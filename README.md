@@ -14,6 +14,53 @@ El sistema se compone de tres contenedores principales:
 2. **Backend**: Django + Django REST Framework.
 3. **Database**: PostgreSQL.
 
+
+### 📑 Fases del Proyecto (Roadmap)
+
+A continuación se detalla el progreso del proyecto siguiendo la planificación establecida:
+
+* **Fase 1: Análisis y Requisitos (Semanas 1-2)** 🟢
+* Definición de la idea principal: Aprendizaje incremental para alumnos de la ESO.
+* Identificación de los niveles de conocimiento (Nivel 1, 2 y 3).
+* Diseño de la arquitectura técnica (Docker + React + Django).
+
+
+* **Fase 2: Infraestructura y Diseño Base (Semanas 3-4)** 🟢
+* **Dockerización**: Configuración de contenedores para Frontend, Backend y Base de Datos.
+* **Frontend Setup**: Inicialización de React con Vite.
+* **Sistemas de Estilos**: Implementación y configuración de Tailwind CSS v4 y DaisyUI.
+* **Control de Versiones**: Establecimiento del flujo de trabajo con ramas en Git (`develop` y `feature`).
+
+
+* **Fase 3: Diseño de BD y Modelo de Datos (Semanas 3-5)** 🟡 **[ACTUAL]**
+* Diseño del modelo relacional en PostgreSQL.
+* Creación del `CustomUser` en Django para gestionar los niveles de suscripción.
+* Definición de permisos y roles de usuario.
+
+
+* **Fase 4: Desarrollo del Backend y API (Semanas 5-7)** 🔴
+* Creación de la API REST con Django REST Framework.
+* Endpoints para la gestión de alumnos y contenidos.
+* Lógica de filtrado de cursos por niveles.
+
+
+* **Fase 5: Desarrollo del Frontend e Integración (Semanas 7-9)** 🔴
+* Maquetación de la interfaz de usuario con los componentes de DaisyUI.
+* Consumo de la API desde React.
+* Gestión de estados y navegación de la aplicación.
+
+
+* **Fase 6: Pruebas, Contenido y Documentación (Semanas 10-12)** 🔴
+* Pruebas unitarias e integración de sistemas.
+* Carga de contenido educativo real (vídeos, ejercicios).
+* Preparación de la memoria final y materiales de la exposición.
+
+
+
+
+
+
+
 ## 🎨 Fase 2: Identidad Visual y UI
 
 Hemos integrado un sistema de diseño moderno basado en utilidades que permite un desarrollo rápido de interfaces.
