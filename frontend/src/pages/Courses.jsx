@@ -74,7 +74,7 @@ export default function Courses() {
                       <div className="card-body">
                         <h3 className="card-title text-xl text-purple-300 flex justify-between items-start">
                           {level.name}
-                          <span className="badge badge-sm border border-purple-500 text-purple-200 bg-purple-900/50 shadow-[0_0_10px_rgba(168,85,247,0.3)]">Nivel {level.level_order}</span>
+                          <span className="badge badge-sm border border-purple-500 text-purple-200 bg-purple-900/50 shadow-[0_0_10px_rgba(168,85,247,0.3)]">Nivel {level.order}</span>
                         </h3>
                         <div className="divider my-0 before:bg-white/5 after:bg-white/5 opacity-50"></div>
                         <ul className="space-y-3 mt-3 flex-grow">
