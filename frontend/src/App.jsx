@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
+import Mission from './pages/Mission';
 import spaceBg from './assets/img/logo-fondo.jpg';
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <main className="flex-grow">
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/mission" element={<Mission />} />
               <Route path="*" element={
                 <div className="flex flex-col items-center justify-center min-h-[60vh]">
                   <h1 className="text-5xl font-bold text-pink-500">404</h1>

@@ -18,7 +18,7 @@ export default function Navbar() {
         <ul className="menu menu-horizontal px-1 font-medium text-slate-200">
           <li><Link className="hover:text-pink-400 hover:bg-white/5 transition-colors" to="/">Inicio</Link></li>
           <li><Link className="hover:text-cyan-400 hover:bg-white/5 transition-colors" to="/courses">Catálogo Estelar</Link></li>
-          <li><a className="hover:text-purple-400 hover:bg-white/5 transition-colors">La Misión</a></li>
+          <li><Link className="hover:text-purple-400 hover:bg-white/5 transition-colors" to="/mission">La Misión</Link></li>
         </ul>
       </div>
 
