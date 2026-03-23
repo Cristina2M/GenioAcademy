@@ -69,7 +69,7 @@ export default function Courses() {
 
                 {/* Niveles Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 relative z-10">
-                  {category.levels.map((level) => (
+                  {category.knowledge_levels && category.knowledge_levels.map((level) => (
                     <div key={level.id} className="card bg-slate-800/60 border border-white/5 hover:border-purple-500/40 transition-all duration-300 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)] group hover:-translate-y-1">
                       <div className="card-body">
                         <h3 className="card-title text-xl text-purple-300 flex justify-between items-start">
