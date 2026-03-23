@@ -1,26 +1,29 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
 
 function App() {
   return (
-    <div className="min-h-screen bg-base-200 flex flex-col items-center justify-center gap-4">
-      <h1 className="text-4xl font-bold text-primary">
-        Genio Academy
-      </h1>
-      <p className="text-lg">Tailwind CSS + DaisyUI instalados correctamente</p>
-      <button className="btn btn-primary">¡Funciona!</button>
-      
-      <div className="stats shadow">
-        <div className="stat">
-          <div className="stat-title">Cursos disponibles</div>
-          <div className="stat-value text-secondary">0</div>
-          <div className="stat-desc">Fase de desarrollo</div>
-        </div>
+    <Router>
+      <div className="flex flex-col min-h-screen bg-base-100 text-base-content">
+        {/* Usamos el Navbar de forma global para toda la app */}
+        <Navbar />
+        
+        {/* Contenido principal inyectado por el enrutador */}
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="*" element={
+              <div className="flex flex-col items-center justify-center min-h-[60vh]">
+                <h1 className="text-4xl font-bold">404</h1>
+                <p className="mt-4">Página no encontrada o en construcción</p>
+              </div>
+            } />
+          </Routes>
+        </main>
       </div>
-    </div>
-  )
+    </Router>
+  );
 }
 
-export default App
+export default App;
