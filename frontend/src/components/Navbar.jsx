@@ -1,11 +1,20 @@
 import { Link } from 'react-router-dom';
 import logoPrincipal from '../assets/img/logo.png';
 
+// ==========================================
+// COMPONENTE UI: Barra de Navegación (Navbar.jsx)
+// ==========================================
+// Este componente se muestra en todas las páginas. Maneja la navegación y 
+// el menú adaptativo (hamburguesa) para pantallas de móviles.
+
 export default function Navbar() {
   return (
+    // "sticky top-0 z-50" asegura que la barra siempre se quede pegada arriba al hacer scroll
     <div className="navbar bg-slate-900/50 backdrop-blur-md shadow-lg border-b border-white/5 px-4 lg:px-8 sticky top-0 z-50 transition-all duration-300 min-h-[4.5rem]">
       <div className="flex-1 flex items-center">
         {/* Logo sobresaliente (Breakout Logo) */}
+        {/* Usamos el componente <Link> de React Router envés de la etiqueta <a> clásica de HTML. 
+            Esto hace que la página cambie AL INSTANTE sin recargar todo el navegador de cero. */}
         <Link to="/" className="group relative z-[100] w-24 h-24 md:w-36 md:h-36 -mb-12 md:-mb-16 -ml-2 mr-2">
           <div className="w-full h-full bg-slate-950 rounded-full border-2 border-cyan-500/40 p-2 shadow-[0_15px_30px_rgba(0,0,0,0.6)] group-hover:scale-105 group-hover:border-pink-500/40 transition-all duration-300 flex items-center justify-center">
             <div className="w-full h-full rounded-full bg-gradient-to-br from-pink-500/10 to-cyan-500/10 flex items-center justify-center p-1">
@@ -37,7 +46,10 @@ export default function Navbar() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" />
             </svg>
           </div>
-          <ul tabIndex={0} className="menu menu-sm dropdown-content bg-slate-900 border border-white/10 rounded-box z-10 mt-3 w-52 p-2 shadow-2xl">
+          {/* Truco UX: El menú móvil en DaisyUI se queda abierto al cambiar de ruta.
+              Al añadir este onClick analizamos si el usuario hizo clic en un enlace (document.activeElement)
+              y forzamos la pérdida de foco (.blur()) para que el menú se pliegue automáticamente. */}
+          <ul tabIndex={0} className="menu menu-sm dropdown-content bg-slate-900 border border-white/10 rounded-box z-10 mt-3 w-52 p-2 shadow-2xl" onClick={() => { const elem = document.activeElement; if (elem) { elem.blur(); } }}>
             <li><Link to="/">Inicio</Link></li>
             <li><Link to="/courses">Catálogo Estelar</Link></li>
             <li><Link to="/mission">La Misión</Link></li>

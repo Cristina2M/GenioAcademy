@@ -7,8 +7,15 @@ import spaceBg from './assets/img/logo-fondo.jpg';
 import ScrollToTop from './components/ScrollToTop';
 import ScrollToTopButton from './components/ScrollToTopButton';
 
+// ==========================================
+// COMPONENTE PRINCIPAL: App.jsx
+// ==========================================
+// Este archivo actúa como el "esqueleto" o contenedor base de toda la aplicación.
+// Aquí configuramos el enrutador (Router) que decide qué página mostrar en base a la URL.
+
 function App() {
   return (
+    // <Router> envuelve todo para habilitar la navegación sin recargar la página entera
     <Router>
       <ScrollToTop />
       <div 
@@ -23,12 +30,19 @@ function App() {
         {/* Overlay oscuro estelar para mejorar la legibilidad del texto */}
         <div className="absolute inset-0 bg-slate-950/80 z-0"></div>
 
-        {/* Añadimos div para asegurar que el contenido se posiciona sobre el overlay */}
+        {/* Añadimos un contenedor relativo (relative z-10) para asegurar que el contenido 
+            se posiciona físicamente "encima" del overlay oscuro y no quede tapado */}
         <div className="relative z-10 flex flex-col flex-grow">
+          
+          {/* El Navbar va fuera de las rutas porque queremos que se renderice en TODAS las páginas */}
           <Navbar />
           
+          {/* main actúa como el contenedor principal del contenido cambiante */}
           <main className="flex-grow">
+            
+            {/* <Routes> es como un "Switch". Busca la primera <Route> que coincida con la URL actual */}
             <Routes>
+              {/* Ruta Base o Inicio: Si la URL es la raíz ("/"), carga el componente <Home /> */}
               <Route path="/" element={<Home />} />
               <Route path="/courses" element={<Courses />} />
               <Route path="/mission" element={<Mission />} />

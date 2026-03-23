@@ -1,28 +1,52 @@
 import { useState, useEffect } from 'react';
 import { BookOpen, Star, Rocket } from 'lucide-react';
 
+// ==========================================
+// PÁGINA: Catálogo Estelar (Courses.jsx)
+// ==========================================
+// Esta página es responsable de obtener los cursos desde nuestro backend de Django
+// y mostrarlos secuencialmente divididos por Categorías y Niveles.
+
 export default function Courses() {
+  // --- ESTADOS LOCALES (Hooks de React) ---
+  // Utilizamos useState para manejar el almacenamiento de datos dinámicos.
+  // 1. categories: Almacena la lista de categorías traída desde la API. Empieza como un array vacío [].
   const [categories, setCategories] = useState([]);
+  // 2. loading: Controla si mostramos el icono de carga. Empieza en "true" porque al entrar a la página, estamos cargando.
   const [loading, setLoading] = useState(true);
+  // 3. error: Guarda cualquier mensaje de error si la petición al servidor falla. Empieza en null (sin error).
   const [error, setError] = useState(null);
 
-  // Llamada a la API real de Django (Backend)
+  // --- EFECTO SECUNDARIO (Llamada a la API) ---
+  // useEffect se ejecuta automáticamente cuando el componente se monta por primera vez en la pantalla.
+  // El último argumento [] (array de dependencias vacío) le dice a React que ejecute esto SOLO UNA VEZ.
   useEffect(() => {
+    // Definimos una función asíncrona (async) porque dependemos de la respuesta de un servidor externo por internet
     const fetchCourses = async () => {
       try {
+        // Bloque TRY: Intentamos conectar con la base de datos a través de nuestro endpoint público
         const response = await fetch('http://localhost:8000/api/courses/categories/');
+        
+        // Comprobamos si el código de estado HTTP es algo distinto a un éxito (ej: 404, 500)
         if (!response.ok) {
           throw new Error('Se perdió la conexión de telemetría con el servidor galáctico');
         }
+        
+        // Parseamos el texto en crudo de la red convirtiéndolo a un objeto JSON usable en JavaScript
         const data = await response.json();
+        // Guardamos los datos reales en el estado
         setCategories(data);
       } catch (err) {
+        // Bloque CATCH: Si la red se cae, el fetch fallará y atraparemos el error aquí
         setError(err.message);
       } finally {
+        // Bloque FINALLY: Independientemente de si fue un éxito o un error, hemos terminado la petición.
+        // Apagamos la pantalla de carga ("loading" pasa a ser falso).
         setLoading(false);
       }
     };
 
+    // Al definir la función asíncrona arriba, no olvidemos invocarla para que suceda la magia.
     fetchCourses();
   }, []);
 
@@ -42,18 +66,24 @@ export default function Courses() {
           </p>
         </div>
 
+        {/* Renderizado Condicional: Evaluamos en qué estado nos encontramos */}
         {loading ? (
+          // CASO 1: Aún estamos esperando la respuesta de la Base de Datos
           <div className="flex flex-col items-center justify-center py-20">
             <span className="loading loading-ring loading-lg text-cyan-400"></span>
             <p className="mt-4 text-slate-400 animate-pulse font-medium">Sondeando el espacio profundo...</p>
           </div>
         ) : error ? (
+          // CASO 2: El servidor ha caído o la conexión está rechazada
           <div className="alert alert-error bg-red-900/50 border border-red-500 text-white shadow-xl backdrop-blur-md max-w-2xl mx-auto">
             <span>Error en la conexión intergaláctica: {error}</span>
           </div>
         ) : (
+          // CASO 3: Todo fue exitoso. Iteraremos sobre el bloque de categorías para dibujarlas.
           <div className="space-y-16">
+            {/* .map() funciona como un bucle for, cogiendo cada Categoría de la Base de Datos y escupiendo un bloque HTML */}
             {categories.map((category) => (
+              // Es IMPORTANTÍSIMO proveer una propiedad "key" única (id) para que React sepa optimizar actualizaciones en bucles
               <div key={category.id} className="bg-slate-900/40 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden group/cat">
                 
                 {/* Categoría Header */}
