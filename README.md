@@ -36,7 +36,7 @@ A continuación se detalla el progreso del proyecto siguiendo la planificación 
 * **Dockerización**: Configuración de contenedores para Frontend, Backend y Base de Datos.
 * **Frontend Setup**: Inicialización de React con Vite.
 * **Sistemas de Estilos**: Implementación y configuración de Tailwind CSS v4 y DaisyUI.
-* **Control de Versiones**: Establecimiento del flujo de trabajo con ramas en Git (`develop` y `feature`).
+* **Control de Versiones**: Establecimiento del flujo de trabajo con ramas en Git (`main`, `develop`, `feature` y `release`).
 
 
 * **Fase 3: Diseño de BD y Modelo de Datos (Semanas 3-5)** 🟢
@@ -116,6 +116,11 @@ Para que el proyecto funcione, siempre debemos ejecutar estos comandos desde la 
    * Los `Usuarios` disponen de roles jerárquicos basados en su tipo de suscripción (`Nivel 1`, `Nivel 2` o `Nivel 3`) para limitar el acceso al contenido premium.
 2. **Autenticación Segura (JWT)**: Todo el control de sesiones se ha delegado a JSON Web Tokens mediante la biblioteca *SimpleJWT*.
 3. **CORS habilitado**: El servidor Django permite peticiones procedentes del frontend React (`localhost:5173`).
+
+#### Integración de UI (Fase 5)
+1. **Enrutamiento Completo (SPA)**: Configuración en matriz usando `react-router-dom` para transiciones fluidas de página completas eliminando tiempos de carga (incluyendo gestión 404 y auto-scroll a cabecera).
+2. **Consumo de API Reactivo**: Conexión al endpoint de Django de `categories/` gestionada mediante asincronía (`fetch`/`await`) encapsulada en Hooks (`useEffect`, `useState`) para control de estados de carga y error.
+3. **Estética Avanzada (Glassmorphism)**: Creación de la identidad visual propia mediante utilidades avanzadas de Tailwind (opacidades, `backdrop-blur`, brillos internos y animaciones espaciales) aplicadas sobre las Vistas de "Inicio", "La Misión" y "Catálogo".
 
 #### Endpoints Principales Disponibles (API REST)
 * **Gestión de Sesión:**
