@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'users',
+    'courses',
 ]
 
 MIDDLEWARE = [
@@ -130,4 +131,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.CustomUser'
 
 # CORS Config
-CORS_ALLOW_ALL_ORIGINS = True # Permite que el framework React a localhost:5173 envíe requests al API
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]

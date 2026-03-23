@@ -7,22 +7,19 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(KnowledgeLevel)
 class KnowledgeLevelAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category')
+    list_display = ('name', 'category', 'order')
     list_filter = ('category',)
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('title', 'knowledge_level', 'is_active')
-    list_filter = ('is_active', 'knowledge_level')
+    list_display = ('title', 'knowledge_level')
+    list_filter = ('knowledge_level__category',)
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ('title', 'course', 'order')
-    list_filter = ('course',)
-    ordering = ('course', 'order')
+    list_display = ('title', 'course', 'is_premium')
+    list_filter = ('is_premium', 'course')
 
 @admin.register(Exercise)
 class ExerciseAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'lesson', 'order')
-    list_filter = ('lesson',)
-    ordering = ('lesson', 'order')
+    list_display = ('question', 'lesson')
