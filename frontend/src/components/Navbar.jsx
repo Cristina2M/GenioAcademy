@@ -18,7 +18,7 @@ export default function Navbar() {
         <ul className="menu menu-horizontal px-1 font-medium text-slate-200">
           <li><Link className="hover:text-pink-400 hover:bg-white/5 transition-colors" to="/">Inicio</Link></li>
           <li><Link className="hover:text-cyan-400 hover:bg-white/5 transition-colors" to="/courses">Catálogo Estelar</Link></li>
-          <li><a className="hover:text-purple-400 hover:bg-white/5 transition-colors">La Misión</a></li>
+          <li><Link className="hover:text-purple-400 hover:bg-white/5 transition-colors" to="/mission">La Misión</Link></li>
         </ul>
       </div>
 
@@ -35,6 +35,7 @@ export default function Navbar() {
           <ul tabIndex={0} className="menu menu-sm dropdown-content bg-slate-900 border border-white/10 rounded-box z-10 mt-3 w-52 p-2 shadow-2xl">
             <li><Link to="/">Inicio</Link></li>
             <li><Link to="/courses">Catálogo Estelar</Link></li>
+            <li><Link to="/mission">La Misión</Link></li>
             <li><Link to="/login" className="text-cyan-400">Entrar</Link></li>
           </ul>
         </div>
