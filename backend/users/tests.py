@@ -37,3 +37,17 @@ class UsersAPITest(TestCase):
         
         # Opcional: Validamos que el nombre del usuario insertado coincide con la respuesta
         self.assertEqual(response.data[0]['username'], "estudiante_prueba")
+
+    # Prueba para asegurarnos de que el endpoint de Autenticación de JWT funciona.
+    def test_get_jwt_token(self):
+        # Ejecutamos una petición POST para intentar obtener un token
+        response = self.client.post('/api/token/', {
+            'username': 'estudiante_prueba',
+            'password': 'password_secreto123'
+        })
+        
+        # Validamos que nos han dado acceso (HTTP 200 OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # Validamos que se incluyen las claves generadas
+        self.assertIn('access', response.data)
+        self.assertIn('refresh', response.data)
