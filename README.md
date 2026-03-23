@@ -32,19 +32,19 @@ A continuación se detalla el progreso del proyecto siguiendo la planificación 
 * **Control de Versiones**: Establecimiento del flujo de trabajo con ramas en Git (`develop` y `feature`).
 
 
-* **Fase 3: Diseño de BD y Modelo de Datos (Semanas 3-5)** 🟡 **[ACTUAL]**
+* **Fase 3: Diseño de BD y Modelo de Datos (Semanas 3-5)** 🟢
 * Diseño del modelo relacional en PostgreSQL.
 * Creación del `CustomUser` en Django para gestionar los niveles de suscripción.
 * Definición de permisos y roles de usuario.
 
 
-* **Fase 4: Desarrollo del Backend y API (Semanas 5-7)** 🔴
-* Creación de la API REST con Django REST Framework.
-* Endpoints para la gestión de alumnos y contenidos.
-* Lógica de filtrado de cursos por niveles.
+* **Fase 4: Desarrollo del Backend y API (Semanas 5-7)** 🟢
+* Creación de la API REST con Django REST Framework (Serializadores y ViewSets).
+* Endpoints para la gestión de alumnos, rutas de cursos jerárquicos y lecciones.
+* Implementación de Autenticación de seguridad mediante JSON Web Tokens (JWT).
 
 
-* **Fase 5: Desarrollo del Frontend e Integración (Semanas 7-9)** 🔴
+* **Fase 5: Desarrollo del Frontend e Integración (Semanas 7-9)** 🟡 **[ACTUAL]**
 * Maquetación de la interfaz de usuario con los componentes de DaisyUI.
 * Consumo de la API desde React.
 * Gestión de estados y navegación de la aplicación.
@@ -106,7 +106,10 @@ Para que el proyecto funcione, siempre debemos ejecutar estos comandos desde la 
 * [x] Inicialización de Proyecto Django y React con Vite.
 * [x] Conexión establecida con PostgreSQL.
 * [x] **Instalación y configuración de Tailwind CSS v4 y DaisyUI.**
-* [ ] Creación del Modelo de Usuario Personalizado (Niveles 1, 2 y 3).
+* [x] Creación del Modelo de Usuario Personalizado (Niveles 1, 2 y 3).
+* [x] Creación de modelos de Cursos (Categoría, Niveles, Cursos, Lecciones, Ejercicios).
+* [x] Implementación de API REST con Django REST Framework.
+* [x] Autenticación con JSON Web Tokens (JWT) y pruebas automáticas.
 * [ ] Maquetación de la Navbar y Página de Inicio.
 
 ---
