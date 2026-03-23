@@ -6,30 +6,24 @@ export default function Courses() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Funcionalidad 'dummy' provisional para diseñar la maquetación. Luego será reemplazado por la API.
+  // Llamada a la API real de Django (Backend)
   useEffect(() => {
-    setTimeout(() => {
-      setCategories([
-        {
-          id: 1,
-          name: "Misiones Matemáticas",
-          description: "El lenguaje del universo, desde aritmética hasta trigonometría.",
-          levels: [
-            { id: 1, name: "Aritmética Básica", level_order: 1, courses: [{id: 1, title: "Sumas Galácticas"}, {id: 2, title: "Restas Espaciales"}] },
-            { id: 2, name: "Álgebra Intermedia", level_order: 2, courses: [{id: 3, title: "Ecuaciones de 1er Grado"}] }
-          ]
-        },
-        {
-          id: 2,
-          name: "Leyes de la Física",
-          description: "Entiende cómo se comportan los planetas y la materia.",
-          levels: [
-            { id: 3, name: "Leyes de Newton", level_order: 1, courses: [{id: 4, title: "Fuerza y Movimiento"}] }
-          ]
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/courses/categories/');
+        if (!response.ok) {
+          throw new Error('Se perdió la conexión de telemetría con el servidor galáctico');
         }
-      ]);
-      setLoading(false);
-    }, 800);
+        const data = await response.json();
+        setCategories(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
   }, []);
 
   return (
