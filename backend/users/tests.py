@@ -51,3 +51,22 @@ class UsersAPITest(TestCase):
         # Validamos que se incluyen las claves generadas
         self.assertIn('access', response.data)
         self.assertIn('refresh', response.data)
+
+    # Prueba para validar que un usuario nuevo puede registrarse desde la API de forma anónima
+    def test_user_registration(self):
+        response = self.client.post('/api/users/users/', {
+            'username': 'nuevo_estudiante',
+            'email': 'nuevo@genio.com',
+            'password': 'password_segura',
+            'subscription_level': 2
+        })
+        
+        # Comprobar si se creó con éxito (201 Created)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        
+        # Validar que podemos hacer login con la nueva cuenta (comprobando que la password se hasheó)
+        login_response = self.client.post('/api/token/', {
+            'username': 'nuevo_estudiante',
+            'password': 'password_segura'
+        })
+        self.assertEqual(login_response.status_code, status.HTTP_200_OK)
