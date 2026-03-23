@@ -6,7 +6,7 @@ export default function Navbar() {
     <div className="navbar bg-slate-900/50 backdrop-blur-md shadow-lg border-b border-white/5 px-4 lg:px-8 sticky top-0 z-50 transition-all duration-300 min-h-[4.5rem]">
       <div className="flex-1 flex items-center">
         {/* Logo sobresaliente (Breakout Logo) */}
-        <Link to="/" className="group relative z-[100] w-20 h-20 md:w-28 md:h-28 -mb-10 md:-mb-14 -ml-2 mr-2">
+        <Link to="/" className="group relative z-[100] w-24 h-24 md:w-36 md:h-36 -mb-12 md:-mb-16 -ml-2 mr-2">
           <div className="w-full h-full bg-slate-950 rounded-full border-2 border-cyan-500/40 p-2 shadow-[0_15px_30px_rgba(0,0,0,0.6)] group-hover:scale-105 group-hover:border-pink-500/40 transition-all duration-300 flex items-center justify-center">
             <div className="w-full h-full rounded-full bg-gradient-to-br from-pink-500/10 to-cyan-500/10 flex items-center justify-center p-1">
               <img src={logoPrincipal} alt="Genio Academy Logo" className="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]" />
