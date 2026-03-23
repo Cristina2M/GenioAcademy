@@ -3,14 +3,19 @@ import logoPrincipal from '../assets/img/logo.png';
 
 export default function Navbar() {
   return (
-    <div className="navbar bg-slate-900/50 backdrop-blur-md shadow-lg border-b border-white/5 px-4 lg:px-12 sticky top-0 z-50 transition-all duration-300">
-      <div className="flex-1">
-        <Link to="/" className="btn btn-ghost hover:bg-white/5 h-auto py-2 flex items-center gap-3">
-          {/* Logo oficial */}
-          <div className="w-10 h-10 rounded-full bg-white/10 p-1 flex items-center justify-center border border-pink-500/30 shadow-[0_0_15px_rgba(236,72,153,0.3)]">
-            <img src={logoPrincipal} alt="Genio Academy" className="w-full h-full object-contain" />
+    <div className="navbar bg-slate-900/50 backdrop-blur-md shadow-lg border-b border-white/5 px-4 lg:px-8 sticky top-0 z-50 transition-all duration-300 min-h-[4.5rem]">
+      <div className="flex-1 flex items-center">
+        {/* Logo sobresaliente (Breakout Logo) */}
+        <Link to="/" className="group relative z-[100] w-20 h-20 md:w-28 md:h-28 -mb-10 md:-mb-14 -ml-2 mr-2">
+          <div className="w-full h-full bg-slate-950 rounded-full border-2 border-cyan-500/40 p-2 shadow-[0_15px_30px_rgba(0,0,0,0.6)] group-hover:scale-105 group-hover:border-pink-500/40 transition-all duration-300 flex items-center justify-center">
+            <div className="w-full h-full rounded-full bg-gradient-to-br from-pink-500/10 to-cyan-500/10 flex items-center justify-center p-1">
+              <img src={logoPrincipal} alt="Genio Academy Logo" className="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]" />
+            </div>
           </div>
-          <span className="font-extrabold text-2xl tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-cyan-400">Genio Academy</span>
+        </Link>
+        
+        <Link to="/" className="btn btn-ghost hover:bg-transparent h-auto py-2 px-2 hidden sm:flex">
+          <span className="font-extrabold text-2xl tracking-tighter text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">Genio <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-cyan-400">Academy</span></span>
         </Link>
       </div>
       
