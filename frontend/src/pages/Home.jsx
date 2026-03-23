@@ -77,19 +77,6 @@ export default function Home() {
                
                <img src={buhoMascot} alt="Búho Genio Mascot" className="relative z-10 w-96 lg:w-[32rem] drop-shadow-[0_20px_50px_rgba(0,0,0,0.6)] animate-[bounce_5s_ease-in-out_infinite]" />
                
-               {/* Tarjeta flotante interactiva UI (Falsa demostración) */}
-               <div className="absolute -left-10 bottom-24 bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-[0_0_30px_rgba(0,0,0,0.5)] animate-[bounce_6s_ease-in-out_infinite_reverse] hidden md:block border-b-cyan-500/50">
-                  <div className="flex items-center gap-4">
-                    <div className="bg-green-500/20 p-3 rounded-xl border border-green-500/30">
-                      <Compass className="w-7 h-7 text-green-400" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Logro Desbloqueado</p>
-                      <p className="font-black text-white text-lg drop-shadow-md">¡Aritmética Dominada!</p>
-                    </div>
-                  </div>
-               </div>
-               
             </div>
 
           </div>

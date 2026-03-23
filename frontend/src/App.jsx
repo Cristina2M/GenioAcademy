@@ -4,10 +4,12 @@ import Home from './pages/Home';
 import Courses from './pages/Courses';
 import Mission from './pages/Mission';
 import spaceBg from './assets/img/logo-fondo.jpg';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <div 
         className="flex flex-col min-h-screen text-slate-100 relative overflow-hidden"
         style={{ 
