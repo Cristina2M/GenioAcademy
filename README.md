@@ -10,9 +10,16 @@ Se ha implementado una arquitectura de **microservicios dockerizados** para gara
 
 El sistema se compone de tres contenedores principales:
 
-1. **Frontend**: React + Vite (SPA).
-2. **Backend**: Django + Django REST Framework.
-3. **Database**: PostgreSQL.
+1. **Frontend**: React + Vite (SPA). *Puerto: `5173` (localhost:5173)*
+2. **Backend**: Django + Django REST Framework. *Puerto: `8000` (localhost:8000)*
+3. **Database**: PostgreSQL. *Puerto interno: `5432`*
+
+### 🔐 Gestión de Credenciales y Entorno (.env)
+
+Por normativas de seguridad, los secretos del marco de trabajo no se vuelcan al repositorio público.
+Debe preexistir o ser inyectado por Docker un contexto de variables (`.env` o compose environment) que defina:
+* La firma secreta criptográfica de Django (`SECRET_KEY`).
+* Las credenciales de levantamiento y conexión inter-contenedor de PostgreSQL (`POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`).
 
 
 ### 📑 Fases del Proyecto (Roadmap)
@@ -85,8 +92,9 @@ Para que el proyecto funcione, siempre debemos ejecutar estos comandos desde la 
 
 #### 🔹 Comandos de Backend (Django)
 
-* **Migraciones:** `docker-compose exec backend python manage.py migrate`
-* **Crear Superusuario:** `docker-compose exec backend python manage.py createsuperuser`
+* **Ejecutar Migraciones:** `docker-compose exec backend python manage.py migrate` *(Prepara las tablas SQL en base a los modelos)*
+* **Poblar Base de Datos (Seed):** `docker-compose exec backend python seed_data.py` *(Imprescindible la primera vez para cargar Categorías y Cursos de prueba y evitar arrancar con el Frontend en blanco)*
+* **Crear Superusuario:** `docker-compose exec backend python manage.py createsuperuser` *(Para acceso a `http://localhost:8000/admin/`)*
 * **Crear App:** `docker-compose exec backend python manage.py startapp nombre_de_la_app`
 
 #### 🔹 Comandos de Frontend (React)
