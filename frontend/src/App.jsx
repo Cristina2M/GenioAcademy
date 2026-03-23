@@ -5,6 +5,7 @@ import Courses from './pages/Courses';
 import Mission from './pages/Mission';
 import spaceBg from './assets/img/logo-fondo.jpg';
 import ScrollToTop from './components/ScrollToTop';
+import ScrollToTopButton from './components/ScrollToTopButton';
 
 function App() {
   return (
@@ -39,6 +40,9 @@ function App() {
               } />
             </Routes>
           </main>
+          
+          {/* Botón Flotante Global para volver arriba */}
+          <ScrollToTopButton />
         </div>
       </div>
     </Router>
