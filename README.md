@@ -94,11 +94,29 @@ Para que el proyecto funcione, siempre debemos ejecutar estos comandos desde la 
 
 ---
 
-### 🛠️ Detalles Técnicos de la Fase Actual
+### 🛠️ Detalles Técnicos y Documentación de Fases Producidas
 
+#### Frontend (Fase 2)
 1. **Tailwind v4 Config**: Debido a la arquitectura de Docker, la configuración se ha centralizado en `src/index.css` mediante `@import "tailwindcss";` y `@plugin "daisyui";`.
 2. **PostCSS**: Se utiliza `@tailwindcss/postcss` para procesar los estilos correctamente dentro de Vite.
-3. **CORS**: El backend está preparado para aceptar peticiones desde el origen del frontend (`localhost:5173`).
+
+#### Backend y Modelado (Fase 3 y 4)
+1. **Estructura de Datos (Aprendizaje Incremental)**: El núcleo educativo de la plataforma se modela como:
+   * `Categoría` ➔ `Nivel de Conocimiento` ➔ `Curso` ➔ `Lección` ➔ `Ejercicio`
+   * Los `Usuarios` disponen de roles jerárquicos basados en su tipo de suscripción (`Nivel 1`, `Nivel 2` o `Nivel 3`) para limitar el acceso al contenido premium.
+2. **Autenticación Segura (JWT)**: Todo el control de sesiones se ha delegado a JSON Web Tokens mediante la biblioteca *SimpleJWT*.
+3. **CORS habilitado**: El servidor Django permite peticiones procedentes del frontend React (`localhost:5173`).
+
+#### Endpoints Principales Disponibles (API REST)
+* **Gestión de Sesión:**
+  * `POST /api/token/` ➔ Para iniciar sesión proporcionando credenciales. Devuelve los tokens `access` y `refresh`.
+  * `POST /api/token/refresh/` ➔ Para renovar el token de acceso cuando expira.
+* **Catálogo Educativo (Cursos):**
+  * `GET /api/courses/categories/` ➔ Devuelve todo el árbol anidado de asignaturas, niveles y cursos.
+  * `GET /api/courses/courses/` ➔ Cursos específicos.
+  * `GET /api/courses/lessons/` ➔ Lecciones (teoría y vídeo). Solo lectura.
+* **Gestión de Usuarios:**
+  * `GET, POST /api/users/users/` ➔ Operaciones CRUD completas sobre la tabla de alumnos.
 
 ### 📍 Estado Actual
 
