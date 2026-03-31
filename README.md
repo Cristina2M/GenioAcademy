@@ -51,9 +51,9 @@ Desarrollo de la lógica de negocio, seguridad y persistencia de la información
   * Creación de los modelos de aprendizaje: Curso, Tema, Lección y Recurso.
   * Ejecución de migraciones iniciales en PostgreSQL.
 
-* **Fase 5: Sistema de Autenticación y Seguridad** (🟡 En proceso)
+* **Fase 5: Sistema de Autenticación y Seguridad** (✅ Completado)
   * Implementación de JWT (JSON Web Tokens) para sesiones seguras sin estado. *(Completado en Backend)*
-  * Creación de los endpoints de registro y login de alumnos. *(Login completado)*
+  * Creación de los endpoints de registro y login de alumnos. *(Login y Registro completados)*
   * Configuración de políticas de CORS para proteger las peticiones entre puertos. *(Completado)*
 
 * **Fase 6: Desarrollo de la API REST Core** (✅ Completado)

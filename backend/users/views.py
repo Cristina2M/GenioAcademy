@@ -1,8 +1,14 @@
 # Importaciones necesarias para crear los controladores de la API (Vistas)
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from .models import CustomUser
 from .serializers import UserSerializer
+
+# Endpoint dedicado exclusivamente para Registro de Alumnos
+class RegisterView(generics.CreateAPIView):
+    queryset = CustomUser.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = UserSerializer
 
 # Definimos el conjunto de vistas (ViewSet) para manejar las operaciones sobre 'CustomUser'
 class UserViewSet(viewsets.ModelViewSet):
