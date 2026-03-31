@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { User, Mail, Lock, UserPlus, ArrowRight } from 'lucide-react';
+import { User, Mail, Lock, UserPlus, ArrowRight, Eye, EyeOff } from 'lucide-react';
 
 export default function Register() {
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <div className="min-h-[85vh] relative flex items-center justify-center py-20 overflow-hidden">
       
@@ -48,7 +51,7 @@ export default function Register() {
 
               <div className="form-control">
                 <label className="label py-1">
-                  <span className="label-text text-slate-300 font-semibold text-sm tracking-wide">Com encriptada (Email)</span>
+                  <span className="label-text text-slate-300 font-semibold text-sm tracking-wide">Correo electrónico</span>
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
@@ -71,10 +74,17 @@ export default function Register() {
                     <Lock className="h-5 w-5" />
                   </div>
                   <input 
-                    type="password" 
+                    type={showPassword ? "text" : "password"} 
                     placeholder="Min 8 carácteres..." 
-                    className="input w-full pl-11 bg-slate-800/50 border-white/10 text-white placeholder:text-slate-500 focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all rounded-xl" 
+                    className="input w-full pl-11 pr-12 bg-slate-800/50 border-white/10 text-white placeholder:text-slate-500 focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all rounded-xl" 
                   />
+                  <button 
+                    type="button" 
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-pink-400 transition-colors"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </button>
                 </div>
               </div>
 

@@ -36,11 +36,11 @@ export default function Navbar() {
         </ul>
       </div>
 
-      <div className="flex-none ml-4">
-        <Link to="/login" className="btn btn-ghost text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 mr-1 hidden sm:flex rounded-full px-4 transition-all">
+      <div className="flex-none ml-4 flex items-center gap-1 sm:gap-2">
+        <Link to="/login" className="btn btn-ghost text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 hidden sm:flex rounded-full px-4 transition-all">
           Entrar
         </Link>
-        <Link to="/register" className="btn bg-gradient-to-r from-pink-500 to-purple-600 border-none text-white hover:from-pink-400 hover:to-purple-500 hover:shadow-[0_0_20px_rgba(236,72,153,0.5)] transition-all mr-2 hidden sm:flex rounded-full px-6">
+        <Link to="/register" className="btn bg-gradient-to-r from-pink-500 to-purple-600 border-none text-white hover:from-pink-400 hover:to-purple-500 hover:shadow-[0_0_20px_rgba(236,72,153,0.5)] transition-all hidden sm:flex rounded-full px-6">
           Nueva Cuenta
         </Link>
         <div className="dropdown dropdown-end lg:hidden">
