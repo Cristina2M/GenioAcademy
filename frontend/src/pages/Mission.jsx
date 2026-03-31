@@ -140,7 +140,7 @@ export default function Mission() {
                 <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-cyan-400 flex-shrink-0" /> Evaluaciones básicas limitadas al final de la lección.</li>
               </ul>
               <div className="mt-auto w-full">
-                <Link to="/signup" className="btn btn-outline border-cyan-500/50 text-cyan-300 hover:bg-cyan-500 hover:text-black hover:border-cyan-400 w-full rounded-2xl">
+                <Link to="/register" className="btn btn-outline border-cyan-500/50 text-cyan-300 hover:bg-cyan-500 hover:text-black hover:border-cyan-400 w-full rounded-2xl">
                   Registrar Gratis
                 </Link>
               </div>
@@ -164,9 +164,9 @@ export default function Mission() {
                 <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> Panel de métricas y reporte mensual de progreso enviado a los padres.</li>
               </ul>
               <div className="mt-auto w-full">
-                <button className="btn bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white border-none w-full rounded-2xl shadow-[0_0_20px_rgba(236,72,153,0.4)] text-lg">
+                <Link to="/register" className="btn bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white border-none w-full rounded-2xl shadow-[0_0_20px_rgba(236,72,153,0.4)] text-lg">
                   Suscribirse a Velocidad Luz
-                </button>
+                </Link>
               </div>
             </div>
 
@@ -185,9 +185,9 @@ export default function Mission() {
                 <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-purple-400 flex-shrink-0" /> <strong>Seguimiento Personalizado:</strong> Plan de ruta semanal trazado por el tutor en contacto con el padre/tutor legal.</li>
               </ul>
               <div className="mt-auto w-full">
-                <button className="btn bg-slate-800/80 border border-purple-500/50 text-purple-300 hover:bg-purple-600 hover:text-white hover:border-purple-400 w-full rounded-2xl transition-all">
+                <Link to="/register" className="btn bg-slate-800/80 border border-purple-500/50 text-purple-300 hover:bg-purple-600 hover:text-white hover:border-purple-400 w-full rounded-2xl transition-all">
                   Consultar Disponibilidad
-                </button>
+                </Link>
               </div>
             </div>
             

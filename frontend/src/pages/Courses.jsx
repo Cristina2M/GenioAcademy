@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BookOpen, Star, Rocket } from 'lucide-react';
+import { BookOpen, Star } from 'lucide-react';
 
 // ==========================================
 // PÁGINA: Catálogo Estelar (Courses.jsx)
@@ -119,11 +119,6 @@ export default function Courses() {
                             <li className="text-sm text-slate-500/70 italic text-center py-2">No hay información en este sector.</li>
                           )}
                         </ul>
-                        <div className="card-actions justify-end mt-6">
-                          <button className="btn btn-sm bg-slate-700/50 border border-cyan-500/50 text-cyan-300 hover:bg-cyan-500 hover:border-cyan-400 hover:text-slate-900 w-full rounded-lg shadow-[0_0_10px_rgba(34,211,238,0.1)] transition-all">
-                            Explorar Nivel <Rocket className="w-4 h-4 ml-1" />
-                          </button>
-                        </div>
                       </div>
                     </div>
                   ))}
