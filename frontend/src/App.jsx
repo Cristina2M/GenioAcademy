@@ -3,6 +3,8 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Courses from './pages/Courses';
 import Mission from './pages/Mission';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import spaceBg from './assets/img/logo-fondo.jpg';
 import ScrollToTop from './components/ScrollToTop';
 import ScrollToTopButton from './components/ScrollToTopButton';
@@ -46,6 +48,8 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/courses" element={<Courses />} />
               <Route path="/mission" element={<Mission />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
               <Route path="*" element={
                 <div className="flex flex-col items-center justify-center min-h-[60vh]">
                   <h1 className="text-5xl font-bold text-pink-500">404</h1>

@@ -37,8 +37,11 @@ export default function Navbar() {
       </div>
 
       <div className="flex-none ml-4">
-        <Link to="/login" className="btn bg-transparent border border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black hover:shadow-[0_0_20px_rgba(34,211,238,0.5)] transition-all mr-2 hidden sm:flex rounded-full px-6">
-          Iniciar Sesión
+        <Link to="/login" className="btn btn-ghost text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 mr-1 hidden sm:flex rounded-full px-4 transition-all">
+          Entrar
+        </Link>
+        <Link to="/register" className="btn bg-gradient-to-r from-pink-500 to-purple-600 border-none text-white hover:from-pink-400 hover:to-purple-500 hover:shadow-[0_0_20px_rgba(236,72,153,0.5)] transition-all mr-2 hidden sm:flex rounded-full px-6">
+          Nueva Cuenta
         </Link>
         <div className="dropdown dropdown-end lg:hidden">
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle text-white">
@@ -54,6 +57,7 @@ export default function Navbar() {
             <li><Link to="/courses">Catálogo Estelar</Link></li>
             <li><Link to="/mission">La Misión</Link></li>
             <li><Link to="/login" className="text-cyan-400">Entrar</Link></li>
+            <li><Link to="/register" className="text-pink-400 font-bold">Unirse a la Academia</Link></li>
           </ul>
         </div>
       </div>
