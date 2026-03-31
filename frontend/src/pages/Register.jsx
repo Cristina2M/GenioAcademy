@@ -76,7 +76,7 @@ export default function Register() {
                 <h3 className="text-2xl font-bold text-white mb-2">Órbita Base</h3>
                 <p className="text-slate-400 mb-6 min-h-[50px] text-sm">El acceso perfecto para mentes autodidactas que solo necesitan los materiales.</p>
                 <div className="text-4xl font-black text-white mb-8 border-b border-white/10 pb-6 w-full">
-                  Gratis
+                  6,99€<span className="text-sm font-normal text-slate-500 block mt-2">/mes</span>
                 </div>
                 <ul className="space-y-4 mb-8 text-left w-full text-sm">
                   <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-cyan-400 flex-shrink-0" /> Acceso visual ilimitado al índice.</li>
@@ -101,8 +101,19 @@ export default function Register() {
                 <Rocket className="w-14 h-14 text-pink-400 mb-6 drop-shadow-[0_0_15px_rgba(236,72,153,0.5)] group-hover:scale-110 transition-transform" />
                 <h3 className="text-3xl font-bold text-pink-300 mb-2">Velocidad Luz</h3>
                 <p className="text-slate-300 mb-6 min-h-[50px] text-sm">Acompañamiento impulsado por Inteligencia Artificial y datos de rendimiento.</p>
-                <div className="text-5xl font-black text-white mb-8 border-b border-white/10 pb-6 w-full">
-                  19€<span className="text-xl text-slate-400 font-normal">/mes</span>
+                <div className="w-full border-b border-white/10 pb-6 mb-6">
+                  <div className="flex items-center justify-center gap-3 mb-2">
+                    <span className="text-slate-400 line-through text-2xl font-bold">12,99€</span>
+                    <span className="bg-green-500/20 text-green-300 border border-green-500/30 text-xs font-black px-2 py-0.5 rounded-full">-23%</span>
+                  </div>
+                  <div className="text-6xl font-black text-white">
+                    9,99€<span className="text-xl text-pink-300 font-normal">/mes</span>
+                  </div>
+                  <div className="mt-3 bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-400/30 rounded-xl px-4 py-2 flex items-center justify-center gap-2">
+                    <span className="text-lg">🚀</span>
+                    <span className="text-amber-300 font-black text-xs uppercase tracking-wide">Precio Fundador · Solo los 2 primeros meses</span>
+                  </div>
+                  <p className="text-slate-500 text-xs mt-2">Después, 12,99€/mes. Cancela cuando quieras.</p>
                 </div>
                 <ul className="space-y-4 mb-8 text-left w-full text-sm">
                   <li className="flex items-start gap-3 text-white font-medium border-b border-white/5 pb-2"><CheckCircle2 className="w-5 h-5 text-pink-500 flex-shrink-0" /> Todo lo incluido en Base</li>
@@ -111,7 +122,7 @@ export default function Register() {
                 </ul>
                 <div className="mt-auto w-full">
                   <button className="btn bg-gradient-to-r from-pink-500 to-purple-600 group-hover:from-pink-400 group-hover:to-purple-500 text-white border-none w-full rounded-2xl shadow-[0_0_20px_rgba(236,72,153,0.4)] text-lg">
-                    Empezar Plan Pro
+                    Empezar por 9,99€
                   </button>
                 </div>
               </div>
@@ -125,7 +136,7 @@ export default function Register() {
                 <h3 className="text-2xl font-bold text-purple-300 mb-2">Agujero de Gusano</h3>
                 <p className="text-slate-400 mb-6 min-h-[50px] text-sm">Experiencia mega-premium con profesores reales para suspensos críticos.</p>
                 <div className="text-4xl font-black text-white mb-8 border-b border-white/10 pb-6 w-full">
-                  89€<span className="text-xl text-slate-400 font-normal">/mes</span>
+                  24,99€<span className="text-xl text-slate-400 font-normal">/mes</span>
                 </div>
                 <ul className="space-y-4 mb-8 text-left w-full text-sm">
                   <li className="flex items-start gap-3 text-slate-200 font-medium border-b border-white/5 pb-2"><CheckCircle2 className="w-5 h-5 text-purple-500 flex-shrink-0" /> Todo lo de Velocidad Luz</li>

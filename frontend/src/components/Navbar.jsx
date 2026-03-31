@@ -30,7 +30,7 @@ export default function Navbar() {
         </Link>
         
         <Link to={user ? "/dashboard" : "/"} className="btn btn-ghost hover:bg-transparent h-auto py-2 px-2 hidden sm:flex">
-          <span className="font-extrabold text-2xl tracking-tighter text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">Genio <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-cyan-400">Academy</span></span>
+          <span className="font-extrabold text-2xl tracking-tighter drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]"><span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-400">Genio</span> <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-cyan-400">Academy</span></span>
         </Link>
       </div>
       
