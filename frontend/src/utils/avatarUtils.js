@@ -9,35 +9,30 @@ import buho8 from '../assets/img/stikers/buho8.png';
 import buho9 from '../assets/img/stikers/buho9.png';
 import buho10 from '../assets/img/stikers/buho10.png';
 
-// ==========================================
-// UTILIDAD: AVATARES DE GAMIFICACIÓN
-// ==========================================
-// Retorna la imagen del Búho correspondiente al Nivel de RPG del alumno.
+export const avatarDatabase = [
+    { id: 'buho1', src: buho1, requiredLevel: 1, name: 'Recluta Espacial', desc: 'Tu primera skin desbloqueada.' },
+    { id: 'buho2', src: buho2, requiredLevel: 2, name: 'Búho Explorador', desc: 'Te atreviste a mirar las estrellas.' },
+    { id: 'buho3', src: buho3, requiredLevel: 3, name: 'Matemático Nato', desc: 'Una mente en evolución.' },
+    { id: 'buho4', src: buho4, requiredLevel: 4, name: 'Astrobúho', desc: 'Tu nivel de conocimiento avanza rápido.' },
+    { id: 'buho5', src: buho5, requiredLevel: 5, name: 'Viajero Intergaláctico', desc: 'La medalla al coraje académico.' },
+    { id: 'buho6', src: buho6, requiredLevel: 6, name: 'Aventurero Estelar', desc: 'Has dominado mecánicas complejas.' },
+    { id: 'buho7', src: buho7, requiredLevel: 7, name: 'Capitán de la Nave', desc: 'Tienes al resto copiando tus apuntes.' },
+    { id: 'buho8', src: buho8, requiredLevel: 8, name: 'Búho Cuántico', desc: 'Tus respuestas son siempre perfectas.' },
+    { id: 'buho9', src: buho9, requiredLevel: 9, name: 'Guardián Cósmico', desc: 'Un sabio milenario ha nacido.' },
+    { id: 'buho10', src: buho10, requiredLevel: 10, name: 'Genio Universal', desc: 'Has completado la experiencia definitiva.' },
+];
 
-export const getStudentAvatar = (level) => {
-    // Si no tiene nivel por algún fallo, asumimos que es nivel 1
-    const safeLevel = level || 1;
-    
-    const avatarMap = {
-        1: buho1, // Recluta
-        2: buho2,
-        3: buho3,
-        4: buho4,
-        5: buho5,
-        6: buho6,
-        7: buho7,
-        8: buho8,
-        9: buho9,
-        10: buho10,
-    };
-    
-    // Calcula cual es el avatar máximo que tenemos guardado
-    const maxUnlockedAvatar = Math.max(...Object.keys(avatarMap));
-    
-    // Si el alumno es nivel 20 pero solo tenemos 10 búhos, le enseñamos el 10º
-    if (safeLevel >= maxUnlockedAvatar) {
-        return avatarMap[maxUnlockedAvatar];
+export const getAllAvatars = () => avatarDatabase;
+
+// Extrae el JPG/PNG enviándole un ID o un nivel fallback para el Navbar
+export const getStudentAvatar = (avatarIdOrLevel) => {
+    // Si pasamos un level (ej. Navbar fallback por primera vez)
+    if (typeof avatarIdOrLevel === 'number') {
+        const found = avatarDatabase.find(a => a.requiredLevel === avatarIdOrLevel);
+        return found ? found.src : buho1;
     }
     
-    return avatarMap[safeLevel] || buho1;
+    // Si pasamos el string del ID de BD
+    const found = avatarDatabase.find(a => a.id === avatarIdOrLevel);
+    return found ? found.src : buho1;
 }

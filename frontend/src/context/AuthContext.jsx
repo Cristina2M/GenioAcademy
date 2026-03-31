@@ -90,13 +90,37 @@ export const AuthProvider = ({ children }) => {
         navigate('/'); // Eyectamos al inicio!
     };
 
+    // ==========================================
+    // FUNCIÓN: CAMBIAR AVATAR DE BÚHO
+    // ==========================================
+    const updateAvatar = async (avatarId) => {
+        try {
+            const response = await axiosInstance.post('users/management/update_avatar/', {
+                selected_avatar: avatarId
+            });
+            if (response.status === 200) {
+                const data = response.data;
+                // Sustituimos los JWT antiguos porque el nuevo viene con la skin inyectada
+                const newAuthTokens = { access: data.access, refresh: data.refresh };
+                setAuthTokens(newAuthTokens);
+                setUser(jwtDecode(data.access));
+                localStorage.setItem('authTokens', JSON.stringify(newAuthTokens));
+                return { success: true };
+            }
+        } catch (error) {
+            console.error("Error cambiando avatar", error);
+            return { success: false };
+        }
+    };
+
     // Empaquetamos todo lo que queremos exponer de forma global
     const contextData = {
         user,
         authTokens,
         loginUser,
         registerUser,
-        logoutUser
+        logoutUser,
+        updateAvatar
     };
 
     // Solo se ejecuta 1 vez cuando la página arranca

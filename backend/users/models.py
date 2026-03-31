@@ -20,8 +20,11 @@ class CustomUser(AbstractUser):
     )
 
     # Campos de Gamificación RPG (Motor Incremental)
-    experience_points = models.PositiveIntegerField(default=0, verbose_name='Puntos de Experiencia (XP)')
-    current_student_level = models.PositiveIntegerField(default=1, verbose_name='Nivel Global de Alumno')
+    experience_points = models.IntegerField(default=0)
+    # Nivel RPG actual, aumenta segun ganes XP
+    current_student_level = models.IntegerField(default=1)
+    # El avatar (búho) que el jugador ha seleccionado mostrar
+    selected_avatar = models.CharField(max_length=50, default='buho1')
 
     # Método para representar el objeto como texto (ej: en el panel de administrador)
     def __str__(self):

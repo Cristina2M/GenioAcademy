@@ -1,17 +1,27 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Target, Trophy, Flame, Compass, Play, BookOpen, Star } from 'lucide-react';
+import { Target, Trophy, Flame, Compass, Play, BookOpen, Star, Lock, X } from 'lucide-react';
 import AuthContext from '../context/AuthContext';
-import { getStudentAvatar } from '../utils/avatarUtils';
+import { getStudentAvatar, avatarDatabase } from '../utils/avatarUtils';
 
 export default function Dashboard() {
-  const { user } = useContext(AuthContext);
+  const { user, updateAvatar } = useContext(AuthContext);
+  const [isUpdatingAvatar, setIsUpdatingAvatar] = useState(false);
 
   // Cálculos de Gamificación (Podríamos traerlos del backend luego, aquí lo simulamos con lo que da el Token)
   const currentXP = user?.experience_points || 350; // Extraído del backend si lo configuraste, o mock
   const currentLevel = user?.current_student_level || 1;
+  const currentAvatarId = user?.selected_avatar || currentLevel;
+  
   const xpForNextLevel = currentLevel * 500;
   const progressPercentage = Math.round((currentXP / xpForNextLevel) * 100);
+
+  const handleAvatarSelect = async (avatarId) => {
+    setIsUpdatingAvatar(true);
+    await updateAvatar(avatarId);
+    setIsUpdatingAvatar(false);
+    document.getElementById('avatar_modal').close();
+  };
 
   return (
     <div className="min-h-screen relative pt-24 pb-12 px-4 sm:px-6 lg:px-8">
@@ -32,10 +42,19 @@ export default function Dashboard() {
           <div className="card-body p-8 sm:p-10 flex flex-col md:flex-row items-center gap-8">
             
             {/* Avatar Magnético */}
-            <div className="relative shrink-0 group">
+            <div 
+              className="relative shrink-0 group cursor-pointer"
+              onClick={() => document.getElementById('avatar_modal').showModal()}
+            >
               <div className="absolute inset-0 bg-gradient-to-br from-pink-500 to-cyan-500 rounded-full blur-xl opacity-40 group-hover:opacity-60 transition-opacity"></div>
-              <div className="w-32 h-32 rounded-full border-4 border-slate-900 relative z-10 p-1 bg-gradient-to-br from-cyan-400 to-pink-500 flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(34,211,238,0.3)]">
-                <img src={getStudentAvatar(currentLevel)} alt="Avatar de Estudiante" className="w-full h-full object-cover rounded-full bg-slate-800" />
+              
+              <div className={`w-32 h-32 rounded-full border-4 ${isUpdatingAvatar ? 'border-amber-400 animate-pulse' : 'border-slate-900'} relative z-10 p-1 bg-gradient-to-br from-cyan-400 to-pink-500 flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(34,211,238,0.3)]`}>
+                <img src={getStudentAvatar(currentAvatarId)} alt="Avatar de Estudiante" className="w-full h-full object-cover rounded-full bg-slate-800" />
+                
+                {/* Overlay Oscuro al pasar el ratón para indicar que es clickeable */}
+                <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center rounded-full">
+                   <div className="text-white text-xs font-bold bg-slate-900/80 px-2 py-1 rounded-full border border-white/20">Cambiar</div>
+                </div>
               </div>
               
               {/* Insignia de Nivel superpuesta */}
@@ -179,6 +198,66 @@ export default function Dashboard() {
         </div>
 
       </div>
+
+      {/* ==========================================
+          MODAL: GALERÍA DE AVATARES
+          ========================================== */}
+      <dialog id="avatar_modal" className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box bg-slate-900 border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] max-w-4xl">
+          <form method="dialog">
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-slate-400 hover:text-white"><X className="w-5 h-5"/></button>
+          </form>
+          
+          <h3 className="font-black text-2xl text-white mb-2 flex items-center gap-2">
+            <Trophy className="w-6 h-6 text-amber-500"/> Colección de Reconocimientos
+          </h3>
+          <p className="text-slate-400 text-sm mb-6">Equipa los búhos que hayas desbloqueado a lo largo de tu viaje académico. Los skins exclusivos muestran tu dedicación.</p>
+          
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {avatarDatabase.map((avatar) => {
+              const isUnlocked = currentLevel >= avatar.requiredLevel;
+              const isSelected = currentAvatarId === avatar.id || (!user?.selected_avatar && currentLevel === avatar.requiredLevel);
+              
+              return (
+                <div 
+                  key={avatar.id} 
+                  className={`relative flex flex-col items-center p-3 rounded-2xl border transition-all duration-300 ${
+                    isSelected ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_15px_rgba(251,191,36,0.3)] scale-105 z-10' : 
+                    isUnlocked ? 'border-white/10 bg-slate-800/50 hover:bg-slate-700/50 hover:border-cyan-500/50 cursor-pointer' : 
+                    'border-transparent bg-slate-900/50 opacity-80 cursor-not-allowed'
+                  }`}
+                  onClick={() => isUnlocked && handleAvatarSelect(avatar.id)}
+                >
+                  <div 
+                    className={`relative w-20 h-20 mb-3 ${!isUnlocked ? 'tooltip tooltip-bottom' : ''}`}
+                    data-tip={!isUnlocked ? `Alcanza el Nivel ${avatar.requiredLevel} para desbloquear` : ''}
+                  >
+                    <img 
+                      src={avatar.src} 
+                      alt={avatar.name} 
+                      className={`w-full h-full object-contain drop-shadow-lg transition-all ${!isUnlocked ? 'grayscale-[100%] brightness-[0.2] contrast-200' : 'group-hover:scale-110'}`} 
+                    />
+                    
+                    {/* Capa de Candado */}
+                    {!isUnlocked && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Lock className="w-8 h-8 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" />
+                      </div>
+                    )}
+                  </div>
+                  
+                  <span className={`text-xs font-bold text-center ${isSelected ? 'text-amber-400' : isUnlocked ? 'text-white' : 'text-slate-500'}`}>{avatar.name}</span>
+                  {isSelected && <span className="absolute -top-2 -right-2 bg-amber-500 text-slate-900 text-[10px] font-black px-2 py-0.5 rounded-full shadow-md">EQUIPADO</span>}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <form method="dialog" className="modal-backdrop">
+          <button>Cerrar</button>
+        </form>
+      </dialog>
+      
     </div>
   );
 }
