@@ -73,9 +73,9 @@ Conexión visual de los datos para que el estudiante interactúe con la platafor
   * Configuración de React Router para la navegación SPA (Single Page Application). *(Completado)*
   * Creación de "Rutas Privadas" que redirigen al login si el usuario no tiene token válido. *(Completado)*
 
-* **Fase 9: Panel de Control del Estudiante (Dashboard)** (🟡 En proceso)
+* **Fase 9: Panel de Control del Estudiante (Dashboard)** (✅ Completado)
   * Maquetación de la vista principal adaptada al nivel actual del alumno. *(Inicio y Misión completados)*
-  * Creación de tarjetas de cursos y barras de progreso utilizando componentes DaisyUI. *(Tarjetas completadas)*
+  * Tarjetas de resumen para mostrar puntos de experiencia (XP) y últimos cursos tomados. *(Estética Glassmorphism implementada con datos simulados)*
 
 * **Fase 10: Consumo de Datos y Estado Global** (🟡 En proceso)
   * Integración de Axios/Fetch (con interceptores de tokens) para conectar React con Django. *(Cursos completado, Auth pendiente)*

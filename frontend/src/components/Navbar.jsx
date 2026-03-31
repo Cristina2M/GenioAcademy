@@ -49,18 +49,29 @@ export default function Navbar() {
               <span className="text-sm font-bold text-white leading-tight">Agente {user.username || 'Recluta'}</span>
               <span className="text-xs text-cyan-400 font-semibold tracking-wide">Nivel de Rango {user.current_student_level || 1}</span>
             </div>
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-cyan-500 p-[2px] hidden sm:block">
-              <div className="w-full h-full bg-slate-900 rounded-full flex items-center justify-center">
-                 <UserIcon className="w-5 h-5 text-white" />
+            
+            {/* Menú Desplegable del Avatar */}
+            <div className="dropdown dropdown-end">
+              <div tabIndex={0} role="button" className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-cyan-500 p-[2px] hidden sm:flex cursor-pointer hover:scale-105 transition-transform hover:shadow-[0_0_15px_rgba(236,72,153,0.5)]">
+                <div className="w-full h-full bg-slate-900 rounded-full flex items-center justify-center">
+                   <UserIcon className="w-5 h-5 text-white" />
+                </div>
               </div>
+              <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow-2xl bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-2xl w-52 mt-4 space-y-1 hidden sm:flex">
+                <li>
+                  <Link to="/dashboard" className="text-slate-200 hover:text-white hover:bg-white/10 rounded-xl transition-all font-semibold">
+                    <UserIcon className="w-4 h-4 text-cyan-400"/> Mi Panel Base
+                  </Link>
+                </li>
+                <div className="h-[1px] bg-white/10 my-1 w-full relative"></div>
+                <li>
+                  <button onClick={logoutUser} className="text-red-400 hover:text-red-200 hover:bg-red-500/20 rounded-xl transition-all font-semibold tracking-wide">
+                    <LogOut className="w-4 h-4"/> Eyectar Nave
+                  </button>
+                </li>
+              </ul>
             </div>
-            <button 
-              onClick={logoutUser} 
-              className="btn btn-ghost text-red-400 hover:bg-red-500/10 hover:text-red-300 btn-sm ml-2 px-2"
-              title="Cerrar Sesión"
-            >
-              <LogOut className="w-5 h-5" />
-            </button>
+            {/* Fin menú desplegable */}
           </div>
         ) : (
           // Vista Usuario No Conectado
@@ -87,7 +98,10 @@ export default function Navbar() {
             <li><Link to="/courses">Catálogo Estelar</Link></li>
             <li><Link to="/mission">La Misión</Link></li>
             {user ? (
-               <li><button onClick={logoutUser} className="text-red-400">Desconectar nave</button></li>
+               <>
+                 <li><Link to="/dashboard" className="text-cyan-400 font-bold border border-cyan-500/30 rounded-lg my-1">Mi Panel Base</Link></li>
+                 <li><button onClick={logoutUser} className="text-red-400 hover:bg-red-500/20 rounded-lg">Desconectar nave</button></li>
+               </>
             ) : (
                <>
                  <li><Link to="/login" className="text-cyan-400">Entrar</Link></li>
