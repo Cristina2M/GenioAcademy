@@ -77,9 +77,10 @@ Conexión visual de los datos para que el estudiante interactúe con la platafor
   * Maquetación de la vista principal adaptada al nivel actual del alumno. *(Inicio y Misión completados)*
   * Tarjetas de resumen para mostrar puntos de experiencia (XP) y últimos cursos tomados. *(Estética Glassmorphism implementada con datos simulados)*
 
-* **Fase 10: Consumo de Datos y Estado Global** (🟡 En proceso)
-  * Integración de Axios/Fetch (con interceptores de tokens) para conectar React con Django. *(Cursos completado, Auth pendiente)*
-  * Gestión del estado global (contexto del usuario) para no tener que pedir los datos constantemente. *(Pendiente)*
+* **Fase 10: Consumo de Datos y Estado Global** (✅ Completado)
+  * Integración de Axios/Fetch (con interceptores de tokens) para conectar React con Django. *(Completado)*
+  * Desarrollo del Componente `CoursePlayer.jsx` como entorno de vídeo estilo Glassmorphism. *(Completado)*
+  * Gestión del estado global mediante `AuthContext` actualizando progreso y avatares. *(Completado)*
 
 #### 🤖 HITO IV: Inteligencia Artificial Local (Tutor Virtual)
 El valor diferencial: un asistente integrado que respeta la privacidad corriendo en el propio servidor.

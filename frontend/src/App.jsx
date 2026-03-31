@@ -6,6 +6,7 @@ import Mission from './pages/Mission';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import CoursePlayer from './pages/CoursePlayer';
 import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './utils/PrivateRoute';
 import spaceBg from './assets/img/logo-fondo.jpg';
@@ -57,6 +58,7 @@ function App() {
               
               {/* Rutas Privadas y de Usuario (Protegidas por PrivateRoute) */}
               <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+              <Route path="/player/:courseId" element={<PrivateRoute><CoursePlayer /></PrivateRoute>} />
               
               <Route path="*" element={
                 <div className="flex flex-col items-center justify-center min-h-[60vh]">

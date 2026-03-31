@@ -1,20 +1,56 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Target, Trophy, Flame, Compass, Play, BookOpen, Star, Lock, X } from 'lucide-react';
 import AuthContext from '../context/AuthContext';
+import axiosInstance from '../api/axios';
 import { getStudentAvatar, avatarDatabase } from '../utils/avatarUtils';
 
 export default function Dashboard() {
   const { user, updateAvatar } = useContext(AuthContext);
   const [isUpdatingAvatar, setIsUpdatingAvatar] = useState(false);
+  const [activeCourse, setActiveCourse] = useState(null);
+  const [loadingCourse, setLoadingCourse] = useState(true);
 
-  // Cálculos de Gamificación (Podríamos traerlos del backend luego, aquí lo simulamos con lo que da el Token)
-  const currentXP = user?.experience_points || 350; // Extraído del backend si lo configuraste, o mock
+  // Cálculos de Gamificación
+  const currentXP = user?.experience_points || 350;
   const currentLevel = user?.current_student_level || 1;
   const currentAvatarId = user?.selected_avatar || currentLevel;
   
   const xpForNextLevel = currentLevel * 500;
   const progressPercentage = Math.round((currentXP / xpForNextLevel) * 100);
+
+  useEffect(() => {
+    // Fase 10 (Fix): Para evitar dar un curso superior al nivel del alumno y que el Backend lo rechace (403),
+    // consultamos el árbol de categorías, que nos marca 'is_locked: false' en los niveles permitidos.
+    const fetchCourses = async () => {
+      try {
+        const response = await axiosInstance.get('courses/categories/');
+        const categories = response.data;
+        
+        let foundUnlockedCourse = null;
+        
+        // Iteramos el árbol para encontrar el primer curso en un nivel no bloqueado
+        for (const cat of categories) {
+           for (const level of cat.knowledge_levels) {
+             if (!level.is_locked && level.courses && level.courses.length > 0) {
+                foundUnlockedCourse = level.courses[0];
+                break;
+             }
+           }
+           if (foundUnlockedCourse) break;
+        }
+        
+        if (foundUnlockedCourse) {
+           setActiveCourse(foundUnlockedCourse);
+        }
+      } catch (error) {
+        console.error("Error al obtener cursos seguros", error);
+      } finally {
+        setLoadingCourse(false);
+      }
+    };
+    fetchCourses();
+  }, []);
 
   const handleAvatarSelect = async (avatarId) => {
     setIsUpdatingAvatar(true);
@@ -25,7 +61,6 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen relative pt-24 pb-12 px-4 sm:px-6 lg:px-8">
-      
       {/* Nebulosas de fondo */}
       <div className="fixed top-20 left-10 w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[150px] pointer-events-none animate-[pulse_10s_infinite] -z-10"></div>
       <div className="fixed bottom-20 right-10 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[150px] pointer-events-none animate-[pulse_8s_infinite] -z-10"></div>
@@ -36,28 +71,20 @@ export default function Dashboard() {
             SECCIÓN 1: CABECERA DEL JUGADOR
             ========================================== */}
         <section className="card bg-slate-900/60 backdrop-blur-2xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.3)] overflow-hidden">
-          {/* El brillo de la barra superior de la tarjeta */}
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 via-pink-500 to-amber-500"></div>
 
           <div className="card-body p-8 sm:p-10 flex flex-col md:flex-row items-center gap-8">
-            
             {/* Avatar Magnético */}
-            <div 
-              className="relative shrink-0 group cursor-pointer"
-              onClick={() => document.getElementById('avatar_modal').showModal()}
-            >
+            <div className="relative shrink-0 group cursor-pointer" onClick={() => document.getElementById('avatar_modal').showModal()}>
               <div className="absolute inset-0 bg-gradient-to-br from-pink-500 to-cyan-500 rounded-full blur-xl opacity-40 group-hover:opacity-60 transition-opacity"></div>
               
               <div className={`w-32 h-32 rounded-full border-4 ${isUpdatingAvatar ? 'border-amber-400 animate-pulse' : 'border-slate-900'} relative z-10 p-1 bg-gradient-to-br from-cyan-400 to-pink-500 flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(34,211,238,0.3)]`}>
                 <img src={getStudentAvatar(currentAvatarId)} alt="Avatar de Estudiante" className="w-full h-full object-cover rounded-full bg-slate-800" />
-                
-                {/* Overlay Oscuro al pasar el ratón para indicar que es clickeable */}
                 <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center rounded-full">
                    <div className="text-white text-xs font-bold bg-slate-900/80 px-2 py-1 rounded-full border border-white/20">Cambiar</div>
                 </div>
               </div>
               
-              {/* Insignia de Nivel superpuesta */}
               <div className="absolute -bottom-2 -right-2 bg-slate-900 rounded-lg p-1 z-20 shadow-xl border border-white/10">
                 <div className="bg-gradient-to-r from-amber-400 to-orange-500 font-black text-slate-900 px-3 py-1 rounded shadow-inner text-sm">
                   NVL. {currentLevel}
@@ -74,7 +101,6 @@ export default function Dashboard() {
                 <p className="text-slate-400 mt-1 font-medium">Estás a un paso de dominar el siguiente desafío.</p>
               </div>
 
-              {/* Barra de DaisyUI */}
               <div className="w-full mt-4 bg-slate-800/50 p-4 rounded-2xl border border-white/5 shadow-inner">
                 <div className="flex justify-between items-end mb-2">
                   <span className="text-xs font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1">
@@ -84,23 +110,16 @@ export default function Dashboard() {
                     {currentXP} <span className="text-slate-500 font-medium">/ {xpForNextLevel} XP</span>
                   </span>
                 </div>
-                {/* Progress Bar simulada con div para poder poner degradados épicos */}
                 <div className="h-3 w-full bg-slate-900 rounded-full overflow-hidden shrink-0 shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)]">
-                  <div 
-                    className="h-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 relative transition-all duration-1000 ease-out" 
-                    style={{ width: `${progressPercentage}%` }}
-                  >
-                    {/* Efecto de luz moviéndose */}
+                  <div className="h-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 relative transition-all duration-1000 ease-out" style={{ width: `${progressPercentage}%` }}>
                     <div className="absolute top-0 right-0 bottom-0 w-10 bg-gradient-to-r from-transparent to-white/30 animate-[pulse_2s_infinite]"></div>
                   </div>
                 </div>
                 <p className="text-right text-xs text-slate-500 mt-2 font-semibold">Te faltan {xpForNextLevel - currentXP} XP para ascender.</p>
               </div>
             </div>
-
           </div>
         </section>
-
 
         {/* ==========================================
             GRID SECUNDARIO: ACCESOS Y MEDALLAS
@@ -113,49 +132,63 @@ export default function Dashboard() {
               <Target className="w-6 h-6 text-pink-500" /> Operación Principal
             </h2>
             
-            <div className="card bg-slate-900/40 backdrop-blur-md border border-white/10 shadow-2xl hover:border-pink-500/30 transition-colors group">
-              <div className="card-body">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <span className="badge bg-pink-500/20 text-pink-400 border-pink-500/30 font-bold tracking-wide mb-3">MATEMÁTICAS - ESO 1</span>
-                    <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-pink-400 transition-colors">Álgebra: Rescate de Variables (Mock)</h3>
-                    <p className="text-slate-400">Te quedaste en la Lección 3 analizando las ecuaciones de primer grado para rescatar a 'X'.</p>
+            {/* Tarjeta de Misión Actual (Conectada a BBDD) */}
+            <div className="bg-gradient-to-br from-slate-900 to-slate-800 border-2 border-cyan-500/30 rounded-2xl p-6 shadow-[0_0_20px_rgba(34,211,238,0.15)] hover:border-cyan-500/60 transition-colors relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <Target className="w-24 h-24 text-cyan-400" />
+              </div>
+              <h3 className="text-cyan-400 font-bold mb-1 uppercase tracking-widest text-xs flex items-center gap-2">
+                Misión Sugerida {loadingCourse && <span className="loading loading-spinner loading-xs"></span>}
+              </h3>
+              
+              <h2 className="text-white text-xl font-bold mb-4">
+                {activeCourse ? activeCourse.title : "Inscríbete en una Misión"}
+              </h2>
+              
+              {activeCourse && (
+                <div className="flex flex-col gap-2 mb-6 relative z-10">
+                  <div className="flex justify-between text-xs text-slate-300">
+                    <span>Progreso del Sector</span>
+                    <span>0%</span>
                   </div>
-                  <div className="w-16 h-16 rounded-xl bg-slate-800 flex items-center justify-center shrink-0 border border-white/5 shadow-inner">
-                    <span className="text-xl font-bold text-white">45%</span>
+                  <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-white/10">
+                    <div className="h-full bg-gradient-to-r from-cyan-500 to-pink-500 w-[0%]"></div>
                   </div>
                 </div>
+              )}
 
-                <div className="mt-6 flex flex-col sm:flex-row items-center gap-4">
-                  <Link to="/courses" className="btn bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white border-none w-full sm:w-auto px-8 shadow-[0_0_15px_rgba(236,72,153,0.4)]">
-                    <Play className="w-4 h-4 mr-2 fill-current"/> Reanudar Vuelo
+              <div className="flex gap-4">
+                {activeCourse ? (
+                  <Link to={`/player/${activeCourse.id}`} className="btn bg-cyan-500 hover:bg-cyan-400 text-slate-900 border-none w-full shadow-[0_0_15px_rgba(34,211,238,0.4)] font-bold relative z-10 transition-transform">
+                    Entrar a la Academia <Play className="w-4 h-4 ml-1" />
                   </Link>
-                  <Link to="/courses" className="btn btn-ghost text-slate-300 hover:text-white hover:bg-white/5 w-full sm:w-auto">
-                     <BookOpen className="w-4 h-4 mr-2" /> Explorar Catálogo
+                ) : (
+                  <Link to="/courses" className="btn btn-outline border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-slate-900 w-full relative z-10">
+                    Explorar Catálogo <Compass className="w-4 h-4 ml-1" />
                   </Link>
-                </div>
+                )}
               </div>
             </div>
 
-             {/* ZONA DE MEDALLAS FALSAS */}
-             <h2 className="text-2xl font-black text-white px-2 flex items-center gap-2 mt-10">
+            {/* ZONA DE MEDALLAS */}
+            <h2 className="text-2xl font-black text-white px-2 flex items-center gap-2 mt-10">
               <Trophy className="w-6 h-6 text-amber-500" /> Vitrina de Reconocimientos
             </h2>
-             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {[
-                  { name: 'Primer Despegue', icon: <Flame className="w-6 h-6 text-orange-500"/>, color: 'from-orange-500/20 to-red-600/20', unlocked: true },
-                  { name: 'Matemático Novato', icon: <Target className="w-6 h-6 text-blue-400"/>, color: 'from-blue-500/20 to-cyan-500/20', unlocked: true },
-                  { name: 'Cartógrafo Espacial', icon: <Compass className="w-6 h-6 text-emerald-400"/>, color: 'from-emerald-500/20 to-green-600/20', unlocked: false },
-                  { name: 'Sabio Estelar', icon: <Trophy className="w-6 h-6 text-amber-300"/>, color: 'from-amber-500/20 to-yellow-600/20', unlocked: false },
-                ].map((badge, idx) => (
-                  <div key={idx} className={`rounded-2xl p-4 border flex flex-col items-center justify-center text-center transition-all ${badge.unlocked ? `bg-gradient-to-br ${badge.color} border-white/20 shadow-lg` : 'bg-slate-900/30 border-white/5 grayscale opacity-50'}`}>
-                    <div className="w-14 h-14 rounded-full bg-slate-900 border border-white/10 shadow-inner flex items-center justify-center mb-3">
-                       {badge.icon}
-                    </div>
-                    <span className="text-xs font-bold text-white tracking-wide">{badge.name}</span>
-                  </div>
-                ))}
-             </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+               {[
+                 { name: 'Primer Despegue', icon: <Flame className="w-6 h-6 text-orange-500"/>, color: 'from-orange-500/20 to-red-600/20', unlocked: true },
+                 { name: 'Matemático Novato', icon: <Target className="w-6 h-6 text-blue-400"/>, color: 'from-blue-500/20 to-cyan-500/20', unlocked: true },
+                 { name: 'Cartógrafo Espacial', icon: <Compass className="w-6 h-6 text-emerald-400"/>, color: 'from-emerald-500/20 to-green-600/20', unlocked: false },
+                 { name: 'Sabio Estelar', icon: <Trophy className="w-6 h-6 text-amber-300"/>, color: 'from-amber-500/20 to-yellow-600/20', unlocked: false },
+               ].map((badge, idx) => (
+                 <div key={idx} className={`rounded-2xl p-4 border flex flex-col items-center justify-center text-center transition-all ${badge.unlocked ? `bg-gradient-to-br ${badge.color} border-white/20 shadow-lg` : 'bg-slate-900/30 border-white/5 grayscale opacity-50'}`}>
+                   <div className="w-14 h-14 rounded-full bg-slate-900 border border-white/10 shadow-inner flex items-center justify-center mb-3">
+                      {badge.icon}
+                   </div>
+                   <span className="text-xs font-bold text-white tracking-wide">{badge.name}</span>
+                 </div>
+               ))}
+            </div>
           </div>
 
           {/* COLUMNA DERECHA: SIDEBAR */}
@@ -238,7 +271,6 @@ export default function Dashboard() {
                       className={`w-full h-full object-contain drop-shadow-lg transition-all ${!isUnlocked ? 'grayscale-[100%] brightness-[0.2] contrast-200' : 'group-hover:scale-110'}`} 
                     />
                     
-                    {/* Capa de Candado */}
                     {!isUnlocked && (
                       <div className="absolute inset-0 flex items-center justify-center">
                         <Lock className="w-8 h-8 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" />
