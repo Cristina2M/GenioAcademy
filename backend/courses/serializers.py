@@ -22,9 +22,18 @@ class LessonSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     # Relación Inversa para devolver las lecciones anidadas al curso
     lessons = LessonSerializer(many=True, read_only=True)
+    is_completed = serializers.SerializerMethodField()
+    
     class Meta:
         model = Course
         fields = '__all__'
+
+    def get_is_completed(self, obj):
+        request = self.context.get('request')
+        if not request or not request.user.is_authenticated:
+            return False
+        from .models import CourseCompletion
+        return CourseCompletion.objects.filter(user=request.user, course=obj).exists()
 
 # Mapea y serializa los "Niveles de Conocimiento" anidando los cursos disponibles en ese nivel
 class KnowledgeLevelSerializer(serializers.ModelSerializer):

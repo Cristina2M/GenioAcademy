@@ -63,16 +63,22 @@ class CourseViewSet(viewsets.ModelViewSet):
                 
             user.save()
             
+            # 4. Generar nuevo JWT con nuestro serializador personalizado para inyectar XP y Nivel
+            from users.serializers import MyTokenObtainPairSerializer
+            refresh = MyTokenObtainPairSerializer.get_token(user)
+            
             return Response({
-                "message": f"¡Curso completado! Has ganado {course.xp_reward} XP.",
+                "detail": f"¡Recompensas reclamadas! Misión Superada.",
                 "experience_points": user.experience_points,
-                "current_level": user.current_student_level,
-                "leveled_up": leveled_up
+                "level": user.current_student_level,
+                "level_up": leveled_up,
+                "access": str(refresh.access_token),
+                "refresh": str(refresh)
             }, status=status.HTTP_200_OK)
             
         except IntegrityError:
             # Interceptamos si un Hacker/Tramposo intenta mandar el POST 20 veces al mismo curso
-            return Response({"error": "Anti-Farmeo: Ya has cobrado la experiencia de este curso anteriormente."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": "Anti-Farmeo: Ya has cobrado la experiencia de este curso anteriormente."}, status=status.HTTP_400_BAD_REQUEST)
 
 # Controlador de vista de Lecciones Teóricas
 class LessonViewSet(viewsets.ModelViewSet):

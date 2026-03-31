@@ -11,13 +11,20 @@ export default function Dashboard() {
   const [activeCourse, setActiveCourse] = useState(null);
   const [loadingCourse, setLoadingCourse] = useState(true);
 
-  // Cálculos de Gamificación
-  const currentXP = user?.experience_points || 350;
+  // Cálculos de Gamificación (Progresión Relativa)
+  const currentXP = user?.experience_points || 0;
   const currentLevel = user?.current_student_level || 1;
-  const currentAvatarId = user?.selected_avatar || currentLevel;
+  const currentAvatarId = user?.selected_avatar || "buho1";
   
   const xpForNextLevel = currentLevel * 500;
-  const progressPercentage = Math.round((currentXP / xpForNextLevel) * 100);
+  const xpBaseForCurrentLevel = (currentLevel - 1) * 500;
+  
+  // Extraemos la cantidad de XP específica ganada DENTRO del nivel actual
+  const xpEarnedInLevel = Math.max(0, currentXP - xpBaseForCurrentLevel);
+  const xpRequiredForLevel = xpForNextLevel - xpBaseForCurrentLevel; // Siempre 500 con fórmula lineal
+  
+  // Si acabas de subir al nivel 2 (500 XP), progress = (0 / 500) * 100 = 0%
+  const progressPercentage = Math.round((xpEarnedInLevel / xpRequiredForLevel) * 100);
 
   useEffect(() => {
     // Fase 10 (Fix): Para evitar dar un curso superior al nivel del alumno y que el Backend lo rechace (403),
@@ -28,20 +35,31 @@ export default function Dashboard() {
         const categories = response.data;
         
         let foundUnlockedCourse = null;
+        let lastSeenCourse = null;
         
-        // Iteramos el árbol para encontrar el primer curso en un nivel no bloqueado
+        // Iteramos el árbol para encontrar el primer curso en un nivel no bloqueado que NO esté completado
         for (const cat of categories) {
            for (const level of cat.knowledge_levels) {
              if (!level.is_locked && level.courses && level.courses.length > 0) {
-                foundUnlockedCourse = level.courses[0];
-                break;
+                // Iteramos cursos guardando el último por si acaso, pero buscando uno sin completar
+                for (const c of level.courses) {
+                   lastSeenCourse = c;
+                   if (!c.is_completed) {
+                      foundUnlockedCourse = c;
+                      break;
+                   }
+                }
              }
+             if (foundUnlockedCourse) break;
            }
            if (foundUnlockedCourse) break;
         }
         
         if (foundUnlockedCourse) {
            setActiveCourse(foundUnlockedCourse);
+        } else if (lastSeenCourse) {
+           // Si ya completó absolutamente todo, le asignamos el último como repaso
+           setActiveCourse(lastSeenCourse);
         }
       } catch (error) {
         console.error("Error al obtener cursos seguros", error);
@@ -107,7 +125,7 @@ export default function Dashboard() {
                     <Star className="w-3 h-3"/> Progreso de Rango
                   </span>
                   <span className="text-sm font-bold text-white">
-                    {currentXP} <span className="text-slate-500 font-medium">/ {xpForNextLevel} XP</span>
+                    {xpEarnedInLevel} <span className="text-slate-500 font-medium">/ {xpRequiredForLevel} XP</span>
                   </span>
                 </div>
                 <div className="h-3 w-full bg-slate-900 rounded-full overflow-hidden shrink-0 shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)]">
@@ -115,7 +133,7 @@ export default function Dashboard() {
                     <div className="absolute top-0 right-0 bottom-0 w-10 bg-gradient-to-r from-transparent to-white/30 animate-[pulse_2s_infinite]"></div>
                   </div>
                 </div>
-                <p className="text-right text-xs text-slate-500 mt-2 font-semibold">Te faltan {xpForNextLevel - currentXP} XP para ascender.</p>
+                <p className="text-right text-xs text-slate-500 mt-2 font-semibold">Te faltan {xpRequiredForLevel - xpEarnedInLevel} XP para ascender al Nivel {currentLevel + 1}.</p>
               </div>
             </div>
           </div>
@@ -148,19 +166,19 @@ export default function Dashboard() {
               {activeCourse && (
                 <div className="flex flex-col gap-2 mb-6 relative z-10">
                   <div className="flex justify-between text-xs text-slate-300">
-                    <span>Progreso del Sector</span>
-                    <span>0%</span>
+                    <span>Estado Misión</span>
+                    <span>{activeCourse.is_completed ? 'Completada ✔' : '0%'}</span>
                   </div>
                   <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-white/10">
-                    <div className="h-full bg-gradient-to-r from-cyan-500 to-pink-500 w-[0%]"></div>
+                    <div className={`h-full ${activeCourse.is_completed ? 'bg-green-500 w-full' : 'bg-gradient-to-r from-cyan-500 to-pink-500 w-[0%]'}`}></div>
                   </div>
                 </div>
               )}
 
               <div className="flex gap-4">
                 {activeCourse ? (
-                  <Link to={`/player/${activeCourse.id}`} className="btn bg-cyan-500 hover:bg-cyan-400 text-slate-900 border-none w-full shadow-[0_0_15px_rgba(34,211,238,0.4)] font-bold relative z-10 transition-transform">
-                    Entrar a la Academia <Play className="w-4 h-4 ml-1" />
+                  <Link to={`/player/${activeCourse.id}`} className={`btn ${activeCourse.is_completed ? 'bg-slate-700 hover:bg-slate-600 text-white' : 'bg-cyan-500 hover:bg-cyan-400 text-slate-900'} border-none w-full shadow-[0_0_15px_rgba(34,211,238,0.4)] font-bold relative z-10 transition-transform`}>
+                    {activeCourse.is_completed ? 'Repasar Entrenamiento' : 'Entrar a la Academia'} <Play className="w-4 h-4 ml-1" />
                   </Link>
                 ) : (
                   <Link to="/courses" className="btn btn-outline border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-slate-900 w-full relative z-10">
