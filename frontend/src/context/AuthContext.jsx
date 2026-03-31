@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
                 localStorage.setItem('authTokens', JSON.stringify(data));
                 
                 // Redirigir como un campeón al espacio exterior
-                navigate('/courses');
+                navigate('/dashboard');
                 return { success: true };
             }
         } catch (error) {

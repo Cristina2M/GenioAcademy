@@ -5,7 +5,9 @@ import Courses from './pages/Courses';
 import Mission from './pages/Mission';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
 import { AuthProvider } from './context/AuthContext';
+import PrivateRoute from './utils/PrivateRoute';
 import spaceBg from './assets/img/logo-fondo.jpg';
 import ScrollToTop from './components/ScrollToTop';
 import ScrollToTopButton from './components/ScrollToTopButton';
@@ -52,6 +54,10 @@ function App() {
               <Route path="/mission" element={<Mission />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              
+              {/* Rutas Privadas y de Usuario (Protegidas por PrivateRoute) */}
+              <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+              
               <Route path="*" element={
                 <div className="flex flex-col items-center justify-center min-h-[60vh]">
                   <h1 className="text-5xl font-bold text-pink-500">404</h1>

@@ -20,7 +20,7 @@ export default function Navbar() {
         {/* Logo sobresaliente (Breakout Logo) */}
         {/* Usamos el componente <Link> de React Router envés de la etiqueta <a> clásica de HTML. 
             Esto hace que la página cambie AL INSTANTE sin recargar todo el navegador de cero. */}
-        <Link to="/" className="group relative z-[100] w-24 h-24 md:w-36 md:h-36 -mb-12 md:-mb-16 -ml-2 mr-2">
+        <Link to={user ? "/dashboard" : "/"} className="group relative z-[100] w-24 h-24 md:w-36 md:h-36 -mb-12 md:-mb-16 -ml-2 mr-2">
           <div className="w-full h-full bg-slate-950 rounded-full border-2 border-cyan-500/40 p-2 shadow-[0_15px_30px_rgba(0,0,0,0.6)] group-hover:scale-105 group-hover:border-pink-500/40 transition-all duration-300 flex items-center justify-center">
             <div className="w-full h-full rounded-full bg-gradient-to-br from-pink-500/10 to-cyan-500/10 flex items-center justify-center p-1">
               <img src={logoPrincipal} alt="Genio Academy Logo" className="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]" />
@@ -28,7 +28,7 @@ export default function Navbar() {
           </div>
         </Link>
         
-        <Link to="/" className="btn btn-ghost hover:bg-transparent h-auto py-2 px-2 hidden sm:flex">
+        <Link to={user ? "/dashboard" : "/"} className="btn btn-ghost hover:bg-transparent h-auto py-2 px-2 hidden sm:flex">
           <span className="font-extrabold text-2xl tracking-tighter text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">Genio <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-cyan-400">Academy</span></span>
         </Link>
       </div>
