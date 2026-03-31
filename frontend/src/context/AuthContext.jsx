@@ -1,9 +1,26 @@
+// ============================================================
+// ARCHIVO: AuthContext.jsx
+// FUNCIÓN: "El cerebro de la sesión" — Contexto global de autenticación.
+//
+// Este archivo hace que TODOS los componentes de la app puedan saber:
+//   - Si el alumno está conectado o no
+//   - Quién es el alumno (nombre, nivel, plan, avatar...)
+//   - Cómo hacer login, logout, registro, cambiar avatar y completar misiones
+//
+// Funciona como una "caja de control" central. En lugar de pasar esta
+// información de componente en componente, la ponemos aquí y la recogen
+// los que la necesitan con el hook "useContext(AuthContext)".
+//
+// Los datos del alumno vienen del JWT (el carnet digital), que el backend
+// genera al hacer login y al completar cada misión.
+// ============================================================
+
 import { createContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/axios';
 
-// 1. Creamos el portal mágico (El Contexto de React)
+// Creamos el "portal" de React que otros componentes pueden importar para obtener los datos
 const AuthContext = createContext();
 
 // 2. Creamos la nave nodriza que proveerá ese portal a toda la app

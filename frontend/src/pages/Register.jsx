@@ -177,7 +177,7 @@ export default function Register() {
                 onClick={() => setStep(1)} 
                 className="btn btn-sm btn-ghost absolute top-4 left-4 text-slate-400 hover:text-white"
               >
-                Vover Iniciar
+                ← Volver al Plan
               </button>
 
               <div className="text-center mb-8 mt-4">
