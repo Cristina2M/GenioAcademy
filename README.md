@@ -2,7 +2,7 @@
 
 Este proyecto es una plataforma de academia online diseñada específicamente para estudiantes de la ESO. A diferencia de las plataformas tradicionales, Genio Academy organiza el contenido por **niveles de conocimiento específicos** y no por cursos académicos, permitiendo un aprendizaje personalizado.
 
-## 🚀 Fase 1: Cimentación y Entorno (Docker & Estructura)
+## 🚀 Entorno y Puesta en Marcha
 
 Se ha implementado una arquitectura de **microservicios dockerizados** para garantizar que el entorno de desarrollo sea idéntico al de producción.
 
@@ -22,55 +22,97 @@ Debe preexistir o ser inyectado por Docker un contexto de variables (`.env` o co
 * Las credenciales de levantamiento y conexión inter-contenedor de PostgreSQL (`POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`).
 
 
-### 📑 Fases del Proyecto (Roadmap)
+### 📑 Master Plan de Ingeniería: Genio Academy
 
-A continuación se detalla el progreso del proyecto siguiendo la planificación establecida:
+El ciclo de vida de este proyecto se estructura en 5 grandes hitos, abarcando desde la infraestructura base hasta la integración de Inteligencia Artificial en local.
 
-* **Fase 1: Análisis y Requisitos (Semanas 1-2)** 🟢
-* Definición de la idea principal: Aprendizaje incremental para alumnos de la ESO.
-* Identificación de los niveles de conocimiento (Nivel 1, 2 y 3).
-* Diseño de la arquitectura técnica (Docker + React + Django).
+#### 🏗️ HITO I: Fundamentos e Infraestructura DevOps
+El objetivo de esta etapa es crear un entorno de trabajo sólido, replicable y escalable.
+
+* **Fase 1: Conceptualización y Arquitectura Lógica** (✅ Completado)
+  * Definición estricta de los 3 niveles de conocimiento (Nivel 1, 2 y 3) para la ESO.
+  * Diseño de diagramas de flujo (User Journey) desde el registro hasta el uso de la IA.
+
+* **Fase 2: Infraestructura y Orquestación** (✅ Completado)
+  * Configuración del archivo `docker-compose.yml` para microservicios.
+  * Aislamiento de entornos: Frontend (Node), Backend (Python) y Base de Datos (PostgreSQL).
+  * Creación de volúmenes persistentes para evitar pérdida de datos.
+
+* **Fase 3: Sistema de Diseño y UI Core** (✅ Completado)
+  * Inicialización del entorno cliente con React + Vite.
+  * Implementación del motor de estilos moderno Tailwind CSS v4.
+  * Integración de la librería de componentes DaisyUI para estandarizar la interfaz.
+
+#### 🧠 HITO II: El Cerebro de Datos y Backend
+Desarrollo de la lógica de negocio, seguridad y persistencia de la información.
+
+* **Fase 4: Modelado de la Base de Datos Relacional** (✅ Completado)
+  * Desarrollo del modelo `CustomUser` en Django integrando el campo `knowledge_level`.
+  * Creación de los modelos de aprendizaje: Curso, Tema, Lección y Recurso.
+  * Ejecución de migraciones iniciales en PostgreSQL.
+
+* **Fase 5: Sistema de Autenticación y Seguridad** (🟡 En proceso)
+  * Implementación de JWT (JSON Web Tokens) para sesiones seguras sin estado. *(Completado en Backend)*
+  * Creación de los endpoints de registro y login de alumnos. *(Login completado)*
+  * Configuración de políticas de CORS para proteger las peticiones entre puertos. *(Completado)*
+
+* **Fase 6: Desarrollo de la API REST Core** (✅ Completado)
+  * Configuración de Django REST Framework (DRF) y serializadores.
+  * Creación del CRUD (Crear, Leer, Actualizar, Borrar) para el contenido educativo.
+
+* **Fase 7: Motor de Lógica Incremental** (🔴 Pendiente)
+  * Programación del algoritmo que valida si un alumno cumple los requisitos para subir de nivel.
+  * Filtros de seguridad en el backend para bloquear contenido superior al nivel del usuario.
+
+#### 💻 HITO III: Interfaz y Experiencia del Alumno (Frontend)
+Conexión visual de los datos para que el estudiante interactúe con la plataforma.
+
+* **Fase 8: Enrutamiento y Protección del Cliente** (📍 Estamos aquí)
+  * Configuración de React Router para la navegación SPA (Single Page Application). *(Completado)*
+  * Creación de "Rutas Privadas" que redirigen al login si el usuario no tiene token válido. *(Pendiente)*
+
+* **Fase 9: Panel de Control del Estudiante (Dashboard)** (🟡 En proceso)
+  * Maquetación de la vista principal adaptada al nivel actual del alumno. *(Inicio y Misión completados)*
+  * Creación de tarjetas de cursos y barras de progreso utilizando componentes DaisyUI. *(Tarjetas completadas)*
+
+* **Fase 10: Consumo de Datos y Estado Global** (🟡 En proceso)
+  * Integración de Axios/Fetch (con interceptores de tokens) para conectar React con Django. *(Cursos completado, Auth pendiente)*
+  * Gestión del estado global (contexto del usuario) para no tener que pedir los datos constantemente. *(Pendiente)*
+
+#### 🤖 HITO IV: Inteligencia Artificial Local (Tutor Virtual)
+El valor diferencial: un asistente integrado que respeta la privacidad corriendo en el propio servidor.
+
+* **Fase 11: Despliegue de Infraestructura IA** (🔴 Pendiente)
+  * Añadir el servicio Ollama a la red de contenedores de Docker.
+  * Descarga y configuración del modelo de lenguaje (LLM) optimizado para hardware local.
+
+* **Fase 12: Construcción del "Puente IA" (Backend Bridge)** (🔴 Pendiente)
+  * Creación de una clase en Python/Django que se comunique mediante HTTP con el contenedor Ollama.
+  * Prompt Engineering Contextual: Inyectar el nivel del alumno en el prompt para que la IA adapte la dificultad de su respuesta.
+
+* **Fase 13: Interfaz del Asistente Virtual (Chatbot UI)** (🔴 Pendiente)
+  * Desarrollo de la Burbuja Flotante en React para consultas en cualquier pantalla.
+  * Gestión del historial de la conversación y renderizado del texto en tiempo real.
+
+#### 🚀 HITO V: Calidad, Contenido y Cierre Técnico
+Afinación del proyecto para su entrega, exposición y uso real.
+
+* **Fase 14: Inserción de Contenidos y Gamificación** (🔴 Pendiente)
+  * Población de la base de datos con material educativo real de la ESO.
+  * Implementación de recompensas visuales (alertas de éxito, cambios de rango) al subir de nivel.
+
+* **Fase 15: Quality Assurance (QA) y Despliegue Final** (🔴 Pendiente)
+  * Pruebas de integración: intentar vulnerar el sistema accediendo a cursos bloqueados.
+  * Pruebas de estrés del contenedor de IA para asegurar que no colapsa el servidor.
+  * Generación de documentación de la API (Swagger/Redoc) y preparación de la demo técnica.
 
 
-* **Fase 2: Infraestructura y Diseño Base (Semanas 3-4)** 🟢
-* **Dockerización**: Configuración de contenedores para Frontend, Backend y Base de Datos.
-* **Frontend Setup**: Inicialización de React con Vite.
-* **Sistemas de Estilos**: Implementación y configuración de Tailwind CSS v4 y DaisyUI.
-* **Control de Versiones**: Establecimiento del flujo de trabajo con ramas en Git (`main`, `develop`, `feature` y `release`).
-
-
-* **Fase 3: Diseño de BD y Modelo de Datos (Semanas 3-5)** 🟢
-* Diseño del modelo relacional en PostgreSQL.
-* Creación del `CustomUser` en Django para gestionar los niveles de suscripción.
-* Definición de permisos y roles de usuario.
-
-
-* **Fase 4: Desarrollo del Backend y API (Semanas 5-7)** 🟢
-* Creación de la API REST con Django REST Framework (Serializadores y ViewSets).
-* Endpoints para la gestión de alumnos, rutas de cursos jerárquicos y lecciones.
-* Implementación de Autenticación de seguridad mediante JSON Web Tokens (JWT).
-
-
-* **Fase 5: Desarrollo del Frontend e Integración (Semanas 7-9)** 🟢
-* Maquetación de la interfaz de usuario con los componentes de DaisyUI y temática espacial ("Glassmorphism").
-* Consumo de la API desde React (`fetch` a endpoints de Django).
-* Gestión de estados locales y navegación global de la aplicación (React Router DOM).
-* Creación de Vistas: Inicio (Home), Catálogo Estelar interactivo y "La Misión" (Landing page).
-
-
-* **Fase 6: Autenticación, Pruebas y Documentación (Semanas 10-12)** 🟡 **[ACTUAL]**
-* Implementación de formularios de Inicio de Sesión y Registro en React.
-* Conexión con los JWT generados por el backend.
-* Carga de contenido educativo final.
-* Preparación de la memoria final y materiales de la exposición.
 
 
 
 
 
-
-
-## 🎨 Fase 2: Identidad Visual y UI
+## 🎨 Identidad Visual y UI
 
 Hemos integrado un sistema de diseño moderno basado en utilidades que permite un desarrollo rápido de interfaces.
 
@@ -106,18 +148,18 @@ Para que el proyecto funcione, siempre debemos ejecutar estos comandos desde la 
 
 ### 🛠️ Detalles Técnicos y Documentación de Fases Producidas
 
-#### Frontend (Fase 2)
+#### 1. Arquitectura Frontend (Configuración Base)
 1. **Tailwind v4 Config**: Debido a la arquitectura de Docker, la configuración se ha centralizado en `src/index.css` mediante `@import "tailwindcss";` y `@plugin "daisyui";`.
 2. **PostCSS**: Se utiliza `@tailwindcss/postcss` para procesar los estilos correctamente dentro de Vite.
 
-#### Backend y Modelado (Fase 3 y 4)
+#### 2. Lógica de Backend y Base de Datos
 1. **Estructura de Datos (Aprendizaje Incremental)**: El núcleo educativo de la plataforma se modela como:
    * `Categoría` ➔ `Nivel de Conocimiento` ➔ `Curso` ➔ `Lección` ➔ `Ejercicio`
    * Los `Usuarios` disponen de roles jerárquicos basados en su tipo de suscripción (`Nivel 1`, `Nivel 2` o `Nivel 3`) para limitar el acceso al contenido premium.
 2. **Autenticación Segura (JWT)**: Todo el control de sesiones se ha delegado a JSON Web Tokens mediante la biblioteca *SimpleJWT*.
 3. **CORS habilitado**: El servidor Django permite peticiones procedentes del frontend React (`localhost:5173`).
 
-#### Integración de UI (Fase 5)
+#### 3. Integración SPA y UI Avanzada
 1. **Enrutamiento Completo (SPA)**: Configuración en matriz usando `react-router-dom` para transiciones fluidas de página completas eliminando tiempos de carga (incluyendo gestión 404 y auto-scroll a cabecera).
 2. **Consumo de API Reactivo**: Conexión al endpoint de Django de `categories/` gestionada mediante asincronía (`fetch`/`await`) encapsulada en Hooks (`useEffect`, `useState`) para control de estados de carga y error.
 3. **Estética Avanzada (Glassmorphism)**: Creación de la identidad visual propia mediante utilidades avanzadas de Tailwind (opacidades, `backdrop-blur`, brillos internos y animaciones espaciales) aplicadas sobre las Vistas de "Inicio", "La Misión" y "Catálogo".
@@ -132,19 +174,6 @@ Para que el proyecto funcione, siempre debemos ejecutar estos comandos desde la 
   * `GET /api/courses/lessons/` ➔ Lecciones (teoría y vídeo). Solo lectura.
 * **Gestión de Usuarios:**
   * `GET, POST /api/users/users/` ➔ Operaciones CRUD completas sobre la tabla de alumnos.
-
-### 📍 Estado Actual
-
-* [x] Configuración de Docker y Docker Compose.
-* [x] Inicialización de Proyecto Django y React con Vite.
-* [x] Conexión establecida con PostgreSQL.
-* [x] Instalación y configuración de Tailwind CSS v4 y DaisyUI.
-* [x] Creación del Modelo de Usuario Personalizado (Niveles 1, 2 y 3).
-* [x] Creación de modelos de Cursos (Categoría, Niveles, Cursos, Lecciones, Ejercicios).
-* [x] Implementación de API REST con Django REST Framework.
-* [x] Autenticación con JSON Web Tokens (JWT) en Backend.
-* [x] **Fase 5 Completada:** Maquetación e Integración de la Navbar, Inicio, Misión y Catálogo Estelar.
-* [ ] **Desarrollo de Autenticación Frontend (Login/Signup).**
 
 ---
 
