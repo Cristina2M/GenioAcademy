@@ -193,8 +193,13 @@ export default function Dashboard() {
 
           {/* COLUMNA DERECHA: SIDEBAR */}
           <div className="space-y-6">
-            <div className="card bg-slate-800/40 backdrop-blur-sm border border-cyan-500/20 shadow-[0_0_30px_rgba(34,211,238,0.1)]">
-              <div className="card-body p-6">
+            <div className="card bg-slate-800/40 backdrop-blur-sm border border-cyan-500/20 shadow-[0_0_30px_rgba(34,211,238,0.1)] relative overflow-hidden group">
+              {/* Overlay interactivo para indicar "Próximamente" */}
+              <div className="absolute inset-0 bg-slate-950/60 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-[2px]">
+                 <span className="badge border-none bg-cyan-500 text-slate-900 font-bold px-4 py-2 shadow-[0_0_15px_rgba(34,211,238,0.5)]">PRÓXIMAMENTE</span>
+              </div>
+              
+              <div className="card-body p-6 opacity-60 grayscale transition-all group-hover:blur-sm">
                  <h3 className="font-bold text-cyan-400 mb-4 flex items-center gap-2">
                    <Target className="w-5 h-5"/> Misiones Diarias
                  </h3>

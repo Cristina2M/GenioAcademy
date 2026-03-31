@@ -39,7 +39,7 @@ export default function Home() {
                   Entrar al Catálogo <ArrowRight className="ml-2 w-6 h-6"/>
                 </Link>
                 <Link to="/mission" className="btn bg-slate-900/60 backdrop-blur-md border border-slate-600 text-white hover:bg-slate-800 hover:border-pink-500/50 btn-lg rounded-2xl px-8 text-lg hover:-translate-y-1 transition-all">
-                  Descubrir la Filososofía
+                  Descubrir la Filosofía
                 </Link>
               </div>
 
