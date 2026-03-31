@@ -1,9 +1,35 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Lock, LogIn, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, LogIn, ArrowRight, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import AuthContext from '../context/AuthContext';
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const { loginUser } = useContext(AuthContext);
+
+  // Estados de los campos
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Manejador del Formulario
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!username || !password) {
+      setErrorMsg("Debes insertar tus coordenadas.");
+      return;
+    }
+
+    setIsLoading(true);
+    setErrorMsg(null);
+    const result = await loginUser(username, password);
+    
+    if (!result.success) {
+      setErrorMsg(result.error);
+    }
+    setIsLoading(false);
+  };
 
   return (
     <div className="min-h-[85vh] relative flex items-center justify-center py-20 overflow-hidden">
@@ -28,7 +54,14 @@ export default function Login() {
               <p className="text-slate-400 text-sm">Introduce tus credenciales para reanudar tu viaje de conocimiento.</p>
             </div>
 
-            <form className="space-y-6">
+            {errorMsg && (
+              <div className="alert alert-error bg-red-900/50 text-red-200 border border-red-500 mb-6 flex rounded-xl">
+                <AlertCircle className="w-5 h-5 shrink-0" />
+                <span>{errorMsg}</span>
+              </div>
+            )}
+
+            <form className="space-y-6" onSubmit={handleSubmit}>
               
               {/* Campo Nombre de Usuario (Para SimpleJWT solemos usar username o email) */}
               <div className="form-control">
@@ -41,8 +74,10 @@ export default function Login() {
                   </div>
                   <input 
                     type="text" 
-                    placeholder="estudiante@genio.edu" 
+                    placeholder="estudiante_123" 
                     className="input w-full pl-11 bg-slate-800/50 border-white/10 text-white placeholder:text-slate-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all rounded-xl" 
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                   />
                 </div>
               </div>
@@ -61,6 +96,8 @@ export default function Login() {
                     type={showPassword ? "text" : "password"} 
                     placeholder="••••••••" 
                     className="input w-full pl-11 pr-12 bg-slate-800/50 border-white/10 text-white placeholder:text-slate-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all rounded-xl" 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                   <button 
                     type="button" 
@@ -74,10 +111,11 @@ export default function Login() {
 
               {/* Botón Principal Login */}
               <button 
-                type="button" 
+                type="submit" 
+                disabled={isLoading}
                 className="btn w-full mt-4 border-none bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-900 shadow-[0_0_20px_rgba(34,211,238,0.3)] rounded-xl font-extrabold text-base hover:-translate-y-0.5 transition-transform"
               >
-                <LogIn className="w-5 h-5 mr-1" /> Desbloquear Terminal
+                {isLoading ? <span className="loading loading-spinner text-slate-900"></span> : <><LogIn className="w-5 h-5 mr-1" /> Desbloquear Terminal</>}
               </button>
             </form>
 

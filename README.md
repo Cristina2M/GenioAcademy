@@ -67,9 +67,11 @@ Desarrollo de la lógica de negocio, seguridad y persistencia de la información
 #### 💻 HITO III: Interfaz y Experiencia del Alumno (Frontend)
 Conexión visual de los datos para que el estudiante interactúe con la plataforma.
 
-* **Fase 8: Enrutamiento y Protección del Cliente** (📍 Estamos aquí)
+* **Fase 8: Enrutamiento y Protección del Cliente** (✅ Completado)
+  * Crear sistema de inicio y cierre de sesión conectado al backend.
+  * *Nota Arquitectónica:* Se ha optado por implementar la librería **Axios** en conjunto con **jwt-decode** en lugar del nativo `fetch`. El motivo es que Axios soporta Interceptores HTTP (HTTP Interceptors) que permitirán, de forma invisible para el alumno, inyectar el Token en cada petición de forma automática y renovarlo ("refresh") si se caduca. Esto reduce un volumen titánico de código trampa manual.
   * Configuración de React Router para la navegación SPA (Single Page Application). *(Completado)*
-  * Creación de "Rutas Privadas" que redirigen al login si el usuario no tiene token válido. *(Pendiente)*
+  * Creación de "Rutas Privadas" que redirigen al login si el usuario no tiene token válido. *(Completado)*
 
 * **Fase 9: Panel de Control del Estudiante (Dashboard)** (🟡 En proceso)
   * Maquetación de la vista principal adaptada al nivel actual del alumno. *(Inicio y Misión completados)*

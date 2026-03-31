@@ -1,9 +1,33 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { User, Mail, Lock, UserPlus, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { User, Mail, Lock, UserPlus, ArrowRight, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import AuthContext from '../context/AuthContext';
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
+  const { registerUser } = useContext(AuthContext);
+
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!username || !email || !password) {
+      setErrorMsg("Todos los campos obligatorios.");
+      return;
+    }
+    
+    setIsLoading(true);
+    setErrorMsg(null);
+    const result = await registerUser({ username, email, password });
+    if (!result.success) {
+      setErrorMsg(result.error);
+    }
+    setIsLoading(false);
+  };
 
   return (
     <div className="min-h-[85vh] relative flex items-center justify-center py-20 overflow-hidden">
@@ -31,7 +55,14 @@ export default function Register() {
               <p className="text-slate-400 text-sm max-w-xs mx-auto">Configura tu perfil de estudiante y comienza a subir de rango hoy mismo.</p>
             </div>
 
-            <form className="space-y-5">
+            {errorMsg && (
+              <div className="alert alert-error bg-pink-900/50 text-pink-200 border border-pink-500 mb-6 flex rounded-xl">
+                <AlertCircle className="w-5 h-5 shrink-0" />
+                <span>{errorMsg}</span>
+              </div>
+            )}
+
+            <form className="space-y-5" onSubmit={handleSubmit}>
               
               <div className="form-control">
                 <label className="label py-1">
@@ -45,6 +76,8 @@ export default function Register() {
                     type="text" 
                     placeholder="Ej: javier_alonso_04" 
                     className="input w-full pl-11 bg-slate-800/50 border-white/10 text-white placeholder:text-slate-500 focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all rounded-xl" 
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                   />
                 </div>
               </div>
@@ -61,6 +94,8 @@ export default function Register() {
                     type="email" 
                     placeholder="alumno@instituto.es" 
                     className="input w-full pl-11 bg-slate-800/50 border-white/10 text-white placeholder:text-slate-500 focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all rounded-xl" 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
               </div>
@@ -77,6 +112,8 @@ export default function Register() {
                     type={showPassword ? "text" : "password"} 
                     placeholder="Min 8 carácteres..." 
                     className="input w-full pl-11 pr-12 bg-slate-800/50 border-white/10 text-white placeholder:text-slate-500 focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all rounded-xl" 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                   <button 
                     type="button" 
@@ -89,10 +126,11 @@ export default function Register() {
               </div>
 
               <button 
-                type="button" 
+                type="submit" 
+                disabled={isLoading}
                 className="btn w-full mt-6 border-none bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white shadow-[0_0_20px_rgba(236,72,153,0.3)] rounded-xl font-extrabold text-base transition-transform"
               >
-                Solicitar Acceso Oficial <ArrowRight className="w-5 h-5 ml-1"/>
+                {isLoading ? <span className="loading loading-spinner text-white"></span> : <>Solicitar Acceso Oficial <ArrowRight className="w-5 h-5 ml-1"/></>}
               </button>
             </form>
 

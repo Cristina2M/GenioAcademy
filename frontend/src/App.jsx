@@ -5,6 +5,7 @@ import Courses from './pages/Courses';
 import Mission from './pages/Mission';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import { AuthProvider } from './context/AuthContext';
 import spaceBg from './assets/img/logo-fondo.jpg';
 import ScrollToTop from './components/ScrollToTop';
 import ScrollToTopButton from './components/ScrollToTopButton';
@@ -19,8 +20,9 @@ function App() {
   return (
     // <Router> envuelve todo para habilitar la navegación sin recargar la página entera
     <Router>
-      <ScrollToTop />
-      <div 
+      <AuthProvider>
+        <ScrollToTop />
+        <div 
         className="flex flex-col min-h-screen text-slate-100 relative overflow-hidden"
         style={{ 
           backgroundImage: `url(${spaceBg})`, 
@@ -63,6 +65,7 @@ function App() {
           <ScrollToTopButton />
         </div>
       </div>
+      </AuthProvider>
     </Router>
   );
 }

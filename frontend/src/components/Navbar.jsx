@@ -1,4 +1,7 @@
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import AuthContext from '../context/AuthContext';
+import { LogOut, User as UserIcon } from 'lucide-react';
 import logoPrincipal from '../assets/img/logo.png';
 
 // ==========================================
@@ -8,6 +11,8 @@ import logoPrincipal from '../assets/img/logo.png';
 // el menú adaptativo (hamburguesa) para pantallas de móviles.
 
 export default function Navbar() {
+  const { user, logoutUser } = useContext(AuthContext);
+
   return (
     // "sticky top-0 z-50" asegura que la barra siempre se quede pegada arriba al hacer scroll
     <div className="navbar bg-slate-900/50 backdrop-blur-md shadow-lg border-b border-white/5 px-4 lg:px-8 sticky top-0 z-50 transition-all duration-300 min-h-[4.5rem]">
@@ -37,12 +42,37 @@ export default function Navbar() {
       </div>
 
       <div className="flex-none ml-4 flex items-center gap-1 sm:gap-2">
-        <Link to="/login" className="btn btn-ghost text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 hidden sm:flex rounded-full px-4 transition-all">
-          Entrar
-        </Link>
-        <Link to="/register" className="btn bg-gradient-to-r from-pink-500 to-purple-600 border-none text-white hover:from-pink-400 hover:to-purple-500 hover:shadow-[0_0_20px_rgba(236,72,153,0.5)] transition-all hidden sm:flex rounded-full px-6">
-          Nueva Cuenta
-        </Link>
+        {user ? (
+          // Vista Usuario Conectado
+          <div className="flex items-center gap-2">
+            <div className="hidden sm:flex text-right mr-2 flex-col justify-center">
+              <span className="text-sm font-bold text-white leading-tight">Agente {user.username || 'Recluta'}</span>
+              <span className="text-xs text-cyan-400 font-semibold tracking-wide">Nivel de Rango {user.current_student_level || 1}</span>
+            </div>
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-cyan-500 p-[2px] hidden sm:block">
+              <div className="w-full h-full bg-slate-900 rounded-full flex items-center justify-center">
+                 <UserIcon className="w-5 h-5 text-white" />
+              </div>
+            </div>
+            <button 
+              onClick={logoutUser} 
+              className="btn btn-ghost text-red-400 hover:bg-red-500/10 hover:text-red-300 btn-sm ml-2 px-2"
+              title="Cerrar Sesión"
+            >
+              <LogOut className="w-5 h-5" />
+            </button>
+          </div>
+        ) : (
+          // Vista Usuario No Conectado
+          <>
+            <Link to="/login" className="btn btn-ghost text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 hidden sm:flex rounded-full px-4 transition-all">
+              Entrar
+            </Link>
+            <Link to="/register" className="btn bg-gradient-to-r from-pink-500 to-purple-600 border-none text-white hover:from-pink-400 hover:to-purple-500 hover:shadow-[0_0_20px_rgba(236,72,153,0.5)] transition-all hidden sm:flex rounded-full px-6">
+              Nueva Cuenta
+            </Link>
+          </>
+        )}
         <div className="dropdown dropdown-end lg:hidden">
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle text-white">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -56,8 +86,14 @@ export default function Navbar() {
             <li><Link to="/">Inicio</Link></li>
             <li><Link to="/courses">Catálogo Estelar</Link></li>
             <li><Link to="/mission">La Misión</Link></li>
-            <li><Link to="/login" className="text-cyan-400">Entrar</Link></li>
-            <li><Link to="/register" className="text-pink-400 font-bold">Unirse a la Academia</Link></li>
+            {user ? (
+               <li><button onClick={logoutUser} className="text-red-400">Desconectar nave</button></li>
+            ) : (
+               <>
+                 <li><Link to="/login" className="text-cyan-400">Entrar</Link></li>
+                 <li><Link to="/register" className="text-pink-400 font-bold">Unirse a la Academia</Link></li>
+               </>
+            )}
           </ul>
         </div>
       </div>
