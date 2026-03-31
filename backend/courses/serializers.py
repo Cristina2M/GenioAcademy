@@ -29,9 +29,22 @@ class CourseSerializer(serializers.ModelSerializer):
 # Mapea y serializa los "Niveles de Conocimiento" anidando los cursos disponibles en ese nivel
 class KnowledgeLevelSerializer(serializers.ModelSerializer):
     courses = CourseSerializer(many=True, read_only=True)
+    # Propiedad dinámica calculada al vuelo en cada petición
+    is_locked = serializers.SerializerMethodField()
+
     class Meta:
         model = KnowledgeLevel
         fields = '__all__'
+
+    def get_is_locked(self, obj):
+        # Obtenemos la petición web (request) para saber quién está preguntando
+        request = self.context.get('request')
+        # Si el usuario es anónimo o no mandó su Token JWT, por defecto todo bloqueado
+        if not request or not request.user.is_authenticated:
+            return True
+        # Motor Lógico Backend: Si el nivel del conocimiento exige un orden mayor 
+        # al nivel del Alumno, le pasamos "is_locked = True" al frontend.
+        return obj.order > request.user.current_student_level
 
 # Serializador RAÍZ que devuelve las Categorías Generales (Matemáticas, Lengua...) y lo que contienen
 class CategorySerializer(serializers.ModelSerializer):

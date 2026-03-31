@@ -60,9 +60,9 @@ Desarrollo de la lógica de negocio, seguridad y persistencia de la información
   * Configuración de Django REST Framework (DRF) y serializadores.
   * Creación del CRUD (Crear, Leer, Actualizar, Borrar) para el contenido educativo.
 
-* **Fase 7: Motor de Lógica Incremental** (🔴 Pendiente)
-  * Programación del algoritmo que valida si un alumno cumple los requisitos para subir de nivel.
-  * Filtros de seguridad en el backend para bloquear contenido superior al nivel del usuario.
+* **Fase 7: Motor de Lógica Incremental** (✅ Completado)
+  * Programación del algoritmo que valida si un alumno cumple los requisitos para subir de nivel. *(Gamificación RPG aplicada)*
+  * Filtros de seguridad en el backend para bloquear contenido superior al nivel del usuario. *(Excepción 403 Forbidden programada)*
 
 #### 💻 HITO III: Interfaz y Experiencia del Alumno (Frontend)
 Conexión visual de los datos para que el estudiante interactúe con la plataforma.

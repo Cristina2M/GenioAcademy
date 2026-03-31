@@ -1,5 +1,6 @@
 # Importamos el módulo base de base de datos de Django
 from django.db import models
+from django.conf import settings
 
 # ==========================================
 # Modelo Categoría (Ejemplo: Matemáticas, Lengua)
@@ -50,6 +51,8 @@ class Course(models.Model):
     title = models.CharField(max_length=200, verbose_name="Título del Curso")
     # Explicación extensa del curso
     description = models.TextField(verbose_name="Descripción")
+    # Gamificación: Cantidad de XP que otorga completar este curso
+    xp_reward = models.PositiveIntegerField(default=100, verbose_name="Recompensa de XP")
     
     class Meta:
         verbose_name = "Curso"
@@ -99,3 +102,23 @@ class Exercise(models.Model):
 
     def __str__(self):
         return f"Ejercicio de: {self.lesson.title}"
+
+
+# ==========================================
+# Modelo de Registro (Completitud y Anti-Trampas)
+# ==========================================
+class CourseCompletion(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='completed_courses')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='completions')
+    completed_at = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Completado")
+
+    class Meta:
+        verbose_name = "Curso Completado"
+        verbose_name_plural = "Historial de Cursos Completados"
+        # UNIQUE TOGETHER: Clave del motor RPG. Obliga a la base de datos a rechazar intentos 
+        # duplicados si el usuario Juanita ya completó el curso de Matemáticas Básicas. 
+        # Evita que repita el mismo endpoint 50 veces para ganar XP infinito.
+        unique_together = ('user', 'course')
+
+    def __str__(self):
+        return f"{self.user.username} finalizó {self.course.title}"

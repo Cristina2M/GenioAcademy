@@ -19,7 +19,11 @@ class CustomUser(AbstractUser):
         verbose_name='Nivel de Suscripción' # Nombre descriptivo para el panel de administración
     )
 
+    # Campos de Gamificación RPG (Motor Incremental)
+    experience_points = models.PositiveIntegerField(default=0, verbose_name='Puntos de Experiencia (XP)')
+    current_student_level = models.PositiveIntegerField(default=1, verbose_name='Nivel Global de Alumno')
+
     # Método para representar el objeto como texto (ej: en el panel de administrador)
     def __str__(self):
         # Devuelve el nombre de usuario y su nivel
-        return f"{self.username} - Nivel {self.subscription_level}"
+        return f"{self.username} - Nivel {self.current_student_level} (Sub: {self.get_subscription_level_display()})"
