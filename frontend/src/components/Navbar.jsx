@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import AuthContext from '../context/AuthContext';
 import { LogOut, User as UserIcon } from 'lucide-react';
 import logoPrincipal from '../assets/img/logo.png';
+import { getStudentAvatar } from '../utils/avatarUtils';
 
 // ==========================================
 // COMPONENTE UI: Barra de Navegación (Navbar.jsx)
@@ -53,8 +54,8 @@ export default function Navbar() {
             {/* Menú Desplegable del Avatar */}
             <div className="dropdown dropdown-end">
               <div tabIndex={0} role="button" className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-cyan-500 p-[2px] hidden sm:flex cursor-pointer hover:scale-105 transition-transform hover:shadow-[0_0_15px_rgba(236,72,153,0.5)]">
-                <div className="w-full h-full bg-slate-900 rounded-full flex items-center justify-center">
-                   <UserIcon className="w-5 h-5 text-white" />
+                <div className="w-full h-full bg-slate-900 rounded-full flex items-center justify-center overflow-hidden">
+                   <img src={getStudentAvatar(user.current_student_level)} alt="Avatar" className="w-full h-full object-cover" />
                 </div>
               </div>
               <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow-2xl bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-2xl w-52 mt-4 space-y-1 hidden sm:flex">

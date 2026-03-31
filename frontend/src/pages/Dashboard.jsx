@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Target, Trophy, Flame, Compass, Play, BookOpen, Star } from 'lucide-react';
 import AuthContext from '../context/AuthContext';
-import avatarPlaceholder from '../assets/img/stikers/buho2.png';
+import { getStudentAvatar } from '../utils/avatarUtils';
 
 export default function Dashboard() {
   const { user } = useContext(AuthContext);
@@ -34,8 +34,8 @@ export default function Dashboard() {
             {/* Avatar Magnético */}
             <div className="relative shrink-0 group">
               <div className="absolute inset-0 bg-gradient-to-br from-pink-500 to-cyan-500 rounded-full blur-xl opacity-40 group-hover:opacity-60 transition-opacity"></div>
-              <div className="w-32 h-32 rounded-full border-4 border-slate-900 relative z-10 p-1 bg-gradient-to-br from-cyan-400 to-pink-500 flex items-center justify-center overflow-hidden">
-                <img src={avatarPlaceholder} alt="Avatar de Estudiante" className="w-full h-full object-cover rounded-full bg-slate-800" />
+              <div className="w-32 h-32 rounded-full border-4 border-slate-900 relative z-10 p-1 bg-gradient-to-br from-cyan-400 to-pink-500 flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(34,211,238,0.3)]">
+                <img src={getStudentAvatar(currentLevel)} alt="Avatar de Estudiante" className="w-full h-full object-cover rounded-full bg-slate-800" />
               </div>
               
               {/* Insignia de Nivel superpuesta */}
