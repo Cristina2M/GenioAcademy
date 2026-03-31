@@ -1,14 +1,44 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { PlayCircle, CheckCircle, Brain, ArrowLeft, Star, FileText, Compass } from 'lucide-react';
 import axiosInstance from '../api/axios';
+import LessonQuiz from '../components/LessonQuiz';
+import AuthContext from '../context/AuthContext';
 
 export default function CoursePlayer() {
   const { courseId } = useParams();
+  const { completeMission } = useContext(AuthContext);
+  
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   
   const [activeLesson, setActiveLesson] = useState(null);
+  const [activeTab, setActiveTab] = useState('theory'); // 'theory' o 'quiz'
+  const [passedLessons, setPassedLessons] = useState([]); // IDs de lecciones superadas en esta sesión
+
+  const [showVictoryModal, setShowVictoryModal] = useState(false);
+  const [victoryData, setVictoryData] = useState(null);
+  const [claiming, setClaiming] = useState(false);
+
+  const handleLessonPass = (id) => {
+    if (!passedLessons.includes(id)) {
+      setPassedLessons(prev => [...prev, id]);
+    }
+  };
+
+  const handleClaimReward = async () => {
+    setClaiming(true);
+    const result = await completeMission(courseId);
+    setClaiming(false);
+    
+    if (result.success) {
+       setVictoryData(result.payload);
+       setShowVictoryModal(true);
+    } else {
+       // Mensaje de fallback si el usuario es un tramposillo o falló la red
+       alert(result.error);
+    }
+  };
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -98,19 +128,34 @@ export default function CoursePlayer() {
             </div>
           </div>
 
-          {/* Caja de Teoría Glassmorphism */}
+          {/* Caja de Teoría y Práctica Glassmorphism */}
           <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 sm:p-8">
-            <div className="flex gap-3 items-center mb-6 border-b border-white/10 pb-4">
-              <FileText className="w-6 h-6 text-pink-400" />
-              <h2 className="text-2xl font-bold text-white">Documentación Técnica</h2>
+            
+            {/* Cabecera y Pestañas */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-white/10 pb-4">
+              <div className="flex gap-3 items-center">
+                <FileText className="w-6 h-6 text-pink-400" />
+                <h2 className="text-2xl font-bold text-white">Archivos de la Misión</h2>
+              </div>
+              
+              <div className="flex bg-slate-800/80 p-1 rounded-xl w-fit">
+                 <button onClick={() => setActiveTab('theory')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'theory' ? 'bg-cyan-500 text-slate-900 shadow-[0_0_10px_rgba(34,211,238,0.3)]' : 'text-slate-400 hover:text-white'}`}>Manual Teórico</button>
+                 <button onClick={() => setActiveTab('quiz')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 ${activeTab === 'quiz' ? 'bg-cyan-500 text-slate-900 shadow-[0_0_10px_rgba(34,211,238,0.3)]' : 'text-slate-400 hover:text-white'}`}>Simulador {passedLessons.includes(currentActiveLessonId) && <CheckCircle className="w-4 h-4"/>}</button>
+              </div>
             </div>
             
-            <div className="prose prose-invert prose-p:text-slate-300 prose-headings:text-white max-w-none">
-              <p>
-                {activeLesson?.content || course.description || "Esta es la información teórica analizada en los registros. Sumérgete en estos conocimientos para afianzar tus competencias lógicas. Recuerda tomar notas en tu cuaderno táctico."}
-              </p>
-              <p>Aquí se volcarán todos los apuntes del profesor con fórmulas matemáticas detalladas utilizando LaTeX, así como ejercicios interactivos.</p>
-            </div>
+            {/* Contenido Dinámico de la Pestaña */}
+            {activeTab === 'theory' ? (
+              <div className="prose prose-invert prose-p:text-slate-300 prose-headings:text-white max-w-none">
+                <p>
+                  {activeLesson?.content || course.description || "Esta es la información teórica analizada en los registros. Sumérgete en estos conocimientos para afianzar tus competencias lógicas. Recuerda tomar notas en tu cuaderno táctico."}
+                </p>
+                <p>Aquí se volcarán todos los apuntes del profesor con fórmulas matemáticas detalladas utilizando LaTeX, así como ejercicios interactivos.</p>
+              </div>
+            ) : (
+              <LessonQuiz lesson={activeLesson || displayedLessons[0]} onPassed={handleLessonPass} />
+            )}
+            
           </div>
         </div>
 
@@ -132,8 +177,8 @@ export default function CoursePlayer() {
                       : 'bg-slate-800/50 border border-transparent hover:bg-slate-700/50'
                   }`}
                 >
-                  {lesson.isCompleted ? (
-                    <CheckCircle className="w-5 h-5 text-green-400 shrink-0" />
+                  {passedLessons.includes(lesson.id) ? (
+                    <CheckCircle className="w-5 h-5 text-green-400 shrink-0 shadow-[0_0_10px_rgba(74,222,128,0.2)] rounded-full bg-green-400/10" />
                   ) : currentActiveLessonId === lesson.id ? (
                     <PlayCircle className="w-5 h-5 text-cyan-400 shrink-0" />
                   ) : (
@@ -143,14 +188,31 @@ export default function CoursePlayer() {
                     <span className={`text-sm font-semibold truncate ${currentActiveLessonId === lesson.id ? 'text-white' : 'text-slate-300'}`}>
                       {lesson.title}
                     </span>
-                    <span className="text-xs text-slate-500">{lesson.isCompleted ? 'Completada' : 'Pendiente'}</span>
+                    <span className="text-xs text-slate-500">{passedLessons.includes(lesson.id) ? 'Sector Controlado' : 'Asimilación Pendiente'}</span>
                   </div>
                 </button>
               ))}
             </div>
 
-            {/* BOTÓN BÚHO IA - Placeholder Hito 4 */}
+            {/* BOTÓN RECOMPENSA DE MISIÓN */}
             <div className="mt-8 border-t border-white/10 pt-6">
+              {passedLessons.length >= displayedLessons.length ? (
+                 <button 
+                   className={`btn btn-lg w-full bg-gradient-to-r from-amber-400 to-amber-600 hover:from-amber-300 hover:to-amber-500 border-none text-slate-900 shadow-[0_0_20px_rgba(251,191,36,0.5)] font-black text-lg animate-bounce ${claiming ? 'opacity-50 blur-sm pointer-events-none' : ''}`}
+                   onClick={handleClaimReward}
+                   disabled={claiming}
+                 >
+                   ✨ Completar Misión ✨
+                 </button>
+              ) : (
+                 <button className="btn btn-lg w-full bg-slate-800 text-slate-500 border-none cursor-not-allowed hidden md:flex">
+                   Misión ({passedLessons.length}/{displayedLessons.length})
+                 </button>
+              )}
+            </div>
+
+            {/* BOTÓN BÚHO IA - Placeholder Hito 4 */}
+            <div className="mt-4 border-t border-white/10 pt-6">
               <div className="bg-gradient-to-r from-pink-500/20 to-purple-500/20 rounded-xl p-4 border border-pink-500/30 text-center relative overflow-hidden group">
                 <div className="absolute inset-0 bg-pink-500/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
                 <Brain className="w-8 h-8 text-pink-400 mx-auto mb-2" />
@@ -166,6 +228,33 @@ export default function CoursePlayer() {
         </div>
 
       </div>
+
+      {/* Modal de Recompensa RPG (XP y Subida de de Nivel) */}
+      {showVictoryModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md">
+          <div className="bg-slate-900 border border-amber-500/30 p-8 rounded-3xl max-w-sm w-full text-center shadow-[0_0_50px_rgba(251,191,36,0.2)] animate-[scale-up_0.3s_ease-out]">
+             <div className="w-24 h-24 mx-auto bg-amber-500/20 text-amber-500 rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(251,191,36,0.4)] relative">
+                <Star className="w-12 h-12 relative z-10" />
+                <div className="absolute inset-0 bg-amber-400/20 rounded-full animate-ping"></div>
+             </div>
+             
+             <h2 className="text-3xl font-black text-white mb-2">¡Misión Cumplida!</h2>
+             <p className="text-slate-400 mb-6">{victoryData?.detail}</p>
+             
+             {/* Notificador de Nivel Superior si aplica */}
+             {victoryData?.level_up && (
+               <div className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold p-3 rounded-xl mb-6 shadow-[0_0_20px_rgba(236,72,153,0.4)] animate-pulse border border-white/20">
+                 🎉 ¡HAS SUBIDO AL NIVEL {victoryData?.level}! 🎉
+               </div>
+             )}
+             
+             <Link to="/dashboard" className="btn bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold border-none w-full text-lg shadow-[0_0_15px_rgba(34,211,238,0.3)]">
+                Volver a la Base
+             </Link>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

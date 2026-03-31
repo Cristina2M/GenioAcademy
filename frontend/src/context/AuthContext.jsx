@@ -113,6 +113,30 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    // ==========================================
+    // FUNCIÓN: COMPLETAR MISIÓN (Gamificación)
+    // ==========================================
+    const completeMission = async (courseId) => {
+        try {
+            const response = await axiosInstance.post(`courses/courses/${courseId}/complete/`);
+            if (response.status === 200) {
+                const data = response.data;
+                // El Backend devuelve tokens frescos porque el XP y Nivel han mutado
+                if (data.access && data.refresh) {
+                    const newAuthTokens = { access: data.access, refresh: data.refresh };
+                    setAuthTokens(newAuthTokens);
+                    setUser(jwtDecode(data.access));
+                    localStorage.setItem('authTokens', JSON.stringify(newAuthTokens));
+                }
+                return { success: true, payload: data };
+            }
+        } catch (error) {
+            console.error("Error confirmando victoria", error);
+            const msg = error.response?.data?.detail || "Interferencias espaciotemporales al reclamar XP.";
+            return { success: false, error: msg };
+        }
+    };
+
     // Empaquetamos todo lo que queremos exponer de forma global
     const contextData = {
         user,
@@ -120,7 +144,8 @@ export const AuthProvider = ({ children }) => {
         loginUser,
         registerUser,
         logoutUser,
-        updateAvatar
+        updateAvatar,
+        completeMission
     };
 
     // Solo se ejecuta 1 vez cuando la página arranca
