@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { BookOpen, Star, Rocket } from 'lucide-react';
+import { BookOpen, Star } from 'lucide-react';
+import axiosInstance from '../api/axios';
 
 // ==========================================
 // PÁGINA: Catálogo Estelar (Courses.jsx)
@@ -8,45 +9,24 @@ import { BookOpen, Star, Rocket } from 'lucide-react';
 // y mostrarlos secuencialmente divididos por Categorías y Niveles.
 
 export default function Courses() {
-  // --- ESTADOS LOCALES (Hooks de React) ---
-  // Utilizamos useState para manejar el almacenamiento de datos dinámicos.
-  // 1. categories: Almacena la lista de categorías traída desde la API. Empieza como un array vacío [].
   const [categories, setCategories] = useState([]);
-  // 2. loading: Controla si mostramos el icono de carga. Empieza en "true" porque al entrar a la página, estamos cargando.
   const [loading, setLoading] = useState(true);
-  // 3. error: Guarda cualquier mensaje de error si la petición al servidor falla. Empieza en null (sin error).
   const [error, setError] = useState(null);
 
-  // --- EFECTO SECUNDARIO (Llamada a la API) ---
-  // useEffect se ejecuta automáticamente cuando el componente se monta por primera vez en la pantalla.
-  // El último argumento [] (array de dependencias vacío) le dice a React que ejecute esto SOLO UNA VEZ.
   useEffect(() => {
-    // Definimos una función asíncrona (async) porque dependemos de la respuesta de un servidor externo por internet
     const fetchCourses = async () => {
       try {
-        // Bloque TRY: Intentamos conectar con la base de datos a través de nuestro endpoint público
-        const response = await fetch('http://localhost:8000/api/courses/categories/');
-        
-        // Comprobamos si el código de estado HTTP es algo distinto a un éxito (ej: 404, 500)
-        if (!response.ok) {
-          throw new Error('Se perdió la conexión de telemetría con el servidor galáctico');
-        }
-        
-        // Parseamos el texto en crudo de la red convirtiéndolo a un objeto JSON usable en JavaScript
-        const data = await response.json();
-        // Guardamos los datos reales en el estado
-        setCategories(data);
+        // Usamos axiosInstance (no fetch nativo) para enviar el JWT automáticamente.
+        // Esto permite que el backend calcule is_locked e is_completed correctamente.
+        const response = await axiosInstance.get('courses/categories/');
+        setCategories(response.data);
       } catch (err) {
-        // Bloque CATCH: Si la red se cae, el fetch fallará y atraparemos el error aquí
-        setError(err.message);
+        setError(err.message || 'Se perdió la conexión de telemetría con el servidor galáctico');
       } finally {
-        // Bloque FINALLY: Independientemente de si fue un éxito o un error, hemos terminado la petición.
-        // Apagamos la pantalla de carga ("loading" pasa a ser falso).
         setLoading(false);
       }
     };
 
-    // Al definir la función asíncrona arriba, no olvidemos invocarla para que suceda la magia.
     fetchCourses();
   }, []);
 
@@ -119,11 +99,6 @@ export default function Courses() {
                             <li className="text-sm text-slate-500/70 italic text-center py-2">No hay información en este sector.</li>
                           )}
                         </ul>
-                        <div className="card-actions justify-end mt-6">
-                          <button className="btn btn-sm bg-slate-700/50 border border-cyan-500/50 text-cyan-300 hover:bg-cyan-500 hover:border-cyan-400 hover:text-slate-900 w-full rounded-lg shadow-[0_0_10px_rgba(34,211,238,0.1)] transition-all">
-                            Explorar Nivel <Rocket className="w-4 h-4 ml-1" />
-                          </button>
-                        </div>
                       </div>
                     </div>
                   ))}

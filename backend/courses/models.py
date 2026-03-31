@@ -1,124 +1,165 @@
-# Importamos el módulo base de base de datos de Django
+# ============================================================
+# ARCHIVO: courses/models.py
+# FUNCIÓN: Define las "tablas" de la base de datos para los cursos.
+#
+# La estructura jerárquica es:
+#   Categoría → Nivel de Conocimiento → Curso → Lección → Ejercicio
+#
+# Por ejemplo:
+#   Matemáticas → Nivel 1 → "Fracciones" → "Suma de fracciones" → "¿Cuánto es 1/2 + 1/4?"
+#
+# También hay una tabla de "Completitud de Cursos" que guarda qué
+# alumnos han superado qué cursos (para otorgar XP y evitar el farmeo).
+# ============================================================
+
 from django.db import models
 from django.conf import settings
 
-# ==========================================
-# Modelo Categoría (Ejemplo: Matemáticas, Lengua)
-# ==========================================
+
+# ── CATEGORÍA ──
+# Es la asignatura: Matemáticas, Lengua, Física, etc.
 class Category(models.Model):
-    # Nombre de la categoría (único)
-    name = models.CharField(max_length=100, unique=True, verbose_name="Categoría")
-    # Descripción detallada opcional de lo que abarca
-    description = models.TextField(blank=True, null=True, verbose_name="Descripción")
+    name = models.CharField(max_length=200, verbose_name='Nombre de la asignatura')
+    description = models.TextField(blank=True, verbose_name='Descripción')
 
-    # Metadatos para mostrar nombres legibles en el panel de administrador
     class Meta:
-        verbose_name = "Categoría"
-        verbose_name_plural = "Categorías"
+        verbose_name = 'Categoría'
+        verbose_name_plural = 'Categorías'
 
-    # Retorna el nombre para imprimir en listas
     def __str__(self):
         return self.name
 
-# ==========================================
-# Modelo Nivel de Conocimiento (Ejemplo: Sumas Básicas)
-# ==========================================
+
+# ── NIVEL DE CONOCIMIENTO ──
+# Es la dificultad dentro de una asignatura (Básico, Intermedio, Avanzado...).
+# Cada nivel tiene un número de orden que lo compara con el nivel RPG del alumno:
+# si order=2 y el alumno es nivel RPG 1, este nivel está bloqueado.
 class KnowledgeLevel(models.Model):
-    # Relación con categoría, un nivel siempre pertenece a una Categoría paraguas
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='knowledge_levels', verbose_name="Categoría")
-    # Nombre del nivel específico 
-    name = models.CharField(max_length=150, verbose_name="Nivel de Conocimiento (Tema)")
-    # Más detalles sobre el nivel de conocimiento
-    description = models.TextField(blank=True, null=True, verbose_name="Descripción")
-    # Número para ordenar cronológicamente o por dificultad de aprendizaje
-    order = models.PositiveIntegerField(default=0, verbose_name="Orden Sugerido")
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.CASCADE,       # Si se borra la asignatura, se borran sus niveles
+        related_name='knowledge_levels' # Para acceder como: categoria.knowledge_levels.all()
+    )
+    name = models.CharField(max_length=200, verbose_name='Nombre del nivel')
+    order = models.IntegerField(
+        default=1,
+        verbose_name='Orden / Dificultad',
+        help_text='Se compara con el nivel RPG del alumno. Si es mayor, el nivel está bloqueado.'
+    )
 
     class Meta:
-        verbose_name = "Nivel de Conocimiento"
-        verbose_name_plural = "Niveles de Conocimiento"
-        ordering = ['category', 'order'] # Orden por defecto al obtenerlos de base de datos
+        verbose_name = 'Nivel de Conocimiento'
+        verbose_name_plural = 'Niveles de Conocimiento'
+        ordering = ['order']  # Siempre ordenados de menor a mayor dificultad
 
     def __str__(self):
-        return f"{self.category.name} - {self.name}"
+        return f'{self.category.name} — {self.name} (Orden {self.order})'
 
-# ==========================================
-# Modelo Curso Concreto (Un pack de contenido y ejercicios)
-# ==========================================
+
+# ── CURSO ──
+# Es una "cápsula" de conocimiento muy específica dentro de un nivel.
+# Ejemplo: "División de fracciones" dentro de Matemáticas → Nivel Básico.
 class Course(models.Model):
-    # Relación con el nivel al que pertenece
-    knowledge_level = models.ForeignKey(KnowledgeLevel, on_delete=models.CASCADE, related_name='courses', verbose_name="Nivel de Conocimiento")
-    # Título principal del curso
-    title = models.CharField(max_length=200, verbose_name="Título del Curso")
-    # Explicación extensa del curso
-    description = models.TextField(verbose_name="Descripción")
-    # Gamificación: Cantidad de XP que otorga completar este curso
-    xp_reward = models.PositiveIntegerField(default=100, verbose_name="Recompensa de XP")
-    
+    knowledge_level = models.ForeignKey(
+        KnowledgeLevel,
+        on_delete=models.CASCADE,
+        related_name='courses'  # Para acceder como: nivel.courses.all()
+    )
+    title = models.CharField(max_length=300, verbose_name='Título del curso')
+    description = models.TextField(blank=True, verbose_name='Descripción del curso')
+    xp_reward = models.IntegerField(
+        default=300,
+        verbose_name='Puntos XP que da al completar'
+    )
+
     class Meta:
-        verbose_name = "Curso"
-        verbose_name_plural = "Cursos"
+        verbose_name = 'Curso'
+        verbose_name_plural = 'Cursos'
 
     def __str__(self):
         return self.title
 
-# ==========================================
-# Modelo Lección (Teoría en texto y/o video)
-# ==========================================
+
+# ── LECCIÓN ──
+# Es una unidad de contenido dentro de un Curso.
+# Tiene texto teórico y puede tener ejercicios asociados.
 class Lesson(models.Model):
-    # Relación del curso padre al que responde esta lección
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='lessons', verbose_name="Curso")
-    # Título de las lecciones (ej: "Propiedades de las raíces")
-    title = models.CharField(max_length=200, verbose_name="Título de la Lección")
-    # Explicación en formato de texto largo
-    content = models.TextField(blank=True, null=True, verbose_name="Contenido Teórico")
-    # Enlace a YouTube o CDN (Premium)
-    video_url = models.URLField(blank=True, null=True, verbose_name="URL del Vídeo")
-    # Define si necesita ser suscriptor Nivel 2 o 3 para acceder
-    is_premium = models.BooleanField(default=True, verbose_name="Requiere Nivel 2 o 3")
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name='lessons'  # Para acceder como: curso.lessons.all()
+    )
+    title = models.CharField(max_length=300, verbose_name='Título de la lección')
+    content = models.TextField(
+        blank=True,
+        verbose_name='Contenido teórico',
+        help_text='El texto de teoría que verá el alumno en la pestaña "Manual Teórico".'
+    )
+    order = models.IntegerField(default=1, verbose_name='Posición en el curso')
 
     class Meta:
-        verbose_name = "Lección"
-        verbose_name_plural = "Lecciones"
+        verbose_name = 'Lección'
+        verbose_name_plural = 'Lecciones'
+        ordering = ['order']  # Las lecciones se muestran en orden
 
     def __str__(self):
-        return f"{self.course.title} - {self.title}"
+        return f'{self.course.title} — {self.title}'
 
-# ==========================================
-# Modelo Ejercicio Interactivo (Pregunta y Respuestas)
-# ==========================================
+
+# ── EJERCICIO ──
+# Es una pregunta tipo test (opción múltiple) dentro de una lección.
+# El campo "options" almacena las posibles respuestas separadas por comas.
+# Por ejemplo: "3,6,9,12" → cuatro opciones.
 class Exercise(models.Model):
-    # Una lección puede contener múltiples ejercicios
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='exercises', verbose_name="Lección")
-    # El texto del problema o pregunta a resolver
-    question = models.TextField(verbose_name="Pregunta / Enunciado")
-    # Guarda un Formato JSON con las posibles respuestas a dar
-    options = models.JSONField(verbose_name="Opciones (JSON)", help_text="Formato: ['Opcion A', 'Opcion B']")
-    # String representativo de la respuesta acertada para validación
-    correct_answer = models.CharField(max_length=255, verbose_name="Respuesta Correcta")
+    lesson = models.ForeignKey(
+        Lesson,
+        on_delete=models.CASCADE,
+        related_name='exercises'  # Para acceder como: leccion.exercises.all()
+    )
+    question = models.TextField(verbose_name='Pregunta')
+    options = models.JSONField(
+        verbose_name='Opciones de respuesta',
+        help_text='Lista de opciones en formato JSON. Ejemplo: ["A", "B", "C", "D"]'
+    )
+    correct_answer = models.CharField(
+        max_length=500,
+        verbose_name='Respuesta correcta',
+        help_text='Debe coincidir exactamente con una de las opciones del campo "options".'
+    )
 
     class Meta:
-        verbose_name = "Ejercicio"
-        verbose_name_plural = "Ejercicios"
+        verbose_name = 'Ejercicio'
+        verbose_name_plural = 'Ejercicios'
 
     def __str__(self):
-        return f"Ejercicio de: {self.lesson.title}"
+        return f'Ejercicio de "{self.lesson.title}": {self.question[:60]}...'
 
 
-# ==========================================
-# Modelo de Registro (Completitud y Anti-Trampas)
-# ==========================================
+# ── COMPLETITUD DE CURSO ──
+# Registra qué alumno ha completado qué curso.
+# La combinación (user + course) es ÚNICA: un alumno solo puede completar un curso UNA VEZ.
+# Esto es lo que impide que el alumno haga farmeo de XP (completar el mismo curso mil veces).
 class CourseCompletion(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='completed_courses')
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='completions')
-    completed_at = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Completado")
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,       # Apunta al modelo de usuario personalizado (CustomUser)
+        on_delete=models.CASCADE,
+        related_name='completed_courses'
+    )
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name='completions'
+    )
+    completed_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Fecha de completitud'
+    )
 
     class Meta:
-        verbose_name = "Curso Completado"
-        verbose_name_plural = "Historial de Cursos Completados"
-        # UNIQUE TOGETHER: Clave del motor RPG. Obliga a la base de datos a rechazar intentos 
-        # duplicados si el usuario Juanita ya completó el curso de Matemáticas Básicas. 
-        # Evita que repita el mismo endpoint 50 veces para ganar XP infinito.
+        verbose_name = 'Completitud de Curso'
+        verbose_name_plural = 'Completitudes de Curso'
+        # LA CLAVE DE SEGURIDAD: Django impedirá insertar dos filas con el mismo usuario+curso
         unique_together = ('user', 'course')
 
     def __str__(self):
-        return f"{self.user.username} finalizó {self.course.title}"
+        return f'{self.user.username} completó "{self.course.title}" el {self.completed_at.strftime("%d/%m/%Y")}'

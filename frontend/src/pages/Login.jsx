@@ -86,7 +86,6 @@ export default function Login() {
               <div className="form-control">
                 <label className="label py-1">
                   <span className="label-text text-slate-300 font-semibold text-sm tracking-wide">Contraseña secreta</span>
-                  <a href="#" className="label-text-alt text-cyan-400 hover:text-cyan-300 transition-colors">¿Contraseña olvidada?</a>
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">

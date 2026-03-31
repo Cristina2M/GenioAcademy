@@ -132,7 +132,7 @@ export default function Mission() {
               <h3 className="text-2xl font-bold text-white mb-2">Órbita Base</h3>
               <p className="text-slate-400 mb-6 min-h-[50px]">El acceso perfecto para mentes autodidactas que solo necesitan los materiales.</p>
               <div className="text-4xl font-black text-white mb-8 border-b border-white/10 pb-6 w-full">
-                Gratis <span className="text-sm font-normal text-slate-500 block mt-2">Para siempre</span>
+                6,99€<span className="text-sm font-normal text-slate-500 block mt-2">/mes</span>
               </div>
               <ul className="space-y-4 mb-8 text-left w-full text-sm">
                 <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-cyan-400 flex-shrink-0" /> Acceso visual ilimitado al índice del Catálogo Estelar.</li>
@@ -140,8 +140,8 @@ export default function Mission() {
                 <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-cyan-400 flex-shrink-0" /> Evaluaciones básicas limitadas al final de la lección.</li>
               </ul>
               <div className="mt-auto w-full">
-                <Link to="/signup" className="btn btn-outline border-cyan-500/50 text-cyan-300 hover:bg-cyan-500 hover:text-black hover:border-cyan-400 w-full rounded-2xl">
-                  Registrar Gratis
+                <Link to="/register" className="btn btn-outline border-cyan-500/50 text-cyan-300 hover:bg-cyan-500 hover:text-black hover:border-cyan-400 w-full rounded-2xl">
+                  Empezar por 6,99€
                 </Link>
               </div>
             </div>
@@ -154,8 +154,19 @@ export default function Mission() {
               <Rocket className="w-14 h-14 text-pink-400 mb-6 drop-shadow-[0_0_15px_rgba(236,72,153,0.5)]" />
               <h3 className="text-3xl font-bold text-pink-300 mb-2">Velocidad Luz</h3>
               <p className="text-slate-300 mb-6 min-h-[50px]">El equilibrio perfecto: Acompañamiento impulsado por Inteligencia Artificial y datos.</p>
-              <div className="text-5xl font-black text-white mb-8 border-b border-white/10 pb-6 w-full">
-                19€<span className="text-xl text-slate-400 font-normal">/mes</span>
+              <div className="w-full border-b border-white/10 pb-6 mb-6">
+                <div className="flex items-center justify-center gap-3 mb-2">
+                  <span className="text-slate-400 line-through text-2xl font-bold">12,99€</span>
+                  <span className="bg-green-500/20 text-green-300 border border-green-500/30 text-xs font-black px-2 py-0.5 rounded-full">-23%</span>
+                </div>
+                <div className="text-6xl font-black text-white">
+                  9,99€<span className="text-xl text-pink-300 font-normal">/mes</span>
+                </div>
+                <div className="mt-3 bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-400/30 rounded-xl px-4 py-2 flex items-center justify-center gap-2">
+                  <span className="text-lg">🚀</span>
+                  <span className="text-amber-300 font-black text-sm uppercase tracking-wide">Precio Fundador · Solo los 2 primeros meses</span>
+                </div>
+                <p className="text-slate-500 text-xs mt-2">Después, 12,99€/mes. Cancela cuando quieras.</p>
               </div>
               <ul className="space-y-4 mb-8 text-left w-full text-base">
                 <li className="flex items-start gap-3 text-white font-medium border-b border-white/5 pb-2"><CheckCircle2 className="w-5 h-5 text-pink-500 flex-shrink-0" /> Todo lo incluido en "Órbita Base"</li>
@@ -164,9 +175,9 @@ export default function Mission() {
                 <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> Panel de métricas y reporte mensual de progreso enviado a los padres.</li>
               </ul>
               <div className="mt-auto w-full">
-                <button className="btn bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white border-none w-full rounded-2xl shadow-[0_0_20px_rgba(236,72,153,0.4)] text-lg">
-                  Suscribirse a Velocidad Luz
-                </button>
+                <Link to="/register" className="btn bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white border-none w-full rounded-2xl shadow-[0_0_20px_rgba(236,72,153,0.4)] text-lg">
+                  Empezar por 9,99€
+                </Link>
               </div>
             </div>
 
@@ -176,7 +187,7 @@ export default function Mission() {
               <h3 className="text-2xl font-bold text-purple-300 mb-2">Agujero de Gusano</h3>
               <p className="text-slate-400 mb-6 min-h-[50px]">La experiencia mega-premium para recuperar control cuando hay suspensos críticos importantes.</p>
               <div className="text-4xl font-black text-white mb-8 border-b border-white/10 pb-6 w-full">
-                89€<span className="text-xl text-slate-400 font-normal">/mes</span>
+                24,99€<span className="text-xl text-slate-400 font-normal">/mes</span>
               </div>
               <ul className="space-y-4 mb-8 text-left w-full text-sm">
                 <li className="flex items-start gap-3 text-slate-200 font-medium border-b border-white/5 pb-2"><CheckCircle2 className="w-5 h-5 text-purple-500 flex-shrink-0" /> Todo lo incluido en "Velocidad Luz"</li>
@@ -185,9 +196,9 @@ export default function Mission() {
                 <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-purple-400 flex-shrink-0" /> <strong>Seguimiento Personalizado:</strong> Plan de ruta semanal trazado por el tutor en contacto con el padre/tutor legal.</li>
               </ul>
               <div className="mt-auto w-full">
-                <button className="btn bg-slate-800/80 border border-purple-500/50 text-purple-300 hover:bg-purple-600 hover:text-white hover:border-purple-400 w-full rounded-2xl transition-all">
+                <Link to="/register" className="btn bg-slate-800/80 border border-purple-500/50 text-purple-300 hover:bg-purple-600 hover:text-white hover:border-purple-400 w-full rounded-2xl transition-all">
                   Consultar Disponibilidad
-                </button>
+                </Link>
               </div>
             </div>
             
@@ -221,7 +232,7 @@ export default function Mission() {
                 ¿Cómo sé si realmente están progresando y no perdiendo el tiempo?
               </div>
               <div className="collapse-content text-slate-400 text-lg leading-relaxed">
-                <p>En el plan central y premium, como tutor principal, recibirás notificaciones y un panel con <strong>métricas claras de tiempo útil, ejercicios aprobados y áreas de fricción</strong>. En caso de suscripción superior, un profesor humano hablará contigo rutinariamente para exponerte las mejoras metodológicas implementadas y evitar que te preocupes excesivamente la noche antes del examen escolar.</p>
+                <p>En el plan central y premium, como tutor principal, recibirás notificaciones y un panel con <strong className="text-pink-300">métricas claras de tiempo útil, ejercicios aprobados y áreas de fricción</strong>. En caso de suscripción superior, un profesor humano hablará contigo rutinariamente para exponerte las mejoras metodológicas implementadas y evitar que te preocupes excesivamente la noche antes del examen escolar.</p>
               </div>
             </div>
 
@@ -231,7 +242,7 @@ export default function Mission() {
                 ¿Sirve Genio Academy para un niño que va bien en clase o solo es para reforzar?
               </div>
               <div className="collapse-content text-slate-400 text-lg leading-relaxed">
-                <p>Es para ambos perfiles. Como Genio Academy se basa en "Cápsulas Híper-Específicas", los estudiantes sobresalientes lo utilizan de maravilla para avanzar en temas de cursos superiores o potenciar sus habilidades, saciando el aburrimiento típico que a veces sufren en la escuela presencial.</p>
+                <p>Es para ambos perfiles. Como Genio Academy se basa en <strong className="text-pink-300">"Cápsulas Híper-Específicas"</strong>, los estudiantes sobresalientes lo utilizan de maravilla para avanzar en temas de cursos superiores o potenciar sus habilidades, saciando el aburrimiento típico que a veces sufren en la escuela presencial.</p>
               </div>
             </div>
 
@@ -251,7 +262,7 @@ export default function Mission() {
               </p>
               <div className="flex flex-col sm:flex-row gap-5">
                 <Link to="/courses" className="btn bg-cyan-500 hover:bg-cyan-400 text-slate-900 border-none btn-lg px-8 rounded-2xl font-bold shadow-[0_0_30px_rgba(34,211,238,0.5)]">
-                  Explorar Catálogo de Estímulos
+                  Explorar Catálogo Estelar
                 </Link>
                 <Link to="/login" className="btn btn-outline border-indigo-400 text-indigo-300 hover:bg-indigo-500 hover:text-white btn-lg px-8 rounded-2xl shadow-[0_0_20px_rgba(79,70,229,0.3)] backdrop-blur-md">
                   Contactar con la Comandancia <ArrowRight className="ml-2 w-5 h-5"/>

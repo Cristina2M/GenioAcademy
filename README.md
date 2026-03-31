@@ -2,6 +2,14 @@
 
 Este proyecto es una plataforma de academia online diseñada específicamente para estudiantes de la ESO. A diferencia de las plataformas tradicionales, Genio Academy organiza el contenido por **niveles de conocimiento específicos** y no por cursos académicos, permitiendo un aprendizaje personalizado.
 
+#### ✨ HITO V: Despliegue y Pruebas Reales (Expansión Final)
+Ajustes finos, auditorías y puesta en órbita.
+* Testing E2E (Simular que un alumno se registra, compra/abre un curso, ve las lecciones y chatea con IA).
+* Despliegue en un VPS modesto o usando servicios en nube accesibles.
+* Documentación pulida para que el día de mañana otros desarrolladores puedan hacer crecer Genio Academy.
+* **Sistema de Vidas (Planetas):** Implementar mecánica Roguelike global. Los fallos en el simulador descuentan planetas/vidas.
+* **Minijuegos de Recuperación:** Crear motores en JavaScript (Módulos independientes) para auto-generar Sudokus y Sopas de Letras con palabras clave del temario (ej: "Pitágoras") para que los alumnos ganen nuevas vidas al estar a punto de morir en combate.
+
 ## 🚀 Entorno y Puesta en Marcha
 
 Se ha implementado una arquitectura de **microservicios dockerizados** para garantizar que el entorno de desarrollo sea idéntico al de producción.
