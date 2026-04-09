@@ -21,6 +21,7 @@ import { PlayCircle, CheckCircle, Brain, ArrowLeft, ArrowRight, Star, FileText, 
 import axiosInstance from '../api/axios';
 import LessonQuiz from '../components/LessonQuiz';
 import AIChatPanel from '../components/AIChatPanel';
+import LivesPanel from '../components/LivesPanel';
 import AuthContext from '../context/AuthContext';
 
 export default function CoursePlayer() {
@@ -330,9 +331,14 @@ export default function CoursePlayer() {
               )}
             </div>
 
-          </div>
+          {/* ── PANEL DE VIDAS (PLANETAS) ──
+               Sistema Roguelike: muestra los planetas del alumno y,
+               si está en Game Over con Plan 3, activa los botones de minijuego. */}
+          <LivesPanel />
+
         </div>
       </div>
+    </div>
 
       {/* ══════════════════════════════════════════
           MODAL DE VICTORIA

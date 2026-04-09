@@ -19,6 +19,8 @@ services:
       - ./backend:/app
     ports:
       - "8000:8000"
+    env_file:
+      - ./backend/.env          # Carga GROQ_API_KEY y otros secretos desde el archivo .env local
     environment:
       - DATABASE_URL=postgres://genio_user:genio_password@db:5432/genio_db
     depends_on:

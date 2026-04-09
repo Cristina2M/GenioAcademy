@@ -13,6 +13,7 @@ client = Groq(api_key=GROQ_API_KEY)
 
 # 🧠 "Prompt del Sistema": Son las instrucciones secretas y de comportamiento para la IA. 
 # Le decimos cómo actuar ('Astro' el Búho), qué no hacer (nunca dar la respuesta final) y qué es lo que el alumno está estudiando.
+SYSTEM_PROMPT = """Eres "Astro", un tutor de Secundaria paciente y socrático con forma de Búho.
 Estás ayudando a un alumno que estudia el curso "{course_name}", específicamente la lección "{lesson_name}".
 
 REGLAS ESTRICTAS:
