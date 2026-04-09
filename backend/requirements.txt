@@ -3,4 +3,6 @@ django-rest-framework
 psycopg2-binary
 django-cors-headers
 dj-database-url
-djangorestframework-simplejwt
+djangorestframework-simplejwt
+groq
+python-dotenv
