@@ -108,17 +108,44 @@ El valor diferencial: un asistente llamado "Astro" integrado en el aula que guí
   * Personalización del chat conectándose con el contexto: carga dinámicamente el búho "Astro" y el avatar del piloto que ha seleccionado el alumno.
   * Gestión de estado de carga, animaciones de "Pensando..." y autoscroll.
 
-#### 🚀 HITO V: Calidad, Contenido y Cierre Técnico
+#### 🪐 HITO V: Sistema de Vidas (Mecánica Roguelike)
+Gamificación avanzada penalizando el fallo continuo para fomentar la repetición espaciada y la retención lúdica.
+
+* **Fase 14: Lógica de Vidas y Planetas** (🔴 Pendiente)
+  * Implementación del motor en el Backend. Cada alumno dispondrá de un máximo de 3 "planetas" (vidas).
+  * Si el alumno suspende una evaluación, pierde un planeta. 
+  * Regeneración pasiva temporal: Cada planeta perdido tarda 2 horas en regenerarse automáticamente.
+
+* **Fase 15: Minijuegos de Soporte Auxiliar** (🔴 Pendiente)
+  * Creación de interfaces de minijuegos independientes (Sudokus matemáticos, Sopas de letras históricas).
+  * **Reglas estrictas de mecánica "Game Over":**
+    * Solo se habilitan los minijuegos cuando el alumno ha perdido sus 3 vidas (0 planetas).
+    * Al superar un minijuego y ganar 1 planeta, el acceso a otros minijuegos se bloquea hasta volver a perder la vida.
+    * Cooldown penalizador: Solo se permite jugar un mismo minijuego 1 vez cada 24 horas.
+    * Sincronía de tiempo: Recuperar una vida a través de un minijuego **NO** interrumpe ni resetea el reloj de regeneración natural de 2 horas.
+
+#### 🎓 HITO VI: Claustro Interactivo (Catálogo de Profesores)
+Conexión humana y especializada para estudiantes élite.
+
+* **Fase 16: Motor Relacional Multidimensional (M2M)** (🔴 Pendiente)
+  * Creación de un Catálogo de Profesores organizados por áreas de conocimiento.
+  * Configuración de relaciones "Muchos a Muchos" para que un docente (ej. María) pueda impartir simultáneamente Matemáticas y Física.
+
+* **Fase 17: Suite de Comunicación (Exclusivo Nivel 3)** (🔴 Pendiente)
+  * Panel de chat en vivo con profesores especializados elegidos del catálogo.
+  * Base para integración de canales de videoconferencia (WebRTC o SDK externos) permitiendo tutorías remotas directas para alumnos del Plan Máximo ("Agujero de Gusano").
+
+#### 🚀 HITO VII: Calidad, Contenido y Cierre Técnico
 Afinación del proyecto para su entrega, exposición y uso real.
 
-* **Fase 14: Inserción de Contenidos y Gamificación** (🔴 Pendiente)
+* **Fase 18: Inserción de Contenidos y Efectos Visuales** (🔴 Pendiente)
   * Población de la base de datos con material educativo real de la ESO.
-  * Implementación de recompensas visuales (alertas de éxito, cambios de rango) al subir de nivel.
+  * Implementación de recompensas visuales (alertas de éxito, cambios de rango).
 
-* **Fase 15: Quality Assurance (QA) y Despliegue Final** (🔴 Pendiente)
+* **Fase 19: Quality Assurance (QA) y Despliegue Final** (🔴 Pendiente)
   * Pruebas de integración: intentar vulnerar el sistema accediendo a cursos bloqueados.
-  * Pruebas de estrés del contenedor de IA para asegurar que no colapsa el servidor.
-  * Generación de documentación de la API (Swagger/Redoc) y preparación de la demo técnica.
+  * Pruebas de estrés y límites en las peticiones a la API Groq.
+  * Generación de documentación de la API y preparación del portfolio.
 
 
 
