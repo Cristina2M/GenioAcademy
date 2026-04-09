@@ -1,3 +1,4 @@
+# Importamos herramientas necesarias para crear nuestro propio "endpoint" de la API y comunicarnos con la IA
 import os
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -5,13 +6,13 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from groq import Groq
 
-# Recuperamos la API key del entorno
+# 🔑 La llave mágica: sacamos nuestra clave secreta de las variables de entorno
 GROQ_API_KEY = os.environ.get('GROQ_API_KEY')
-# Instanciamos el cliente (se recomienda hacerlo globalmente o por request)
-# Si GROQ_API_KEY no está seteada, Groq() intentará leer la variable de entorno GROQ_API_KEY automáticamente.
+# Creamos la conexión con la "nube" de la IA de Groq
 client = Groq(api_key=GROQ_API_KEY)
 
-SYSTEM_PROMPT = """Eres "Astro", un tutor de Secundaria paciente y socrático con forma de Búho.
+# 🧠 "Prompt del Sistema": Son las instrucciones secretas y de comportamiento para la IA. 
+# Le decimos cómo actuar ('Astro' el Búho), qué no hacer (nunca dar la respuesta final) y qué es lo que el alumno está estudiando.
 Estás ayudando a un alumno que estudia el curso "{course_name}", específicamente la lección "{lesson_name}".
 
 REGLAS ESTRICTAS:
@@ -30,13 +31,15 @@ class ChatView(APIView):
     def post(self, request):
         user = request.user
         
-        # Validar plan (Solo Plan 2 y Plan 3 tienen acceso a la IA)
+        # Protegemos la ruta: Comprobamos si el alumno tiene un plan Avanzado (2 o superior)
         if user.subscription_level < 2:
+            # Si tiene un plan gratuito (1), le denegamos el acceso
             return Response(
                 {"detail": "Acceso denegado. Astro está disponible a partir del Plan Velocidad Luz."},
                 status=status.HTTP_403_FORBIDDEN
             )
             
+        # Extraemos los datos que nos envía el React: los mensajes que ya se han escrito y dónde está el alumno
         data = request.data
         messages = data.get("messages", [])
         course_title = data.get("courseTitle", "General")
@@ -48,17 +51,17 @@ class ChatView(APIView):
         # Preparamos el system prompt con el contexto
         sys_msg = SYSTEM_PROMPT.format(course_name=course_title, lesson_name=lesson_title)
         
-        # Construimos el array de mensajes para Groq
-        # Añadimos el system prompt al inicio
+        # Construimos el formato que espera la IA (una lista de mensajes guardada en forma de diccionario)
+        # El primero siempre es la instrucción secreta
         groq_messages = [{"role": "system", "content": sys_msg}]
         
-        # Agregamos el historial recibido (se espera una lista de diccionarios { "role": "user" o "assistant", "content": "..." })
+        # Después sumamos toda la charla que llevaba el alumno con Astro para que la IA no pierda el hilo
         for msg in messages:
             if msg.get("role") in ["user", "assistant"] and msg.get("content"):
                 groq_messages.append({"role": msg["role"], "content": msg["content"]})
                 
         try:
-            # Llamamos al modelo (usamos llama3-8b-8192 o llama3-70b-8192)
+            # Pedimos la respuesta a internet a "llama-3.1-8b-instant" (Una de las mentes brillantes de Groq)
             chat_completion = client.chat.completions.create(
                 messages=groq_messages,
                 model="llama-3.1-8b-instant",

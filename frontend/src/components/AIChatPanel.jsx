@@ -4,15 +4,22 @@ import axiosInstance from '../api/axios';
 import AuthContext from '../context/AuthContext';
 import { getStudentAvatar } from '../utils/avatarUtils';
 
+// ============================================================
+// ARCHIVO: AIChatPanel.jsx
+// FUNCIÓN: Es el componente de interfaz gráfica del chat de IA (Astro).
+// Se encarga de mostrar la burbuja de mensajes, conectarse al backend 
+// para enviar y recibir datos, y manejar el estado (escribiendo, etc.)
+// ============================================================
 export default function AIChatPanel({ courseTitle, lessonTitle }) {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [messages, setMessages] = useState([]); // Guarda el historial de mensajes
+  const [input, setInput] = useState(''); // El texto que el alumno está escribiendo
+  const [isLoading, setIsLoading] = useState(false); // Sirve para mostrar la animación de "Pensando..."
   const messagesEndRef = useRef(null);
 
+  // Cargamos los datos del usuario conectado para usar su avatar elegido
   const { user } = useContext(AuthContext);
   const userAvatarImage = getStudentAvatar(user?.selected_avatar || 'buho1');
-  const aiAvatarImage = getStudentAvatar('buho10'); // Astro
+  const aiAvatarImage = getStudentAvatar('buho10'); // Astro usa el avatar del Genio Universal
 
   // Auto-scroll al último mensaje
   const scrollToBottom = () => {
@@ -27,14 +34,15 @@ export default function AIChatPanel({ courseTitle, lessonTitle }) {
     e.preventDefault();
     if (!input.trim()) return;
 
-    // Añadimos el mensaje del usuario al historial local
+    // 1. Añadimos lo que escribió el alumno a la pantalla inmediatamente 
     const newMessages = [...messages, { role: 'user', content: input.trim() }];
     setMessages(newMessages);
     setInput('');
     setIsLoading(true);
 
     try {
-      // Llamada al backend
+      // 2. Nos comunicamos por detrás con el backend pasándole el historial de la conversación
+      // Además le enviamos en qué curso y lección está el alumno para que funcione el contexto socrático.
       const response = await axiosInstance.post('ai/chat/', {
         messages: newMessages,
         courseTitle: courseTitle,
