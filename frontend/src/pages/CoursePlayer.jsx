@@ -20,6 +20,7 @@ import { useParams, Link } from 'react-router-dom';
 import { PlayCircle, CheckCircle, Brain, ArrowLeft, ArrowRight, Star, FileText, Compass, ShieldAlert, Lock, Rocket } from 'lucide-react';
 import axiosInstance from '../api/axios';
 import LessonQuiz from '../components/LessonQuiz';
+import AIChatPanel from '../components/AIChatPanel';
 import AuthContext from '../context/AuthContext';
 
 export default function CoursePlayer() {
@@ -306,16 +307,11 @@ export default function CoursePlayer() {
             */}
             <div className="mt-4 border-t border-white/10 pt-6">
               {hasAIAccess ? (
-                // Plan 2 o 3: Búho incluido en el plan, pero aún no implementado
-                <div className="bg-gradient-to-r from-pink-500/20 to-purple-500/20 rounded-xl p-4 border border-pink-500/30 text-center relative overflow-hidden group">
-                  <div className="absolute inset-0 bg-pink-500/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-                  <Brain className="w-8 h-8 text-pink-400 mx-auto mb-2" />
-                  <h4 className="font-bold text-white text-sm">¿Dudas en la misión?</h4>
-                  <p className="text-xs text-slate-300 mt-1 mb-3">La IA Local está decodificando el entorno...</p>
-                  <button className="btn btn-sm w-full bg-pink-500 hover:bg-pink-400 border-none text-white shadow-[0_0_15px_rgba(236,72,153,0.4)] relative z-10" disabled>
-                    🦉 Próximamente
-                  </button>
-                </div>
+                // Plan 2 o 3: Búho incluido en el plan, cargamos el chat interactivo
+                <AIChatPanel 
+                  courseTitle={course?.title || "Curso General"} 
+                  lessonTitle={activeLesson?.title || "Consulta"} 
+                />
               ) : (
                 // Plan 1: Búho bloqueado con invitación a subir de plan
                 <div className="bg-slate-800/60 rounded-xl p-4 border border-slate-600/40 text-center">
