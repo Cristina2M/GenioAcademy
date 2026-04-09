@@ -98,9 +98,9 @@ class UserViewSet(viewsets.ModelViewSet):
 
 # ── SISTEMA DE VIDAS (PLANETAS) ──
 
-LIFE_REGEN_HOURS = 2   # Horas que tarda en regenerarse 1 planeta de forma pasiva
-MAX_LIVES = 3          # Límite de planetas que puede tener cualquier alumno
-MINIGAME_COOLDOWN_HOURS = 24  # Cooldown por minijuego para evitar abusos
+LIFE_REGEN_SECONDS = 60        # ⏱️ PRUEBAS: 1 minuto (producción: 2 horas = 7200)
+MINIGAME_COOLDOWN_SECONDS = 30 # ⏱️ PRUEBAS: 30 segundos (producción: 24 horas = 86400)
+MAX_LIVES = 3                  # Límite de planetas que puede tener cualquier alumno
 
 
 def sync_lives(user):
@@ -121,7 +121,7 @@ def sync_lives(user):
 
     now = timezone.now()
     elapsed = now - user.last_life_lost_at  # Tiempo transcurrido desde la última pérdida
-    lives_to_restore = int(elapsed.total_seconds() // (LIFE_REGEN_HOURS * 3600))
+    lives_to_restore = int(elapsed.total_seconds() // LIFE_REGEN_SECONDS)
 
     if lives_to_restore > 0:
         new_lives = min(user.lives_count + lives_to_restore, MAX_LIVES)
@@ -130,7 +130,7 @@ def sync_lives(user):
             user.last_life_lost_at = None  # Reloj apagado: ya está completo
         else:
             # Avanzamos el reloj solo el tiempo consumido (respetando el sobrante)
-            user.last_life_lost_at += timedelta(hours=LIFE_REGEN_HOURS * lives_to_restore)
+            user.last_life_lost_at += timedelta(seconds=LIFE_REGEN_SECONDS * lives_to_restore)
         user.save()
 
 
@@ -151,7 +151,7 @@ class LivesView(APIView):
         seconds_until_next = None
         if user.lives_count < MAX_LIVES and user.last_life_lost_at:
             elapsed = (timezone.now() - user.last_life_lost_at).total_seconds()
-            remaining = (LIFE_REGEN_HOURS * 3600) - (elapsed % (LIFE_REGEN_HOURS * 3600))
+            remaining = LIFE_REGEN_SECONDS - (elapsed % LIFE_REGEN_SECONDS)
             seconds_until_next = int(remaining)
 
         # Los minijuegos solo se desbloquean para alumnos Plan 3 con 0 vidas
@@ -236,8 +236,8 @@ class MinigamePlayView(APIView):
         if not minigame_id:
             return Response({'detail': 'Falta el ID del minijuego.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Comprobamos el cooldown de 24 horas para este minijuego específico
-        cooldown_limit = timezone.now() - timedelta(hours=MINIGAME_COOLDOWN_HOURS)
+        # Comprobamos el cooldown de 30 segundos para este minijuego específico
+        cooldown_limit = timezone.now() - timedelta(seconds=MINIGAME_COOLDOWN_SECONDS)
         recently_played = MinigameLog.objects.filter(
             user=user,
             minigame_id=minigame_id,
