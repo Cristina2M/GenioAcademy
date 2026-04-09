@@ -117,7 +117,12 @@ Gamificación avanzada penalizando el fallo continuo para fomentar la repetició
   * Regeneración pasiva temporal: Cada planeta perdido tarda 2 horas en regenerarse automáticamente.
 
 * **Fase 15: Minijuegos de Soporte Auxiliar** (🔴 Pendiente)
-  * Creación de interfaces de minijuegos independientes (Sudokus matemáticos, Sopas de letras históricas).
+  * Creación de interfaces de minijuegos independientes en React que consuman muy pocos recursos del servidor. Los 5 seleccionados por su viabilidad y rejugabilidad son:
+    1. **Juego de memoria (Cartas / Parejas):** Voltear cartas para emparejar concepto-definición. Ideal de programar en React con CSS 3D.
+    2. **Cálculo mental rápido (Modo Arcade):** Operaciones matemáticas autogeneradas con un contador de tiempo agresivo.
+    3. **Sopa de letras:** Construcción de un grid 2D para buscar vocabulario clave de la lección.
+    4. **Completar la palabra (Estilo Ahorcado):** Adivinar la palabra faltante para potenciar ortografía.
+    5. **Verdadero o Falso (Ráfaga / Supervivencia):** Enseña al alumno a procesar afirmaciones bajo presión de tiempo con 2 botones gigantes.
   * **Reglas estrictas de mecánica "Game Over":**
     * Solo se habilitan los minijuegos cuando el alumno ha perdido sus 3 vidas (0 planetas).
     * Al superar un minijuego y ganar 1 planeta, el acceso a otros minijuegos se bloquea hasta volver a perder la vida.
