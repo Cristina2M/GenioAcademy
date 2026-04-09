@@ -9,6 +9,7 @@
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
 
 class CustomUser(AbstractUser):
@@ -59,6 +60,59 @@ class CustomUser(AbstractUser):
         help_text='Identificador del búho seleccionado. Ejemplo: "buho1", "buho2".'
     )
 
+    # ── SISTEMA DE VIDAS (PLANETAS) ──
+
+    # Número de planetas (vidas) actuales del alumno. Máximo: 3.
+    lives_count = models.IntegerField(
+        default=3,
+        verbose_name='Planetas (Vidas)',
+        help_text='Máximo 3. Se pierden al fallar una evaluación y se regeneran con el tiempo.'
+    )
+
+    # Reloj maestro de regeneración pasiva.
+    # Cuando el alumno pierde una vida, guardamos el instante exacto.
+    # Cada 2 horas que pasen desde ese momento, se recupera 1 planeta automáticamente
+    # sin necesidad de tareas en segundo plano (calculamos la diferencia al vuelo cuando el alumno conecta).
+    last_life_lost_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name='Momento de pérdida de la última vida',
+        help_text='Punto de partida del reloj de regeneración de 2 horas.'
+    )
+
     def __str__(self):
         # Cómo se ve este alumno en el panel de administración de Django
-        return f"{self.username} — Nivel {self.current_student_level} (Plan {self.get_subscription_level_display()})"
+        return f"{self.username} — Nivel {self.current_student_level} (Plan {self.get_subscription_level_display()}) | Vidas: {self.lives_count}/3"
+
+
+# ============================================================
+# MODELO: MinigameLog
+# FUNCIÓN: Registra cadáver vez que un alumno juega un minijuego.
+#
+# De esta forma podemos aplicar el cooldown de 24 horas por minijuego:
+# si el registro de hoy ya existe en esta tabla, el alumno no puede volver a jugar.
+# ============================================================
+class MinigameLog(models.Model):
+
+    # El alumno que jugó (si se borra el alumno, sus registros de juego se borran también)
+    user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='minigame_logs',
+        verbose_name='Alumno'
+    )
+
+    # Identificador único del minijuego jugado (ej: 'pairs', 'arcade', 'wordsearch', 'fill_word', 'true_false')
+    minigame_id = models.CharField(
+        max_length=50,
+        verbose_name='ID del minijuego'
+    )
+
+    # Instante exacto en que se jugó para calcular el cooldown de 24 horas
+    played_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Jugado el'
+    )
+
+    def __str__(self):
+        return f"{self.user.username} — {self.minigame_id} — {self.played_at.strftime('%d/%m/%Y %H:%M')}"
