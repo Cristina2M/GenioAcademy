@@ -48,20 +48,24 @@ export default function LivesPanel() {
     fetchLives();
   }, [fetchLives]);
 
-  // Cuenta atrás en tiempo real (actualiza cada segundo)
+  // Polling independiente al servidor cada 5 segundos para mantener sincronía
+  // Esto garantiza que los planetas se actualicen sin necesidad de recargar
   useEffect(() => {
-    if (countdown === null || countdown <= 0) return;
-    const timer = setInterval(() => {
-      setCountdown(prev => {
-        if (prev <= 1) {
-          fetchLives(); // Al llegar a 0, recargamos por si ha regenerado una vida
-          return null;
-        }
-        return prev - 1;
-      });
+    const poll = setInterval(() => {
+      fetchLives();
+    }, 5000);
+    return () => clearInterval(poll);
+  }, [fetchLives]);
+
+  // Reloj local: descuenta 1 segundo cada tick para la cuenta atrás visual
+  // Es INDEPENDIENTE del polling — si llega a 0 simplemente espera el próximo fetch
+  useEffect(() => {
+    if (!countdown || countdown <= 0) return;
+    const tick = setInterval(() => {
+      setCountdown(prev => (prev > 1 ? prev - 1 : 0));
     }, 1000);
-    return () => clearInterval(timer);
-  }, [countdown, fetchLives]);
+    return () => clearInterval(tick);
+  }, [countdown]);
 
   // Formatea segundos como "1h 23m 45s"
   const formatCountdown = (secs) => {
