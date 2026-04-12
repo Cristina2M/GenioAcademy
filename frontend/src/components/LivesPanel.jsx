@@ -48,12 +48,12 @@ export default function LivesPanel() {
     fetchLives();
   }, [fetchLives]);
 
-  // Polling independiente al servidor cada 5 segundos para mantener sincronía
+  // Polling independiente al servidor cada 1 segundo para mantener sincronía
   // Esto garantiza que los planetas se actualicen sin necesidad de recargar
   useEffect(() => {
     const poll = setInterval(() => {
       fetchLives();
-    }, 5000);
+    }, 1000);
     return () => clearInterval(poll);
   }, [fetchLives]);
 
