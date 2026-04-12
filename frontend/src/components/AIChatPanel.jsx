@@ -66,7 +66,7 @@ export default function AIChatPanel({ courseTitle, lessonTitle }) {
 
   return (
     <div className="flex flex-col h-[400px] bg-slate-900 border border-pink-500/30 rounded-xl overflow-hidden shadow-[0_0_20px_rgba(236,72,153,0.15)] relative">
-      {/* Cabecera del Búho IA */}
+      {/* Cabecera de Astro */ }
       <div className="bg-gradient-to-r from-pink-500/20 to-purple-500/20 p-3 border-b border-pink-500/30 flex items-center gap-2">
         <img src={aiAvatarImage} alt="Astro" className="w-6 h-6 object-cover rounded-full" />
         <h4 className="font-bold text-white text-sm">Astro</h4>

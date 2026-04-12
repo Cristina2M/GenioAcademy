@@ -199,16 +199,6 @@ export default function LivesPanel() {
         </div>
       ) : null}
 
-      {/* ── MENSAJE DE FEEDBACK EN TIEMPO REAL ── */}
-      {message && (
-        <div className={`rounded-xl px-3 py-2 text-xs font-medium text-center transition-all ${
-          message.type === 'success' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' :
-          message.type === 'warning' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' :
-          'bg-rose-500/20 text-rose-300 border border-rose-500/30'
-        }`}>
-          {message.text}
-        </div>
-      )}
     </div>
   );
 }
