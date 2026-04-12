@@ -6,13 +6,13 @@
 // Tiene tres partes principales:
 //   1. Barra superior con el nombre del curso
 //   2. Columna izquierda: vídeo + teoría / simulador de preguntas
-//   3. Columna derecha: lista de lecciones + botón de completar + Búho IA
+//   3. Columna derecha: lista de lecciones + botón de completar + Astro
 //
 // El botón principal cambia según el estado del curso:
 //   - "Completar Misión" si el curso es nuevo (da XP)
 //   - "Terminar Entrenamiento" si ya fue completado (modo repaso, sin XP)
 //
-// El Búho IA (para resolver dudas) está bloqueado para el Plan 1.
+// Astro (para resolver dudas) está bloqueado para el Plan 1.
 // ============================================================
 
 import { useState, useEffect, useContext } from 'react';
@@ -49,9 +49,9 @@ export default function CoursePlayer() {
   const [errorModal, setErrorModal] = useState('');
 
   // ─────────────────────────────────────────────
-  // PLAN DEL ALUMNO: para mostrar/ocultar el Búho IA
+  // PLAN DEL ALUMNO: para mostrar/ocultar Astro
   // ─────────────────────────────────────────────
-  // Plan 1 = Órbita Base (sin IA), Plan 2+ = acceso al Búho IA cuando esté listo
+  // Plan 1 = Órbita Base (sin IA), Plan 2+ = acceso a Astro cuando esté listo
   const subscriptionLevel = user?.subscription_level || 1;
   const hasAIAccess = subscriptionLevel >= 2;
 
@@ -301,7 +301,7 @@ export default function CoursePlayer() {
               )}
             </div>
 
-            {/* ── TARJETA DEL BÚHO IA ──
+            {/* ── TARJETA DE ASTRO ──
                 Muestra contenido diferente según el plan del alumno:
                 - Plan 1: Función bloqueada con aviso para subir de plan
                 - Plan 2 o 3: Activado pero marcado como "Próximamente" (Hito IV)
@@ -314,10 +314,10 @@ export default function CoursePlayer() {
                   lessonTitle={activeLesson?.title || "Consulta"} 
                 />
               ) : (
-                // Plan 1: Búho bloqueado con invitación a subir de plan
+                // Plan 1: Astro bloqueado con invitación a subir de plan
                 <div className="bg-slate-800/60 rounded-xl p-4 border border-slate-600/40 text-center">
                   <Lock className="w-8 h-8 text-slate-500 mx-auto mb-2" />
-                  <h4 className="font-bold text-slate-400 text-sm">Búho IA</h4>
+                  <h4 className="font-bold text-slate-400 text-sm">Astro</h4>
                   <p className="text-xs text-slate-500 mt-1 mb-3">
                     Disponible desde el Plan <strong className="text-pink-300">Velocidad Luz</strong>
                   </p>

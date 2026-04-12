@@ -98,8 +98,8 @@ class UserViewSet(viewsets.ModelViewSet):
 
 # ── SISTEMA DE VIDAS (PLANETAS) ──
 
-LIFE_REGEN_SECONDS = 60        # ⏱️ PRUEBAS: 1 minuto (producción: 2 horas = 7200)
-MINIGAME_COOLDOWN_SECONDS = 30 # ⏱️ PRUEBAS: 30 segundos (producción: 24 horas = 86400)
+LIFE_REGEN_SECONDS = 600       # ⏱️ 10 minutos (evita que se recupere vida mientras juegas)
+MINIGAME_COOLDOWN_SECONDS = 30 # ⏱️ 30 segundos para pruebas
 MAX_LIVES = 3                  # Límite de planetas que puede tener cualquier alumno
 
 
@@ -132,6 +132,49 @@ def sync_lives(user):
             # Avanzamos el reloj solo el tiempo consumido (respetando el sobrante)
             user.last_life_lost_at += timedelta(seconds=LIFE_REGEN_SECONDS * lives_to_restore)
         user.save()
+        
+def get_lives_data(user):
+    """
+    Helper para obtener el estado completo de vidas y minijuegos de un usuario.
+    Se usa en LivesView, DecreaseLivesView y MinigamePlayView para mantener
+    al frontend siempre sincronizado con los datos más recientes.
+    """
+    sync_lives(user)
+
+    # Calculamos el tiempo restante para el siguiente planeta
+    seconds_until_next = None
+    if user.lives_count < MAX_LIVES and user.last_life_lost_at:
+        elapsed = (timezone.now() - user.last_life_lost_at).total_seconds()
+        remaining = LIFE_REGEN_SECONDS - (elapsed % LIFE_REGEN_SECONDS)
+        seconds_until_next = int(remaining)
+
+    # Los minijuegos solo se desbloquean para alumnos Plan 3 con 0 vidas
+    can_play_minigame = (user.subscription_level == 3 and user.lives_count == 0)
+
+    # Calculamos el cooldown actual de cada minijuego consumido
+    minigames_cooldowns = {}
+    now = timezone.now()
+    cooldown_limit = now - timedelta(seconds=MINIGAME_COOLDOWN_SECONDS)
+    
+    recent_logs = MinigameLog.objects.filter(
+        user=user,
+        played_at__gte=cooldown_limit
+    )
+    
+    for log in recent_logs:
+        elapsed_mg = (now - log.played_at).total_seconds()
+        remaining_mg = MINIGAME_COOLDOWN_SECONDS - elapsed_mg
+        if remaining_mg > 0:
+            if log.minigame_id not in minigames_cooldowns or remaining_mg > minigames_cooldowns[log.minigame_id]:
+                minigames_cooldowns[log.minigame_id] = int(remaining_mg)
+
+    return {
+        'lives': user.lives_count,
+        'max_lives': MAX_LIVES,
+        'seconds_until_next_life': seconds_until_next,
+        'can_play_minigame': can_play_minigame,
+        'minigames_cooldowns': minigames_cooldowns,
+    }
 
 
 class LivesView(APIView):
@@ -144,25 +187,8 @@ class LivesView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        user = request.user
-        sync_lives(user)  # Actualizamos primero las vidas pasivas
-
-        # Calculamos el tiempo restante para el siguiente planeta
-        seconds_until_next = None
-        if user.lives_count < MAX_LIVES and user.last_life_lost_at:
-            elapsed = (timezone.now() - user.last_life_lost_at).total_seconds()
-            remaining = LIFE_REGEN_SECONDS - (elapsed % LIFE_REGEN_SECONDS)
-            seconds_until_next = int(remaining)
-
-        # Los minijuegos solo se desbloquean para alumnos Plan 3 con 0 vidas
-        can_play_minigame = (user.subscription_level == 3 and user.lives_count == 0)
-
-        return Response({
-            'lives': user.lives_count,
-            'max_lives': MAX_LIVES,
-            'seconds_until_next_life': seconds_until_next,
-            'can_play_minigame': can_play_minigame,
-        })
+        data = get_lives_data(request.user)
+        return Response(data)
 
 
 class DecreaseLivesView(APIView):
@@ -190,10 +216,9 @@ class DecreaseLivesView(APIView):
             user.last_life_lost_at = timezone.now()
         user.save()
 
-        return Response({
-            'lives': user.lives_count,
-            'detail': f'Has perdido un planeta. Te quedan {user.lives_count}/3.',
-        })
+        data = get_lives_data(user)
+        data['detail'] = f'Has perdido un planeta. Te quedan {user.lives_count}/3.'
+        return Response(data)
 
 
 class MinigamePlayView(APIView):
@@ -223,20 +248,13 @@ class MinigamePlayView(APIView):
                 status=status.HTTP_403_FORBIDDEN
             )
 
-        # Solo se pueden jugar con 0 vidas
-        if user.lives_count > 0:
-            return Response(
-                {'detail': 'Todavía tienes planetas. Los minijuegos solo se activan en Game Over (0 vidas).'},
-                status=status.HTTP_403_FORBIDDEN
-            )
-
         minigame_id = request.data.get('minigame_id')
         won = request.data.get('won', False)
 
         if not minigame_id:
             return Response({'detail': 'Falta el ID del minijuego.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Comprobamos el cooldown de 30 segundos para este minijuego específico
+        # Comprobamos el cooldown actual
         cooldown_limit = timezone.now() - timedelta(seconds=MINIGAME_COOLDOWN_SECONDS)
         recently_played = MinigameLog.objects.filter(
             user=user,
@@ -246,23 +264,29 @@ class MinigamePlayView(APIView):
 
         if recently_played:
             return Response(
-                {'detail': f'Ya jugaste "{minigame_id}" recientemente. Cooldown de 24 horas activo.'},
+                {'detail': f'Ya jugaste "{minigame_id}" recientemente.'},
                 status=status.HTTP_429_TOO_MANY_REQUESTS
             )
 
-        # Registramos la jugada (independientemente de si ganó o perdió)
+        # Registramos la jugada SIEMPRE que se intente (para activar cooldown pase lo que pase)
+        # Esto evita que el bloqueo falle si el alumno recupera una vida pasivamente mientras juega.
         MinigameLog.objects.create(user=user, minigame_id=minigame_id)
+
+        # Si recuperó una vida pasivamente, le dejamos terminar pero no le damos otra adicional si ganó
+        if user.lives_count > 0 and won:
+            data = get_lives_data(user)
+            data['detail'] = 'Ya habías recuperado un planeta automáticamente.'
+            return Response(data)
 
         if won:
             # Recupera 1 vida SIN tocar el reloj de regeneración pasiva
             user.lives_count = 1
             user.save()
-            return Response({
-                'lives': user.lives_count,
-                'detail': '¡Minijuego superado! Has recuperado 1 planeta. ¡Sigue así, explorador!',
-            })
+
+        data = get_lives_data(user)
+        if won:
+            data['detail'] = '¡Minijuego superado! Has recuperado 1 planeta.'
         else:
-            return Response({
-                'lives': user.lives_count,
-                'detail': 'No superaste el minijuego esta vez. El cooldown de 24h se ha iniciado.',
-            })
+            data['detail'] = 'No superaste el minijuego esta vez. Cooldown activado.'
+        
+        return Response(data)

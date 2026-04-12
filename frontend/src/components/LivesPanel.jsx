@@ -12,24 +12,37 @@
 // ============================================================
 
 import { useState, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/axios';
-import { Rocket, ShieldAlert, RefreshCw } from 'lucide-react';
+import { Rocket, ShieldAlert, RefreshCw, X, Clock, Play } from 'lucide-react';
+import MinijuegoParejas from './MinijuegoParejas';
+import MinijuegoCalculo from './MinijuegoCalculo';
+import MinijuegoSopaLetras from './MinijuegoSopaLetras';
+import MinijuegoCompletar from './MinijuegoCompletar';
+import MinijuegoVerdaderoFalso from './MinijuegoVerdaderoFalso';
 
 // IDs de los 5 minijuegos disponibles
 const MINIGAMES = [
-  { id: 'pairs',      label: '🎴 Parejas' },
-  { id: 'arcade',     label: '⏱️ Cálculo' },
-  { id: 'wordsearch', label: '🔤 Sopa letras' },
-  { id: 'fill_word',  label: '✍️ Completar' },
-  { id: 'true_false', label: '🎯 V o F' },
+  { id: 'pairs',      label: '🎴 Parejas',      desc: 'Busca las parejas de imágenes de Astro antes de agotar tus 6 intentos.',  route: '/minijuego/parejas' },
+  { id: 'arcade',     label: '⏱️ Cálculo',     desc: 'Resuelve 10 operaciones matemáticas al azar. ¡Solo se permiten 3 errores!', route: '/minijuego/calculo' },
+  { id: 'wordsearch', label: '🔤 Sopa letras', desc: 'Encuentra palabras clave escondidas en la cuadrícula de letras.',       route: '/minijuego/sopa-letras' },
+  { id: 'fill_word',  label: '✍️ Completar',   desc: 'Rellena los huecos de la palabra con las letras que faltan.',           route: '/minijuego/completar' },
+  { id: 'true_false', label: '🎯 V o F',       desc: 'Responde Verdadero o Falso a una serie de preguntas rápidas.',         route: '/minijuego/verdadero-falso' },
 ];
 
+// Debe coincidir con MINIGAME_COOLDOWN_SECONDS en backend/users/views.py
+const MINIGAME_COOLDOWN_SECONDS = 30; // 30 segundos para pruebas
+
 export default function LivesPanel() {
-  const [livesData, setLivesData] = useState(null);   // Datos de vidas del servidor
+  const navigate = useNavigate();
+  const [livesData, setLivesData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState(null);        // Mensaje de feedback al alumno
-  const [countdown, setCountdown] = useState(null);    // Segundos hasta el próximo planeta
+  const [message, setMessage] = useState(null);
+  const [countdown, setCountdown] = useState(null);
   const [selectedMinigame, setSelectedMinigame] = useState(MINIGAMES[0].id);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeMinigame, setActiveMinigame] = useState(null); // ID del minijuego activo
 
   // Carga el estado de vidas desde el backend
   const fetchLives = useCallback(async () => {
@@ -48,12 +61,12 @@ export default function LivesPanel() {
     fetchLives();
   }, [fetchLives]);
 
-  // Polling independiente al servidor cada 5 segundos para mantener sincronía
+  // Polling independiente al servidor cada 1 segundo para mantener sincronía
   // Esto garantiza que los planetas se actualicen sin necesidad de recargar
   useEffect(() => {
     const poll = setInterval(() => {
       fetchLives();
-    }, 5000);
+    }, 1000);
     return () => clearInterval(poll);
   }, [fetchLives]);
 
@@ -82,33 +95,55 @@ export default function LivesPanel() {
     setMessage(null);
     try {
       const res = await axiosInstance.post('users/lives/decrease/');
+      setLivesData(res.data);
+      setCountdown(res.data.seconds_until_next_life);
       setMessage({ type: 'error', text: res.data.detail });
-      await fetchLives();
     } catch (err) {
       setMessage({ type: 'error', text: err.response?.data?.detail || 'Error inesperado.' });
     }
   };
 
-  // Simula ganar un minijuego (si won=true) o perderlo (si won=false)
-  const handleMinigame = async (won) => {
-    setMessage(null);
+  // Simula ganar un minijuego (won=true) o perderlo (won=false)
+  // Recibe el id del minijuego directamente para evitar el estado desactualizado
+  const handleMinigame = useCallback(async (minigameId, won) => {
+    // Actualización optimista
+    if (!won) {
+      setLivesData(prev => ({
+        ...prev,
+        minigames_cooldowns: {
+          ...(prev?.minigames_cooldowns || {}),
+          [minigameId]: MINIGAME_COOLDOWN_SECONDS
+        }
+      }));
+    }
+
     try {
       const res = await axiosInstance.post('users/minigames/play/', {
-        minigame_id: selectedMinigame,
+        minigame_id: minigameId,
         won,
       });
-      setMessage({
-        type: won ? 'success' : 'warning',
-        text: res.data.detail,
-      });
-      await fetchLives();
+      // Sincronización PROFUNDA con la respuesta del servidor
+      setLivesData(res.data);
+      setCountdown(res.data.seconds_until_next_life);
+      
+      if (won) setIsModalOpen(false);
     } catch (err) {
-      const detail = err.response?.data?.detail || 'Error inesperado.';
-      setMessage({ type: 'error', text: detail });
+      console.error(err);
+      await fetchLives();
     }
-  };
+  }, [axiosInstance, fetchLives]);
 
-  if (loading) {
+  // Llamado por el componente de minijuego cuando termina (won = true/false)
+  const handleMinigameFinish = useCallback((minigameId, won, shouldClose = true) => {
+    // Primero lanzamos la actualización (optimista e interna)
+    handleMinigame(minigameId, won);
+    // Solo cerramos si se nos indica explícitamente
+    if (shouldClose) {
+      setActiveMinigame(null);
+    }
+  }, [handleMinigame]);
+
+  if (loading || !livesData) {
     return (
       <div className="flex items-center justify-center p-4 text-slate-400 text-sm">
         <RefreshCw className="w-4 h-4 animate-spin mr-2" /> Cargando planetas...
@@ -116,10 +151,11 @@ export default function LivesPanel() {
     );
   }
 
-  const { lives, max_lives, can_play_minigame } = livesData;
+  const { lives, max_lives, can_play_minigame, minigames_cooldowns = {} } = livesData;
 
   return (
-    <div className="bg-slate-900/60 border border-slate-700/50 rounded-xl p-4 space-y-4">
+    <>
+      <div className="bg-slate-900/60 border border-slate-700/50 rounded-xl p-4 space-y-4">
 
       {/* ── MARCADOR DE PLANETAS ── */}
       <div className="flex items-center justify-between">
@@ -157,37 +193,16 @@ export default function LivesPanel() {
 
       {/* ── PANEL DE MINIJUEGOS (solo Plan 3 con 0 vidas) ── */}
       {can_play_minigame ? (
-        <div className="space-y-3 border-t border-slate-700 pt-3">
-          <p className="text-xs text-amber-400 font-bold text-center flex items-center justify-center gap-1">
-            <ShieldAlert className="w-4 h-4" /> ¡Game Over! Elige un minijuego de rescate
+        <div className="border-t border-slate-700 pt-3 text-center">
+          <p className="text-xs text-amber-400 font-bold mb-3 flex items-center justify-center gap-1">
+            <ShieldAlert className="w-4 h-4" /> ¡Game Over! 
           </p>
-
-          {/* Selector del minijuego */}
-          <select
-            value={selectedMinigame}
-            onChange={e => setSelectedMinigame(e.target.value)}
-            className="w-full bg-slate-800 border border-slate-600 text-white text-sm rounded-xl px-3 py-2 focus:outline-none focus:border-pink-500"
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="w-full btn btn-sm bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 border-none text-white rounded-xl font-bold shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all"
           >
-            {MINIGAMES.map(mg => (
-              <option key={mg.id} value={mg.id}>{mg.label}</option>
-            ))}
-          </select>
-
-          {/* Botones de simulación de resultado */}
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              onClick={() => handleMinigame(true)}
-              className="btn btn-sm bg-emerald-600 hover:bg-emerald-500 border-none text-white rounded-xl transition-all"
-            >
-              ✅ Superado
-            </button>
-            <button
-              onClick={() => handleMinigame(false)}
-              className="btn btn-sm bg-slate-700 hover:bg-slate-600 border-none text-white rounded-xl transition-all"
-            >
-              ❌ Fallado
-            </button>
-          </div>
+            🕹️ Minijuegos de Rescate
+          </button>
         </div>
       ) : lives === 0 ? (
         // Plan 1 o 2: sin acceso a minijuegos aunque tenga 0 vidas
@@ -199,16 +214,106 @@ export default function LivesPanel() {
         </div>
       ) : null}
 
-      {/* ── MENSAJE DE FEEDBACK EN TIEMPO REAL ── */}
-      {message && (
-        <div className={`rounded-xl px-3 py-2 text-xs font-medium text-center transition-all ${
-          message.type === 'success' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' :
-          message.type === 'warning' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' :
-          'bg-rose-500/20 text-rose-300 border border-rose-500/30'
-        }`}>
-          {message.text}
-        </div>
-      )}
     </div>
+
+      {/* ── MODAL DE CATÁLOGO DE MINIJUEGOS ── */}
+      {isModalOpen && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/90 backdrop-blur-sm p-4">
+          <div className="bg-slate-900 border border-slate-700 p-6 rounded-2xl w-full max-w-5xl shadow-[0_0_50px_rgba(245,158,11,0.15)] relative animate-[scale-up_0.2s_ease-out]">
+            {/* Cabecera del Modal */}
+            <div className="flex justify-between items-center mb-6 border-b border-slate-700/50 pb-4">
+              <h2 className="text-2xl font-black text-amber-400 flex items-center gap-2">
+                <ShieldAlert className="w-6 h-6" /> Minijuegos de Rescate
+              </h2>
+              <button 
+                onClick={() => setIsModalOpen(false)}
+                className="p-1 hover:bg-slate-800 rounded-full transition-colors"
+              >
+                <X className="w-6 h-6 text-slate-400 hover:text-white" />
+              </button>
+            </div>
+
+            <p className="text-slate-300 mb-6 text-sm">
+              Selecciona un minijuego. Si ganas, recuperarás 1 planeta. Cada minijuego tiene un tiempo de reutilización después de usarlo. ¡Elige sabiamente!
+            </p>
+
+            {/* Grid del Catálogo */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+              {MINIGAMES.map(mg => {
+                const cooldown = minigames_cooldowns[mg.id] || 0;
+                const isOnCooldown = cooldown > 0;
+                
+                return (
+                  <div key={mg.id} className={`border rounded-xl p-4 flex flex-col justify-between transition-all ${isOnCooldown ? 'bg-slate-900 border-slate-800 opacity-60 grayscale' : 'bg-slate-800/80 border-slate-600 hover:border-amber-500/50'}`}>
+                    <div className="mb-4">
+                      <h3 className="text-lg font-bold text-white mb-1">{mg.label}</h3>
+                      {isOnCooldown ? (
+                        <p className="text-xs font-bold text-rose-400 flex items-center gap-1">
+                          <Clock className="w-3 h-3" /> Reutilizable en: {formatCountdown(cooldown)}
+                        </p>
+                      ) : (
+                        <p className="text-xs text-slate-400">{mg.desc}</p>
+                      )}
+                    </div>
+                    
+                    {/* Botones de simulación por cada juego */}
+                    <div className="mt-auto">
+                      <button
+                        disabled={isOnCooldown}
+                        onClick={() => {
+                          setIsModalOpen(false);
+                          setActiveMinigame(mg.id);
+                        }}
+                        className={`w-full btn btn-xs border-none text-white rounded-lg transition-all flex items-center justify-center gap-1 ${isOnCooldown ? 'bg-slate-800 text-slate-600 cursor-not-allowed' : 'bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500'}`}
+                      >
+                        {!isOnCooldown && <Play className="w-3 h-3" />} Jugar
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+          </div>
+        </div>,
+        document.body
+      )}
+      {/* ── MINIJUEGOS INDIVIDUALES (MODALES) ── */}
+      {activeMinigame === 'pairs' && (
+        <MinijuegoParejas 
+          key="game-pairs"
+          onClose={() => handleMinigameFinish('pairs', false, true)} 
+          onFinish={(won, shouldClose = true) => handleMinigameFinish('pairs', won, shouldClose)} 
+        />
+      )}
+      {activeMinigame === 'arcade' && (
+        <MinijuegoCalculo 
+          key="game-arcade"
+          onClose={() => handleMinigameFinish('arcade', false, true)} 
+          onFinish={(won, shouldClose = true) => handleMinigameFinish('arcade', won, shouldClose)} 
+        />
+      )}
+      {activeMinigame === 'wordsearch' && (
+        <MinijuegoSopaLetras 
+          key="game-wordsearch"
+          onClose={() => handleMinigameFinish('wordsearch', false, true)} 
+          onFinish={(won, shouldClose = true) => handleMinigameFinish('wordsearch', won, shouldClose)} 
+        />
+      )}
+      {activeMinigame === 'fill_word' && (
+        <MinijuegoCompletar 
+          key="game-fill_word"
+          onClose={() => handleMinigameFinish('fill_word', false, true)} 
+          onFinish={(won, shouldClose = true) => handleMinigameFinish('fill_word', won, shouldClose)} 
+        />
+      )}
+      {activeMinigame === 'true_false' && (
+        <MinijuegoVerdaderoFalso 
+          key="game-true_false"
+          onClose={() => handleMinigameFinish('true_false', false, true)} 
+          onFinish={(won, shouldClose = true) => handleMinigameFinish('true_false', won, shouldClose)} 
+        />
+      )}
+    </>
   );
 }

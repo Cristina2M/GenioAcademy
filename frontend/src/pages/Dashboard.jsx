@@ -6,7 +6,7 @@
 //   - Su avatar, nombre, nivel y barra de progreso de XP
 //   - La misión sugerida (próximo curso a hacer)
 //   - Su vitrina de medallas/logros
-//   - El acceso al Búho IA (bloqueado si tiene el Plan 1)
+//   - El acceso a Astro (bloqueado si tiene el Plan 1)
 //
 // Este archivo se conecta al backend para obtener los cursos
 // disponibles en el nivel del alumno. También usa el contexto
@@ -59,7 +59,7 @@ export default function Dashboard() {
   // Plan 1 = Órbita Base, Plan 2 = Velocidad Luz, Plan 3 = Agujero de Gusano.
   // Usamos esto para decidir qué funciones mostrar o bloquear.
   const subscriptionLevel = user?.subscription_level || 1;
-  const hasAIAccess = subscriptionLevel >= 2; // El Búho IA requiere Plan 2 o superior
+  const hasAIAccess = subscriptionLevel >= 2; // Astro requiere Plan 2 o superior
 
   // ─────────────────────────────────────────────
   // OBTENER EL CURSO SUGERIDO AL ARRANCAR
