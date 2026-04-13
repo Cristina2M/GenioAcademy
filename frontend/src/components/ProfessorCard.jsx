@@ -66,7 +66,7 @@ const ProfessorCard = ({ professor }) => {
 
             {/* MODAL DE TRAYECTORIA */}
             <dialog id={`modal_prof_${professor.id}`} className="modal modal-bottom sm:modal-middle backdrop-blur-md">
-                <div className="modal-box bg-[#0c0c1d] border border-white/10 shadow-2xl p-0 overflow-hidden max-w-2xl">
+                <div className="modal-box bg-[#0c0c1d] border border-white/10 shadow-2xl p-0 overflow-y-auto max-w-2xl max-h-[90vh] custom-scroll">
                     <button 
                         className="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 text-white z-50 hover:bg-white/10"
                         onClick={() => document.getElementById(`modal_prof_${professor.id}`).close()}
