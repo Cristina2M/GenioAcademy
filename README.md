@@ -105,90 +105,70 @@ El valor diferencial: un asistente llamado "Astro" integrado en el aula que guí
 
 * **Fase 13: Interfaz del Asistente Virtual (Chatbot UI)** (✅ Completado)
   * Construcción del panel interactivo `AIChatPanel.jsx` estilo Glassmorphism incrustado en el reproductor de cursos.
-  * Personalización del chat conectándose con el contexto: carga dinámicamente el búho "Astro" y el avatar del piloto que ha seleccionado el alumno.
+  * Personalización del chat conectándose con el contexto: carga dinámica del búho "Astro" y el avatar del piloto seleccionado.
   * Gestión de estado de carga, animaciones de "Pensando..." y autoscroll.
 
-#### 🪐 HITO V: Sistema de Vidas (Mecánica Roguelike)
-Gamificación avanzada penalizando el fallo continuo para fomentar la repetición espaciada y la retención lúdica.
-
-* **Fase 14: Lógica de Vidas y Planetas** (🔴 Pendiente)
-  * Implementación del motor en el Backend. Cada alumno dispondrá de un máximo de 3 "planetas" (vidas).
-  * Si el alumno suspende una evaluación, pierde un planeta. 
-  * Regeneración pasiva temporal: Cada planeta perdido tarda 2 horas en regenerarse automáticamente.
-
-* **Fase 15: Minijuegos de Soporte Auxiliar** (🔴 Pendiente)
-  * Creación de interfaces de minijuegos independientes en React que consuman muy pocos recursos del servidor. Los 5 seleccionados por su viabilidad y rejugabilidad son:
-    1. **Juego de memoria (Cartas / Parejas):** Voltear cartas para emparejar concepto-definición. Ideal de programar en React con CSS 3D.
-    2. **Cálculo mental rápido (Modo Arcade):** Operaciones matemáticas autogeneradas con un contador de tiempo agresivo.
-    3. **Sopa de letras:** Construcción de un grid 2D para buscar vocabulario clave de la lección.
-    4. **Completar la palabra (Estilo Ahorcado):** Adivinar la palabra faltante para potenciar ortografía.
-    5. **Verdadero o Falso (Ráfaga / Supervivencia):** Enseña al alumno a procesar afirmaciones bajo presión de tiempo con 2 botones gigantes.
-  * **Reglas estrictas de mecánica "Game Over":**
-    * Solo se habilitan los minijuegos cuando el alumno ha perdido sus 3 vidas (0 planetas).
-    * Al superar un minijuego y ganar 1 planeta, el acceso a otros minijuegos se bloquea hasta volver a perder la vida.
-    * Cooldown penalizador: Solo se permite jugar un mismo minijuego 1 vez cada 24 horas.
-    * Sincronía de tiempo: Recuperar una vida a través de un minijuego **NO** interrumpe ni resetea el reloj de regeneración natural de 2 horas.
+#### ✨ HITO V: Sistema de Rescate y Gamificación (✅ Completado)
+Afinación de la mecánica Roguelike y motores de minijuegos.
+*   **Sistema de Vidas (Planetas):** Implementación de la gestión de 3 planetas por alumno.
+*   **Regeneración Pasiva:** Motor de tiempo real que recupera vidas cada 2 horas (basado en `last_life_lost_at`).
+*   **Minijuegos de Recuperación:** 5 motores independientes creados en React (Parejas, Cálculo, Sopa de letras, Completar y Verdadero/Falso).
+*   **Branding "Astro":** Unificación de la IA y el estilo visual bajo la identidad del búho Astro.
+*   **Reglas de Cooldown:** Solo se puede jugar a cada minijuego una vez cada 24 horas (`MinigameLog`).
+*   Superar un minijuego otorga **1 planeta** inmediatamente.
 
 #### 🎓 HITO VI: Claustro Interactivo (Catálogo de Profesores)
 Conexión humana y especializada para estudiantes élite.
 
 * **Fase 16: Motor Relacional Multidimensional (M2M)** (🔴 Pendiente)
   * Creación de un Catálogo de Profesores organizados por áreas de conocimiento.
-  * Configuración de relaciones "Muchos a Muchos" para que un docente (ej. María) pueda impartir simultáneamente Matemáticas y Física.
-
 * **Fase 17: Suite de Comunicación (Exclusivo Nivel 3)** (🔴 Pendiente)
-  * Panel de chat en vivo con profesores especializados elegidos del catálogo.
-  * Base para integración de canales de videoconferencia (WebRTC o SDK externos) permitiendo tutorías remotas directas para alumnos del Plan Máximo ("Agujero de Gusano").
+  * Panel de chat en vivo con profesores especializados y base para tutorías remotas.
 
 #### 🚀 HITO VII: Calidad, Contenido y Cierre Técnico
 Afinación del proyecto para su entrega, exposición y uso real.
 
-* **Fase 18: Inserción de Contenidos y Efectos Visuales** (🔴 Pendiente)
+* **Fase 18: Inserción de Contenidos y Efectos Visuales** (🟡 En Progreso)
   * Población de la base de datos con material educativo real de la ESO.
-  * Implementación de recompensas visuales (alertas de éxito, cambios de rango).
-
+  * Implementación de recompensas visuales y sonidos de interfaz.
 * **Fase 19: Quality Assurance (QA) y Despliegue Final** (🔴 Pendiente)
-  * Pruebas de integración: intentar vulnerar el sistema accediendo a cursos bloqueados.
-  * Pruebas de estrés y límites en las peticiones a la API Groq.
-  * Generación de documentación de la API y preparación del portfolio.
 
+## 🎨 Identidad Visual y UI: El Universo Astro
 
+La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina espacial. 
 
+*   **Astro (El Búho Genio):** El guía oficial de la academia. Aparece en el chat socrático y en los minijuegos.
+*   **Tailwind CSS v4 & DaisyUI**: Motor de estilos de última generación para componentes reactivos y modernos.
 
+---
 
+### 🛠️ Detalles Técnicos de Integración
 
+#### Astro IA (Tutor Socrático)
+El asistente no da las respuestas, sino que guía al alumno. Utiliza el modelo `llama-3.1-8b-instant` vía Groq LPU para respuestas casi instantáneas.
 
-## 🎨 Identidad Visual y UI
-
-Hemos integrado un sistema de diseño moderno basado en utilidades que permite un desarrollo rápido de interfaces.
-
-* **Tailwind CSS v4**: Motor de estilos de última generación.
-* **DaisyUI**: Librería de componentes basada en Tailwind para botones, formularios y layouts preconfigurados.
+#### Sistema de Rescate
+Ubicado en el `LivesPanel.jsx`, centraliza la salud del alumno. Detecta automáticamente si el alumno puede jugar (vidas < 3) y gestiona los tiempos de espera y bloqueos de seguridad anti-farmeo.
 
 ---
 
 ### 📋 Guía de Comandos (Cheat Sheet)
 
-Para que el proyecto funcione, siempre debemos ejecutar estos comandos desde la raíz de la carpeta `GenioAcademy`.
-
 #### 🔹 Gestión del Entorno (Docker)
-
-* **Levantar el proyecto / Reconstruir:** `docker-compose up --build`
-* **Levantar el proyecto normalmente:** `docker-compose up`
-* **Detener todos los servicios:** `docker-compose down`
-* **Limpieza total (borra contenedores y BD):** `docker-compose down -v`
+*   **Levantar / Reconstruir:** `docker-compose up --build`
+*   **Levantar normalmente:** `docker-compose up`
+*   **Detener servicios:** `docker-compose down`
+*   **Limpieza total (borra contenedores y BD):** `docker-compose down -v`
 
 #### 🔹 Comandos de Backend (Django)
-
-* **Ejecutar Migraciones:** `docker-compose exec backend python manage.py migrate` *(Prepara las tablas SQL en base a los modelos)*
-* **Poblar Base de Datos (Seed):** `docker-compose exec backend python seed_data.py` *(Imprescindible la primera vez para cargar Categorías y Cursos de prueba y evitar arrancar con el Frontend en blanco)*
-* **Crear Superusuario:** `docker-compose exec backend python manage.py createsuperuser` *(Para acceso a `http://localhost:8000/admin/`)*
-* **Crear App:** `docker-compose exec backend python manage.py startapp nombre_de_la_app`
+*   **Ejecutar Migraciones:** `docker-compose exec backend python manage.py migrate`
+*   **Poblar Base de Datos (Seed):** `docker-compose exec backend python seed_data.py`
+*   **Crear Superusuario:** `docker-compose exec backend python manage.py createsuperuser`
+*   **Crear App:** `docker-compose exec backend python manage.py startapp nombre_de_la_app`
 
 #### 🔹 Comandos de Frontend (React)
-
-* **Instalar librerías (si el contenedor está corriendo):** `docker-compose exec frontend npm install nombre-libreria`
-* **Instalar librerías (si el contenedor está parado):** `docker-compose run --rm frontend npm install nombre-libreria`
+*   **Instalar librerías (si el contenedor está corriendo):** `docker-compose exec frontend npm install nombre-libreria`
+*   **Instalar librerías (si el contenedor está parado):** `docker-compose run --rm frontend npm install nombre-libreria`
 
 ---
 
@@ -216,8 +196,6 @@ Para que el proyecto funcione, siempre debemos ejecutar estos comandos desde la 
   * `POST /api/token/refresh/` ➔ Para renovar el token de acceso cuando expira.
 * **Catálogo Educativo (Cursos):**
   * `GET /api/courses/categories/` ➔ Devuelve todo el árbol anidado de asignaturas, niveles y cursos.
-  * `GET /api/courses/courses/` ➔ Cursos específicos.
-  * `GET /api/courses/lessons/` ➔ Lecciones (teoría y vídeo). Solo lectura.
 * **Gestión de Usuarios:**
   * `GET, POST /api/users/users/` ➔ Operaciones CRUD completas sobre la tabla de alumnos.
 
@@ -227,6 +205,3 @@ Para que el proyecto funcione, siempre debemos ejecutar estos comandos desde la 
 
 * **Extensiones de Archivo**: Para las configuraciones de PostCSS y Tailwind en esta estructura, se recomienda usar `.js` o `.cjs` según la necesidad de compatibilidad con CommonJS detectada durante la Fase 2.
 * **Hot Reload**: Los cambios en el CSS y JSX se reflejan al instante.
-
----
-

@@ -2,7 +2,7 @@
 ## Genio Academy — Plataforma de Aprendizaje Incremental para la ESO
 
 > **Repositorio GitHub:** https://github.com/Cristina2M/GenioAcademy  
-> **Versión del documento:** Hito IV completado / Hito V en desarrollo  
+> **Versión del documento:** Hito V completado  
 > **Fecha:** Abril 2026
 
 ---
@@ -40,8 +40,8 @@ La plataforma combina tres pilares innovadores:
 | II | Backend y Base de Datos | ✅ Completado |
 | III | Frontend y Experiencia de Usuario | ✅ Completado |
 | IV | Integración de Inteligencia Artificial (Astro) | ✅ Completado |
-| V | Sistema de Vidas y Minijuegos Roguelike | 🔄 En desarrollo |
-| VI | Catálogo de Profesores y Videoconferencias | 🔴 Planificado |
+| V | Sistema de Vidas y Minijuegos Roguelike | ✅ Completado |
+| VI | Catálogo de Profesores y Videoconferencias | 🔄 En desarrollo |
 | VII | Calidad, Contenido y Despliegue Final | 🔴 Planificado |
 
 ---
@@ -223,10 +223,11 @@ Genio Academy aborda estos problemas con un enfoque triple:
 - **Descripción:** Al fallar una evaluación se llama al endpoint `POST /api/users/lives/decrease/`. Se resta 1 vida y se inicia el reloj de regeneración si no estaba corriendo.
 - **Resultado:** El panel de vidas se actualiza en tiempo real.
 
-#### CU-07: Recuperar vida mediante minijuego
-- **Actor:** Alumno con Plan 3 y 0 vidas
-- **Descripción:** Con 0 planetas, se desbloquean los minijuegos de rescate. El alumno elige uno y lo completa. El backend valida: plan 3, 0 vidas, cooldown de 24h por minijuego. Si todo es correcto y el alumno gana, se devuelve 1 planeta sin resetear el reloj de regeneración pasiva.
-- **Restricción:** Solo Plan 3. Solo con 0 vidas. Cooldown 24h por minijuego.
+#### CU-07: Recuperar vida mediante minijuego de rescate
+- **Actor:** Alumno con **Plan 3 (Agujero de Gusano)** y 0 vidas.
+- **Descripción:** Cuando el alumno agota sus 3 planetas, se desbloquea el panel de rescate. El alumno debe superar uno de los 5 minijuegos (Parejas, Cálculo, Sopa, Completar o Verdadero/Falso). El sistema valida que el alumno tenga el Plan 3 y que no haya jugado a ese minijuego específico en las últimas 24 horas.
+- **Resultado:** Si el alumno gana, recupera 1 planeta de forma inmediata.
+- **Restricción:** Exclusivo de Plan 3. Solo disponible con 0 vidas. Cooldown de 24 horas por cada minijuego.
 
 #### CU-08: Cambio de avatar
 - **Actor:** Alumno conectado
@@ -344,13 +345,21 @@ Al entrar en un curso verás:
 - Los planetas se **regeneran solos** (cada 2 horas en producción).
 - Si llegas a **0 planetas** y eres del **Plan 3 (Agujero de Gusano)**, se desbloquean los **Minijuegos de Rescate**.
 
-### 6.7 Minijuegos de Rescate (Plan 3 exclusivo)
+### 6.7 Minijuegos de Rescate (Exclusivo Plan 3)
 
-Solo disponibles con 0 vidas:
-1. Selecciona un minijuego del desplegable.
-2. Complétalo correctamente para recuperar 1 planeta.
-3. Ese mismo minijuego queda bloqueado 24 horas (en producción).
-4. Solo puedes jugar 1 minijuego por "ronda de rescate" — al recuperar 1 vida, los minijuegos se vuelven a bloquear.
+Esta funcionalidad está diseñada para que los alumnos más avanzados puedan volver a la acción sin esperar la regeneración pasiva de 2 horas. 
+
+**Requisitos:** Tener 0 vidas actuales y suscripción "Agujero de Gusano".
+
+1.  **Selección**: Elige uno de los 5 sectores de rescate disponibles:
+    -   **Parejas de Astro**: Encuentra los búhos idénticos para sincronizar la memoria del sistema.
+    -   **Cálculo Mental**: Resuelve operaciones aritméticas rápidas en el menor tiempo posible.
+    -   **Sopa de Letras**: Localiza conceptos clave del temario en un panel de datos.
+    -   **Completar Palabra**: Adivina la palabra técnica que restablecerá el núcleo del planeta.
+    -   **Verdadero o Falso**: Supera una ráfaga de afirmaciones bajo presión extrema.
+2.  **Victoria**: Al completar el juego con éxito, recuperas 1 planeta al instante.
+3.  **Bloqueo de Seguridad (Cooldown)**: Cada minijuego tiene un periodo de enfriamiento de 24 horas. Una vez usado para recuperar una vida, ese juego específico no estará disponible hasta el día siguiente.
+4.  **Uso Único**: Solo puedes realizar 1 rescate por "ronda". Al recuperar 1 vida, los minijuegos vuelven a bloquearse hasta que vuelvas a tener 0 vidas.
 
 ### 6.8 Galería de Avatares (Búhos)
 
@@ -450,8 +459,8 @@ _[Mostrar el flujo: Registro → Dashboard → Catálogo → CoursePlayer → Ch
 _[Mostrar tabla de planes de la sección 7]_
 
 ### Diapositiva 9 — Hoja de ruta futura
-- Hito V: Sistema de vidas + 5 minijuegos.
-- Hito VI: Catálogo de profesores + Videoconferencias (WebRTC).
+- Hito V: Sistema de vidas + 5 minijuegos (Completado).
+- Hito VI: Catálogo de profesores + Videoconferencias (En desarrollo).
 - Hito VII: Contenido real ESO + Despliegue en producción.
 
 ### Diapositiva 10 — Conclusión
@@ -472,7 +481,7 @@ _[Mostrar tabla de planes de la sección 7]_
 | `main` | Versión estable y revisada de producción |
 | `develop` | Integración continua de todas las features |
 | `feature/IA` | Integración del tutor Astro (completado, mergeado) |
-| `feature/vidas` | Sistema de vidas Roguelike (en desarrollo activo) |
+| `feature/vidas` | Sistema de vidas Roguelike y minijuegos (Completado) |
 | `release/hito-3` | Snapshot del Hito III completo |
 
 ### Comandos Rápidos para Ejecutar el Proyecto
