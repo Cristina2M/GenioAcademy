@@ -20,12 +20,6 @@ const ProfessorCard = ({ professor }) => {
                     />
                     {/* Degradado sobre la imagen */}
                     <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-60" />
-                    
-                    {/* Sello de verificación sutil en la esquina */}
-                    <div className="absolute top-4 right-4 ring-1 ring-white/20 bg-black/40 backdrop-blur-md rounded-full px-2 py-1 flex items-center gap-1.5 shadow-xl">
-                        <div className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse"></div>
-                        <span className="text-[8px] font-black text-white tracking-widest uppercase">Verified</span>
-                    </div>
                 </figure>
 
                 {/* Cuerpo de la tarjeta */}

@@ -1,4 +1,4 @@
-import { ArrowRight, Map, BrainCircuit, Compass, Telescope, Star, Users, GraduationCap } from 'lucide-react';
+import { ArrowRight, Map, BrainCircuit, Compass, Telescope, Star, Users, GraduationCap, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -24,7 +24,7 @@ export default function Home() {
       <div className="absolute bottom-[0%] left-[20%] w-[700px] h-[700px] bg-purple-600/10 rounded-full blur-[150px] pointer-events-none z-0"></div>
 
       {/* Hero Section */}
-      <div className="pt-24 pb-32 relative z-10 flex items-center min-h-[90vh]">
+      <div className="pt-24 pb-20 relative z-10 flex items-center min-h-[85vh]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="flex flex-col lg:flex-row items-center gap-16">
             
@@ -96,10 +96,10 @@ export default function Home() {
       </div>
 
       {/* Características (Glassmorphism Cards) */}
-      <div className="py-32 relative z-10 border-t border-white/5 bg-slate-950/60">
+      <div className="py-24 relative z-10 border-t border-white/5 bg-slate-950/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div className="text-center mb-24 relative">
+          <div className="text-center mb-16 relative">
              <span className="text-cyan-400 font-bold tracking-widest uppercase mb-3 block">Nuestra nave nodriza</span>
              <h2 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white drop-shadow-md">
                Una Plataforma de Otro <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-orange-400">Mundo</span>
@@ -145,9 +145,9 @@ export default function Home() {
       </div>
       
       {/* Sección del Claustro Destacado (Para padres y visitantes) */}
-      <div className="py-32 relative z-10 border-t border-white/5 bg-slate-900/20">
+      <div className="py-24 relative z-10 border-t border-white/5 bg-slate-900/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
+            <div className="flex flex-col md:flex-row items-center justify-between mb-16 gap-10">
                 <div className="max-w-2xl text-left">
                     <span className="text-teal-400 font-bold tracking-widest uppercase mb-3 flex items-center gap-2">
                         <GraduationCap className="w-5 h-5"/> Experiencia de Vanguardia
@@ -155,33 +155,70 @@ export default function Home() {
                     <h2 className="text-4xl md:text-6xl font-black tracking-tight text-white mb-6">
                         Nuestra <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500">Facultad Galáctica</span>
                     </h2>
-                    <p className="text-slate-400 text-xl leading-relaxed">
-                        En Genio Academy, la tecnología está al servicio de la maestría humana. 
-                        Contamos con un equipo de docentes apasionados, especializados en motivar y guiar 
-                        a los alumnos a través de los desafíos más complejos de la ESO.
+                    <p className="text-slate-400 text-xl leading-relaxed mb-8">
+                        La tranquilidad de los padres es nuestra prioridad. En Genio Academy, el talento humano no es un extra, 
+                        es el pilar fundamental que da sentido a nuestra tecnología. 
                     </p>
-                </div>
-                <Link to="/register" className="btn btn-outline border-white/20 text-white hover:bg-white hover:text-black rounded-2xl px-10">
-                    Conocer a todo el equipo
-                </Link>
-            </div>
-
-            {/* Grid de profesores destacados */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                {featuredProfs.map(prof => (
-                    <ProfessorCard key={prof.id} professor={prof} />
-                ))}
-                
-                {/* Card de "Únete" para fomentar el registro */}
-                <div className="card bg-gradient-to-br from-slate-900/60 to-purple-900/20 backdrop-blur-xl border border-dashed border-white/10 shadow-2xl flex items-center justify-center p-10 text-center group hover:border-purple-500/50 transition-all">
-                    <div className="w-20 h-20 bg-purple-500/10 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <Users className="w-10 h-10 text-purple-400" />
+                    
+                    {/* Cuadrícula de compromisos para padres */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10">
+                        <div className="flex gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                            <div className="w-12 h-12 rounded-xl bg-teal-500/10 flex items-center justify-center shrink-0 border border-teal-500/20">
+                                <ShieldCheck className="w-6 h-6 text-teal-400" />
+                            </div>
+                            <div>
+                                <h4 className="text-white font-bold text-sm uppercase tracking-wide">Perfiles Verificados</h4>
+                                <p className="text-slate-500 text-xs mt-1">Todos nuestros docentes han superado un riguroso proceso de validación académica y pedagógica.</p>
+                            </div>
+                        </div>
+                        <div className="flex gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                            <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0 border border-blue-500/20">
+                                <BrainCircuit className="w-6 h-6 text-blue-400" />
+                            </div>
+                            <div>
+                                <h4 className="text-white font-bold text-sm uppercase tracking-wide">Apoyo Psicopedagógico</h4>
+                                <p className="text-slate-500 text-xs mt-1">Nuestros tutores están formados para entender y motivar a alumnos de secundaria, no solo para enseñar teoría.</p>
+                            </div>
+                        </div>
+                        <div className="flex gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                            <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center shrink-0 border border-purple-500/20">
+                                <Compass className="w-6 h-6 text-purple-400" />
+                            </div>
+                            <div>
+                                <h4 className="text-white font-bold text-sm uppercase tracking-wide">Seguimiento Constante</h4>
+                                <p className="text-slate-500 text-xs mt-1">Manténgase siempre informado sobre el progreso real y los hitos alcanzados por su hijo en cada cápsula.</p>
+                            </div>
+                        </div>
+                        <div className="flex gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                            <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20">
+                                <Users className="w-6 h-6 text-amber-400" />
+                            </div>
+                            <div>
+                                <h4 className="text-white font-bold text-sm uppercase tracking-wide">Cercanía Humana</h4>
+                                <p className="text-slate-500 text-xs mt-1">Garantizamos que detrás de cada pantalla hay un experto real dispuesto a resolver las dudas más complejas.</p>
+                            </div>
+                        </div>
                     </div>
-                    <h3 className="text-2xl font-bold text-white mb-4">¿Buscas un tutor específico?</h3>
-                    <p className="text-slate-400 mb-8">Registra a tu hijo para acceder al claustro completo de expertos y agendar su primera tutoría.</p>
-                    <Link to="/register" className="btn btn-primary rounded-xl px-8 shadow-lg shadow-purple-500/20">
-                        Abrir Cuenta de Alumno
+                </div>
+
+                <div className="flex flex-col items-center justify-center">
+                    <Link to="/claustro" className="group relative">
+                        {/* Glow effect background */}
+                        <div className="absolute -inset-1 bg-gradient-to-r from-teal-500 to-blue-600 rounded-2xl blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+                        
+                        <div className="relative btn border-white/10 bg-slate-900 text-white hover:bg-slate-800 rounded-2xl px-10 py-6 h-auto flex flex-col gap-2 transition-all">
+                            <span className="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-400 uppercase tracking-tighter">
+                                Conoce a nuestro equipo
+                            </span>
+                            <div className="flex items-center gap-2 text-slate-400 group-hover:text-white transition-colors">
+                                <span className="text-xs font-bold uppercase tracking-widest">Explorar Claustro</span>
+                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            </div>
+                        </div>
                     </Link>
+                    <p className="text-[10px] text-slate-500 italic max-w-[220px] text-center mt-6 leading-relaxed opacity-60">
+                        Acceda a las trayectorias académicas y pedagógicas de nuestros docentes expertos.
+                    </p>
                 </div>
             </div>
         </div>

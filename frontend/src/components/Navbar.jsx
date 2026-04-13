@@ -36,10 +36,17 @@ export default function Navbar() {
       
       <div className="flex-none hidden lg:flex">
         <ul className="menu menu-horizontal px-1 font-medium text-slate-200">
-          <li><Link className="hover:text-pink-400 hover:bg-white/5 transition-colors" to="/">Inicio</Link></li>
-          <li><Link className="hover:text-cyan-400 hover:bg-white/5 transition-colors" to="/courses">Catálogo Estelar</Link></li>
-          <li><Link className="hover:text-purple-400 hover:bg-white/5 transition-colors" to="/mission">La Misión</Link></li>
-          <li><Link className="hover:text-teal-400 hover:bg-white/5 transition-colors" to="/claustro">Claustro</Link></li>
+          {!user && (
+            <>
+              <li><Link className="hover:text-pink-400 hover:bg-white/5 transition-colors" to="/">Inicio</Link></li>
+              <li><Link className="hover:text-cyan-400 hover:bg-white/5 transition-colors" to="/courses">Catálogo Estelar</Link></li>
+              <li><Link className="hover:text-purple-400 hover:bg-white/5 transition-colors" to="/mission">La Misión</Link></li>
+              <li><Link className="hover:text-teal-400 hover:bg-white/5 transition-colors" to="/claustro">Claustro</Link></li>
+            </>
+          )}
+          {user && (
+             <li><Link className="hover:text-cyan-400 hover:bg-white/5 transition-colors" to="/courses">Cursos</Link></li>
+          )}
         </ul>
       </div>
 

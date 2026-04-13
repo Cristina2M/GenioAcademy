@@ -15,7 +15,7 @@
 
 import { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Target, Trophy, Flame, Compass, Play, BookOpen, Star, Lock, X, Rocket } from 'lucide-react';
+import { Target, Trophy, Flame, Compass, Play, BookOpen, Star, Lock, X, Rocket, GraduationCap } from 'lucide-react';
 import AuthContext from '../context/AuthContext';
 import axiosInstance from '../api/axios';
 import { getStudentAvatar, avatarDatabase } from '../utils/avatarUtils';
@@ -318,6 +318,39 @@ export default function Dashboard() {
                     </div>
                   </li>
                 </ul>
+              </div>
+            </div>
+
+            {/* TARJETA: CONSULTORIO GALÁCTICO (CLAUSTRO) */}
+            <div className={`card bg-slate-800/40 backdrop-blur-sm border ${subscriptionLevel >= 3 ? 'border-teal-500/30 hover:border-teal-400' : 'border-white/10'} shadow-lg relative overflow-hidden group transition-all`}>
+              {/* Overlay para niveles restringidos (1 y 2) */}
+              {subscriptionLevel < 3 && (
+                <div className="absolute inset-0 bg-slate-950/80 z-20 flex flex-col items-center justify-center p-6 text-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-md">
+                   <Lock className="w-8 h-8 text-amber-500 mb-2" />
+                   <p className="text-white font-bold text-sm tracking-tight">Consultorio Galáctico restringido</p>
+                   <p className="text-slate-400 text-[10px] mt-1 italic">Válido solo para alumnos con Plan 3 (Agujero de Gusano)</p>
+                   <Link to="/pricing" className="btn btn-xs btn-outline btn-amber mt-4 border-amber-500/50 text-amber-500 hover:bg-amber-500 hover:text-black">Subir Rango</Link>
+                </div>
+              )}
+
+              <div className="card-body p-6">
+                <h3 className={`font-bold ${subscriptionLevel >= 3 ? 'text-teal-400' : 'text-slate-500'} mb-2 flex items-center gap-2 tracking-wider uppercase text-xs`}>
+                  <GraduationCap className="w-5 h-5"/> Consultorio Galáctico
+                </h3>
+                <p className="text-white text-lg font-black leading-tight">Biblioteca de Maestros</p>
+                <p className="text-slate-400 text-xs mt-2 leading-relaxed">Consulta el currículum de todos nuestros expertos y resuelve tus dudas académicas.</p>
+                
+                <div className="mt-6">
+                  {subscriptionLevel >= 3 ? (
+                    <Link to="/dashboard/claustro" className="btn btn-sm btn-block bg-teal-600 hover:bg-teal-500 border-none text-white font-bold flex items-center gap-2">
+                       Acceder al Claustro <Play className="w-3 h-3" />
+                    </Link>
+                  ) : (
+                    <button disabled className="btn btn-sm btn-block bg-white/5 border-white/10 text-slate-600 cursor-not-allowed">
+                       Bloqueado
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
 

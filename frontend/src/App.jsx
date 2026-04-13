@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import CoursePlayer from './pages/CoursePlayer';
 import Claustro from './pages/Claustro';
+import StudentCatalog from './pages/StudentCatalog';
 import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './utils/PrivateRoute';
 import spaceBg from './assets/img/logo-fondo.jpg';
@@ -59,6 +60,7 @@ function App() {
               
               {/* Rutas Privadas y de Usuario (Protegidas por PrivateRoute) */}
               <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+              <Route path="/dashboard/claustro" element={<PrivateRoute><StudentCatalog /></PrivateRoute>} />
               <Route path="/player/:courseId" element={<PrivateRoute><CoursePlayer /></PrivateRoute>} />
               <Route path="/claustro" element={<Claustro />} />
               

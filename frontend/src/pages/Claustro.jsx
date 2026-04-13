@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import axiosInstance from '../api/axios';
 import ProfessorCard from '../components/ProfessorCard';
 import AuthContext from '../context/AuthContext';
 import { ShieldCheck, GraduationCap } from 'lucide-react';
@@ -18,13 +18,10 @@ const Claustro = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = localStorage.getItem('access_token');
-                const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
-                
-                // Cargar profesores y categorías
+                // Cargar profesores y categorías usando la instancia configurada
                 const [profRes, catRes] = await Promise.all([
-                    axios.get('http://localhost:8000/api/teachers/professors/', config),
-                    axios.get('http://localhost:8000/api/courses/categories/', config)
+                    axiosInstance.get('teachers/professors/'),
+                    axiosInstance.get('courses/categories/')
                 ]);
 
                 setProfessors(profRes.data);
