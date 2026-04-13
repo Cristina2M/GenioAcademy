@@ -20,6 +20,7 @@ export default function Dashboard() {
   const progressPercentage = Math.round((currentXP / xpForNextLevel) * 100);
 
   useEffect(() => {
+<<<<<<< HEAD
     // Fase 10 (Fix): Para evitar dar un curso superior al nivel del alumno y que el Backend lo rechace (403),
     // consultamos el árbol de categorías, que nos marca 'is_locked: false' en los niveles permitidos.
     const fetchCourses = async () => {
@@ -45,6 +46,20 @@ export default function Dashboard() {
         }
       } catch (error) {
         console.error("Error al obtener cursos seguros", error);
+=======
+    // Fase 10: Consumo de datos Reales del Backend
+    const fetchCourses = async () => {
+      try {
+        const response = await axiosInstance.get('courses/courses/');
+        const courses = response.data;
+        // Asignamos como misión activa el primer curso que esté al nivel del alumno o inferior (O por ahora, simplemente el primero para probar)
+        if (courses && courses.length > 0) {
+           const firstCourse = courses[0];
+           setActiveCourse(firstCourse);
+        }
+      } catch (error) {
+        console.error("Error al obtener cursos", error);
+>>>>>>> 5b6b1d8df59528d8f5aa4f2ef7bbed7c812fc3e0
       } finally {
         setLoadingCourse(false);
       }
@@ -132,6 +147,7 @@ export default function Dashboard() {
               <Target className="w-6 h-6 text-pink-500" /> Operación Principal
             </h2>
             
+<<<<<<< HEAD
             {/* Tarjeta de Misión Actual (Conectada a BBDD) */}
             <div className="bg-gradient-to-br from-slate-900 to-slate-800 border-2 border-cyan-500/30 rounded-2xl p-6 shadow-[0_0_20px_rgba(34,211,238,0.15)] hover:border-cyan-500/60 transition-colors relative overflow-hidden group">
               <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
@@ -167,7 +183,49 @@ export default function Dashboard() {
                     Explorar Catálogo <Compass className="w-4 h-4 ml-1" />
                   </Link>
                 )}
+=======
+            <div className="card bg-slate-900/40 backdrop-blur-md border border-white/10 shadow-2xl hover:border-pink-500/30 transition-colors group">
+              <div className="card-body">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <span className="badge bg-pink-500/20 text-pink-400 border-pink-500/30 font-bold tracking-wide mb-3">MATEMÁTICAS - ESO 1</span>
+                    <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-pink-400 transition-colors">Álgebra: Rescate de Variables (Mock)</h3>
+                    <p className="text-slate-400">Te quedaste en la Lección 3 analizando las ecuaciones de primer grado para rescatar a 'X'.</p>
+            {/* Tarjeta de Misión Actual (Conectada a la BBDD Real) */}
+            <div className="bg-gradient-to-br from-slate-900 to-slate-800 border-2 border-cyan-500/30 rounded-2xl p-6 shadow-[0_0_20px_rgba(34,211,238,0.15)] hover:border-cyan-500/60 transition-colors relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <Target className="w-24 h-24 text-cyan-400" />
+>>>>>>> 5b6b1d8df59528d8f5aa4f2ef7bbed7c812fc3e0
               </div>
+              <h3 className="text-cyan-400 font-bold mb-1 uppercase tracking-widest text-xs flex items-center gap-2">
+                Misión Principal {loadingCourse && <span className="loading loading-spinner loading-xs"></span>}
+              </h3>
+              
+              <h2 className="text-white text-xl font-bold mb-4">
+                {activeCourse ? activeCourse.title : "Inscríbete en una Misión"}
+              </h2>
+              
+              {activeCourse && (
+                <div className="flex flex-col gap-2 mb-6 relative z-10">
+                  <div className="flex justify-between text-xs text-slate-300">
+                    <span>Progreso del Sector</span>
+                    <span>0%</span>
+                  </div>
+                  <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-white/10">
+                    <div className="h-full bg-gradient-to-r from-cyan-500 to-pink-500 w-[0%]"></div>
+                  </div>
+                </div>
+              )}
+
+              {activeCourse ? (
+                <Link to={`/player/${activeCourse.id}`} className="btn bg-cyan-500 hover:bg-cyan-400 text-slate-900 border-none w-full shadow-[0_0_15px_rgba(34,211,238,0.4)] font-bold relative z-10 hover:scale-[1.02] transition-transform">
+                  Entrar a la Academia <Play className="w-4 h-4 ml-1" />
+                </Link>
+              ) : (
+                <Link to="/courses" className="btn btn-outline border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-slate-900 w-full relative z-10">
+                  Explorar Catálogo <Compass className="w-4 h-4 ml-1" />
+                </Link>
+              )}
             </div>
 
             {/* ZONA DE MEDALLAS */}

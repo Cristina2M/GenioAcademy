@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+<<<<<<< HEAD
 import { PlayCircle, CheckCircle, Brain, ArrowLeft, Star, FileText, Compass } from 'lucide-react';
+=======
+import { PlayCircle, CheckCircle, Brain, ArrowLeft, Star, FileText } from 'lucide-react';
+>>>>>>> 5b6b1d8df59528d8f5aa4f2ef7bbed7c812fc3e0
 import axiosInstance from '../api/axios';
 
 export default function CoursePlayer() {
@@ -8,16 +12,30 @@ export default function CoursePlayer() {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   
+<<<<<<< HEAD
   const [activeLesson, setActiveLesson] = useState(null);
+=======
+  // Datos simulados de lecciones mientras adaptamos el serializador del backend completo
+  const dummyLessons = [
+    { id: 1, title: 'Conceptos Base', isCompleted: true },
+    { id: 2, title: 'Desarrollo Práctico', isCompleted: false },
+    { id: 3, title: 'Evaluación de Rango', isCompleted: false },
+  ];
+  
+  const [activeLessonId, setActiveLessonId] = useState(1);
+>>>>>>> 5b6b1d8df59528d8f5aa4f2ef7bbed7c812fc3e0
 
   useEffect(() => {
     const fetchCourse = async () => {
       try {
         const response = await axiosInstance.get(`courses/courses/${courseId}/`);
         setCourse(response.data);
+<<<<<<< HEAD
         if (response.data.lessons && response.data.lessons.length > 0) {
           setActiveLesson(response.data.lessons[0]);
         }
+=======
+>>>>>>> 5b6b1d8df59528d8f5aa4f2ef7bbed7c812fc3e0
       } catch (error) {
         console.error("Error cargando el curso", error);
       } finally {
@@ -27,6 +45,7 @@ export default function CoursePlayer() {
     fetchCourse();
   }, [courseId]);
 
+<<<<<<< HEAD
   // Si no hay lecciones reales desde BD, creamos unas dinámicas de relleno para que la UI no quede rota.
   const displayedLessons = course?.lessons?.length > 0 
     ? course.lessons 
@@ -37,6 +56,8 @@ export default function CoursePlayer() {
       
   const currentActiveLessonId = activeLesson ? activeLesson.id : displayedLessons[0].id;
 
+=======
+>>>>>>> 5b6b1d8df59528d8f5aa4f2ef7bbed7c812fc3e0
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950">
@@ -94,7 +115,11 @@ export default function CoursePlayer() {
             <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-30"></div>
             <div className="absolute top-4 left-4 flex gap-2">
                <span className="badge badge-error gap-1 animate-pulse border-none font-bold text-xs"><div className="w-2 h-2 rounded-full bg-white"></div> LIVE</span>
+<<<<<<< HEAD
                <span className="badge bg-slate-800/80 text-white border-none font-bold text-xs">{(activeLesson && activeLesson.title) || 'Lección Activa'}</span>
+=======
+               <span className="badge bg-slate-800/80 text-white border-none font-bold text-xs">Lección {activeLessonId}</span>
+>>>>>>> 5b6b1d8df59528d8f5aa4f2ef7bbed7c812fc3e0
             </div>
           </div>
 
@@ -107,7 +132,11 @@ export default function CoursePlayer() {
             
             <div className="prose prose-invert prose-p:text-slate-300 prose-headings:text-white max-w-none">
               <p>
+<<<<<<< HEAD
                 {activeLesson?.content || course.description || "Esta es la información teórica analizada en los registros. Sumérgete en estos conocimientos para afianzar tus competencias lógicas. Recuerda tomar notas en tu cuaderno táctico."}
+=======
+                {course.description || "Esta es la información teórica analizada en los registros. Sumérgete en estos conocimientos para afianzar tus competencias lógicas. Recuerda tomar notas en tu cuaderno táctico."}
+>>>>>>> 5b6b1d8df59528d8f5aa4f2ef7bbed7c812fc3e0
               </p>
               <p>Aquí se volcarán todos los apuntes del profesor con fórmulas matemáticas detalladas utilizando LaTeX, así como ejercicios interactivos.</p>
             </div>
@@ -122,25 +151,42 @@ export default function CoursePlayer() {
             </h3>
             
             <div className="space-y-3">
+<<<<<<< HEAD
               {displayedLessons.map((lesson, idx) => (
                 <button
                   key={lesson.id}
                   onClick={() => setActiveLesson(lesson)}
                   className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${
                     currentActiveLessonId === lesson.id 
+=======
+              {dummyLessons.map((lesson, idx) => (
+                <button
+                  key={lesson.id}
+                  onClick={() => setActiveLessonId(lesson.id)}
+                  className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${
+                    activeLessonId === lesson.id 
+>>>>>>> 5b6b1d8df59528d8f5aa4f2ef7bbed7c812fc3e0
                       ? 'bg-cyan-500/20 border border-cyan-500/50 shadow-[0_0_10px_rgba(34,211,238,0.2)]' 
                       : 'bg-slate-800/50 border border-transparent hover:bg-slate-700/50'
                   }`}
                 >
                   {lesson.isCompleted ? (
                     <CheckCircle className="w-5 h-5 text-green-400 shrink-0" />
+<<<<<<< HEAD
                   ) : currentActiveLessonId === lesson.id ? (
+=======
+                  ) : activeLessonId === lesson.id ? (
+>>>>>>> 5b6b1d8df59528d8f5aa4f2ef7bbed7c812fc3e0
                     <PlayCircle className="w-5 h-5 text-cyan-400 shrink-0" />
                   ) : (
                     <div className="w-5 h-5 rounded-full border border-slate-500 shrink-0 flex items-center justify-center text-[10px] text-slate-500 font-bold">{idx + 1}</div>
                   )}
                   <div className="flex flex-col overflow-hidden">
+<<<<<<< HEAD
                     <span className={`text-sm font-semibold truncate ${currentActiveLessonId === lesson.id ? 'text-white' : 'text-slate-300'}`}>
+=======
+                    <span className={`text-sm font-semibold truncate ${activeLessonId === lesson.id ? 'text-white' : 'text-slate-300'}`}>
+>>>>>>> 5b6b1d8df59528d8f5aa4f2ef7bbed7c812fc3e0
                       {lesson.title}
                     </span>
                     <span className="text-xs text-slate-500">{lesson.isCompleted ? 'Completada' : 'Pendiente'}</span>
