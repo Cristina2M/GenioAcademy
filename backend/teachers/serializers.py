@@ -21,6 +21,6 @@ class ProfessorSerializer(serializers.ModelSerializer):
         model = Professor
         fields = [
             'id', 'full_name', 'title', 'bio', 
-            'avatar_url', 'subjects', 'subjects_detail', 'is_active'
+            'avatar_url', 'subjects', 'subjects_detail', 'is_active', 'cv_json'
         ]
         # 'subjects' se usa para escritura (IDs) y 'subjects_detail' para lectura
