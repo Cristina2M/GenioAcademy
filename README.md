@@ -109,13 +109,17 @@ El valor diferencial: un asistente llamado "Astro" integrado en el aula que guí
   * Gestión de estado de carga, animaciones de "Pensando..." y autoscroll.
 
 #### ✨ HITO V: Sistema de Rescate y Gamificación (✅ Completado)
-Afinación de la mecánica Roguelike y motores de minijuegos.
-*   **Sistema de Vidas (Planetas):** Implementación de la gestión de 3 planetas por alumno.
-*   **Regeneración Pasiva:** Motor de tiempo real que recupera vidas cada 2 horas (basado en `last_life_lost_at`).
-*   **Minijuegos de Recuperación:** 5 motores independientes creados en React (Parejas, Cálculo, Sopa de letras, Completar y Verdadero/Falso).
-*   **Branding "Astro":** Unificación de la IA y el estilo visual bajo la identidad del búho Astro.
-*   **Reglas de Cooldown:** Solo se puede jugar a cada minijuego una vez cada 24 horas (`MinigameLog`).
-*   Superar un minijuego otorga **1 planeta** inmediatamente.
+Afinación de la mecánica Roguelike y motores de minijuegos para fomentar la retención.
+
+* **Fase 14: Lógica de Vidas y Mecánica Roguelike** (✅ Completado)
+  * Implementación de la gestión de 3 planetas (vidas) por alumno en el backend.
+  * Motor de regeneración pasiva: recuperación de 1 planeta cada 2 horas (`last_life_lost_at`).
+  * Integración visual de la salud del alumno en el `LivesPanel.jsx`.
+
+* **Fase 15: Sistema de Rescate y Minijuegos Educativos** (✅ Completado)
+  * Desarrollo de 5 motores de juegos en React: Parejas, Cálculo, Sopa de letras, Completar y Verdadero/Falso.
+  * Lógica de seguridad: Cooldown de 24h por minijuego y ganancia inmediata de 1 planeta tras victoria.
+  * Consolidación de la identidad visual "Astro" en todos los feedbacks de juego.
 
 #### 🎓 HITO VI: Claustro Interactivo (Catálogo de Profesores)
 Conexión humana y especializada para estudiantes élite.
