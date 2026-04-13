@@ -39,6 +39,7 @@ export default function Navbar() {
           <li><Link className="hover:text-pink-400 hover:bg-white/5 transition-colors" to="/">Inicio</Link></li>
           <li><Link className="hover:text-cyan-400 hover:bg-white/5 transition-colors" to="/courses">Catálogo Estelar</Link></li>
           <li><Link className="hover:text-purple-400 hover:bg-white/5 transition-colors" to="/mission">La Misión</Link></li>
+          <li><Link className="hover:text-teal-400 hover:bg-white/5 transition-colors" to="/claustro">Claustro</Link></li>
         </ul>
       </div>
 
@@ -98,6 +99,7 @@ export default function Navbar() {
             <li><Link to="/">Inicio</Link></li>
             <li><Link to="/courses">Catálogo Estelar</Link></li>
             <li><Link to="/mission">La Misión</Link></li>
+            <li><Link to="/claustro">Claustro</Link></li>
             {user ? (
                <>
                  <li><Link to="/dashboard" className="text-cyan-400 font-bold border border-cyan-500/30 rounded-lg my-1">Mi Panel Base</Link></li>

@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/courses/', include('courses.urls')),
     path('api/users/', include('users.urls')),
     path('api/ai/', include('ai.urls')),
+    path('api/teachers/', include('teachers.urls')),
     
     # Endpoints para Autenticación con JWT
     path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),

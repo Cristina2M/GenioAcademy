@@ -1,8 +1,20 @@
-import { ArrowRight, Map, BrainCircuit, Compass, Telescope, Star } from 'lucide-react';
+import { ArrowRight, Map, BrainCircuit, Compass, Telescope, Star, Users, GraduationCap } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import buhoMascot from '../assets/img/stikers/buho1.png';
+import ProfessorCard from '../components/ProfessorCard';
 
 export default function Home() {
+  const [featuredProfs, setFeaturedProfs] = useState([]);
+
+  useEffect(() => {
+    // Cargar solo los profesores destacados (acceso público)
+    axios.get('http://localhost:8000/api/teachers/professors/')
+      .then(res => setFeaturedProfs(res.data))
+      .catch(err => console.error("Error cargando profesores destacados:", err));
+  }, []);
+
   return (
     <div className="min-h-screen relative overflow-hidden">
       
@@ -132,6 +144,49 @@ export default function Home() {
         </div>
       </div>
       
+      {/* Sección del Claustro Destacado (Para padres y visitantes) */}
+      <div className="py-32 relative z-10 border-t border-white/5 bg-slate-900/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
+                <div className="max-w-2xl text-left">
+                    <span className="text-teal-400 font-bold tracking-widest uppercase mb-3 flex items-center gap-2">
+                        <GraduationCap className="w-5 h-5"/> Experiencia de Vanguardia
+                    </span>
+                    <h2 className="text-4xl md:text-6xl font-black tracking-tight text-white mb-6">
+                        Nuestra <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500">Facultad Galáctica</span>
+                    </h2>
+                    <p className="text-slate-400 text-xl leading-relaxed">
+                        En Genio Academy, la tecnología está al servicio de la maestría humana. 
+                        Contamos con un equipo de docentes apasionados, especializados en motivar y guiar 
+                        a los alumnos a través de los desafíos más complejos de la ESO.
+                    </p>
+                </div>
+                <Link to="/register" className="btn btn-outline border-white/20 text-white hover:bg-white hover:text-black rounded-2xl px-10">
+                    Conocer a todo el equipo
+                </Link>
+            </div>
+
+            {/* Grid de profesores destacados */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                {featuredProfs.map(prof => (
+                    <ProfessorCard key={prof.id} professor={prof} />
+                ))}
+                
+                {/* Card de "Únete" para fomentar el registro */}
+                <div className="card bg-gradient-to-br from-slate-900/60 to-purple-900/20 backdrop-blur-xl border border-dashed border-white/10 shadow-2xl flex items-center justify-center p-10 text-center group hover:border-purple-500/50 transition-all">
+                    <div className="w-20 h-20 bg-purple-500/10 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <Users className="w-10 h-10 text-purple-400" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-4">¿Buscas un tutor específico?</h3>
+                    <p className="text-slate-400 mb-8">Registra a tu hijo para acceder al claustro completo de expertos y agendar su primera tutoría.</p>
+                    <Link to="/register" className="btn btn-primary rounded-xl px-8 shadow-lg shadow-purple-500/20">
+                        Abrir Cuenta de Alumno
+                    </Link>
+                </div>
+            </div>
+        </div>
+      </div>
+
     </div>
   );
 }
