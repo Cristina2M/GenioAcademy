@@ -19,23 +19,27 @@ const ProfessorCard = ({ professor }) => {
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                     {/* Degradado sobre la imagen */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-80" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-60" />
                     
-                    {/* Badge de título */}
-                    <div className="absolute bottom-4 left-4 right-4">
-                        <span className="bg-purple-600/80 text-white text-xs font-bold px-3 py-1 rounded-full backdrop-blur-md uppercase tracking-widest border border-white/20">
-                            {professor.title}
-                        </span>
+                    {/* Sello de verificación sutil en la esquina */}
+                    <div className="absolute top-4 right-4 ring-1 ring-white/20 bg-black/40 backdrop-blur-md rounded-full px-2 py-1 flex items-center gap-1.5 shadow-xl">
+                        <div className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse"></div>
+                        <span className="text-[8px] font-black text-white tracking-widest uppercase">Verified</span>
                     </div>
                 </figure>
 
                 {/* Cuerpo de la tarjeta */}
                 <div className="card-body p-6">
-                    <h2 className="card-title text-2xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">
-                        {professor.full_name}
-                    </h2>
+                    <div className="mb-4">
+                        <h2 className="card-title text-2xl font-bold text-white mb-1 group-hover:text-purple-400 transition-colors tracking-tight">
+                            {professor.full_name}
+                        </h2>
+                        <p className="text-teal-400/90 text-[10px] font-bold uppercase tracking-[0.2em] leading-tight">
+                            {professor.title}
+                        </p>
+                    </div>
                     
-                    <p className="text-gray-400 text-sm leading-relaxed mb-4 line-clamp-2">
+                    <p className="text-gray-400 text-sm leading-relaxed mb-4 line-clamp-3 font-medium">
                         {professor.bio}
                     </p>
 
