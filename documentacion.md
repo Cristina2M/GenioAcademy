@@ -479,10 +479,24 @@ _[Mostrar tabla de planes de la sección 7]_
 | Rama | Propósito |
 |------|-----------|
 | `main` | Versión estable y revisada de producción |
-| `develop` | Integración continua de todas las features |
-| `feature/IA` | Integración del tutor Astro (completado, mergeado) |
+| `develop` | Integración continua de todas las features revisadas |
+| `feature/IA` | Integración del tutor Astro (Completado) |
 | `feature/vidas` | Sistema de vidas Roguelike y minijuegos (Completado) |
-| `release/hito-3` | Snapshot del Hito III completo |
+| `feature/reproductorCursos` | Entorno de estudio y visualización de lecciones (Completado) |
+| `feature/Catalogo` | Motor de búsqueda y filtrado de contenido educativo |
+| `feature/motorLogica` | Algoritmos de gamificación y progresión incremental |
+| `feature/panelEstudiante` | Dashboard y visualización de progreso del alumno |
+| `feature/mision` | Desarrollo de la lógica de misiones diarias |
+| `feature/home-v2` | Rediseño de la landing page (Capitán Galáctico) |
+| `feature/autenticacionFrontend` | Sistema de login, registro y tokens JWT |
+| `feature/backendV1` | Desarrollo inicial del núcleo del servidor Django |
+| `feature/frontendV1` | Arquitectura base del cliente React |
+| `feature/frontend` | Versión preliminar del entorno de usuario |
+| `feature/bd` | Modelado y configuración de bases de datos PostgreSQL |
+| `feature/docs` | Rama dedicada a la redacción de documentación técnica |
+| `release/hito-3` | Snapshot estable del Hito III |
+| `release/backend` | Estabilización de servicios de servidor |
+| `release/revision2` | Ajustes finales de Calidad (QA) y corrección de bugs |
 
 ### Comandos Rápidos para Ejecutar el Proyecto
 
