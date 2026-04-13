@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import axiosInstance from '../api/axios';
 import ProfessorCard from '../components/ProfessorCard';
 import AuthContext from '../context/AuthContext';
-import { Search, GraduationCap, Filter } from 'lucide-react';
+import { Search, GraduationCap, Filter, Sparkles } from 'lucide-react';
+import '../styles/professors.css';
 
 /**
  * Catálogo Escolar Galáctico - Vista exclusiva para alumnos.
@@ -18,7 +20,6 @@ const StudentCatalog = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Usamos la instancia configurada que ya maneja tokens y baseURL
                 const [profRes, catRes] = await Promise.all([
                     axiosInstance.get('teachers/professors/'),
                     axiosInstance.get('courses/categories/')
@@ -35,7 +36,6 @@ const StudentCatalog = () => {
         fetchData();
     }, []);
 
-    // Lógica de filtrado combinada
     const filteredProfessors = professors.filter(p => {
         const matchesCategory = selectedCategory === 'all' || p.subjects.includes(parseInt(selectedCategory));
         const matchesSearch = p.full_name.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -52,40 +52,50 @@ const StudentCatalog = () => {
     }
 
     return (
-        <div className="min-h-screen pt-24 pb-12 px-4 md:px-8 bg-[#050510] relative">
-            {/* Luces decorativas */}
-            <div className="fixed top-0 right-0 w-[500px] h-[500px] bg-teal-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="min-h-screen pt-24 pb-20 px-4 md:px-8 bg-[#050510] relative overflow-hidden">
+            {/* Luces decorativas de fondo */}
+            <div className="fixed top-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+            <div className="fixed bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-teal-500/10 rounded-full blur-[120px] pointer-events-none"></div>
 
-            <div className="max-w-7xl mx-auto">
+            <div className="max-w-7xl mx-auto relative z-10">
                 {/* Header Alumno */}
-                <div className="mb-12">
-                    <div className="flex items-center gap-3 text-teal-400 mb-2 uppercase tracking-widest font-black text-sm">
+                <motion.div 
+                    initial={{ opacity: 0, x: -30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="mb-16"
+                >
+                    <div className="flex items-center gap-3 text-teal-400 mb-4 uppercase tracking-[0.4em] font-black text-xs">
                         <GraduationCap className="w-5 h-5"/> Directorio de Maestros
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-black text-white mb-4">
-                        Biblioteca de <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500">Sabios Estelares</span>
+                    <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tighter leading-none">
+                        Biblioteca de <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-blue-500 to-purple-600 animate-gradient-x">Sabios Estelares</span>
                     </h1>
-                    <p className="text-slate-400 max-w-2xl font-medium">
-                        Consulta la trayectoria completa de tus mentores. Filtra por especialidad para encontrar al guía adecuado para tu próxima misión.
+                    <p className="text-slate-400 max-w-2xl font-medium text-lg border-l-2 border-white/10 pl-6 py-2">
+                        Consulta la trayectoria completa de tus mentores. Filtra por especialidad para encontrar al guía adecuado para tu próxima misión académica.
                     </p>
-                </div>
+                </motion.div>
 
                 {/* Filtros y Buscador */}
-                <div className="flex flex-col lg:flex-row gap-6 mb-12 items-center justify-between">
-                    <div className="flex flex-wrap gap-2 items-center flex-1 justify-center lg:justify-start">
-                        <div className="flex items-center gap-2 text-slate-500 mr-2">
-                            <Filter className="w-4 h-4"/> <span className="text-[10px] font-bold uppercase tracking-widest">Especialidades:</span>
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="flex flex-col xl:flex-row gap-8 mb-16 items-center justify-between bg-white/5 p-6 rounded-[2rem] border border-white/5 backdrop-blur-md"
+                >
+                    <div className="flex flex-wrap gap-3 items-center flex-1 justify-center lg:justify-start">
+                        <div className="flex items-center gap-2 text-slate-500 mr-4">
+                            <Filter className="w-4 h-4"/> <span className="text-[10px] font-black uppercase tracking-[0.2em]">Sectores de Sabiduría:</span>
                         </div>
                         <button 
-                            className={`btn btn-sm btn-outline rounded-full text-[10px] ${selectedCategory === 'all' ? 'bg-teal-600 text-white border-none' : 'text-slate-400 border-white/10 hover:bg-white/5'}`}
+                            className={`btn btn-sm rounded-full px-6 text-[10px] font-black uppercase tracking-widest border-2 transition-all duration-300 ${selectedCategory === 'all' ? 'bg-teal-500 text-black border-teal-500 shadow-[0_0_15px_rgba(20,184,166,0.4)]' : 'bg-transparent text-slate-400 border-white/10 hover:border-white/30 hover:text-white'}`}
                             onClick={() => setSelectedCategory('all')}
                         >
-                            Todas las Ramas
+                            Ver Todo el Firmamento
                         </button>
                         {categories.map(cat => (
                             <button 
                                 key={cat.id}
-                                className={`btn btn-sm btn-outline rounded-full text-[10px] ${selectedCategory === cat.id.toString() ? 'bg-teal-600 text-white border-none' : 'text-slate-400 border-white/10 hover:bg-white/5'}`}
+                                className={`btn btn-sm rounded-full px-6 text-[10px] font-black uppercase tracking-widest border-2 transition-all duration-300 ${selectedCategory === cat.id.toString() ? 'bg-purple-600 text-white border-purple-600 shadow-[0_0_15px_rgba(168,85,247,0.4)]' : 'bg-transparent text-slate-400 border-white/10 hover:border-white/30 hover:text-white'}`}
                                 onClick={() => setSelectedCategory(cat.id.toString())}
                             >
                                 {cat.name}
@@ -93,35 +103,60 @@ const StudentCatalog = () => {
                         ))}
                     </div>
 
-                    <div className="relative w-full max-w-sm">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                    <div className="relative w-full max-w-sm search-glow rounded-full">
+                        <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                         <input 
                             type="text" 
-                            placeholder="Buscar maestro por nombre..." 
-                            className="input input-bordered w-full bg-black/40 border-white/10 rounded-full pl-12 text-sm text-white focus:border-teal-500 focus:outline-none transition-all"
+                            placeholder="Buscar maestro por nombre o título..." 
+                            className="input input-bordered w-full bg-black/40 border-white/5 rounded-full pl-14 pr-6 h-14 text-sm text-white focus:outline-none transition-all placeholder:text-slate-600 placeholder:font-bold"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Grid Resultados */}
-                {filteredProfessors.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-20">
-                        {filteredProfessors.map(prof => (
-                            <ProfessorCard key={prof.id} professor={prof} />
-                        ))}
-                    </div>
-                ) : (
-                    <div className="text-center py-32 rounded-[2.5rem] bg-indigo-500/5 border border-dashed border-white/5">
-                        <div className="w-20 h-20 bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-700">
-                             <Search className="w-10 h-10"/>
-                        </div>
-                        <h3 className="text-white text-xl font-bold mb-2">Sin rastro del maestro</h3>
-                        <p className="text-slate-500 italic max-w-xs mx-auto">No hemos encontrado ningún docente que coincida con tu búsqueda en este sector estelar.</p>
-                        <button onClick={() => {setSearchTerm(''); setSelectedCategory('all');}} className="btn btn-ghost btn-xs text-teal-400 mt-4">Reiniciar filtros</button>
-                    </div>
-                )}
+                <AnimatePresence mode='wait'>
+                    {filteredProfessors.length > 0 ? (
+                        <motion.div 
+                            key={selectedCategory + searchTerm}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 pb-20"
+                        >
+                            {filteredProfessors.map((prof, index) => (
+                                <motion.div
+                                    key={prof.id}
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ delay: index * 0.05 }}
+                                >
+                                    <ProfessorCard professor={prof} />
+                                </motion.div>
+                            ))}
+                        </motion.div>
+                    ) : (
+                        <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="text-center py-40 rounded-[3rem] bg-white/5 border border-dashed border-white/10"
+                        >
+                            <div className="w-24 h-24 bg-slate-900/50 rounded-full flex items-center justify-center mx-auto mb-8 text-slate-700 border border-white/5">
+                                 <Search className="w-12 h-12"/>
+                            </div>
+                            <h3 className="text-white text-3xl font-black mb-4 tracking-tight">Señal Perdida en este Sector</h3>
+                            <p className="text-slate-500 italic max-w-md mx-auto text-lg">No hemos localizado ningún mentor que coincida con tus coordenadas de búsqueda. Prueba con otros criterios o reinicia los sensores.</p>
+                            <button 
+                                onClick={() => {setSearchTerm(''); setSelectedCategory('all');}} 
+                                className="btn btn-ghost hover:bg-teal-500/10 text-teal-400 mt-8 rounded-full px-8 gap-2 font-black uppercase text-xs tracking-widest"
+                            >
+                                <Sparkles className="w-4 h-4" />
+                                Reiniciar Sensores Galácticos
+                            </button>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </div>
     );

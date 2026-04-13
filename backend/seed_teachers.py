@@ -15,39 +15,61 @@ from courses.models import Category
 def seed_teachers():
     print("--- Iniciando poblado de Profesores ---")
 
-    # 1. Obtener o crear categorías
-    cat_math, _ = Category.objects.get_or_create(name='Misiones Matemáticas')
-    cat_lang, _ = Category.objects.get_or_create(name='Lengua y Literatura')
-    cat_phys, _ = Category.objects.get_or_create(name='Leyes de la Física')
+    # --- 1. Crear Categorías de Asignaturas si no existen ---
+    cat_math, _ = Category.objects.get_or_create(
+        name='Misiones Matemáticas',
+        defaults={'description': 'Cálculo, Álgebra y Geometría aplicada a la navegación estelar.'}
+    )
+    cat_lang, _ = Category.objects.get_or_create(
+        name='Lengua y Literatura',
+        defaults={'description': 'Gramática, Literatura y Comunicación efectiva.'}
+    )
+    cat_phys, _ = Category.objects.get_or_create(
+        name='Leyes de la Física',
+        defaults={'description': 'Mecánica, Energía y el estudio del Cosmos.'}
+    )
+    cat_hist, _ = Category.objects.get_or_create(
+        name='Historia y Civilizaciones',
+        defaults={'description': 'Crónicas de la Tierra y evolución de las sociedades humanas.'}
+    )
+    cat_bio, _ = Category.objects.get_or_create(
+        name='Bio-Ciencias Estelares',
+        defaults={'description': 'Biología molecular, ecosistemas y vida en el universo.'}
+    )
+    cat_idioms, _ = Category.objects.get_or_create(
+        name='Idiomas Galácticos',
+        defaults={'description': 'Inglés y sistemas de comunicación interplanetaria.'}
+    )
+    cat_chem, _ = Category.objects.get_or_create(
+        name='Química y Alquimia',
+        defaults={'description': 'Ciencia de los materiales, reacciones y química estelar.'}
+    )
+    cat_art, _ = Category.objects.get_or_create(
+        name='Artes y Creación',
+        defaults={'description': 'Expresión visual, música y diseño de realidades.'}
+    )
 
-    # 2. Definir datos de profesores
+    # --- 2. Preparar Datos de Profesores ---
     professors_data = [
         {
             'full_name': 'Dr. Valerius Prime',
             'title': 'Doctor en Ciencias Físicas y Matemáticas',
-            'bio': 'Con más de 15 años de experiencia docente, el Dr. Valerius es especialista en pedagogía del cálculo avanzado. Su enfoque combina el rigor académico con una metodología adaptativa que asegura que ningún alumno se quede atrás en las materias de ciencias, transformando desafíos complejos en conceptos claros.',
+            'bio': 'Con más de 20 años de experiencia en la investigación de agujeros de gusano y cálculo multivariable, el Dr. Valerius lidera el departamento de ciencias exactas. Su enfoque se centra en hacer que lo complejo sea intuitivo y emocionante para los jóvenes exploradores.',
             'avatar_url': '/assets/professors/prof_math.png',
             'is_featured': True,
             'cv_json': {
                 'education': [
-                    {'year': '2012', 'degree': 'Máster en Educación Secundaria', 'institution': 'Facultad de Pedagogía'},
-                    {'year': '2010', 'degree': 'Doctorado en Física Teórica', 'institution': 'Universidad Central de Ciencias'},
-                    {'year': '2008', 'degree': 'Grado en Matemáticas Puras', 'institution': 'Universidad Central de Ciencias'},
-                    {'year': '2009', 'degree': 'Certificación en Diseño Instruccional', 'institution': 'E-Learning Global'}
+                    {'year': '2005', 'degree': 'Doctorado en Astrofísica', 'institution': 'MIT'},
+                    {'year': '2000', 'degree': 'Grado en Matemáticas Puras', 'institution': 'Universidad de Stanford'}
                 ],
                 'experience': [
-                    {'period': '2015 - Presente', 'role': 'Jefe de Departamento de Ciencias', 'company': 'Genio Academy / International Stem'},
-                    {'period': '2012 - 2015', 'role': 'Coordinador Pedagógico', 'company': 'Colegio Mayor de Ciencias'},
-                    {'period': '2008 - 2012', 'role': 'Profesor Titular de Álgebra', 'company': 'Centro Regional de Estudios Avanzados'},
-                    {'period': '2006 - 2008', 'role': 'Investigador Junior', 'company': 'Laboratorio de Cuántica Aplicada'}
+                    {'period': '2015 - Presente', 'role': 'Director Académico', 'company': 'Genio Academy'},
+                    {'period': '2008 - 2015', 'role': 'Investigador Principal', 'company': 'CERN'}
                 ],
                 'methods': [
-                    'Aprendizaje basado en problemas (PBL)',
-                    'Gamificación en entornos virtuales',
-                    'Cálculo visual y nemotecnia avanzada',
-                    'Método Singapur adaptado',
-                    'Flipped Classroom (Clase invertida)',
-                    'Evaluación continua por competencias'
+                    'Visualización geométrica en 3D',
+                    'Resolución de problemas por analogía cósmica',
+                    'Gamificación de sistemas de ecuaciones'
                 ]
             },
             'subjects': [cat_math, cat_phys]
@@ -61,23 +83,16 @@ def seed_teachers():
             'cv_json': {
                 'education': [
                     {'year': '2015', 'degree': 'Doctorado en Literatura Comparada', 'institution': 'Universidad Complutense'},
-                    {'year': '2012', 'degree': 'Máster en Filología Hispánica', 'institution': 'UAM Madrid'},
-                    {'year': '2010', 'degree': 'Grado en Humanidades y Lenguas', 'institution': 'Universidad de Sevilla'},
-                    {'year': '2013', 'degree': 'Especialista en Escritura Creativa', 'institution': 'Escuela de Letras'}
+                    {'year': '2012', 'degree': 'Máster en Filología Hispánica', 'institution': 'UAM Madrid'}
                 ],
                 'experience': [
                     {'period': '2018 - Presente', 'role': 'Directora de Contenidos Lingüísticos', 'company': 'Genio Academy'},
-                    {'period': '2015 - 2018', 'role': 'Tutora de Bachillerato Literario', 'company': 'Instituto Cervantes'},
-                    {'period': '2012 - 2015', 'role': 'Lectora de Español', 'company': 'Universidad de Bolonia'},
-                    {'period': '2010 - 2012', 'role': 'Editora de Textos Pedagógicos', 'company': 'Editorial Saber'}
+                    {'period': '2015 - 2018', 'role': 'Tutora de Bachillerato Literario', 'company': 'Instituto Cervantes'}
                 ],
                 'methods': [
                     'Análisis crítico textual por capas',
                     'Debate Socrático aplicado a la literatura',
-                    'Escritura creativa gamificada',
-                    'Narrativa transmedia educativa',
-                    'Aprendizaje cooperativo dinámico',
-                    'Técnicas de oratoria y retórica'
+                    'Escritura creativa gamificada'
                 ]
             },
             'subjects': [cat_lang]
@@ -90,24 +105,17 @@ def seed_teachers():
             'is_featured': True,
             'cv_json': {
                 'education': [
-                    {'year': '2014', 'degree': 'Doctorado en Arqueología Digital', 'institution': 'Oxford University'},
-                    {'year': '2010', 'degree': 'Máster en Historia Contemporánea', 'institution': 'Sorbona de París'},
-                    {'year': '2008', 'degree': 'Grado en Antropología', 'institution': 'Universidad de Salamanca'}
+                    {'year': '2014', 'degree': 'Doctorado en Arqueología Digital', 'institution': 'Oxford University'}
                 ],
                 'experience': [
-                    {'period': '2020 - Presente', 'role': 'Conservador de Memoria Histórica', 'company': 'Genio Academy'},
-                    {'period': '2016 - 2020', 'role': 'Guía de Expediciones Académicas', 'company': 'Geo-Astro Research'},
-                    {'period': '2012 - 2016', 'role': 'Profesor de Geo-Política', 'company': 'Escuela Diplomática Mundial'}
+                    {'period': '2020 - Presente', 'role': 'Conservador de Memoria Histórica', 'company': 'Genio Academy'}
                 ],
                 'methods': [
                     'Storytelling histórico inmersivo',
-                    'Análisis de fuentes mediante Big Data',
-                    'Cartografía crítica interactiva',
-                    'Juegos de rol de gestión de crisis históricas',
-                    'Paleontología digital comparada'
+                    'Cartografía crítica interactiva'
                 ]
             },
-            'subjects': [cat_lang] # Reutilizando categorías existentes o añadir nuevas si se desea
+            'subjects': [cat_hist]
         },
         {
             'full_name': 'Dra. Lyra Nova',
@@ -117,24 +125,17 @@ def seed_teachers():
             'is_featured': False,
             'cv_json': {
                 'education': [
-                    {'year': '2016', 'degree': 'Doctorado en Bioquímica', 'institution': 'Stanford University'},
-                    {'year': '2013', 'degree': 'Máster en Biología Sintética', 'institution': 'MIT'},
-                    {'year': '2011', 'degree': 'Grado en Ciencias Biológicas', 'institution': 'Universidad de Buenos Aires'}
+                    {'year': '2016', 'degree': 'Doctorado en Bioquímica', 'institution': 'Stanford University'}
                 ],
                 'experience': [
-                    {'period': '2019 - Presente', 'role': 'Investigadora de Bio-Entornos', 'company': 'Genio Academy'},
-                    {'period': '2016 - 2019', 'role': 'Analista de Bio-Seguridad', 'company': 'Star-Med Center'},
-                    {'period': '2013 - 2016', 'role': 'Asistente de Laboratorio de Genética', 'company': 'Global Flora Foundation'}
+                    {'period': '2019 - Presente', 'role': 'Investigadora de Bio-Entornos', 'company': 'Genio Academy'}
                 ],
                 'methods': [
                     'Laboratorios virtuales de alta precisión',
-                    'Mapas genéticos mediante Realidad Aumentada',
-                    'Bio-ética en entornos tecnológicos',
-                    'Simulación de ecosistemas auto-sostenibles',
-                    'Análisis de patrones biológicos complejos'
+                    'Simulación de ecosistemas auto-sostenibles'
                 ]
             },
-            'subjects': [cat_phys]
+            'subjects': [cat_bio]
         },
         {
             'full_name': 'Dra. Sarah Moon',
@@ -144,21 +145,17 @@ def seed_teachers():
             'is_featured': True,
             'cv_json': {
                 'education': [
-                    {'year': '2014', 'degree': 'Máster en Lingüística Aplicada', 'institution': 'Cambridge University'},
-                    {'year': '2011', 'degree': 'Grado en Estudios Internacionales', 'institution': 'Yale University'}
+                    {'year': '2014', 'degree': 'Máster en Lingüística Aplicada', 'institution': 'Cambridge University'}
                 ],
                 'experience': [
-                    {'period': '2018 - Presente', 'role': 'Coordinadora de Idiomas', 'company': 'Genio Academy'},
-                    {'period': '2014 - 2018', 'role': 'Instructora de Vuelo y Lenguaje', 'company': 'Aero-Global Training'}
+                    {'period': '2018 - Presente', 'role': 'Coordinadora de Idiomas', 'company': 'Genio Academy'}
                 ],
                 'methods': [
                     'Inmersión lingüística situacional',
-                    'Técnicas de comunicación asertiva',
-                    'Aprendizaje acelerado mediante audio-estímulos',
                     'Debates diplomáticos simulados'
                 ]
             },
-            'subjects': [cat_lang]
+            'subjects': [cat_idioms]
         },
         {
             'full_name': 'Dra. Kiara Stone',
@@ -168,16 +165,13 @@ def seed_teachers():
             'is_featured': False,
             'cv_json': {
                 'education': [
-                    {'year': '2015', 'degree': 'Doctorado en Geología Planetaria', 'institution': 'Arizona State University'},
-                    {'year': '2012', 'degree': 'Grado en Ciencias de la Tierra', 'institution': 'UNAM'}
+                    {'year': '2015', 'degree': 'Doctorado en Geología Planetaria', 'institution': 'Arizona State University'}
                 ],
                 'experience': [
-                    {'period': '2019 - Presente', 'role': 'Especialista en Análisis de Suelos', 'company': 'Genio Academy'},
-                    {'period': '2015 - 2019', 'role': 'Investigadora de Campo', 'company': 'Exploración Minera Galáctica'}
+                    {'period': '2019 - Presente', 'role': 'Especialista en Análisis de Suelos', 'company': 'Genio Academy'}
                 ],
                 'methods': [
                     'Análisis mineralógico mediante espectroscopía',
-                    'Prospección geofísica interactiva',
                     'Modelado 3D de tectónica planetaria'
                 ]
             },
@@ -191,20 +185,17 @@ def seed_teachers():
             'is_featured': False,
             'cv_json': {
                 'education': [
-                    {'year': '2013', 'degree': 'Doctorado en Química Cuántica', 'institution': 'Heidelberg University'},
-                    {'year': '2009', 'degree': 'Grado en Ingeniería Química', 'institution': 'Universidad Politécnica de Valencia'}
+                    {'year': '2013', 'degree': 'Doctorado en Química Cuántica', 'institution': 'Heidelberg University'}
                 ],
                 'experience': [
-                    {'period': '2017 - Presente', 'role': 'Jefe de Laboratorio de Química', 'company': 'Genio Academy'},
-                    {'period': '2013 - 2017', 'role': 'Científico de Materiales Avanzados', 'company': 'Nano-Tech Soluciones'}
+                    {'period': '2017 - Presente', 'role': 'Jefe de Laboratorio de Química', 'company': 'Genio Academy'}
                 ],
                 'methods': [
                     'Simulación molecular cuántica',
-                    'Experimentos químicos en microgravedad virtual',
                     'Síntesis de materiales mediante pulsos de luz'
                 ]
             },
-            'subjects': [cat_phys]
+            'subjects': [cat_chem]
         },
         {
             'full_name': 'Dr. Theo Canvas',
@@ -214,20 +205,17 @@ def seed_teachers():
             'is_featured': True,
             'cv_json': {
                 'education': [
-                    {'year': '2011', 'degree': 'Máster en Artes Digitales', 'institution': 'Royal College of Art'},
-                    {'year': '2008', 'degree': 'Grado en Bellas Artes', 'institution': 'Academia de San Carlos'}
+                    {'year': '2011', 'degree': 'Máster en Artes Digitales', 'institution': 'Royal College of Art'}
                 ],
                 'experience': [
-                    {'period': '2016 - Presente', 'role': 'Director Artístico Vocal', 'company': 'Genio Academy'},
-                    {'period': '2012 - 2016', 'role': 'Concept Artist', 'company': 'Estudios de Cine Intergaláctico'}
+                    {'period': '2016 - Presente', 'role': 'Director Artístico Vocal', 'company': 'Genio Academy'}
                 ],
                 'methods': [
                     'Escultura de luz en espacios 3D',
-                    'Composición visual transmedia',
                     'Historia del arte desde la perspectiva de la IA'
                 ]
             },
-            'subjects': [cat_lang]
+            'subjects': [cat_art]
         },
         {
             'full_name': 'Dra. Aria Sound',
@@ -237,12 +225,10 @@ def seed_teachers():
             'is_featured': False,
             'cv_json': {
                 'education': [
-                    {'year': '2014', 'degree': 'Doctorado en Acústica y Vibración', 'institution': 'Berklee College of Music'},
-                    {'year': '2010', 'degree': 'Grado en Composición Musical', 'institution': 'Conservatorio de Viena'}
+                    {'year': '2014', 'degree': 'Doctorado en Acústica y Vibración', 'institution': 'Berklee College of Music'}
                 ],
                 'experience': [
-                    {'period': '2019 - Presente', 'role': 'Especialista en Educación Sonora', 'company': 'Genio Academy'},
-                    {'period': '2015 - 2019', 'role': 'Ingeniera de Sonido en Misiones Estelares', 'company': 'Agencia Espacial Europea'}
+                    {'period': '2019 - Presente', 'role': 'Especialista en Educación Sonora', 'company': 'Genio Academy'}
                 ],
                 'methods': [
                     'Diseño sonoro holístico',
@@ -250,7 +236,7 @@ def seed_teachers():
                     'Síntesis sonora mediante datos estelares'
                 ]
             },
-            'subjects': [cat_lang]
+            'subjects': [cat_art]
         }
     ]
 

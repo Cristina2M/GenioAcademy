@@ -24,7 +24,7 @@ export default function Home() {
       <div className="absolute bottom-[0%] left-[20%] w-[700px] h-[700px] bg-purple-600/10 rounded-full blur-[150px] pointer-events-none z-0"></div>
 
       {/* Hero Section */}
-      <div className="pt-24 pb-20 relative z-10 flex items-center min-h-[85vh]">
+      <div className="pt-24 pb-16 relative z-10 flex items-center min-h-[70vh]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="flex flex-col lg:flex-row items-center gap-16">
             
@@ -145,9 +145,9 @@ export default function Home() {
       </div>
       
       {/* Sección del Claustro Destacado (Para padres y visitantes) */}
-      <div className="py-24 relative z-10 border-t border-white/5 bg-slate-900/20">
+      <div className="pt-24 pb-12 relative z-10 border-t border-white/5 bg-slate-900/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row items-center justify-between mb-16 gap-10">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-10">
                 <div className="max-w-2xl text-left">
                     <span className="text-teal-400 font-bold tracking-widest uppercase mb-3 flex items-center gap-2">
                         <GraduationCap className="w-5 h-5"/> Experiencia de Vanguardia
@@ -155,13 +155,17 @@ export default function Home() {
                     <h2 className="text-4xl md:text-6xl font-black tracking-tight text-white mb-6">
                         Nuestra <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500">Facultad Galáctica</span>
                     </h2>
-                    <p className="text-slate-400 text-xl leading-relaxed mb-8">
+                    <p className="text-slate-400 text-xl leading-relaxed mb-6">
                         La tranquilidad de los padres es nuestra prioridad. En Genio Academy, el talento humano no es un extra, 
                         es el pilar fundamental que da sentido a nuestra tecnología. 
                     </p>
+                    <div className="inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-teal-500/5 border border-teal-500/20 text-teal-400/90 text-sm font-medium italic mb-2 backdrop-blur-sm">
+                        <ShieldCheck className="w-5 h-5 shrink-0" />
+                        Todo nuestro profesorado ha sido estudiado de forma exhaustiva para corroborar sus currículums y trayectorias profesionales.
+                    </div>
                     
                     {/* Cuadrícula de compromisos para padres */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
                         <div className="flex gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
                             <div className="w-12 h-12 rounded-xl bg-teal-500/10 flex items-center justify-center shrink-0 border border-teal-500/20">
                                 <ShieldCheck className="w-6 h-6 text-teal-400" />

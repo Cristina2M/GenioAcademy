@@ -1,4 +1,7 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import { BookOpen, MapPin, Sparkles, Award } from 'lucide-react';
+import '../styles/professors.css';
 
 /**
  * Tarjeta de Profesor estilo Premium / Glassmorphism.
@@ -10,30 +13,39 @@ const ProfessorCard = ({ professor }) => {
 
     return (
         <>
-            <div className="card bg-gray-900/60 backdrop-blur-xl border border-white/10 shadow-2xl hover:border-purple-500/50 transition-all duration-300 group overflow-hidden h-full">
+            <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                whileHover={{ y: -5 }}
+                className="professor-card-glow card bg-gray-900/60 backdrop-blur-xl border border-white/10 shadow-2xl hover:border-purple-500/50 transition-all duration-300 group overflow-hidden h-full flex flex-col"
+            >
                 {/* Cabecera con Imagen */}
                 <figure className="relative h-64 overflow-hidden">
-                    <img 
+                    <motion.img 
                         src={avatar} 
                         alt={professor.full_name} 
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                     {/* Degradado sobre la imagen */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-60" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-80" />
+                    
                 </figure>
 
                 {/* Cuerpo de la tarjeta */}
-                <div className="card-body p-6">
+                <div className="card-body p-6 flex-1 flex flex-col">
                     <div className="mb-4">
-                        <h2 className="card-title text-2xl font-bold text-white mb-1 group-hover:text-purple-400 transition-colors tracking-tight">
+                        <h2 className="card-title text-2xl font-black text-white mb-1 group-hover:text-purple-400 transition-colors tracking-tighter">
                             {professor.full_name}
                         </h2>
-                        <p className="text-teal-400/90 text-[10px] font-bold uppercase tracking-[0.2em] leading-tight">
-                            {professor.title}
-                        </p>
+                        <div className="flex items-center gap-2">
+                             <Sparkles className="w-3 h-3 text-teal-400" />
+                             <p className="text-teal-400/90 text-[10px] font-black uppercase tracking-[0.2em] leading-tight">
+                                {professor.title}
+                            </p>
+                        </div>
                     </div>
                     
-                    <p className="text-gray-400 text-sm leading-relaxed mb-4 line-clamp-3 font-medium">
+                    <p className="text-slate-400 text-sm leading-relaxed mb-6 line-clamp-3 font-medium">
                         {professor.bio}
                     </p>
 
@@ -42,9 +54,9 @@ const ProfessorCard = ({ professor }) => {
                         {professor.subjects_detail?.map(subject => (
                             <span 
                                 key={subject.id} 
-                                className="text-[10px] bg-blue-500/10 text-blue-300 border border-blue-500/30 px-2 py-1 rounded tracking-tighter uppercase font-mono"
+                                className="text-[10px] bg-purple-500/10 text-purple-300 border border-purple-500/30 px-3 py-1 rounded-full tracking-tighter uppercase font-black"
                             >
-                                {subject.name}
+                                # {subject.name}
                             </span>
                         ))}
                     </div>
@@ -52,121 +64,150 @@ const ProfessorCard = ({ professor }) => {
                     {/* Botón de Perfil */}
                     <div className="card-actions mt-6">
                         <button 
-                            className="btn btn-outline btn-primary btn-sm w-full gap-2 border-white/20 text-white hover:bg-white hover:text-black transition-all"
+                            className="btn btn-outline btn-sm w-full gap-2 border-white/10 text-white hover:bg-white hover:text-black hover:border-white transition-all rounded-xl font-bold uppercase tracking-widest text-[10px]"
                             onClick={() => document.getElementById(`modal_prof_${professor.id}`).showModal()}
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                            </svg>
-                            Ver Trayectoria
+                            <BookOpen className="w-4 h-4" />
+                            Explorar Trayectoria
                         </button>
                     </div>
                 </div>
-            </div>
+            </motion.div>
 
-            {/* MODAL DE TRAYECTORIA (FUERA DE LA CARD PARA EVITAR GHOSTING) */}
-            <dialog id={`modal_prof_${professor.id}`} className="modal modal-bottom sm:modal-middle backdrop-blur-sm">
-                <div className="modal-box bg-[#0c0c1d] border border-white/10 shadow-2xl p-0 overflow-hidden max-w-2xl max-h-[90vh] flex flex-col">
+            {/* MODAL DE TRAYECTORIA */}
+            <dialog id={`modal_prof_${professor.id}`} className="modal modal-bottom sm:modal-middle backdrop-blur-md">
+                <div className="modal-box glass-deep border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] p-0 overflow-hidden max-w-3xl max-h-[90vh] flex flex-col rounded-[2.5rem]">
                     {/* BOTÓN X FIJO */}
                     <button 
-                        className="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 text-white z-50 bg-[#0c0c1d]/80 hover:bg-white/10 backdrop-blur-md border border-white/5"
+                        className="btn btn-sm btn-circle btn-ghost absolute right-6 top-6 text-white z-50 bg-black/40 hover:bg-white/10 backdrop-blur-md border border-white/5"
                         onClick={() => document.getElementById(`modal_prof_${professor.id}`).close()}
                     >✕</button>
                     
                     {/* CONTENEDOR SCROLLABLE */}
-                    <div className="overflow-y-auto px-8 pt-10 pb-16 custom-scroll flex-1">
+                    <div className="overflow-y-auto px-10 pt-12 pb-20 custom-scroll flex-1">
                         {/* Header: Avatar + Nombre al lado */}
-                        <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-10 pb-8 border-b border-white/5">
-                            <div className="w-28 h-28 rounded-2xl border-2 border-teal-500/30 overflow-hidden shadow-2xl bg-slate-800 flex-shrink-0">
-                                <img src={avatar} alt={professor.full_name} className="w-full h-full object-cover" />
-                            </div>
+                        <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-12 pb-10 border-b border-white/5">
+                            <motion.div 
+                                initial={{ scale: 0.8, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className="relative group"
+                            >
+                                <div className="absolute inset-0 bg-teal-500/20 blur-2xl group-hover:bg-purple-500/20 transition-colors"></div>
+                                <div className="relative w-36 h-36 rounded-3xl border-2 border-white/10 overflow-hidden shadow-2xl flex-shrink-0">
+                                    <img src={avatar} alt={professor.full_name} className="w-full h-full object-cover" />
+                                </div>
+                            </motion.div>
                             
                             <div className="text-center md:text-left pt-2">
-                                <h3 className="font-black text-4xl text-white mb-2 tracking-tight">{professor.full_name}</h3>
-                                <p className="text-teal-400 font-bold tracking-widest uppercase text-xs flex items-center justify-center md:justify-start gap-2">
-                                    <span className="w-2 h-2 rounded-full bg-teal-500"></span>
-                                    {professor.title}
-                                </p>
+                                <h3 className="font-black text-5xl text-white mb-2 tracking-tighter leading-none">{professor.full_name}</h3>
+                                <div className="flex flex-col md:flex-row gap-4 mt-4">
+                                    <p className="text-teal-400 font-black tracking-[0.2em] uppercase text-[10px] flex items-center justify-center md:justify-start gap-2 bg-teal-400/5 px-4 py-2 rounded-full border border-teal-400/20">
+                                        <Award className="w-4 h-4"/>
+                                        {professor.title}
+                                    </p>
+                                    <p className="text-slate-400 font-black tracking-[0.2em] uppercase text-[10px] flex items-center justify-center md:justify-start gap-2 bg-white/5 px-4 py-2 rounded-full border border-white/10">
+                                        <MapPin className="w-4 h-4"/>
+                                        Sector Académico Verificado
+                                    </p>
+                                </div>
                             </div>
                         </div>
                         
-                        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
-                            {/* SECCIÓN: PERFIL Y METODOLOGÍA */}
-                            <div className="space-y-8">
-                                <section>
-                                    <h4 className="text-white text-sm font-bold flex items-center gap-2 mb-4 opacity-50 uppercase tracking-widest">
-                                        <div className="w-8 h-[1px] bg-teal-500"></div> Perfil Profesional
-                                    </h4>
-                                    <p className="text-slate-300 leading-relaxed text-sm italic">
+                        <div className="grid grid-cols-1 gap-12">
+                            {/* SECCIÓN: PERFIL */}
+                            <motion.section 
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.2 }}
+                            >
+                                <h4 className="text-white/30 text-[10px] font-black flex items-center gap-2 mb-6 uppercase tracking-[0.3em]">
+                                    <div className="w-10 h-[1px] bg-teal-500"></div> Perfil Profesional
+                                </h4>
+                                <div className="bg-white/5 p-8 rounded-3xl border border-white/5 relative overflow-hidden group">
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/5 blur-3xl rounded-full"></div>
+                                    <p className="text-slate-200 leading-relaxed text-lg font-medium relative z-10 italic">
                                         "{professor.bio}"
                                     </p>
-                                </section>
+                                </div>
+                            </motion.section>
 
-                                <section>
-                                    <h4 className="text-white text-sm font-bold flex items-center gap-2 mb-4 opacity-50 uppercase tracking-widest">
-                                        <div className="w-8 h-[1px] bg-teal-500"></div> Metodología Pedagógica
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                                {/* SECCIÓN: FORMACIÓN */}
+                                <motion.section
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.3 }}
+                                >
+                                    <h4 className="text-white/30 text-[10px] font-black flex items-center gap-2 mb-8 uppercase tracking-[0.3em]">
+                                        <div className="w-10 h-[1px] bg-purple-500"></div> ADN Académico
                                     </h4>
-                                    <div className="flex flex-wrap gap-2">
-                                        {professor.cv_json?.methods?.map((method, idx) => (
-                                            <span key={idx} className="badge badge-outline border-teal-500/30 text-teal-400 p-3 text-xs">
-                                                {method}
-                                            </span>
+                                    <div className="space-y-6 border-l-2 border-white/5 ml-3 pl-8">
+                                        {professor.cv_json?.education?.map((edu, idx) => (
+                                            <div key={idx} className="relative group/edu">
+                                                <div className="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-[#0c0c1d] border-2 border-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.4)] transition-transform group-hover/edu:scale-125"></div>
+                                                <p className="text-[10px] text-purple-400 font-black mb-1 opacity-70 tracking-widest">{edu.year}</p>
+                                                <p className="text-white text-base font-bold tracking-tight">{edu.degree}</p>
+                                                <p className="text-slate-500 text-sm font-medium">{edu.institution}</p>
+                                            </div>
                                         ))}
                                     </div>
-                                </section>
+                                </motion.section>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    {/* SECCIÓN: FORMACIÓN */}
-                                    <section>
-                                        <h4 className="text-white text-sm font-bold flex items-center gap-2 mb-6 opacity-50 uppercase tracking-widest">
-                                            <div className="w-8 h-[1px] bg-teal-500"></div> Formación Académica
-                                        </h4>
-                                        <div className="space-y-4 border-l border-white/10 ml-2 pl-4">
-                                            {professor.cv_json?.education?.map((edu, idx) => (
-                                                <div key={idx} className="relative">
-                                                    <div className="absolute -left-[21px] top-1 w-2 h-2 rounded-full bg-teal-500 shadow-[0_0_10px_rgba(20,184,166,0.6)]"></div>
-                                                    <p className="text-[10px] text-teal-500 font-bold mb-1">{edu.year}</p>
-                                                    <p className="text-white text-sm font-semibold">{edu.degree}</p>
-                                                    <p className="text-slate-500 text-xs">{edu.institution}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </section>
-
-                                    {/* SECCIÓN: EXPERIENCIA */}
-                                    <section>
-                                        <h4 className="text-white text-sm font-bold flex items-center gap-2 mb-6 opacity-50 uppercase tracking-widest">
-                                            <div className="w-8 h-[1px] bg-teal-500"></div> Trayectoria Profesional
-                                        </h4>
-                                        <div className="space-y-4 border-l border-white/10 ml-2 pl-4">
-                                            {professor.cv_json?.experience?.map((exp, idx) => (
-                                                <div key={idx} className="relative">
-                                                    <div className="absolute -left-[21px] top-1 w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.6)]"></div>
-                                                    <p className="text-[10px] text-blue-400 font-bold mb-1">{exp.period}</p>
-                                                    <p className="text-white text-sm font-semibold">{exp.role}</p>
-                                                    <p className="text-slate-500 text-xs">{exp.company}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </section>
-                                </div>
+                                {/* SECCIÓN: EXPERIENCIA */}
+                                <motion.section
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.4 }}
+                                >
+                                    <h4 className="text-white/30 text-[10px] font-black flex items-center gap-2 mb-8 uppercase tracking-[0.3em]">
+                                        <div className="w-10 h-[1px] bg-blue-500"></div> Historial de Misiones
+                                    </h4>
+                                    <div className="space-y-6 border-l-2 border-white/5 ml-3 pl-8">
+                                        {professor.cv_json?.experience?.map((exp, idx) => (
+                                            <div key={idx} className="relative group/exp">
+                                                <div className="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-[#0c0c1d] border-2 border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-transform group-hover/exp:scale-125"></div>
+                                                <p className="text-[10px] text-blue-400 font-black mb-1 opacity-70 tracking-widest">{exp.period}</p>
+                                                <p className="text-white text-base font-bold tracking-tight">{exp.role}</p>
+                                                <p className="text-slate-500 text-sm font-medium">{exp.company}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </motion.section>
                             </div>
+
+                            {/* SECCIÓN: METODOLOGÍA */}
+                            <motion.section
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.5 }}
+                            >
+                                <h4 className="text-white/30 text-[10px] font-black flex items-center gap-2 mb-6 uppercase tracking-[0.3em]">
+                                    <div className="w-10 h-[1px] bg-green-500"></div> Protocolos de Enseñanza
+                                </h4>
+                                <div className="flex flex-wrap gap-3">
+                                    {professor.cv_json?.methods?.map((method, idx) => (
+                                        <span key={idx} className="px-5 py-2 rounded-2xl bg-gradient-to-r from-green-500/10 to-teal-500/10 border border-green-500/20 text-green-400 text-[11px] font-black tracking-wider uppercase shadow-inner">
+                                            {method}
+                                        </span>
+                                    ))}
+                                </div>
+                            </motion.section>
                         </div>
 
-                        <div className="mt-12 pt-6 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
-                            <div className="flex items-center gap-3">
-                                <div className="bg-green-500/10 text-green-400 px-3 py-1 rounded-full text-[10px] font-bold border border-green-500/20 flex items-center gap-2">
-                                    <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
-                                    DOCENTE VERIFICADO
+                        <div className="mt-16 pt-10 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
+                            <div className="flex items-center gap-4">
+                                <div className="bg-green-500/10 text-green-400 px-5 py-2 rounded-full text-[10px] font-black border border-green-500/20 flex items-center gap-3">
+                                    <div className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse"></div>
+                                    IDENTIDAD ACADÉMICA VERIFICADA
                                 </div>
-                                <div className="text-slate-500 text-[10px] font-medium italic">
-                                    Expediente académico validado por Genio Academy
-                                </div>
+                            </div>
+                            <div className="text-slate-500 text-[10px] font-black tracking-widest uppercase opacity-40">
+                                Siglo XXI - Era Estelar
                             </div>
                         </div>
                     </div>
                 </div>
-                <form method="dialog" className="modal-backdrop bg-black/40">
+                <form method="dialog" className="modal-backdrop bg-black/80 backdrop-blur-md">
                     <button>close</button>
                 </form>
             </dialog>
