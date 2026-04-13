@@ -60,7 +60,7 @@ function App() {
               {/* Rutas Privadas y de Usuario (Protegidas por PrivateRoute) */}
               <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
               <Route path="/player/:courseId" element={<PrivateRoute><CoursePlayer /></PrivateRoute>} />
-              <Route path="/claustro" element={<PrivateRoute><Claustro /></PrivateRoute>} />
+              <Route path="/claustro" element={<Claustro />} />
               
               <Route path="*" element={
                 <div className="flex flex-col items-center justify-center min-h-[60vh]">
