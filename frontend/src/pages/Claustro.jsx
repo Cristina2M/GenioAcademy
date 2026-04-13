@@ -52,7 +52,7 @@ const Claustro = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#050510] text-white pt-24 pb-12 px-4 md:px-8">
+        <div className="min-h-screen pt-24 pb-12 px-4 md:px-8">
             {/* Header Adaptativo */}
             <div className="max-w-7xl mx-auto text-center mb-16">
                 {!user ? (
