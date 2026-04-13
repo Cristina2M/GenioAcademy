@@ -90,20 +90,23 @@ Conexión visual de los datos para que el estudiante interactúe con la platafor
   * Desarrollo del Componente `CoursePlayer.jsx` como entorno de vídeo estilo Glassmorphism. *(Completado)*
   * Gestión del estado global mediante `AuthContext` actualizando progreso y avatares. *(Completado)*
 
-#### 🤖 HITO IV: Inteligencia Artificial Local (Tutor Virtual)
-El valor diferencial: un asistente integrado que respeta la privacidad corriendo en el propio servidor.
+#### 🤖 HITO IV: Inteligencia Artificial (Tutor Virtual Socrático)
+El valor diferencial: un asistente llamado "Astro" integrado en el aula que guía a los alumnos usando el método socrático (respondiendo y guiando sin dar la respuesta final).
 
-* **Fase 11: Despliegue de Infraestructura IA** (🔴 Pendiente)
-  * Añadir el servicio Ollama a la red de contenedores de Docker.
-  * Descarga y configuración del modelo de lenguaje (LLM) optimizado para hardware local.
+* **Fase 11: Despliegue de Infraestructura IA en la Nube (Groq)** (✅ Completado)
+  * Registro e integración con **Groq Cloud** para utilizar modelos ultra-rápidos (LPU).
+  * Uso del modelo oficial `llama-3.1-8b-instant` para procesar el lenguaje natural.
+  * *Nota Arquitectónica:* Se descartó Ollama local a favor de Groq por cuestiones de rendimiento del servidor y extrema velocidad de respuesta en los chats.
 
-* **Fase 12: Construcción del "Puente IA" (Backend Bridge)** (🔴 Pendiente)
-  * Creación de una clase en Python/Django que se comunique mediante HTTP con el contenedor Ollama.
-  * Prompt Engineering Contextual: Inyectar el nivel del alumno en el prompt para que la IA adapte la dificultad de su respuesta.
+* **Fase 12: Construcción del "Puente IA" (Backend Bridge)** (✅ Completado)
+  * Creación de una aplicación Django (`ai/views.py`) que actúa de intermediario y protege la clave secreta de Groq.
+  * Prompt Engineering Contextual: La IA recibe por detrás qué asignatura y tema está estudiando el alumno para dar ejemplos precisos (ej. Gravedad en Física).
+  * Bloqueo de seguridad: El endpoint comprueba que el alumno tenga una suscripción activa (Plan Velocidad Luz o superior) o devuelve un error `403 Forbidden`.
 
-* **Fase 13: Interfaz del Asistente Virtual (Chatbot UI)** (🔴 Pendiente)
-  * Desarrollo de la Burbuja Flotante en React para consultas en cualquier pantalla.
-  * Gestión del historial de la conversación y renderizado del texto en tiempo real.
+* **Fase 13: Interfaz del Asistente Virtual (Chatbot UI)** (✅ Completado)
+  * Construcción del panel interactivo `AIChatPanel.jsx` estilo Glassmorphism incrustado en el reproductor de cursos.
+  * Personalización del chat conectándose con el contexto: carga dinámicamente el búho "Astro" y el avatar del piloto que ha seleccionado el alumno.
+  * Gestión de estado de carga, animaciones de "Pensando..." y autoscroll.
 
 #### 🚀 HITO V: Calidad, Contenido y Cierre Técnico
 Afinación del proyecto para su entrega, exposición y uso real.

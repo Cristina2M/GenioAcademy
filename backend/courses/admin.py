@@ -23,8 +23,8 @@ class CourseAdmin(admin.ModelAdmin):
 # Mostramos un resumen eficaz de qué lecciones están protegidas bajo suscripción Premium
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ('title', 'course', 'is_premium')
-    list_filter = ('is_premium', 'course') # Útil para localizar fugas de contenido público 
+    list_display = ('title', 'course')
+    list_filter = ('course',) # Útil para filtrar por curso
 
 # Personalización para facilitar la edición de ejercicios
 @admin.register(Exercise)

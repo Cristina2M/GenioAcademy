@@ -321,40 +321,6 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* ── TARJETA DEL BÚHO IA ──
-                Comportamiento según el plan de suscripción:
-                - Plan 1 (Órbita Base): Bloqueado, muestra candado y enlace para subir de plan
-                - Plan 2 o 3 (Luz / Gusano): Activo pero marcado como "Próximamente" (Hito IV)
-            */}
-            {hasAIAccess ? (
-              // PLAN 2 O 3: El Búho está incluido en su plan, pero aún no está listo
-              <div className="rounded-2xl bg-gradient-to-br from-purple-900/50 to-pink-900/50 border border-purple-500/30 p-6 flex flex-col items-center text-center relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-pink-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform"></div>
-                <h3 className="font-black text-xl text-white mb-2 relative z-10">¿Perdido en el Espacio?</h3>
-                <p className="text-sm text-slate-300 mb-6 relative z-10">La Búho IA estará disponible muy pronto para guiarte sin darte la respuesta directa.</p>
-                <button
-                  disabled
-                  className="btn bg-white/10 text-white/50 border border-white/10 w-full font-bold relative z-10 cursor-not-allowed"
-                >
-                  🦉 Búho IA — Próximamente
-                </button>
-              </div>
-            ) : (
-              // PLAN 1: El Búho no está incluido, mostramos el candado con invitación a subir de plan
-              <div className="rounded-2xl bg-slate-900/60 border border-slate-700/50 p-6 flex flex-col items-center text-center relative overflow-hidden">
-                <Lock className="w-10 h-10 text-slate-500 mb-3" />
-                <h3 className="font-black text-lg text-slate-300 mb-1">Búho IA</h3>
-                <p className="text-sm text-slate-500 mb-5">
-                  El asistente de IA está disponible desde el Plan <strong className="text-pink-300">Velocidad Luz</strong>.
-                </p>
-                <Link
-                  to="/register"
-                  className="btn btn-sm bg-gradient-to-r from-pink-500 to-purple-600 text-white border-none w-full rounded-xl shadow-[0_0_15px_rgba(236,72,153,0.3)] font-bold"
-                >
-                  <Rocket className="w-4 h-4 mr-1" /> Ver Planes
-                </Link>
-              </div>
-            )}
           </div>
         </div>
       </div>
