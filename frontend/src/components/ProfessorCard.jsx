@@ -66,21 +66,27 @@ const ProfessorCard = ({ professor }) => {
 
             {/* MODAL DE TRAYECTORIA */}
             <dialog id={`modal_prof_${professor.id}`} className="modal modal-bottom sm:modal-middle backdrop-blur-md">
-                <div className="modal-box bg-slate-900 border border-white/10 shadow-2xl p-0 overflow-hidden max-w-2xl">
-                    <div className="h-32 bg-gradient-to-r from-purple-600 to-blue-600 relative">
-                        <button 
-                            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-white"
-                            onClick={() => document.getElementById(`modal_prof_${professor.id}`).close()}
-                        >✕</button>
-                    </div>
+                <div className="modal-box bg-[#0c0c1d] border border-white/10 shadow-2xl p-0 overflow-hidden max-w-2xl">
+                    <button 
+                        className="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 text-white z-50 hover:bg-white/10"
+                        onClick={() => document.getElementById(`modal_prof_${professor.id}`).close()}
+                    >✕</button>
                     
-                    <div className="px-8 pb-8 -mt-12 relative z-10">
-                        <div className="w-24 h-24 rounded-2xl border-4 border-slate-900 overflow-hidden shadow-xl mb-4 bg-slate-800">
-                             <img src={avatar} alt={professor.full_name} className="w-full h-full object-cover" />
+                    <div className="px-8 pt-10 pb-16 relative z-10">
+                        {/* Header: Avatar + Nombre al lado */}
+                        <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-10 pb-8 border-b border-white/5">
+                            <div className="w-28 h-28 rounded-2xl border-2 border-teal-500/30 overflow-hidden shadow-2xl bg-slate-800 flex-shrink-0">
+                                <img src={avatar} alt={professor.full_name} className="w-full h-full object-cover" />
+                            </div>
+                            
+                            <div className="text-center md:text-left pt-2">
+                                <h3 className="font-black text-4xl text-white mb-2 tracking-tight">{professor.full_name}</h3>
+                                <p className="text-teal-400 font-bold tracking-widest uppercase text-xs flex items-center justify-center md:justify-start gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-teal-500"></span>
+                                    {professor.title}
+                                </p>
+                            </div>
                         </div>
-                        
-                        <h3 className="font-black text-3xl text-white mb-1">{professor.full_name}</h3>
-                        <p className="text-teal-400 font-bold tracking-wide uppercase text-xs mb-8">{professor.title}</p>
                         
                         <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
                             {/* SECCIÓN: PERFIL Y METODOLOGÍA */}
