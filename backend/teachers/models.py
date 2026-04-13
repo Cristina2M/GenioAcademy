@@ -47,6 +47,14 @@ class Professor(models.Model):
         help_text='Si está marcado, el profesor aparecerá en la landing page pública para los padres.'
     )
 
+    # Nuevo campo para el Currículum Estructurado
+    cv_json = models.JSONField(
+        default=dict, 
+        blank=True, 
+        verbose_name='Datos del Currículum',
+        help_text='Almacena formación, experiencia y habilidades en formato JSON.'
+    )
+
     class Meta:
         verbose_name = 'Profesor'
         verbose_name_plural = 'Profesores'
