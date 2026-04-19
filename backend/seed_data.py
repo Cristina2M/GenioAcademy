@@ -16,4 +16,13 @@ cat_fisica = Category.objects.create(name="Leyes de la Física", description="En
 nivel1_fisica = KnowledgeLevel.objects.create(category=cat_fisica, name="Leyes de Newton", order=1)
 Course.objects.create(knowledge_level=nivel1_fisica, title="Fuerza y Movimiento", description="Descubre cómo se propulsan los cohetes.")
 
+# Biología y Geología
+cat_bio = Category.objects.create(name="Biología y Geología", description="El estudio de la vida en nuestro planeta y la composición de los astros.")
+nivel1_bio = KnowledgeLevel.objects.create(category=cat_bio, name="Planeta Tierra", order=1)
+nivel2_bio = KnowledgeLevel.objects.create(category=cat_bio, name="Genética Espacial", order=2)
+Course.objects.create(knowledge_level=nivel1_bio, title="Estructura de la Tierra", description="Minerales, rocas y placas tectónicas.")
+Course.objects.create(knowledge_level=nivel1_bio, title="La Biosfera", description="Los ecosistemas y cómo sustentan la vida.")
+Course.objects.create(knowledge_level=nivel2_bio, title="ADN Estelar", description="Los bloques constructores de las especies alienígenas y humanas.")
+Course.objects.create(knowledge_level=nivel2_bio, title="Selección Natural", description="Adaptación a entornos hostiles en el espacio.")
+
 print("Base de datos cósmica poblada con éxito.")
