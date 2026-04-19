@@ -34,4 +34,13 @@ Course.objects.create(knowledge_level=nivel1_historia, title="El Imperio Romano"
 Course.objects.create(knowledge_level=nivel2_historia, title="La Revolución Industrial", description="Máquinas de vapor y cambios sociales.")
 Course.objects.create(knowledge_level=nivel2_historia, title="Descubrimientos Geográficos", description="La ruta de las especias y el nuevo mundo.")
 
+# Lengua y Literatura
+cat_lengua = Category.objects.create(name="Lengua y Literatura", description="Domina el arte de la comunicación y las historias de la humanidad.")
+nivel1_lengua = KnowledgeLevel.objects.create(category=cat_lengua, name="Gramática Vital", order=1)
+nivel2_lengua = KnowledgeLevel.objects.create(category=cat_lengua, name="Análisis Sintáctico", order=2)
+Course.objects.create(knowledge_level=nivel1_lengua, title="El Sustantivo y Adjetivo", description="Identifica las piezas clave de la oración.")
+Course.objects.create(knowledge_level=nivel1_lengua, title="Acentuación Especial", description="No dejes que tu mensaje se pierda en el cosmos por una tilde.")
+Course.objects.create(knowledge_level=nivel2_lengua, title="Sujeto y Predicado", description="Analiza el núcleo de la comunicación.")
+Course.objects.create(knowledge_level=nivel2_lengua, title="Complementos Verbales", description="Cazadores de objetos directos e indirectos.")
+
 print("Base de datos cósmica poblada con éxito.")
