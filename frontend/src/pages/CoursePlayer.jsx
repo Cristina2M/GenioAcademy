@@ -230,8 +230,14 @@ export default function CoursePlayer() {
             {activeTab === 'theory' ? (
               // Pestaña de teoría: muestra el contenido de la lección
               <div className="prose prose-invert prose-p:text-slate-300 prose-headings:text-white max-w-none">
-                <p>{activeLesson?.content || course.description || 'Esta es la información teórica analizada en los registros. Sumérgete en estos conocimientos para afianzar tus competencias lógicas.'}</p>
-                <p>Aquí se volcarán todos los apuntes del profesor con fórmulas matemáticas y ejercicios interactivos.</p>
+                {activeLesson?.content ? (
+                  <div dangerouslySetInnerHTML={{ __html: activeLesson.content }} />
+                ) : (
+                  <>
+                    <p>{course.description || 'Esta es la información teórica analizada en los registros. Sumérgete en estos conocimientos para afianzar tus competencias lógicas.'}</p>
+                    <p>Aquí se volcarán todos los apuntes del profesor con fórmulas matemáticas y ejercicios interactivos.</p>
+                  </>
+                )}
               </div>
             ) : (
               // Pestaña del simulador: muestra el componente de preguntas
