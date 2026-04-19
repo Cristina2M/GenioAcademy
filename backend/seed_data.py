@@ -19,8 +19,14 @@ Course.objects.create(knowledge_level=nivel2_mates, title="Polinomios Estelares"
 # Leyes de la Física
 cat_fisica = Category.objects.create(name="Leyes de la Física", description="Entiende cómo se comportan los planetas y la materia.")
 nivel1_fisica = KnowledgeLevel.objects.create(category=cat_fisica, name="Leyes de Newton", order=1)
+nivel2_fisica = KnowledgeLevel.objects.create(category=cat_fisica, name="Física Moderna", order=2)
 Course.objects.create(knowledge_level=nivel1_fisica, title="Fuerza y Movimiento", description="Descubre cómo se propulsan los cohetes.")
 Course.objects.create(knowledge_level=nivel1_fisica, title="Leyes de la Termodinámica", description="La energía no se crea ni se destruye.")
+Course.objects.create(knowledge_level=nivel1_fisica, title="Electromagnetismo Básico", description="Campos magnéticos de los planetas alienígenas.")
+Course.objects.create(knowledge_level=nivel1_fisica, title="Cinemática", description="Estudio del movimiento sideral.")
+Course.objects.create(knowledge_level=nivel2_fisica, title="Relatividad Básica", description="Viaja a velocidades cercanas a la luz.")
+Course.objects.create(knowledge_level=nivel2_fisica, title="Óptica Espacial", description="Refracción y lentes de telescopios interestelares.")
+Course.objects.create(knowledge_level=nivel2_fisica, title="Dinámica de Fluidos", description="Comportamiento del plasma y gases nebulosos.")
 
 # Biología y Geología
 cat_bio = Category.objects.create(name="Biología y Geología", description="El estudio de la vida en nuestro planeta y la composición de los astros.")
