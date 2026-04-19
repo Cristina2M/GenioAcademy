@@ -41,6 +41,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['experience_points'] = user.experience_points
         token['selected_avatar'] = user.selected_avatar
         token['subscription_level'] = user.subscription_level  # Plan 1, 2 o 3
+        token['is_teacher'] = hasattr(user, 'professor_profile')
 
         return token
 

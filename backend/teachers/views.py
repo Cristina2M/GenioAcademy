@@ -18,10 +18,22 @@ class ProfessorViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        qs = Professor.objects.filter(is_active=True)
+
+        # Filtro opcional por course_id
+        course_id = self.request.query_params.get('course_id')
+        if course_id:
+            from courses.models import Course
+            try:
+                course = Course.objects.get(id=course_id)
+                qs = qs.filter(subjects=course.knowledge_level.category)
+            except Course.DoesNotExist:
+                pass
+
         if user.is_authenticated:
-            return Professor.objects.filter(is_active=True)
-        # Si no está logueado, solo retornamos los destacados para la Home
-        return Professor.objects.filter(is_active=True, is_featured=True)
+            return qs
+        # Si no esta logueado, solo retornamos los destacados para la Home
+        return qs.filter(is_featured=True)
 
 from rest_framework import status
 from rest_framework.decorators import action
