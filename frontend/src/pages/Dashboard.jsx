@@ -23,11 +23,11 @@ import { getStudentAvatar, avatarDatabase } from '../utils/avatarUtils';
 export default function Dashboard() {
   // Sacamos del contexto global los datos del alumno conectado y la función para cambiar avatar
   const { user, updateAvatar } = useContext(AuthContext);
-  const [isUpdatingAvatar, setIsUpdatingAvatar] = useState(false);
+  const [actualizandoAvatar, setActualizandoAvatar] = useState(false);
 
   // El curso que le sugerimos al alumno (obtenido del backend)
-  const [activeCourse, setActiveCourse] = useState(null);
-  const [loadingCourse, setLoadingCourse] = useState(true);
+  const [cursoSugerido, setCursoSugerido] = useState(null);
+  const [cargandoCurso, setCargandoCurso] = useState(true);
 
   // ─────────────────────────────────────────────
   // CÁLCULOS DE GAMIFICACIÓN (Barra de Progreso XP)
@@ -35,22 +35,22 @@ export default function Dashboard() {
   // El sistema de niveles es lineal: cada nivel cuesta 500 XP más que el anterior.
   // Ejemplo: Nivel 1→2 = 500 XP, Nivel 2→3 = 1000 XP acumulados totales, etc.
 
-  const currentXP = user?.experience_points || 0;
-  const currentLevel = user?.current_student_level || 1;
-  const currentAvatarId = user?.selected_avatar || 'buho1';
+  const xpActual = user?.experience_points || 0;
+  const nivelActual = user?.current_student_level || 1;
+  const idAvatarActual = user?.selected_avatar || 'buho1';
 
   // XP mínimo necesario para estar en el nivel actual (base)
-  const xpBaseForCurrentLevel = (currentLevel - 1) * 500;
+  const xpBaseNivelActual = (nivelActual - 1) * 500;
   // XP mínimo necesario para subir AL SIGUIENTE nivel
-  const xpForNextLevel = currentLevel * 500;
+  const xpParaSiguienteNivel = nivelActual * 500;
 
   // Cuánto XP ha ganado el alumno DENTRO de su nivel actual (no el total)
-  const xpEarnedInLevel = Math.max(0, currentXP - xpBaseForCurrentLevel);
+  const xpGanadoEnNivel = Math.max(0, xpActual - xpBaseNivelActual);
   // Cuánto XP necesita ganar para subir (siempre 500 con nuestra fórmula)
-  const xpRequiredForLevel = xpForNextLevel - xpBaseForCurrentLevel;
+  const xpRequeridoPorNivel = xpParaSiguienteNivel - xpBaseNivelActual;
 
   // Porcentaje de relleno de la barra (de 0 a 100)
-  const progressPercentage = Math.round((xpEarnedInLevel / xpRequiredForLevel) * 100);
+  const porcentajeProgreso = Math.round((xpGanadoEnNivel / xpRequeridoPorNivel) * 100);
 
   // ─────────────────────────────────────────────
   // PLAN DE SUSCRIPCIÓN DEL ALUMNO
@@ -58,65 +58,65 @@ export default function Dashboard() {
   // El plan viene dentro del JWT (token de sesión).
   // Plan 1 = Órbita Base, Plan 2 = Velocidad Luz, Plan 3 = Agujero de Gusano.
   // Usamos esto para decidir qué funciones mostrar o bloquear.
-  const subscriptionLevel = user?.subscription_level || 1;
-  const hasAIAccess = subscriptionLevel >= 2; // Astro requiere Plan 2 o superior
+  const nivelSuscripcion = user?.subscription_level || 1;
+  const tieneAccesoIA = nivelSuscripcion >= 2; // Astro requiere Plan 2 o superior
 
   // ─────────────────────────────────────────────
   // OBTENER EL CURSO SUGERIDO AL ARRANCAR
   // ─────────────────────────────────────────────
   useEffect(() => {
-    const fetchCourses = async () => {
+    const cargarCursos = async () => {
       try {
         // Pedimos el árbol de categorías al backend.
         // Cada categoría tiene niveles, y cada nivel tiene cursos con "is_locked" e "is_completed".
-        const response = await axiosInstance.get('courses/categories/');
-        const categories = response.data;
+        const respuesta = await axiosInstance.get('courses/categories/');
+        const categorias = respuesta.data;
 
-        let foundUnlockedCourse = null; // El primero que esté desbloqueado Y sin completar
-        let lastSeenCourse = null;       // El último que hayamos visto, por si todo está completado
+        let cursoDesbloquedoencontrado = null; // El primero que esté desbloqueado Y sin completar
+        let ultimoCursoVisto = null;            // El último que hayamos visto, por si todo está completado
 
         // Recorremos el árbol: categoría → nivel → cursos
-        for (const cat of categories) {
-          for (const level of cat.knowledge_levels) {
+        for (const cat of categorias) {
+          for (const nivel of cat.knowledge_levels) {
             // Solo miramos niveles que el alumno puede acceder (no bloqueados)
-            if (!level.is_locked && level.courses && level.courses.length > 0) {
-              for (const c of level.courses) {
-                lastSeenCourse = c;
-                if (!c.is_completed) {
+            if (!nivel.is_locked && nivel.courses && nivel.courses.length > 0) {
+              for (const curso of nivel.courses) {
+                ultimoCursoVisto = curso;
+                if (!curso.is_completed) {
                   // ¡Encontramos un curso pendiente! Este es el que sugerimos.
-                  foundUnlockedCourse = c;
+                  cursoDesbloquedoencontrado = curso;
                   break;
                 }
               }
             }
-            if (foundUnlockedCourse) break;
+            if (cursoDesbloquedoencontrado) break;
           }
-          if (foundUnlockedCourse) break;
+          if (cursoDesbloquedoencontrado) break;
         }
 
-        if (foundUnlockedCourse) {
-          setActiveCourse(foundUnlockedCourse);
-        } else if (lastSeenCourse) {
+        if (cursoDesbloquedoencontrado) {
+          setCursoSugerido(cursoDesbloquedoencontrado);
+        } else if (ultimoCursoVisto) {
           // Si el alumno ha completado todos los cursos disponibles,
           // le sugerimos el último para que pueda repasar.
-          setActiveCourse(lastSeenCourse);
+          setCursoSugerido(ultimoCursoVisto);
         }
       } catch (error) {
         console.error('Error al obtener cursos sugeridos', error);
       } finally {
-        setLoadingCourse(false);
+        setCargandoCurso(false);
       }
     };
 
-    fetchCourses();
+    cargarCursos();
   }, []);
 
   // Función que se ejecuta cuando el alumno hace clic en un avatar de la galería
-  const handleAvatarSelect = async (avatarId) => {
-    setIsUpdatingAvatar(true);
-    await updateAvatar(avatarId); // Llama al backend para guardar el cambio
-    setIsUpdatingAvatar(false);
-    document.getElementById('avatar_modal').close(); // Cierra el modal
+  const seleccionarAvatar = async (idAvatar) => {
+    setActualizandoAvatar(true);
+    await updateAvatar(idAvatar); // Llama al backend para guardar el cambio
+    setActualizandoAvatar(false);
+    document.getElementById('avatar_modal').close(); // Cierra el modal de galería
   };
 
   return (
@@ -183,21 +183,21 @@ export default function Dashboard() {
                   </span>
                   {/* Muestra el XP ganado en este nivel vs el necesario para subir */}
                   <span className="text-sm font-bold text-white">
-                    {xpEarnedInLevel} <span className="text-slate-500 font-medium">/ {xpRequiredForLevel} XP</span>
+                    {xpGanadoEnNivel} <span className="text-slate-500 font-medium">/ {xpRequeridoPorNivel} XP</span>
                   </span>
                 </div>
                 {/* Barra visual de progreso */}
                 <div className="h-3 w-full bg-slate-900 rounded-full overflow-hidden shrink-0 shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)]">
                   <div
                     className="h-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 relative transition-all duration-1000 ease-out"
-                    style={{ width: `${progressPercentage}%` }}
+                    style={{ width: `${porcentajeProgreso}%` }}
                   >
                     {/* Destello animado en el extremo derecho de la barra */}
                     <div className="absolute top-0 right-0 bottom-0 w-10 bg-gradient-to-r from-transparent to-white/30 animate-[pulse_2s_infinite]"></div>
                   </div>
                 </div>
                 <p className="text-right text-xs text-slate-500 mt-2 font-semibold">
-                  Te faltan {xpRequiredForLevel - xpEarnedInLevel} XP para ascender al Nivel {currentLevel + 1}.
+                  Te faltan {xpRequeridoPorNivel - xpGanadoEnNivel} XP para ascender al Nivel {nivelActual + 1}.
                 </p>
               </div>
             </div>
@@ -223,35 +223,35 @@ export default function Dashboard() {
               </div>
 
               <h3 className="text-cyan-400 font-bold mb-1 uppercase tracking-widest text-xs flex items-center gap-2">
-                Misión Sugerida {loadingCourse && <span className="loading loading-spinner loading-xs"></span>}
+                Misión Sugerida {cargandoCurso && <span className="loading loading-spinner loading-xs"></span>}
               </h3>
 
               {/* Título del curso (o mensaje si no hay ninguno disponible) */}
               <h2 className="text-white text-xl font-bold mb-4">
-                {activeCourse ? activeCourse.title : 'Inscríbete en una Misión'}
+                {cursoSugerido ? cursoSugerido.title : 'Inscríbete en una Misión'}
               </h2>
 
               {/* Barra de progreso del curso (verde = completado, azul = en progreso) */}
-              {activeCourse && (
+              {cursoSugerido && (
                 <div className="flex flex-col gap-2 mb-6 relative z-10">
                   <div className="flex justify-between text-xs text-slate-300">
                     <span>Estado Misión</span>
-                    <span>{activeCourse.is_completed ? 'Completada ✔' : '0%'}</span>
+                    <span>{cursoSugerido.is_completed ? 'Completada ✔' : '0%'}</span>
                   </div>
                   <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-white/10">
-                    <div className={`h-full ${activeCourse.is_completed ? 'bg-green-500 w-full' : 'bg-gradient-to-r from-cyan-500 to-pink-500 w-[0%]'}`}></div>
+                    <div className={`h-full ${cursoSugerido.is_completed ? 'bg-green-500 w-full' : 'bg-gradient-to-r from-cyan-500 to-pink-500 w-[0%]'}`}></div>
                   </div>
                 </div>
               )}
 
               {/* Botón de acción: va al curso o al catálogo si no hay curso sugerido */}
               <div className="flex gap-4">
-                {activeCourse ? (
+                {cursoSugerido ? (
                   <Link
-                    to={`/player/${activeCourse.id}`}
-                    className={`btn ${activeCourse.is_completed ? 'bg-slate-700 hover:bg-slate-600 text-white' : 'bg-cyan-500 hover:bg-cyan-400 text-slate-900'} border-none w-full shadow-[0_0_15px_rgba(34,211,238,0.4)] font-bold relative z-10 transition-transform`}
+                    to={`/player/${cursoSugerido.id}`}
+                    className={`btn ${cursoSugerido.is_completed ? 'bg-slate-700 hover:bg-slate-600 text-white' : 'bg-cyan-500 hover:bg-cyan-400 text-slate-900'} border-none w-full shadow-[0_0_15px_rgba(34,211,238,0.4)] font-bold relative z-10 transition-transform`}
                   >
-                    {activeCourse.is_completed ? 'Repasar Entrenamiento' : 'Entrar a la Academia'} <Play className="w-4 h-4 ml-1" />
+                    {cursoSugerido.is_completed ? 'Repasar Entrenamiento' : 'Entrar a la Academia'} <Play className="w-4 h-4 ml-1" />
                   </Link>
                 ) : (
                   <Link to="/courses" className="btn btn-outline border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-slate-900 w-full relative z-10">
@@ -322,9 +322,9 @@ export default function Dashboard() {
             </div>
 
             {/* TARJETA: CONSULTORIO GALÁCTICO (CLAUSTRO) */}
-            <div className={`card bg-slate-800/40 backdrop-blur-sm border ${subscriptionLevel >= 3 ? 'border-teal-500/30 hover:border-teal-400' : 'border-white/10'} shadow-lg relative overflow-hidden group transition-all`}>
+            <div className={`card bg-slate-800/40 backdrop-blur-sm border ${nivelSuscripcion >= 3 ? 'border-teal-500/30 hover:border-teal-400' : 'border-white/10'} shadow-lg relative overflow-hidden group transition-all`}>
               {/* Overlay para niveles restringidos (1 y 2) */}
-              {subscriptionLevel < 3 && (
+              {nivelSuscripcion < 3 && (
                 <div className="absolute inset-0 bg-slate-950/80 z-20 flex flex-col items-center justify-center p-6 text-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-md">
                    <Lock className="w-8 h-8 text-amber-500 mb-2" />
                    <p className="text-white font-bold text-sm tracking-tight">Consultorio Galáctico restringido</p>
@@ -334,14 +334,14 @@ export default function Dashboard() {
               )}
 
               <div className="card-body p-6">
-                <h3 className={`font-bold ${subscriptionLevel >= 3 ? 'text-teal-400' : 'text-slate-500'} mb-2 flex items-center gap-2 tracking-wider uppercase text-xs`}>
+                <h3 className={`font-bold ${nivelSuscripcion >= 3 ? 'text-teal-400' : 'text-slate-500'} mb-2 flex items-center gap-2 tracking-wider uppercase text-xs`}>
                   <GraduationCap className="w-5 h-5"/> Consultorio Galáctico
                 </h3>
                 <p className="text-white text-lg font-black leading-tight">Biblioteca de Maestros</p>
                 <p className="text-slate-400 text-xs mt-2 leading-relaxed">Consulta el currículum de todos nuestros expertos y resuelve tus dudas académicas.</p>
                 
                 <div className="mt-6">
-                  {subscriptionLevel >= 3 ? (
+                  {nivelSuscripcion >= 3 ? (
                     <Link to="/dashboard/claustro" className="btn btn-sm btn-block bg-teal-600 hover:bg-teal-500 border-none text-white font-bold flex items-center gap-2">
                        Acceder al Claustro <Play className="w-3 h-3" />
                     </Link>
@@ -380,34 +380,34 @@ export default function Dashboard() {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {avatarDatabase.map((avatar) => {
               // ¿Puede el alumno usar este búho? Depende de su nivel RPG actual.
-              const isUnlocked = currentLevel >= avatar.requiredLevel;
+              const estaDesbloqueado = nivelActual >= avatar.requiredLevel;
               // ¿Es este el búho que tiene equipado ahora mismo?
-              const isSelected = currentAvatarId === avatar.id;
+              const estaSeleccionado = idAvatarActual === avatar.id;
 
               return (
                 <div
                   key={avatar.id}
                   className={`relative flex flex-col items-center p-3 rounded-2xl border transition-all duration-300 ${
-                    isSelected
+                    estaSeleccionado
                       ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_15px_rgba(251,191,36,0.3)] scale-105 z-10'
-                      : isUnlocked
+                      : estaDesbloqueado
                       ? 'border-white/10 bg-slate-800/50 hover:bg-slate-700/50 hover:border-cyan-500/50 cursor-pointer'
                       : 'border-transparent bg-slate-900/50 opacity-80 cursor-not-allowed'
                   }`}
-                  onClick={() => isUnlocked && handleAvatarSelect(avatar.id)}
+                  onClick={() => estaDesbloqueado && seleccionarAvatar(avatar.id)}
                 >
                   {/* Imagen del búho (en gris si está bloqueado) */}
                   <div
-                    className={`relative w-20 h-20 mb-3 ${!isUnlocked ? 'tooltip tooltip-bottom' : ''}`}
-                    data-tip={!isUnlocked ? `Alcanza el Nivel ${avatar.requiredLevel} para desbloquear` : ''}
+                    className={`relative w-20 h-20 mb-3 ${!estaDesbloqueado ? 'tooltip tooltip-bottom' : ''}`}
+                    data-tip={!estaDesbloqueado ? `Alcanza el Nivel ${avatar.requiredLevel} para desbloquear` : ''}
                   >
                     <img
                       src={avatar.src}
                       alt={avatar.name}
-                      className={`w-full h-full object-contain drop-shadow-lg transition-all ${!isUnlocked ? 'grayscale-[100%] brightness-[0.2] contrast-200' : ''}`}
+                      className={`w-full h-full object-contain drop-shadow-lg transition-all ${!estaDesbloqueado ? 'grayscale-[100%] brightness-[0.2] contrast-200' : ''}`}
                     />
                     {/* Candado encima del búho si está bloqueado */}
-                    {!isUnlocked && (
+                    {!estaDesbloqueado && (
                       <div className="absolute inset-0 flex items-center justify-center">
                         <Lock className="w-8 h-8 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" />
                       </div>
