@@ -23,6 +23,7 @@ import LessonQuiz from '../components/LessonQuiz';
 import AIChatPanel from '../components/AIChatPanel';
 import LivesPanel from '../components/LivesPanel';
 import AuthContext from '../context/AuthContext';
+import TutoringModal from '../components/TutoringModal';
 
 export default function CoursePlayer() {
   // Sacamos el ID del curso de la URL (ej: /player/3 → courseId = "3")
@@ -40,20 +41,23 @@ export default function CoursePlayer() {
   const [activeTab, setActiveTab] = useState('theory');             // Pestaña activa: 'theory' o 'quiz'
   const [passedLessons, setPassedLessons] = useState([]);           // IDs de lecciones superadas en esta sesión
 
-  // Estados del modal de victoria (que aparece al completar)
   const [showVictoryModal, setShowVictoryModal] = useState(false);
   const [victoryData, setVictoryData] = useState(null);
   const [claiming, setClaiming] = useState(false);
+
+  // Modal para tutorías
+  const [showTutoringModal, setShowTutoringModal] = useState(false);
 
   // Estado del modal anti-farmeo (aparece si alguien intenta completar un curso ya completado)
   const [errorModal, setErrorModal] = useState('');
 
   // ─────────────────────────────────────────────
-  // PLAN DEL ALUMNO: para mostrar/ocultar Astro
+  // PLAN DEL ALUMNO: para mostrar/ocultar Astro y Tutorías
   // ─────────────────────────────────────────────
-  // Plan 1 = Órbita Base (sin IA), Plan 2+ = acceso a Astro cuando esté listo
+  // Plan 1 = Órbita Base (sin IA), Plan 2 = IA, Plan 3 = Tutorías
   const subscriptionLevel = user?.subscription_level || 1;
   const hasAIAccess = subscriptionLevel >= 2;
+  const hasTutoringAccess = subscriptionLevel >= 3;
 
   // ─────────────────────────────────────────────
   // FUNCIÓN: Marcar una lección como superada
@@ -336,6 +340,24 @@ export default function CoursePlayer() {
                si está en Game Over con Plan 3, activa los botones de minijuego. */}
           <LivesPanel />
 
+          {/* ── BOTÓN DE SOLICITAR TUTORÍA (NIVEL 3) ── */}
+          <div className="mt-4">
+            {hasTutoringAccess ? (
+              <button 
+                onClick={() => setShowTutoringModal(true)}
+                className="btn w-full bg-indigo-500 hover:bg-indigo-400 text-white font-bold border-none shadow-[0_0_15px_rgba(99,102,241,0.4)]"
+              >
+                Solicitar Tutoría en Directo
+              </button>
+            ) : (
+              <div className="bg-slate-800/40 p-3 rounded-lg text-center border border-slate-700">
+                <p className="text-xs text-slate-500 flex items-center justify-center gap-1">
+                  <Lock className="w-3 h-3" /> Tutorías con profesores (Nivel 3)
+                </p>
+              </div>
+            )}
+          </div>
+
         </div>
       </div>
     </div>
@@ -406,6 +428,15 @@ export default function CoursePlayer() {
             </button>
           </div>
         </div>
+      )}
+
+      {/* MODAL DE TUTORÍA */}
+      {showTutoringModal && (
+        <TutoringModal 
+          courseId={courseId} 
+          courseTitle={course.title}
+          onClose={() => setShowTutoringModal(false)} 
+        />
       )}
 
     </div>

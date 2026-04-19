@@ -5,14 +5,16 @@ import AuthContext from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import StudentCardModal from '../components/StudentCardModal';
+import JitsiMeetWrapper from '../components/JitsiMeetWrapper';
 
 const TeacherDashboard = () => {
     const { user } = useContext(AuthContext);
-    const [activeTab, setActiveTab] = useState('inbox'); // 'inbox' or 'students'
+    const [activeTab, setActiveTab] = useState('inbox');
     const [consultations, setConsultations] = useState([]);
     const [students, setStudents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedStudent, setSelectedStudent] = useState(null);
+    const [activeLiveCall, setActiveLiveCall] = useState(null); // The consultation object that is live
 
     useEffect(() => {
         if (!user || !user.is_teacher) return;
@@ -27,10 +29,42 @@ const TeacherDashboard = () => {
             ]);
             setConsultations(consRes.data);
             setStudents(stuRes.data);
+
+            // Si el profesor tiene alguna en curso, la restauramos
+            const liveCall = consRes.data.find(c => c.is_live_call && c.status === 'IN_CALL');
+            if (liveCall) {
+                setActiveLiveCall(liveCall);
+            }
+
         } catch (error) {
             console.error("Error cargando dashboard de profesor:", error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleStartCall = async (consultationId) => {
+        try {
+            const response = await axiosInstance.post(`teachers/consultations/${consultationId}/start_call/`);
+            setActiveLiveCall(response.data);
+            fetchData();
+        } catch (error) {
+            console.error("Error al iniciar llamada:", error);
+        }
+    };
+
+    const handleEndCall = async () => {
+        if (!activeLiveCall) return;
+        try {
+            await axiosInstance.post(`teachers/consultations/${activeLiveCall.id}/end_call/`, {
+                response: 'Tutoría por videollamada realizada con éxito.'
+            });
+            setActiveLiveCall(null);
+            fetchData();
+        } catch (error) {
+            console.error("Error finalizando llamada:", error);
+            // Por seguridad, forzamos cierre
+            setActiveLiveCall(null);
         }
     };
 
@@ -46,7 +80,6 @@ const TeacherDashboard = () => {
                         <p className="text-slate-400">Bienvenido/a, Maestro/a {user.username}</p>
                     </div>
 
-                    {/* Tabs */}
                     <div className="flex gap-2 bg-white/5 p-1 rounded-2xl border border-white/10 backdrop-blur-md">
                         <button 
                             onClick={() => setActiveTab('inbox')}
@@ -70,7 +103,10 @@ const TeacherDashboard = () => {
                 ) : (
                     <div className="bg-white/5 rounded-3xl border border-white/10 overflow-hidden backdrop-blur-xl">
                         {activeTab === 'inbox' ? (
-                            <ConsultationsTab consultations={consultations} refresh={fetchData} />
+                            <ConsultationsTab 
+                                consultations={consultations} 
+                                onStartCall={handleStartCall}
+                            />
                         ) : (
                             <StudentsTab students={students} onSelectStudent={setSelectedStudent} />
                         )}
@@ -82,11 +118,20 @@ const TeacherDashboard = () => {
                 student={selectedStudent} 
                 onClose={() => setSelectedStudent(null)} 
             />
+
+            {/* Renderizar VideoCall si está activa */}
+            {activeLiveCall && (
+                <JitsiMeetWrapper 
+                    meetingLink={activeLiveCall.meeting_link}
+                    isTeacher={true}
+                    onClose={handleEndCall}
+                />
+            )}
         </div>
     );
 };
 
-const ConsultationsTab = ({ consultations, refresh }) => {
+const ConsultationsTab = ({ consultations, onStartCall }) => {
     if (consultations.length === 0) {
         return (
             <div className="text-center py-24">
@@ -102,7 +147,10 @@ const ConsultationsTab = ({ consultations, refresh }) => {
     return (
         <div className="divide-y divide-white/5">
             {consultations.map(c => (
-                <div key={c.id} className="p-6 md:p-8 hover:bg-white/[0.02] transition-colors">
+                <div key={c.id} className="p-6 md:p-8 hover:bg-white/[0.02] transition-colors relative">
+                    {c.is_live_call && (
+                        <div className="absolute top-0 left-0 w-1 h-full bg-red-500 shadow-[0_0_15px_red]"></div>
+                    )}
                     <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-8">
                         <div className="flex-grow">
                             <div className="flex items-center gap-3 mb-2">
@@ -111,6 +159,8 @@ const ConsultationsTab = ({ consultations, refresh }) => {
                                 </span>
                                 {c.status === 'PENDING' ? (
                                     <span className="flex items-center gap-1 text-amber-400 text-xs font-bold uppercase tracking-widest"><Clock className="w-3 h-3"/> Pendiente</span>
+                                ) : c.status === 'IN_CALL' ? (
+                                    <span className="flex items-center gap-1 text-red-500 text-xs font-bold uppercase tracking-widest animate-pulse"><Video className="w-3 h-3"/> En Llamada</span>
                                 ) : (
                                     <span className="flex items-center gap-1 text-teal-400 text-xs font-bold uppercase tracking-widest"><CheckCircle className="w-3 h-3"/> Resuelta</span>
                                 )}
@@ -119,13 +169,21 @@ const ConsultationsTab = ({ consultations, refresh }) => {
                             <p className="text-slate-300 mt-3 p-4 bg-black/30 rounded-xl font-medium leading-relaxed italic">
                                 "{c.message}"
                             </p>
+                            {c.response && (
+                                <div className="mt-4 p-4 border border-teal-500/20 bg-teal-500/5 rounded-xl">
+                                    <span className="block text-teal-400 text-xs font-bold tracking-widest uppercase mb-1">Tu Respuesta</span>
+                                    <p className="text-white text-sm">{c.response}</p>
+                                </div>
+                            )}
                         </div>
                         
                         <div className="min-w-[250px] flex flex-col gap-3 justify-center border-l md:border-t-0 border-white/10 pt-4 md:pt-0 md:pl-8">
-                             {/* Para la FASE 17.5 / Tutorías añadiremos el botón de Crear Sala y Enviar Mensaje */}
                              {c.status === 'PENDING' && (
-                                <button className="btn w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white border-0 hover:from-indigo-400 hover:to-purple-400">
-                                    Responder Ticket
+                                <button 
+                                    onClick={() => onStartCall(c.id)}
+                                    className="btn w-full bg-gradient-to-r from-red-600 to-pink-600 text-white border-0 hover:from-red-500 hover:to-pink-500 gap-2"
+                                >
+                                    <Video className="w-4 h-4" /> Iniciar Videollamada
                                 </button>
                              )}
                              <p className="text-[10px] text-slate-500 uppercase tracking-widest text-center mt-2">

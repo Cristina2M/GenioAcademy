@@ -15,6 +15,7 @@ import PrivateRoute from './utils/PrivateRoute';
 import spaceBg from './assets/img/logo-fondo.jpg';
 import ScrollToTop from './components/ScrollToTop';
 import ScrollToTopButton from './components/ScrollToTopButton';
+import ActiveCallBanner from './components/ActiveCallBanner';
 
 // ==========================================
 // COMPONENTE PRINCIPAL: App.jsx
@@ -46,6 +47,7 @@ function App() {
           
           {/* El Navbar va fuera de las rutas porque queremos que se renderice en TODAS las páginas */}
           <Navbar />
+          <ActiveCallBanner />
           
           {/* main actúa como el contenedor principal del contenido cambiante */}
           <main className="flex-grow">
