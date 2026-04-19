@@ -41,7 +41,7 @@ La plataforma combina tres pilares innovadores:
 | III | Frontend y Experiencia de Usuario | ✅ Completado |
 | IV | Integración de Inteligencia Artificial (Astro) | ✅ Completado |
 | V | Sistema de Vidas y Minijuegos Roguelike | ✅ Completado |
-| VI | Catálogo de Profesores y Videoconferencias | 🔄 En desarrollo |
+| VI | Catálogo de Profesores y Videoconferencias | ✅ Completado |
 | VII | Calidad, Contenido y Despliegue Final | 🔴 Planificado |
 
 ---
@@ -233,6 +233,16 @@ Genio Academy aborda estos problemas con un enfoque triple:
 - **Actor:** Alumno conectado
 - **Descripción:** Desde el panel de perfil, el alumno selecciona un búho desbloqueado según su nivel. El backend actualiza el campo `selected_avatar` y genera un nuevo token JWT con el avatar actualizado para que la navbar se refresque al instante.
 
+#### CU-09: Solicitud de Tutoría Personalizada (Hito VI)
+- **Actor:** Alumno con **Plan 3 (Agujero de Gusano)**
+- **Descripción:** Al navegar un curso, el estudiante puede solicitar ayuda especializada haciendo click en "Solicitar Tutoría". El modal filtra en vivo mediante `/api/teachers/professors/?course_id=X` a los especialistas en la materia, logrando una asignación directa.
+- **Resultado:** Ticket creado en la bandeja de entrada del profesor de manera asíncrona.
+
+#### CU-10: Suite de Videollamada (Hito VI)
+- **Actor:** Profesor (is_teacher) y Alumno solicitante
+- **Descripción:** El profesor revisa su bandeja en el `/teacher-dashboard` y arranca la videollamada de forma remota generando un hash único para una sala Jitsi Meet segura (`IN_CALL`). El alumno recibe un `ActiveCallBanner` de manera diferida, sin necesidad de recargar la página, y es eyectado automáticamente hacia el IFRAME de Jitsi en la misma ventana, sin salir del ecosistema de la Academia.
+- **Resultado:** Conexión en vivo P2P y resolución del ticket.
+
 ---
 
 ## 5. Tecnologías Empleadas
@@ -367,7 +377,15 @@ Esta funcionalidad está diseñada para que los alumnos más avanzados puedan vo
 - Cada búho se desbloquea al alcanzar su nivel RPG correspondiente.
 - El búho activo aparecerá en el chat de Astro y en la barra de navegación.
 
-### 6.9 Panel de Administración (Solo Administrador)
+### 6.9 Tutorías en Vivo y Jitsi Meet (Exclusivo Plan 3)
+
+Si cumples el nivel 3, tendrás en todo momento en tus cursos la opción de hablar cara a cara con un humano:
+1.  **Solicita Tutoría**: Pulsa "Solicitar Tutoría" en cualquier lección y envíale un ticket oficial de auxilio académico al grupo de catedráticos del área correspondiente.
+2.  **Alertas Globales**: No debes esperar en la pantalla indefinidamente. Regresa a jugar o investigar otros mundos. El Backend hará *polling* continuo.
+3.  **Banner Espacial**: En el instante que tu profesor te acepte la llamada, la interfaz hará aparecer un **Banner Flotante (ActiveCallBanner)** con el cartel rojo de LIVE. 
+4.  **Conexión encriptada**: Sin usar enlaces que puedan ser copiados o compartidos públicamente (y por tanto pirateados), el alumno accederá a un entorno de Jitsi totalmente securizado donde el Profesor actuará de conductor del Host de la reunión en un modal a toda pantalla, blindado en el Front y dentro del ecosistema "Genio Academy".
+
+### 6.10 Panel de Administración (Solo Administrador)
 
 - Accede en `http://localhost:8000/admin/` con las credenciales de superusuario.
 - Desde aquí puedes crear/editar: Categorías, Niveles de Conocimiento, Cursos, Lecciones y Ejercicios.
@@ -460,7 +478,7 @@ _[Mostrar tabla de planes de la sección 7]_
 
 ### Diapositiva 9 — Hoja de ruta futura
 - Hito V: Sistema de vidas + 5 minijuegos (Completado).
-- Hito VI: Catálogo de profesores + Videoconferencias (En desarrollo).
+- Hito VI: Catálogo de profesores + Videoconferencias + Dashboard Docente (Completado).
 - Hito VII: Contenido real ESO + Despliegue en producción.
 
 ### Diapositiva 10 — Conclusión
@@ -497,6 +515,8 @@ _[Mostrar tabla de planes de la sección 7]_
 | `release/hito-3` | Snapshot estable del Hito III |
 | `release/backend` | Estabilización de servicios de servidor |
 | `release/revision2` | Ajustes finales de Calidad (QA) y corrección de bugs |
+| `feature/interfaz-profesor` | Dashboard interactivo de uso privativo para claustro docente (Hito 6) |
+| `feature/tutorias` | Generación del motor P2P encriptado de aulas de aula para Live Streaming tipo Jitsi, tickets y sistema de alertas (Hito 6)|
 
 ### Comandos Rápidos para Ejecutar el Proyecto
 

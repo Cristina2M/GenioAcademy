@@ -124,10 +124,14 @@ Afinación de la mecánica Roguelike y motores de minijuegos para fomentar la re
 #### 🎓 HITO VI: Claustro Interactivo (Catálogo de Profesores)
 Conexión humana y especializada para estudiantes élite.
 
-* **Fase 16: Motor Relacional Multidimensional (M2M)** (🔴 Pendiente)
+* **Fase 16: Motor Relacional Multidimensional (M2M)** (✅ Completado)
   * Creación de un Catálogo de Profesores organizados por áreas de conocimiento.
-* **Fase 17: Suite de Comunicación (Exclusivo Nivel 3)** (🔴 Pendiente)
-  * Panel de chat en vivo con profesores especializados y base para tutorías remotas.
+* **Fase 17: Suite de Comunicación (Exclusivo Nivel 3)** (✅ Completado)
+  * Panel de control docente integrado en `/teacher-dashboard` bajo JWT con rol `is_teacher`.
+  * Filtro cruzado entre matrículas (`CourseCompletion`) y asignaturas del profesor para renderizar su alumnado de forma automática.
+  * Modal interactivo "Solicitar Tutoría" en el reproductor de cursos con validación `subscription_level >= 3`.
+  * Botón mágico con notificaciones "en diferido": el alumno recibe notificación parpadeante en su interfaz principal al hacer login si el profesor ha entrado a la sala.
+  * Inyección nativa de llamadas de `Jitsi Meet` seguras (el alumno solo atiende, no es anfitrión).
 
 #### 🚀 HITO VII: Calidad, Contenido y Cierre Técnico
 Afinación del proyecto para su entrega, exposición y uso real.
