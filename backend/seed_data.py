@@ -34,8 +34,12 @@ nivel1_bio = KnowledgeLevel.objects.create(category=cat_bio, name="Planeta Tierr
 nivel2_bio = KnowledgeLevel.objects.create(category=cat_bio, name="Genética Espacial", order=2)
 Course.objects.create(knowledge_level=nivel1_bio, title="Estructura de la Tierra", description="Minerales, rocas y placas tectónicas.")
 Course.objects.create(knowledge_level=nivel1_bio, title="La Biosfera", description="Los ecosistemas y cómo sustentan la vida.")
+Course.objects.create(knowledge_level=nivel1_bio, title="Célula Eucariota", description="El motor microscópico de la vida desarrollada.")
+Course.objects.create(knowledge_level=nivel1_bio, title="Reinos de la Naturaleza", description="Clasifica las formas de vida extraterrestre y terrestre.")
 Course.objects.create(knowledge_level=nivel2_bio, title="ADN Estelar", description="Los bloques constructores de las especies alienígenas y humanas.")
 Course.objects.create(knowledge_level=nivel2_bio, title="Selección Natural", description="Adaptación a entornos hostiles en el espacio.")
+Course.objects.create(knowledge_level=nivel2_bio, title="Virus y Bacterias", description="Microorganismos del universo profundo.")
+Course.objects.create(knowledge_level=nivel2_bio, title="Anatomía Alienígena", description="Comparativa del interior celular en nuevos planetas.")
 
 # Geografía e Historia
 cat_historia = Category.objects.create(name="Geografía e Historia", description="Explora las civilizaciones antiguas y los mapas del universo.")
