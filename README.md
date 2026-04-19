@@ -1,14 +1,10 @@
-# 📝 Genio Academy - Plataforma de Aprendizaje Incremental
+# 📝 Genio Academy — Plataforma de Aprendizaje Incremental
 
-Este proyecto es una plataforma de academia online diseñada específicamente para estudiantes de la ESO. A diferencia de las plataformas tradicionales, Genio Academy organiza el contenido por **niveles de conocimiento específicos** y no por cursos académicos, permitiendo un aprendizaje personalizado.
+Genio Academy es una plataforma de academia online diseñada específicamente para estudiantes de la ESO. A diferencia de las plataformas tradicionales, organiza el contenido por **niveles de conocimiento específicos** y no por cursos académicos, lo que permite un aprendizaje personalizado y progresivo.
 
-#### ✨ HITO V: Despliegue y Pruebas Reales (Expansión Final)
-Ajustes finos, auditorías y puesta en órbita.
-* Testing E2E (Simular que un alumno se registra, compra/abre un curso, ve las lecciones y chatea con IA).
-* Despliegue en un VPS modesto o usando servicios en nube accesibles.
-* Documentación pulida para que el día de mañana otros desarrolladores puedan hacer crecer Genio Academy.
-* **Sistema de Vidas (Planetas):** Implementar mecánica Roguelike global. Los fallos en el simulador descuentan planetas/vidas.
-* **Minijuegos de Recuperación:** Crear motores en JavaScript (Módulos independientes) para auto-generar Sudokus y Sopas de Letras con palabras clave del temario (ej: "Pitágoras") para que los alumnos ganen nuevas vidas al estar a punto de morir en combate.
+La plataforma incluye un sistema de **gamificación RPG** (XP, niveles, vidas Roguelike), **minijuegos educativos** de recuperación, un **tutor virtual socrático con IA** (Groq / LLaMA), un **claustro interactivo** de profesores y **videollamadas de tutoría en directo** via Jitsi Meet.
+
+---
 
 ## 🚀 Entorno y Puesta en Marcha
 
@@ -28,188 +24,255 @@ Por normativas de seguridad, los secretos del marco de trabajo no se vuelcan al 
 Debe preexistir o ser inyectado por Docker un contexto de variables (`.env` o compose environment) que defina:
 * La firma secreta criptográfica de Django (`SECRET_KEY`).
 * Las credenciales de levantamiento y conexión inter-contenedor de PostgreSQL (`POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`).
+* La clave de API de Groq para el asistente Astro (`GROQ_API_KEY`).
 
+### 🧪 Cuentas de Prueba
 
-### 📑 Master Plan de Ingeniería: Genio Academy
+Para poder probar la plataforma sin registrarse, existen las siguientes cuentas predefinidas:
 
-El ciclo de vida de este proyecto se estructura en 5 grandes hitos, abarcando desde la infraestructura base hasta la integración de Inteligencia Artificial en local.
+| Tipo | Usuario | Contraseña | Acceso |
+|---|---|---|---|
+| Alumno (Plan 1) | `al1` | `alumno123` | Catálogo básico |
+| Alumno (Plan 2) | `al2` | `alumno123` | Catálogo + Astro IA |
+| Alumno (Plan 3) | `al3` | `alumno123` | Todo + Tutorías |
+| Profesor | `profe_mate` | `Genio2026!` | Panel docente |
+| Superusuario | `admin` | (ver `.env`) | Admin de Django |
 
-#### 🏗️ HITO I: Fundamentos e Infraestructura DevOps
+---
+
+## 📑 Master Plan de Ingeniería: Genio Academy
+
+El ciclo de vida de este proyecto se estructura en 7 grandes hitos, desde la infraestructura base hasta la calidad y el cierre técnico.
+
+### 🏗️ HITO I: Fundamentos e Infraestructura DevOps
 El objetivo de esta etapa es crear un entorno de trabajo sólido, replicable y escalable.
 
-* **Fase 1: Conceptualización y Arquitectura Lógica** (✅ Completado)
+* **Fase 1: Conceptualización y Arquitectura Lógica** ✅
   * Definición estricta de los 3 niveles de conocimiento (Nivel 1, 2 y 3) para la ESO.
   * Diseño de diagramas de flujo (User Journey) desde el registro hasta el uso de la IA.
 
-* **Fase 2: Infraestructura y Orquestación** (✅ Completado)
+* **Fase 2: Infraestructura y Orquestación** ✅
   * Configuración del archivo `docker-compose.yml` para microservicios.
   * Aislamiento de entornos: Frontend (Node), Backend (Python) y Base de Datos (PostgreSQL).
   * Creación de volúmenes persistentes para evitar pérdida de datos.
 
-* **Fase 3: Sistema de Diseño y UI Core** (✅ Completado)
+* **Fase 3: Sistema de Diseño y UI Core** ✅
   * Inicialización del entorno cliente con React + Vite.
   * Implementación del motor de estilos moderno Tailwind CSS v4.
   * Integración de la librería de componentes DaisyUI para estandarizar la interfaz.
 
-#### 🧠 HITO II: El Cerebro de Datos y Backend
+### 🧠 HITO II: El Cerebro de Datos y Backend
 Desarrollo de la lógica de negocio, seguridad y persistencia de la información.
 
-* **Fase 4: Modelado de la Base de Datos Relacional** (✅ Completado)
+* **Fase 4: Modelado de la Base de Datos Relacional** ✅
   * Desarrollo del modelo `CustomUser` en Django integrando el campo `knowledge_level`.
-  * Creación de los modelos de aprendizaje: Curso, Tema, Lección y Recurso.
+  * Creación de los modelos de aprendizaje: `Category` → `KnowledgeLevel` → `Course` → `Lesson` → `Exercise`.
   * Ejecución de migraciones iniciales en PostgreSQL.
 
-* **Fase 5: Sistema de Autenticación y Seguridad** (✅ Completado)
-  * Implementación de JWT (JSON Web Tokens) para sesiones seguras sin estado. *(Completado en Backend)*
-  * Creación de los endpoints de registro y login de alumnos. *(Login y Registro completados)*
-  * Configuración de políticas de CORS para proteger las peticiones entre puertos. *(Completado)*
+* **Fase 5: Sistema de Autenticación y Seguridad** ✅
+  * Implementación de JWT (JSON Web Tokens) para sesiones seguras sin estado via `SimpleJWT`.
+  * Creación de los endpoints de registro y login de alumnos.
+  * Configuración de políticas de CORS para proteger las peticiones entre puertos.
 
-* **Fase 6: Desarrollo de la API REST Core** (✅ Completado)
+* **Fase 6: Desarrollo de la API REST Core** ✅
   * Configuración de Django REST Framework (DRF) y serializadores.
-  * Creación del CRUD (Crear, Leer, Actualizar, Borrar) para el contenido educativo.
+  * Creación del CRUD para el contenido educativo.
 
-* **Fase 7: Motor de Lógica Incremental** (✅ Completado)
-  * Programación del algoritmo que valida si un alumno cumple los requisitos para subir de nivel. *(Gamificación RPG aplicada)*
-  * Filtros de seguridad en el backend para bloquear contenido superior al nivel del usuario. *(Excepción 403 Forbidden programada)*
+* **Fase 7: Motor de Lógica Incremental** ✅
+  * Algoritmo de progresión: XP acumulado → subida de nivel automática.
+  * Filtros de seguridad 403 para bloquear contenido superior al nivel del usuario.
 
-#### 💻 HITO III: Interfaz y Experiencia del Alumno (Frontend)
+### 💻 HITO III: Interfaz y Experiencia del Alumno (Frontend)
 Conexión visual de los datos para que el estudiante interactúe con la plataforma.
 
-* **Fase 8: Enrutamiento y Protección del Cliente** (✅ Completado)
-  * Crear sistema de inicio y cierre de sesión conectado al backend.
-  * *Nota Arquitectónica:* Se ha optado por implementar la librería **Axios** en conjunto con **jwt-decode** en lugar del nativo `fetch`. El motivo es que Axios soporta Interceptores HTTP (HTTP Interceptors) que permitirán, de forma invisible para el alumno, inyectar el Token en cada petición de forma automática y renovarlo ("refresh") si se caduca. Esto reduce un volumen titánico de código trampa manual.
-  * Configuración de React Router para la navegación SPA (Single Page Application). *(Completado)*
-  * Creación de "Rutas Privadas" que redirigen al login si el usuario no tiene token válido. *(Completado)*
+* **Fase 8: Enrutamiento y Protección del Cliente** ✅
+  * Implementación de `Axios` con interceptores HTTP para inyección automática de JWT.
+  * Configuración de React Router para navegación SPA.
+  * Rutas Privadas (`PrivateRoute`) que redirigen al login si no hay token válido.
 
-* **Fase 9: Panel de Control del Estudiante (Dashboard)** (✅ Completado)
-  * Maquetación de la vista principal adaptada al nivel actual del alumno. *(Inicio y Misión completados)*
-  * Tarjetas de resumen para mostrar puntos de experiencia (XP) y últimos cursos tomados. *(Estética Glassmorphism implementada con datos simulados)*
+* **Fase 9: Panel de Control del Estudiante (Dashboard)** ✅
+  * Tarjeta de perfil con avatar de búho personalizable, barra de XP y nivel RPG.
+  * Misión sugerida automática (primer curso desbloqueado y sin completar).
+  * Vitrina de medallas y acceso al Claustro (restringido por plan).
 
-* **Fase 10: Consumo de Datos y Estado Global** (✅ Completado)
-  * Integración de Axios/Fetch (con interceptores de tokens) para conectar React con Django. *(Completado)*
-  * Desarrollo del Componente `CoursePlayer.jsx` como entorno de vídeo estilo Glassmorphism. *(Completado)*
-  * Gestión del estado global mediante `AuthContext` actualizando progreso y avatares. *(Completado)*
+* **Fase 10: Consumo de Datos y Estado Global** ✅
+  * Contexto global `AuthContext.jsx`: provee sesión, login, logout, XP y avatar a toda la app.
+  * Desarrollo de `CoursePlayer.jsx`: reproductor de cursos con teoría, simulador de preguntas y sidebar de lecciones.
 
-#### 🤖 HITO IV: Inteligencia Artificial (Tutor Virtual Socrático)
-El valor diferencial: un asistente llamado "Astro" integrado en el aula que guía a los alumnos usando el método socrático (respondiendo y guiando sin dar la respuesta final).
+### 🤖 HITO IV: Inteligencia Artificial (Tutor Virtual Socrático)
+Un asistente llamado "Astro" integrado en el aula que guía a los alumnos usando el método socrático.
 
-* **Fase 11: Despliegue de Infraestructura IA en la Nube (Groq)** (✅ Completado)
-  * Registro e integración con **Groq Cloud** para utilizar modelos ultra-rápidos (LPU).
-  * Uso del modelo oficial `llama-3.1-8b-instant` para procesar el lenguaje natural.
-  * *Nota Arquitectónica:* Se descartó Ollama local a favor de Groq por cuestiones de rendimiento del servidor y extrema velocidad de respuesta en los chats.
+* **Fase 11: Despliegue de Infraestructura IA en la Nube (Groq)** ✅
+  * Integración con **Groq Cloud** para modelos ultra-rápidos (LPU).
+  * Uso del modelo `llama-3.1-8b-instant` para procesar lenguaje natural.
+  * *(Se descartó Ollama local por rendimiento y velocidad de respuesta.)*
 
-* **Fase 12: Construcción del "Puente IA" (Backend Bridge)** (✅ Completado)
-  * Creación de una aplicación Django (`ai/views.py`) que actúa de intermediario y protege la clave secreta de Groq.
-  * Prompt Engineering Contextual: La IA recibe por detrás qué asignatura y tema está estudiando el alumno para dar ejemplos precisos (ej. Gravedad en Física).
-  * Bloqueo de seguridad: El endpoint comprueba que el alumno tenga una suscripción activa (Plan Velocidad Luz o superior) o devuelve un error `403 Forbidden`.
+* **Fase 12: Construcción del "Puente IA" (Backend Bridge)** ✅
+  * App Django `ai/views.py` como intermediario que protege la clave de Groq.
+  * Prompt Engineering contextual: la IA sabe qué asignatura y lección está viendo el alumno.
+  * Bloqueo 403 si el alumno no tiene Plan 2 o superior.
 
-* **Fase 13: Interfaz del Asistente Virtual (Chatbot UI)** (✅ Completado)
-  * Construcción del panel interactivo `AIChatPanel.jsx` estilo Glassmorphism incrustado en el reproductor de cursos.
-  * Personalización del chat conectándose con el contexto: carga dinámica del búho "Astro" y el avatar del piloto seleccionado.
-  * Gestión de estado de carga, animaciones de "Pensando..." y autoscroll.
+* **Fase 13: Interfaz del Asistente Virtual (Chatbot UI)** ✅
+  * Panel `AIChatPanel.jsx` estilo Glassmorphism incrustado en el reproductor de cursos.
+  * Animación de "Pensando...", autoscroll y contexto visual con avatar del alumno.
 
-#### ✨ HITO V: Sistema de Rescate y Gamificación (✅ Completado)
-Afinación de la mecánica Roguelike y motores de minijuegos para fomentar la retención.
+### ✨ HITO V: Sistema de Rescate y Gamificación
+Mecánica Roguelike y motores de minijuegos para fomentar la retención del alumno.
 
-* **Fase 14: Lógica de Vidas y Mecánica Roguelike** (✅ Completado)
-  * Implementación de la gestión de 3 planetas (vidas) por alumno en el backend.
-  * Motor de regeneración pasiva: recuperación de 1 planeta cada 2 horas (`last_life_lost_at`).
-  * Integración visual de la salud del alumno en el `LivesPanel.jsx`.
+* **Fase 14: Lógica de Vidas y Mecánica Roguelike** ✅
+  * 3 planetas (vidas) por alumno en el backend.
+  * Regeneración pasiva de 1 planeta cada 2 horas (`last_life_lost_at`).
+  * `LivesPanel.jsx` muestra la salud del alumno e integra los minijuegos.
 
-* **Fase 15: Sistema de Rescate y Minijuegos Educativos** (✅ Completado)
-  * Desarrollo de 5 motores de juegos en React: Parejas, Cálculo, Sopa de letras, Completar y Verdadero/Falso.
-  * Lógica de seguridad: Cooldown de 24h por minijuego y ganancia inmediata de 1 planeta tras victoria.
-  * Consolidación de la identidad visual "Astro" en todos los feedbacks de juego.
+* **Fase 15: Sistema de Rescate y Minijuegos Educativos** ✅
+  * 5 motores de juego en React: Parejas, Cálculo, Sopa de Letras, Completar y Verdadero/Falso.
+  * Cooldown de 24h por minijuego y ganancia inmediata de 1 planeta tras victoria.
+  * Anti-farmeo: bloqueo si el alumno ya tiene 3 vidas.
 
-#### 🎓 HITO VI: Claustro Interactivo (Catálogo de Profesores)
-Conexión humana y especializada para estudiantes élite.
+### 🎓 HITO VI: Claustro Interactivo (Catálogo de Profesores)
+Conexión humana y especializada para estudiantes de Plan 3.
 
-* **Fase 16: Motor Relacional Multidimensional (M2M)** (✅ Completado)
-  * Creación de un Catálogo de Profesores organizados por áreas de conocimiento.
-* **Fase 17: Suite de Comunicación (Exclusivo Nivel 3)** (✅ Completado)
-  * Panel de control docente integrado en `/teacher-dashboard` bajo JWT con rol `is_teacher`.
-  * Filtro cruzado entre matrículas (`CourseCompletion`) y asignaturas del profesor para renderizar su alumnado de forma automática.
-  * Modal interactivo "Solicitar Tutoría" en el reproductor de cursos con validación `subscription_level >= 3`.
-  * Botón mágico con notificaciones "en diferido": el alumno recibe notificación parpadeante en su interfaz principal al hacer login si el profesor ha entrado a la sala.
-  * Inyección nativa de llamadas de `Jitsi Meet` seguras (el alumno solo atiende, no es anfitrión).
+* **Fase 16: Motor Relacional Multidimensional (M2M)** ✅
+  * Catálogo de profesores organizados por materias (`subjects` M2M).
+  * Página pública del Claustro con cards animadas y filtro por especialidad.
 
-#### 🚀 HITO VII: Calidad, Contenido y Cierre Técnico
+* **Fase 17: Suite de Comunicación (Exclusivo Plan 3)** ✅
+  * Panel docente en `/teacher-dashboard` protegido por JWT con rol `is_teacher`.
+  * Modal "Solicitar Tutoría" en el reproductor de cursos (solo si `subscription_level >= 3`).
+  * Videollamadas con **Jitsi Meet** embebido: el profesor inicia la sala, el alumno recibe una notificación flotante en tiempo real (polling 30s) y se une con un clic.
+  * Ficha de alumno para el profesor con estadísticas RPG.
+
+### 🔧 HITO VII: Calidad, Contenido y Cierre Técnico
 Afinación del proyecto para su entrega, exposición y uso real.
 
-* **Fase 18: Inserción de Contenidos y Efectos Visuales** (🟡 En Progreso)
-  * Población de la base de datos con material educativo real de la ESO.
-  * Implementación de recompensas visuales y sonidos de interfaz.
-* **Fase 19: Quality Assurance (QA) y Despliegue Final** (🔴 Pendiente)
+* **Fase 18: Inserción de Contenidos y Contenido Formateado** ✅
+  * Más de 25 microcursos sembrados en todas las materias de la ESO via `seed_data.py`.
+  * Sistema de lecciones con HTML enriquecido (colores, resaltados) y ejercicios interactivos via `seed_content.py`.
+  * Soporte de renderizado HTML dinámico en `CoursePlayer.jsx` (`dangerouslySetInnerHTML`).
+
+* **Fase 19: Correcciones Generales y Documentación Interna** ✅
+  * Revisión y "españolización" de variables y funciones propias en todo el código.
+  * Adición de comentarios exhaustivos en cada archivo para facilitar el mantenimiento.
+  * Múltiples commits atómicos en la rama `release/correccionesGenerales`.
+
+---
 
 ## 🎨 Identidad Visual y UI: El Universo Astro
 
-La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina espacial. 
+La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina espacial.
 
 *   **Astro (El Búho Genio):** El guía oficial de la academia. Aparece en el chat socrático y en los minijuegos.
 *   **Tailwind CSS v4 & DaisyUI**: Motor de estilos de última generación para componentes reactivos y modernos.
+*   **Framer Motion**: Animaciones fluidas en modales, paneles y transiciones.
 
 ---
 
-### 🛠️ Detalles Técnicos de Integración
+## 🌿 Estrategia de Ramas (Git Flow)
 
-#### Astro IA (Tutor Socrático)
-El asistente no da las respuestas, sino que guía al alumno. Utiliza el modelo `llama-3.1-8b-instant` vía Groq LPU para respuestas casi instantáneas.
-
-#### Sistema de Rescate
-Ubicado en el `LivesPanel.jsx`, centraliza la salud del alumno. Detecta automáticamente si el alumno puede jugar (vidas < 3) y gestiona los tiempos de espera y bloqueos de seguridad anti-farmeo.
+| Rama | Propósito |
+|---|---|
+| `main` | Código estable listo para producción |
+| `develop` | Integración de todas las features completadas |
+| `feature/microcursos` | Expansión del catálogo de cursos (25+ cursos) |
+| `feature/contenido-formateado` | Soporte de HTML enriquecido en lecciones |
+| `release/correccionesGenerales` | Limpieza de código, comentarios y españolización |
 
 ---
 
-### 📋 Guía de Comandos (Cheat Sheet)
+## 🛠️ Guía de Comandos (Cheat Sheet)
 
-#### 🔹 Gestión del Entorno (Docker)
+### 🔹 Gestión del Entorno (Docker)
 *   **Levantar / Reconstruir:** `docker-compose up --build`
 *   **Levantar normalmente:** `docker-compose up`
 *   **Detener servicios:** `docker-compose down`
 *   **Limpieza total (borra contenedores y BD):** `docker-compose down -v`
 
-#### 🔹 Comandos de Backend (Django)
+### 🔹 Comandos de Backend (Django)
 *   **Ejecutar Migraciones:** `docker-compose exec backend python manage.py migrate`
-*   **Poblar Base de Datos (Seed):** `docker-compose exec backend python seed_data.py`
+*   **Poblar BD con cursos:** `docker-compose exec backend python seed_data.py`
+*   **Poblar BD con lecciones y ejercicios:** `docker-compose exec backend python seed_content.py`
 *   **Crear Superusuario:** `docker-compose exec backend python manage.py createsuperuser`
 *   **Crear App:** `docker-compose exec backend python manage.py startapp nombre_de_la_app`
+*   **Consola de Django:** `docker-compose exec backend python manage.py shell`
 
-#### 🔹 Comandos de Frontend (React)
-*   **Instalar librerías (si el contenedor está corriendo):** `docker-compose exec frontend npm install nombre-libreria`
-*   **Instalar librerías (si el contenedor está parado):** `docker-compose run --rm frontend npm install nombre-libreria`
-
----
-
-### 🛠️ Detalles Técnicos y Documentación de Fases Producidas
-
-#### 1. Arquitectura Frontend (Configuración Base)
-1. **Tailwind v4 Config**: Debido a la arquitectura de Docker, la configuración se ha centralizado en `src/index.css` mediante `@import "tailwindcss";` y `@plugin "daisyui";`.
-2. **PostCSS**: Se utiliza `@tailwindcss/postcss` para procesar los estilos correctamente dentro de Vite.
-
-#### 2. Lógica de Backend y Base de Datos
-1. **Estructura de Datos (Aprendizaje Incremental)**: El núcleo educativo de la plataforma se modela como:
-   * `Categoría` ➔ `Nivel de Conocimiento` ➔ `Curso` ➔ `Lección` ➔ `Ejercicio`
-   * Los `Usuarios` disponen de roles jerárquicos basados en su tipo de suscripción (`Nivel 1`, `Nivel 2` o `Nivel 3`) para limitar el acceso al contenido premium.
-2. **Autenticación Segura (JWT)**: Todo el control de sesiones se ha delegado a JSON Web Tokens mediante la biblioteca *SimpleJWT*.
-3. **CORS habilitado**: El servidor Django permite peticiones procedentes del frontend React (`localhost:5173`).
-
-#### 3. Integración SPA y UI Avanzada
-1. **Enrutamiento Completo (SPA)**: Configuración en matriz usando `react-router-dom` para transiciones fluidas de página completas eliminando tiempos de carga (incluyendo gestión 404 y auto-scroll a cabecera).
-2. **Consumo de API Reactivo**: Conexión al endpoint de Django de `categories/` gestionada mediante asincronía (`fetch`/`await`) encapsulada en Hooks (`useEffect`, `useState`) para control de estados de carga y error.
-3. **Estética Avanzada (Glassmorphism)**: Creación de la identidad visual propia mediante utilidades avanzadas de Tailwind (opacidades, `backdrop-blur`, brillos internos y animaciones espaciales) aplicadas sobre las Vistas de "Inicio", "La Misión" y "Catálogo".
-
-#### Endpoints Principales Disponibles (API REST)
-* **Gestión de Sesión:**
-  * `POST /api/token/` ➔ Para iniciar sesión proporcionando credenciales. Devuelve los tokens `access` y `refresh`.
-  * `POST /api/token/refresh/` ➔ Para renovar el token de acceso cuando expira.
-* **Catálogo Educativo (Cursos):**
-  * `GET /api/courses/categories/` ➔ Devuelve todo el árbol anidado de asignaturas, niveles y cursos.
-* **Gestión de Usuarios:**
-  * `GET, POST /api/users/users/` ➔ Operaciones CRUD completas sobre la tabla de alumnos.
+### 🔹 Comandos de Frontend (React)
+*   **Instalar librerías (contenedor en marcha):** `docker-compose exec frontend npm install nombre-libreria`
+*   **Instalar librerías (contenedor parado):** `docker-compose run --rm frontend npm install nombre-libreria`
 
 ---
 
-### 💡 Notas de Desarrollo
+## 🔌 Endpoints Principales de la API REST
 
-* **Extensiones de Archivo**: Para las configuraciones de PostCSS y Tailwind en esta estructura, se recomienda usar `.js` o `.cjs` según la necesidad de compatibilidad con CommonJS detectada durante la Fase 2.
-* **Hot Reload**: Los cambios en el CSS y JSX se reflejan al instante.
+### Sesión y Autenticación
+| Método | Endpoint | Descripción |
+|---|---|---|
+| `POST` | `/api/token/` | Login: devuelve `access` y `refresh` tokens |
+| `POST` | `/api/token/refresh/` | Renueva el token de acceso caducado |
+| `POST` | `/api/users/register/` | Registro de nuevo alumno |
+
+### Catálogo Educativo
+| Método | Endpoint | Descripción |
+|---|---|---|
+| `GET` | `/api/courses/categories/` | Árbol completo: asignaturas → niveles → cursos |
+| `GET` | `/api/courses/courses/{id}/` | Detalle de curso con lecciones y ejercicios |
+| `POST` | `/api/courses/courses/{id}/complete/` | Completar curso (suma XP, sube nivel si toca) |
+
+### Gestión de Usuarios
+| Método | Endpoint | Descripción |
+|---|---|---|
+| `GET` | `/api/users/management/` | Perfil del alumno actual |
+| `POST` | `/api/users/management/update_avatar/` | Cambiar avatar de búho (devuelve JWT nuevo) |
+| `GET` | `/api/users/lives/` | Estado de vidas y cooldowns de minijuegos |
+| `POST` | `/api/users/lives/lose/` | Restar 1 vida al alumno |
+| `POST` | `/api/users/lives/recover/{minijuego}/` | Ganar 1 vida tras superar un minijuego |
+
+### Sistema de Tutorías y Profesores
+| Método | Endpoint | Descripción |
+|---|---|---|
+| `GET` | `/api/teachers/professors/` | Lista de profesores (con `?course_id=X` para filtrar) |
+| `GET/POST` | `/api/teachers/consultations/` | Ver/Crear consultas de tutoría |
+| `GET` | `/api/teachers/consultations/active_calls/` | Comprueba si hay llamada activa (polling alumno) |
+| `GET` | `/api/teachers/consultations/my_students/` | Alumnos del profesor (solo docentes) |
+| `POST` | `/api/teachers/consultations/{id}/start_call/` | Iniciar videollamada Jitsi (solo docentes) |
+| `POST` | `/api/teachers/consultations/{id}/end_call/` | Finalizar videollamada (solo docentes) |
+
+### Tutor IA (Astro)
+| Método | Endpoint | Descripción |
+|---|---|---|
+| `POST` | `/api/ai/chat/` | Enviar mensaje a Astro (requiere Plan 2+) |
+
+---
+
+## 🏛️ Detalles Técnicos
+
+### Arquitectura del Frontend
+1. **Tailwind v4**: La configuración se centraliza en `src/index.css` mediante `@import "tailwindcss";` y `@plugin "daisyui";`.
+2. **PostCSS**: Se utiliza `@tailwindcss/postcss` para procesar los estilos dentro de Vite.
+3. **Estado Global**: `AuthContext.jsx` provee los datos del alumno (extraídos del JWT) y las funciones de sesión a toda la app.
+
+### Arquitectura del Backend (Estructura de Datos)
+El núcleo educativo sigue esta jerarquía:
+```
+Categoría (asignatura)
+  └── NivelConocimiento (Nivel 1, 2, 3)
+        └── Curso
+              ├── Lección (con contenido HTML enriquecido)
+              │     └── Ejercicio (pregunta + opciones + respuesta correcta)
+              └── CourseCompletion (registro por alumno)
+```
+
+### Autenticación JWT
+* El token `access` tiene una vida corta (5 minutos). El interceptor de Axios lo renueva automáticamente usando el `refresh` token sin interrumpir al usuario.
+* El payload del JWT incluye campos personalizados: `user_id`, `username`, `current_student_level`, `experience_points`, `subscription_level`, `selected_avatar`, `is_teacher`, `lives_count`.
+
+### Seguridad del Contenido HTML
+* En `CoursePlayer.jsx` se usa `dangerouslySetInnerHTML` para renderizar la teoría con formato (colores, negrita, etc.).
+* Este enfoque es seguro porque el contenido HTML lo inyecta **exclusivamente el administrador** a través de los scripts `seed_content.py`, nunca el alumno.
+
+---
+
+## 💡 Notas de Desarrollo
+
+* **Hot Reload**: Los cambios en CSS y JSX se reflejan al instante gracias a Vite.
+* **Extensiones de Archivo**: Para las configuraciones de PostCSS y Tailwind, se usa `.js` o `.cjs` según la compatibilidad con CommonJS detectada en Docker.
+* **Españolización del Código**: Las variables y funciones propias del proyecto están escritas en español. Las palabras reservadas de React, Django y los frameworks (useState, className, serializer, etc.) se mantienen en inglés porque son parte del lenguaje/framework.
