@@ -65,7 +65,8 @@ class Professor(models.Model):
 class Consultation(models.Model):
     STATUS_CHOICES = [
         ('PENDING', 'Pendiente'),
-        ('ANSWERED', 'Respondida'),
+        ('IN_CALL', 'En Videollamada'),
+        ('ANSWERED', 'Resuelta'),
     ]
 
     student = models.ForeignKey(
@@ -92,7 +93,9 @@ class Consultation(models.Model):
     message = models.TextField(verbose_name='Mensaje / Duda')
     response = models.TextField(blank=True, verbose_name='Respuesta del Profesor')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING', verbose_name='Estado')
+    
     meeting_link = models.CharField(max_length=500, blank=True, verbose_name='Enlace de Videollamada (Jitsi)')
+    is_live_call = models.BooleanField(default=False, verbose_name='Videollamada en Curso')
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Creado el')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Actualizado el')

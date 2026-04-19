@@ -81,3 +81,61 @@ class ConsultationViewSet(viewsets.ModelViewSet):
         } for s in students]
 
         return Response(data)
+
+    @action(detail=True, methods=['post'])
+    def start_call(self, request, pk=None):
+        """Profesor inicia la videollamada de Jitsi"""
+        user = request.user
+        if not hasattr(user, 'professor_profile'):
+            return Response({"error": "No Autorizado."}, status=status.HTTP_403_FORBIDDEN)
+        
+        consultation = self.get_object()
+        if consultation.professor != user.professor_profile:
+            return Response({"error": "No es tu consulta."}, status=status.HTTP_403_FORBIDDEN)
+
+        # Generar "room" única en Jitsi
+        import uuid
+        room_name = f"GenioAcademy_{consultation.id}_{uuid.uuid4().hex[:8]}"
+        meeting_link = f"https://meet.jit.si/{room_name}"
+
+        consultation.status = 'IN_CALL'
+        consultation.is_live_call = True
+        consultation.meeting_link = meeting_link
+        consultation.save()
+
+        return Response(self.get_serializer(consultation).data)
+
+    @action(detail=True, methods=['post'])
+    def end_call(self, request, pk=None):
+        """Profesor finaliza la videollamada resolviendo la consulta"""
+        user = request.user
+        if not hasattr(user, 'professor_profile'):
+            return Response({"error": "No Autorizado."}, status=status.HTTP_403_FORBIDDEN)
+        
+        consultation = self.get_object()
+        if consultation.professor != user.professor_profile:
+            return Response({"error": "No es tu consulta."}, status=status.HTTP_403_FORBIDDEN)
+
+        consultation.status = 'ANSWERED'
+        consultation.is_live_call = False
+        consultation.response = request.data.get('response', 'Videollamada finalizada con éxito.')
+        consultation.save()
+
+        return Response(self.get_serializer(consultation).data)
+
+    @action(detail=False, methods=['get'])
+    def active_calls(self, request):
+        """Alumno comprueba si tiene alguna videollamada activa"""
+        user = request.user
+        if hasattr(user, 'professor_profile'):
+            return Response([])
+
+        active = Consultation.objects.filter(
+            student=user,
+            is_live_call=True,
+            status='IN_CALL'
+        ).first()
+
+        if active:
+            return Response(self.get_serializer(active).data)
+        return Response({})
