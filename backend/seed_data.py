@@ -9,8 +9,12 @@ nivel1_mates = KnowledgeLevel.objects.create(category=cat_mates, name="Aritméti
 nivel2_mates = KnowledgeLevel.objects.create(category=cat_mates, name="Álgebra Intermedia", order=2)
 Course.objects.create(knowledge_level=nivel1_mates, title="Sumas Galácticas", description="Aprende a sumar con asteroides.")
 Course.objects.create(knowledge_level=nivel1_mates, title="Restas Espaciales", description="Aprende a restar viajando a la velocidad de la luz.")
+Course.objects.create(knowledge_level=nivel1_mates, title="Multiplicación Cuántica", description="Incrementa tus recursos multiplicando materia.")
+Course.objects.create(knowledge_level=nivel1_mates, title="División Cósmica", description="Reparte provisiones equitativamente entre la tripulación.")
 Course.objects.create(knowledge_level=nivel2_mates, title="Ecuaciones de 1er Grado", description="Encuentra la incógnita X para ganar combustible.")
 Course.objects.create(knowledge_level=nivel2_mates, title="Fracciones Interestelares", description="Divide y conquista los recursos del universo.")
+Course.objects.create(knowledge_level=nivel2_mates, title="Geometría de Órbitas", description="Calcula áreas y perímetros de campos de fuerza.")
+Course.objects.create(knowledge_level=nivel2_mates, title="Polinomios Estelares", description="Maneja expresiones algebraicas de alta energía.")
 
 # Leyes de la Física
 cat_fisica = Category.objects.create(name="Leyes de la Física", description="Entiende cómo se comportan los planetas y la materia.")
