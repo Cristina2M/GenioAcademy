@@ -121,13 +121,14 @@ Mecánica Roguelike y motores de minijuegos para fomentar la retención del alum
 
 * **Fase 14: Lógica de Vidas y Mecánica Roguelike** ✅
   * 3 planetas (vidas) por alumno en el backend.
-  * Regeneración pasiva de 1 planeta cada 2 horas (`last_life_lost_at`).
+  * Regeneración pasiva: recuperación de 1 planeta cada cierto tiempo (`last_life_lost_at`).
   * `LivesPanel.jsx` muestra la salud del alumno e integra los minijuegos.
 
 * **Fase 15: Sistema de Rescate y Minijuegos Educativos** ✅
   * 5 motores de juego en React: Parejas, Cálculo, Sopa de Letras, Completar y Verdadero/Falso.
-  * Cooldown de 24h por minijuego y ganancia inmediata de 1 planeta tras victoria.
-  * Anti-farmeo: bloqueo si el alumno ya tiene 3 vidas.
+  * Solo accesibles para alumnos Plan 3 con 0 vidas (Game Over).
+  * Cooldown por minijuego: una vez jugado, no puede volver a usarse hasta que pase el tiempo de espera.
+  * Ganancia inmediata de 1 planeta al superar el reto.
 
 ### 🎓 HITO VI: Claustro Interactivo (Catálogo de Profesores)
 Conexión humana y especializada para estudiantes de Plan 3.
@@ -145,13 +146,13 @@ Conexión humana y especializada para estudiantes de Plan 3.
 ### 🔧 HITO VII: Calidad, Contenido y Cierre Técnico
 Afinación del proyecto para su entrega, exposición y uso real.
 
-* **Fase 18: Inserción de Contenidos y Contenido Formateado** ✅
-  * Más de 25 microcursos sembrados en todas las materias de la ESO via `seed_data.py`.
-  * Sistema de lecciones con HTML enriquecido (colores, resaltados) y ejercicios interactivos via `seed_content.py`.
-  * Soporte de renderizado HTML dinámico en `CoursePlayer.jsx` (`dangerouslySetInnerHTML`).
+* **Fase 18: Inserción de Contenidos** ✅
+  * Cursos sembrados en todas las materias de la ESO mediante `seed_data.py` (ejecutado en el shell de Django).
+  * `seed_data.py` incluye categorías, niveles y cursos básicos de Matemáticas y Física.
+  * Soporte de renderizado HTML en `CoursePlayer.jsx` (`dangerouslySetInnerHTML`) para contenido enriquecido que el administrador puede insertar manualmente desde el panel de Django.
 
 * **Fase 19: Correcciones Generales y Documentación Interna** ✅
-  * Revisión y "españolización" de variables y funciones propias en todo el código.
+  * Revisión y “españolización” de variables y funciones propias en todo el código.
   * Adición de comentarios exhaustivos en cada archivo para facilitar el mantenimiento.
   * Múltiples commits atómicos en la rama `release/correccionesGenerales`.
 
@@ -218,8 +219,7 @@ La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina 
 
 ### 🔹 Comandos de Backend (Django)
 *   **Ejecutar Migraciones:** `docker-compose exec backend python manage.py migrate`
-*   **Poblar BD con cursos:** `docker-compose exec backend python seed_data.py`
-*   **Poblar BD con lecciones y ejercicios:** `docker-compose exec backend python seed_content.py`
+*   **Poblar BD con cursos (básico):** `docker-compose exec backend python manage.py shell < seed_data.py`
 *   **Crear Superusuario:** `docker-compose exec backend python manage.py createsuperuser`
 *   **Crear App:** `docker-compose exec backend python manage.py startapp nombre_de_la_app`
 *   **Consola de Django:** `docker-compose exec backend python manage.py shell`
@@ -249,11 +249,12 @@ La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina 
 ### Gestión de Usuarios
 | Método | Endpoint | Descripción |
 |---|---|---|
-| `GET` | `/api/users/management/` | Perfil del alumno actual |
-| `POST` | `/api/users/management/update_avatar/` | Cambiar avatar de búho (devuelve JWT nuevo) |
+| `POST` | `/api/users/register/` | Registro de nuevo alumno |
+| `GET` | `/api/users/management/` | Lista de usuarios (admin) |
+| `POST` | `/api/users/management/{id}/update_avatar/` | Cambiar avatar de búcho (devuelve JWT nuevo) |
 | `GET` | `/api/users/lives/` | Estado de vidas y cooldowns de minijuegos |
-| `POST` | `/api/users/lives/lose/` | Restar 1 vida al alumno |
-| `POST` | `/api/users/lives/recover/{minijuego}/` | Ganar 1 vida tras superar un minijuego |
+| `POST` | `/api/users/lives/decrease/` | Restar 1 vida al alumno |
+| `POST` | `/api/users/minigames/play/` | Validar resultado de minijuego (requiere Plan 3 con 0 vidas) |
 
 ### Sistema de Tutorías y Profesores
 | Método | Endpoint | Descripción |
@@ -291,8 +292,9 @@ Categoría (asignatura)
 ```
 
 ### Autenticación JWT
-* El token `access` tiene una vida corta (5 minutos). El interceptor de Axios lo renueva automáticamente usando el `refresh` token sin interrumpir al usuario.
-* El payload del JWT incluye campos personalizados: `user_id`, `username`, `current_student_level`, `experience_points`, `subscription_level`, `selected_avatar`, `is_teacher`, `lives_count`.
+* El token `access` tiene una vida corta. El interceptor de Axios lo renueva automáticamente usando el `refresh` token sin interrumpir al usuario.
+* El payload del JWT incluye campos personalizados: `user_id`, `username`, `current_student_level`, `experience_points`, `subscription_level`, `selected_avatar`, `is_teacher`.
+* **Nota:** `lives_count` **no** está en el JWT. El frontend lo obtiene en peticiones separadas a `/api/users/lives/`.
 
 ### Seguridad del Contenido HTML
 * En `CoursePlayer.jsx` se usa `dangerouslySetInnerHTML` para renderizar la teoría con formato (colores, negrita, etc.).
