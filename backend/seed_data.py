@@ -25,4 +25,13 @@ Course.objects.create(knowledge_level=nivel1_bio, title="La Biosfera", descripti
 Course.objects.create(knowledge_level=nivel2_bio, title="ADN Estelar", description="Los bloques constructores de las especies alienígenas y humanas.")
 Course.objects.create(knowledge_level=nivel2_bio, title="Selección Natural", description="Adaptación a entornos hostiles en el espacio.")
 
+# Geografía e Historia
+cat_historia = Category.objects.create(name="Geografía e Historia", description="Explora las civilizaciones antiguas y los mapas del universo.")
+nivel1_historia = KnowledgeLevel.objects.create(category=cat_historia, name="Civilizaciones Antiguas", order=1)
+nivel2_historia = KnowledgeLevel.objects.create(category=cat_historia, name="Historia Moderna", order=2)
+Course.objects.create(knowledge_level=nivel1_historia, title="Egipto y los Faraones", description="Descifra los jeroglíficos y construye pirámides.")
+Course.objects.create(knowledge_level=nivel1_historia, title="El Imperio Romano", description="La expansión del imperio y su legado.")
+Course.objects.create(knowledge_level=nivel2_historia, title="La Revolución Industrial", description="Máquinas de vapor y cambios sociales.")
+Course.objects.create(knowledge_level=nivel2_historia, title="Descubrimientos Geográficos", description="La ruta de las especias y el nuevo mundo.")
+
 print("Base de datos cósmica poblada con éxito.")
