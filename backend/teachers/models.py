@@ -61,3 +61,46 @@ class Professor(models.Model):
 
     def __str__(self):
         return f'{self.full_name} — {self.title}'
+
+class Consultation(models.Model):
+    STATUS_CHOICES = [
+        ('PENDING', 'Pendiente'),
+        ('ANSWERED', 'Respondida'),
+    ]
+
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='consultations',
+        verbose_name='Estudiante'
+    )
+    professor = models.ForeignKey(
+        Professor,
+        on_delete=models.CASCADE,
+        related_name='consultations',
+        verbose_name='Profesor'
+    )
+    course = models.ForeignKey(
+        'courses.Course',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='consultations',
+        verbose_name='Curso relacionado'
+    )
+    
+    message = models.TextField(verbose_name='Mensaje / Duda')
+    response = models.TextField(blank=True, verbose_name='Respuesta del Profesor')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING', verbose_name='Estado')
+    meeting_link = models.CharField(max_length=500, blank=True, verbose_name='Enlace de Videollamada (Jitsi)')
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Creado el')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Actualizado el')
+
+    class Meta:
+        verbose_name = 'Consulta'
+        verbose_name_plural = 'Consultas'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'Consulta de {self.student.username} a {self.professor.full_name} ({self.get_status_display()})'

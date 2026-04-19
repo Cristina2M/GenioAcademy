@@ -24,3 +24,19 @@ class ProfessorSerializer(serializers.ModelSerializer):
             'avatar_url', 'subjects', 'subjects_detail', 'is_active', 'cv_json'
         ]
         # 'subjects' se usa para escritura (IDs) y 'subjects_detail' para lectura
+
+from .models import Consultation
+
+class ConsultationSerializer(serializers.ModelSerializer):
+    student_name = serializers.CharField(source='student.username', read_only=True)
+    professor_name = serializers.CharField(source='professor.full_name', read_only=True)
+    course_title = serializers.CharField(source='course.title', read_only=True)
+
+    class Meta:
+        model = Consultation
+        fields = [
+            'id', 'student', 'student_name', 'professor', 'professor_name', 
+            'course', 'course_title', 'message', 'response', 'status', 
+            'meeting_link', 'created_at', 'updated_at'
+        ]
+        read_only_fields = ['student', 'status', 'created_at', 'updated_at']
