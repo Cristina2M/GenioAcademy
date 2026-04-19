@@ -169,13 +169,42 @@ La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina 
 
 ## 🌿 Estrategia de Ramas (Git Flow)
 
+### Ramas principales
 | Rama | Propósito |
 |---|---|
-| `main` | Código estable listo para producción |
-| `develop` | Integración de todas las features completadas |
-| `feature/microcursos` | Expansión del catálogo de cursos (25+ cursos) |
-| `feature/contenido-formateado` | Soporte de HTML enriquecido en lecciones |
-| `release/correccionesGenerales` | Limpieza de código, comentarios y españolización |
+| `main` | Código estable y validado, listo para producción |
+| `develop` | Rama de integración. Aquí convergen todas las features completadas |
+
+### Ramas de Release (integraciones y revisiones cruzadas)
+| Rama | Propósito |
+|---|---|
+| `release/backend` | Primera versión estable del backend Django + DRF |
+| `release/hito-3` | Cierre del Hito III: frontend completo y conectado al backend |
+| `release/revision2` | Segunda ronda de revisión general antes de los hitos de gamificación |
+| `release/correccionesGenerales` | Limpieza de código, españolización de variables y comentarios exhaustivos (rama actual) |
+
+### Ramas de Feature (desarrollo de funcionalidades)
+| Rama | Funcionalidad desarrollada |
+|---|---|
+| `feature/bd` | Modelado inicial de la base de datos (CustomUser, Cursos, Niveles) |
+| `feature/backendV1` | Primera versión del backend: API REST, serializadores y migraciones |
+| `feature/motorLogica` | Motor de lógica incremental: progresión de XP, subida de nivel y bloqueo 403 |
+| `feature/autenticacionFrontend` | Sistema de login/registro en React conectado al JWT del backend |
+| `feature/frontend` | Base del frontend: estructura de páginas y enrutamiento SPA |
+| `feature/frontendV1` | Primera versión estable del frontend con todas las páginas base |
+| `feature/home-v2` | Rediseño de la página de inicio con estética espacial mejorada |
+| `feature/panelEstudiante` | Dashboard del alumno: avatar, XP, misión sugerida y medallas |
+| `feature/reproductorCursos` | Componente `CoursePlayer.jsx`: teoría, simulador de preguntas y sidebar |
+| `feature/Catalogo` | Página de catálogo de cursos con filtros por materia y nivel |
+| `feature/mision` | Página "La Misión": propósito de la academia y planes de suscripción |
+| `feature/IA` | Integración de Astro: tutor socrático con Groq + LLaMA + `AIChatPanel.jsx` |
+| `feature/vidas` | Sistema Roguelike: 3 planetas, regeneración pasiva y 5 minijuegos de recuperación |
+| `feature/claustro` | Página del Claustro: catálogo público de profesores con cards animadas |
+| `feature/interfaz-profesor` | Panel docente (`/teacher-dashboard`): bandeja de consultas y tabla de alumnos |
+| `feature/tutorias` | Sistema de tutorías: modal de solicitud, videollamadas Jitsi y notificaciones en tiempo real |
+| `feature/microcursos` | Expansión del catálogo: +25 cursos en todas las materias de la ESO via `seed_data.py` |
+| `feature/contenido-formateado` | Lecciones con HTML enriquecido y ejercicios via `seed_content.py` |
+| `feature/docs` | Documentación técnica y actualizaciones del README |
 
 ---
 
