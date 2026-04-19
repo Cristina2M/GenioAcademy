@@ -47,8 +47,12 @@ nivel1_historia = KnowledgeLevel.objects.create(category=cat_historia, name="Civ
 nivel2_historia = KnowledgeLevel.objects.create(category=cat_historia, name="Historia Moderna", order=2)
 Course.objects.create(knowledge_level=nivel1_historia, title="Egipto y los Faraones", description="Descifra los jeroglíficos y construye pirámides.")
 Course.objects.create(knowledge_level=nivel1_historia, title="El Imperio Romano", description="La expansión del imperio y su legado.")
+Course.objects.create(knowledge_level=nivel1_historia, title="Mesopotamia Antigüa", description="La cuna de las civilizaciones entre ríos.")
+Course.objects.create(knowledge_level=nivel1_historia, title="Antigua Grecia", description="Filosofía, democracia y guerras médicas.")
 Course.objects.create(knowledge_level=nivel2_historia, title="La Revolución Industrial", description="Máquinas de vapor y cambios sociales.")
 Course.objects.create(knowledge_level=nivel2_historia, title="Descubrimientos Geográficos", description="La ruta de las especias y el nuevo mundo.")
+Course.objects.create(knowledge_level=nivel2_historia, title="Primera Guerra Mundial", description="El conflicto global del siglo XX.")
+Course.objects.create(knowledge_level=nivel2_historia, title="La Guerra Fría", description="El espionaje en la era del telón de acero.")
 
 # Lengua y Literatura
 cat_lengua = Category.objects.create(name="Lengua y Literatura", description="Domina el arte de la comunicación y las historias de la humanidad.")
