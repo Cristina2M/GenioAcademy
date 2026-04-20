@@ -606,6 +606,98 @@ COURSES_DATA = {
             'answer': 'Zeus'
         }
     ],
+    'La Revolución Industrial': [
+        {
+            'title': 'El Vapor que movió el Mundo',
+            'content': '<h3 class="text-2xl text-slate-400 font-bold mb-4">De la Granja a la Fábrica</h3><p class="mb-4 text-slate-300 text-lg">A finales del siglo XVIII, la invención de la máquina de vapor cambió todo. El trabajo manual fue sustituido por máquinas potentes.</p>',
+            'question': '¿Qué invento fue el motor principal de la Primera Revolución Industrial?',
+            'options': ['Máquina de vapor', 'Electricidad', 'Internet'],
+            'answer': 'Máquina de vapor'
+        },
+        {
+            'title': 'Crecimiento Urbano',
+            'content': '<h3 class="text-2xl text-slate-400 font-bold mb-4">El Éxodo Rural</h3><p class="mb-4 text-slate-300 text-lg">Miles de personas dejaron el campo para trabajar en las nuevas fábricas de las ciudades, creando una nueva clase social: el proletariado.</p>',
+            'question': '¿A dónde se mudó la mayoría de la población durante la Revolución Industrial?',
+            'options': ['A las ciudades', 'A otros países', 'De vuelta al campo'],
+            'answer': 'A las ciudades'
+        },
+        {
+            'title': 'La Era del Carbón y el Hierro',
+            'content': '<h3 class="text-2xl text-slate-400 font-bold mb-4">Nuevos Materiales</h3><p class="mb-4 text-slate-300 text-lg">El carbón se convirtió en el combustible del siglo XIX, alimentando trenes y barcos de vapor que conectaron el mundo.</p>',
+            'question': '¿Cuál era el combustible principal de las máquinas de vapor?',
+            'options': ['Carbón', 'Petróleo', 'Madera'],
+            'answer': 'Carbón'
+        }
+    ],
+    'Descubrimientos Geográficos': [
+        {
+            'title': 'Nuevas Rutas de Especias',
+            'content': '<h3 class="text-2xl text-rose-300 font-bold mb-4">Exploradores del Océano</h3><p class="mb-4 text-slate-300 text-lg">En el siglo XV, los europeos buscaban rutas alternativas para llegar a las Indias y así conseguir especias preciosas.</p>',
+            'question': '¿Qué buscaban principalmente los exploradores al navegar hacia el oeste?',
+            'options': ['Especias y oro', 'Nuevos planetas', 'Hielo'],
+            'answer': 'Especias y oro'
+        },
+        {
+            'title': 'El Encuentro de Dos Mundos',
+            'content': '<h3 class="text-2xl text-rose-300 font-bold mb-4">1492: El Gran Cambio</h3><p class="mb-4 text-slate-300 text-lg">Cristóbal Colón llegó a América pensando que estaba en Asia. Esto cambió la historia del mundo para siempre.</p>',
+            'question': '¿En qué año llegó Cristóbal Colón a tierras americanas?',
+            'options': ['1492', '1453', '1500'],
+            'answer': '1492'
+        },
+        {
+            'title': 'La Primera Vuelta al Mundo',
+            'content': '<h3 class="text-2xl text-rose-300 font-bold mb-4">Magallanes y Elcano</h3><p class="mb-4 text-slate-300 text-lg">Esta expedición demostró por primera vez que la Tierra era redonda y que todos los océanos estaban conectados.</p>',
+            'question': '¿Qué demostró la expedición de Magallanes y Elcano?',
+            'options': ['Que la Tierra es redonda', 'Que existen las sirenas', 'Que el sol gira alrededor de la Tierra'],
+            'answer': 'Que la Tierra es redonda'
+        }
+    ],
+    'Primera Guerra Mundial': [
+        {
+            'title': 'La Gran Guerra',
+            'content': '<h3 class="text-2xl text-stone-500 font-bold mb-4">Trincheras y Barro</h3><p class="mb-4 text-slate-300 text-lg">Fue un conflicto masivo que involucró a las principales potencias del mundo entre 1914 y 1918.</p>',
+            'question': '¿En qué año comenzó la Primera Guerra Mundial?',
+            'options': ['1914', '1918', '1939'],
+            'answer': '1914'
+        },
+        {
+            'title': 'Nuevas Tecnologías de Combate',
+            'content': '<h3 class="text-2xl text-stone-500 font-bold mb-4">Tanques y Aviones</h3><p class="mb-4 text-slate-300 text-lg">Por primera vez se usaron armas químicas, tanques y aviación militar a gran escala, cambiando la forma de hacer la guerra.</p>',
+            'question': '¿Cuál de estas tecnologías apareció por primera vez en este conflicto?',
+            'options': ['Tanques de guerra', 'Drones', 'Misiles nucleares'],
+            'answer': 'Tanques de guerra'
+        },
+        {
+            'title': 'El Tratado de Versalles',
+            'content': '<h3 class="text-2xl text-stone-500 font-bold mb-4">Un Final Tenso</h3><p class="mb-4 text-slate-300 text-lg">El tratado que puso fin a la guerra impuso duras condiciones a Alemania, lo que sembró las semillas de futuros conflictos.</p>',
+            'question': '¿Cómo se llamó el tratado de paz que puso fin oficialmente a la Gran Guerra?',
+            'options': ['Tratado de Versalles', 'Pacto de Varsovia', 'Tratado de Utrecht'],
+            'answer': 'Tratado de Versalles'
+        }
+    ],
+    'La Guerra Fría': [
+        {
+            'title': 'Un Mundo Dividido',
+            'content': '<h3 class="text-2xl text-cyan-700 font-bold mb-4">El Telón de Acero</h3><p class="mb-4 text-slate-300 text-lg">Tras la 2ª Guerra Mundial, EE.UU. y la URSS compitieron por la influencia global sin llegar a un enfrentamiento directo.</p>',
+            'question': '¿Quiénes fueron los dos principales rivales durante la Guerra Fría?',
+            'options': ['EE.UU. y la URSS', 'Alemania y Francia', 'China y Japón'],
+            'answer': 'EE.UU. y la URSS'
+        },
+        {
+            'title': 'La Carrera Espacial',
+            'content': '<h3 class="text-2xl text-cyan-700 font-bold mb-4">Mirando a las Estrellas</h3><p class="mb-4 text-slate-300 text-lg">La competencia entre superpotencias impulsó la llegada del hombre a la Luna y el nacimiento de las agencias espaciales.</p>',
+            'question': '¿Qué hito marcó el punto culminante de la carrera espacial en 1969?',
+            'options': ['Llegada a la Luna', 'Lanzamiento del Sputnik', 'Primer satélite artificial'],
+            'answer': 'Llegada a la Luna'
+        },
+        {
+            'title': 'La Caída del Muro',
+            'content': '<h3 class="text-2xl text-cyan-700 font-bold mb-4">El Fin de una Era</h3><p class="mb-4 text-slate-300 text-lg">En 1989, la caída del Muro de Berlín simbolizó el colapso del bloque soviético y el fin de la tensión bipolar.</p>',
+            'question': '¿Qué ciudad estaba dividida por un muro durante la Guerra Fría?',
+            'options': ['Berlín', 'Londres', 'Moscú'],
+            'answer': 'Berlín'
+        }
+    ],
     # I will add more courses as I go to avoid giant files in one turn
 }
 
