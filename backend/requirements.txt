@@ -5,4 +5,6 @@ django-cors-headers
 dj-database-url
 djangorestframework-simplejwt
 groq
-python-dotenv
+python-dotenv
+gunicorn
+whitenoise
