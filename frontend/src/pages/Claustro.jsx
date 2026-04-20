@@ -10,30 +10,30 @@ import '../styles/professors.css';
 const HARDCODED_PROFESSORS = [
     {
         id: 1,
-        full_name: "Dra. Elara Vantaris",
+        full_name: "Dr. Aris Thorne",
         title: "Comandante de Misiones Matemáticas",
         avatar_url: "/assets/professors/prof_math.png",
-        bio: "Doctorada en Astrofísica por el MIT. Elara ha dedicado más de una década a descifrar los patrones numéricos que rigen las órbitas planetarias y la lógica universal.",
+        bio: "Especialista en lógica pura y patrones estelares. Aris utiliza el lenguaje de los números para trazar las rutas más seguras a través del hiperespacio educativo.",
         cv_json: {
             education: [
-                { degree: "Ph.D. en Astrofísica Relevante", institution: "MIT, USA" },
-                { degree: "Máster en Computación Cuántica", institution: "Stanford" },
-                { degree: "Grado en Matemáticas Puras", institution: "Oxford" }
+                { degree: "Ph.D. en Matemáticas Aplicadas", institution: "Oxford" },
+                { degree: "Máster en Teoría de Números", institution: "Princeton" },
+                { degree: "Grado en Astrofísica", institution: "MIT" }
             ],
             experience: [
-                { role: "Directora de Navegación", company: "Agencia Espacial Europea" },
-                { role: "Catedrática de Cálculo", company: "Universidad de Cambridge" },
-                { role: "Investigadora Principal", company: "CERN" }
+                { role: "Catedrático de Cálculo", company: "Universidad de Cambridge" },
+                { role: "Investigador de Lógica", company: "CERN" },
+                { role: "Director de Navegación", company: "ESA" }
             ],
-            methods: ["Modelado 3D", "Lógica Borrosa", "Cálculo Galáctico"]
+            methods: ["Lógica Borrosa", "Cálculo Galáctico", "Modelado 3D"]
         }
     },
     {
         id: 2,
-        full_name: "Dra. Lyra Nova",
-        title: "Arquitecta de Leyes de la Física y Química",
+        full_name: "Dr. Felix Quantum",
+        title: "Arquitecto de Física y Química",
         avatar_url: "/assets/professors/prof_chem.png",
-        bio: "Especialista en mecánica cuántica y termodinámica aplicada. Su pasión es hacer que lo invisible se vuelva comprensible y fascinante para las mentes jóvenes.",
+        bio: "Explorador de la materia y la energía. Felix transforma las leyes fundamentales del universo en experimentos asombrosos que desafían la gravedad de lo cotidiano.",
         cv_json: {
             education: [
                 { degree: "Ph.D. en Física de Partículas", institution: "CERN Academy" },
@@ -50,10 +50,10 @@ const HARDCODED_PROFESSORS = [
     },
     {
         id: 3,
-        full_name: "Dr. Aris Thorne",
-        title: "Explorador de Biología y Geología",
+        full_name: "Dra. Elara Vantaris",
+        title: "Exploradora de Biología y Geología",
         avatar_url: "/assets/professors/prof_bio.png",
-        bio: "Bióloga marina y experta en exobiología. Ha liderado misiones para entender la vida en entornos extremos de la Tierra y en mundos lejanos.",
+        bio: "Bióloga marina y experta en exobiología. Elara ha dedicado su carrera a entender cómo la vida florece en los rincones más extremos y fascinantes de la galaxia.",
         cv_json: {
             education: [
                 { degree: "Doctorado en Exobiología", institution: "NASA Fellowship" },
@@ -73,7 +73,7 @@ const HARDCODED_PROFESSORS = [
         full_name: "Dra. Sarah Moon",
         title: "Embajadora de Lengua y Literatura",
         avatar_url: "/assets/professors/prof_lang.png",
-        bio: "Lingüista experta en comunicación inter-cultural. Sarah transforma el análisis sintáctico y la literatura en el viaje más emocionante que un estudiante puede emprender.",
+        bio: "Lingüista experta en comunicación inter-cultural. Sarah transforma el arte de las palabras en el viaje más emocionante que un estudiante puede emprender.",
         cv_json: {
             education: [
                 { degree: "Ph.D. en Literatura Comparada", institution: "Salamanca" },
@@ -93,7 +93,7 @@ const HARDCODED_PROFESSORS = [
         full_name: "Dra. Kiara Stone",
         title: "Cronista de Geografía e Historia",
         avatar_url: "/assets/professors/prof_geo.png",
-        bio: "Historiadora y cartógrafa moderna. Kiara cree que entender nuestro pasado es la única brújula real para navegar el futuro de nuestra civilización.",
+        bio: "Historiadora y cartógrafa moderna. Kiara cree que entender nuestras raíces es la única brújula real para navegar el futuro de nuestra civilización.",
         cv_json: {
             education: [
                 { degree: "Cum Laude en Historia Universal", institution: "U. de Bolonia" },
@@ -113,7 +113,7 @@ const HARDCODED_PROFESSORS = [
         full_name: "Dr. Theo Canvas",
         title: "Maestro de Expresión Artística",
         avatar_url: "/assets/professors/prof_art.png",
-        bio: "Visionario del arte digital y tradicional. Theo enseña a los estudiantes a plasmar sus ideas en lienzos infinitos utilizando tanto pinceles como algoritmos.",
+        bio: "Visionario del arte digital y tradicional. Theo enseña a plasmar ideas en lienzos infinitos utilizando tanto pinceles clásicos como algoritmos de vanguardia.",
         cv_json: {
             education: [
                 { degree: "Doctorado en Bellas Artes", institution: "Royal College of Art" },
