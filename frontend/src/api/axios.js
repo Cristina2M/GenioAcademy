@@ -3,10 +3,15 @@ import axios from 'axios';
 // ==========================================
 // CLIENTE HTTP (AXIOS) CONFIGURADO GLOBALMENTE
 // ==========================================
-// Todo el tráfico web hacia Django debe usar esta instancia.
+// La URL base viene de la variable de entorno VITE_API_URL:
+//   - En desarrollo local (.env.local): http://127.0.0.1:8000/api/
+//   - En producción (Vercel):           https://api.cristina2daw.es/api/
+// Vite inyecta las variables VITE_* en tiempo de compilación.
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api/', // El puerto de tu Backend en Docker
+    baseURL: API_URL,
     headers: {
         'Content-Type': 'application/json',
     }
@@ -63,7 +68,7 @@ axiosInstance.interceptors.response.use(
                 if (authTokens?.refresh) {
                     // ⚠️ ATENCIÓN: Usamos "axios.post" estándar, NO "axiosInstance.post" 
                     // Si usamos la instancia, su propio interceptor chocaría consigo mismo.
-                    const respuestaRefresco = await axios.post('http://127.0.0.1:8000/api/token/refresh/', {
+                    const respuestaRefresco = await axios.post(`${API_URL}token/refresh/`, {
                         refresh: authTokens.refresh
                     });
                     
