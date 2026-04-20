@@ -43,6 +43,13 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['subscription_level'] = user.subscription_level  # Plan 1, 2 o 3
         token['is_teacher'] = hasattr(user, 'professor_profile')
 
+        # Datos del profesor (si el usuario es un maestro)
+        token['is_teacher'] = hasattr(user, 'professor_profile')
+        if hasattr(user, 'professor_profile'):
+            # Guardamos la ruta de imagen real del profesor para que el Navbar la muestre
+            # El campo avatar_url contiene la ruta pública: /assets/professors/prof_math.png
+            token['professor_image'] = user.professor_profile.avatar_url or ''
+
         return token
 
 

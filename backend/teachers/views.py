@@ -131,8 +131,9 @@ class ConsultationViewSet(viewsets.ModelViewSet):
         # Extraemos los IDs únicos de esos alumnos (sin repeticiones)
         ids_alumnos = completitudes.values_list('user_id', flat=True).distinct()
 
-        # Obtenemos los objetos de usuario completos
-        alumnos = UsuarioPersonalizado.objects.filter(id__in=ids_alumnos)
+        # Solo mostramos alumnos del Plan 3 (Agujero de Gusano): los únicos con acceso a tutorías
+        # Los planes 1 y 2 no tienen esta funcionalidad habilitada, por eso no aparecen aquí
+        alumnos = UsuarioPersonalizado.objects.filter(id__in=ids_alumnos, subscription_level=3)
 
         # Construimos la respuesta con los datos que necesita el frontend
         datos = [{
