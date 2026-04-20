@@ -159,8 +159,9 @@ CORS_ALLOWED_ORIGINS = [
     # Producción: dominio principal y subdominio www
     "https://cristina2daw.es",
     "https://www.cristina2daw.es",
-    # URL provisional de Vercel (antes de configurar el dominio personalizado)
+    # URLs de Vercel (dominio asignado y previews)
     "https://genio-academy.vercel.app",
+    "https://genio-academy-hhggfz2dc-cristina2ms-projects.vercel.app",
 ]
 
 # ── LOGGING ──
