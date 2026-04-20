@@ -2,7 +2,7 @@
 ## Genio Academy — Plataforma de Aprendizaje Incremental para la ESO
 
 > **Repositorio GitHub:** https://github.com/Cristina2M/GenioAcademy  
-> **Versión del documento:** Hito VII completado  
+> **Versión del documento:** Hito VII completado + Fase 20 (Estabilización)  
 > **Fecha:** Abril 2026
 
 ---
@@ -168,6 +168,8 @@ Genio Academy aborda estos problemas con un enfoque triple:
 | Relación | Tipo | Descripción |
 |----------|------|-------------|
 | `CustomUser` → `CourseCompletion` | 1:N | Un alumno puede completar muchos cursos |
+| `CustomUser` → `UserCourseProgress` | 1:N | Un alumno puede tener muchos cursos en progreso (iniciados) |
+| `Course` → `UserCourseProgress` | 1:N | Un curso puede ser iniciado por muchos alumnos |
 | `Course` → `CourseCompletion` | 1:N | Un curso puede ser completado por muchos alumnos |
 | `CustomUser` → `MinigameLog` | 1:N | Un alumno puede tener muchos registros de minijuego |
 | `Category` → `KnowledgeLevel` | 1:N | Una asignatura tiene varios niveles de dificultad |
@@ -254,6 +256,7 @@ src/
  │   ├── CoursePlayer.jsx   → Reproductor: teoría + quiz + sidebar
  │   ├── Claustro.jsx       → Catálogo público de profesores
  │   ├── StudentCatalog.jsx → Claustro privado para alumnos (Plan 3)
+  ├── MySpaceJourney.jsx  → Historial de cursos del alumno (en progreso y completados, con filtros)
  │   └── TeacherDashboard.jsx → Panel docente: consultas y alumnos
  └── components/
      ├── Navbar.jsx           → Barra de navegación global
@@ -286,6 +289,7 @@ src/
 | `/register` | `Register` | Público |
 | `/dashboard` | `Dashboard` | 🔒 Privado |
 | `/dashboard/claustro` | `StudentCatalog` | 🔒 Privado |
+| `/mi-trayectoria` | `MySpaceJourney` | 🔒 Privado |
 | `/player/:courseId` | `CoursePlayer` | 🔒 Privado |
 | `/teacher-dashboard` | `TeacherDashboard` | 🔒 Privado (+ is_teacher) |
 | `*` | 404 inline | Público |
@@ -326,9 +330,10 @@ src/
 
 #### CU-06: Sistema de vidas y pérdida de planeta
 - **Actor:** Alumno conectado (cualquier plan)
-- **Descripción:** Al fallar una evaluación se llama al endpoint `POST /api/users/lives/decrease/`. Se resta 1 vida y se inicia el reloj de regeneración (`last_life_lost_at`) si no estaba ya corriendo. La regeneración de vidas se calcula al vuelo comparando `timezone.now()` con `last_life_lost_at` cada vez que el alumno hace cualquier petición al servidor, sin necesidad de tareas en segundo plano.
+- **Descripción:** Al responder incorrectamente una pregunta en el simulador (`LessonQuiz.jsx`), el componente llama automáticamente al endpoint de penalización. Se resta 1 vida y se inicia el reloj de regeneración si no estaba ya corriendo.
+- **Bloqueo preventivo:** Antes de iniciar cualquier prueba, `LessonQuiz.jsx` consulta `GET /api/users/lives/`. Si el alumno tiene 0 vidas, se muestra un aviso de **Sistemas de Simulación Bloqueados** y el botón de inicio desaparece hasta recuperar al menos 1 planeta.
 - **Endpoint:** `POST /api/users/lives/decrease/`
-- **Resultado:** El panel de vidas se actualiza en tiempo real.
+- **Resultado:** El panel de vidas se actualiza en tiempo real. El simulador queda bloqueado automáticamente al llegar a 0.
 
 #### CU-07: Recuperar vida mediante minijuego de rescate
 - **Actor:** Alumno con **Plan 3 (Agujero de Gusano)** y 0 vidas.
@@ -416,7 +421,9 @@ src/
 
 4. **Astro como proxy:** El backend actúa de intermediario obligatorio entre React y Groq. El frontend nunca conoce la `GROQ_API_KEY`. Además, el backend añade el `SYSTEM_PROMPT` de Astro (instrucciones de comportamiento socrático + contexto de la lección) antes de enviar el mensaje al modelo, algo que tampoco puede hacer el cliente.
 
-5. **Claustro público/privado:** El mismo endpoint `GET /api/teachers/professors/` devuelve resultados distintos según si el usuario está autenticado o no. Sin token: solo profesores `is_featured=True` (para la landing). Con token: claustro completo. Además, `?course_id=X` activa el filtro por materia para el modal de tutoría.
+5. **Catálogo siempre disponible:** `CategoryViewSet` es público (`AllowAny`). El endpoint acepta JWT de forma opcional — si está presente y es válido, calcula `is_completed` e `is_started` por alumno; si no hay token o es inválido, devuelve los cursos sin datos de progreso. Un fallback en `Courses.jsx` hace una segunda petición sin token si la primera falla, garantizando que el catálogo nunca muestre un error al alumno.
+
+6. **Claustro público/privado:** El mismo endpoint `GET /api/teachers/professors/` devuelve resultados distintos según si el usuario está autenticado o no. Sin token: solo profesores `is_featured=True` (para la landing). Con token: claustro completo. Además, `?course_id=X` activa el filtro por materia para el modal de tutoría.
 
 ---
 
@@ -448,7 +455,7 @@ GenioAcademy/
 │   │   └── urls.py              → Rutas: /register/, /lives/, /minigames/play/...
 │   │
 │   ├── courses/                 → App del catálogo educativo
-│   │   ├── models.py            → Category, KnowledgeLevel, Course, Lesson, Exercise, CourseCompletion
+│   │   ├── models.py            → Category, KnowledgeLevel, Course, Lesson, Exercise, CourseCompletion, UserCourseProgress
 │   │   ├── serializers.py       → Serialización del árbol de contenido
 │   │   ├── views.py             → API de cursos con bloqueo por nivel RPG
 │   │   └── urls.py              → Rutas: /categories/, /courses/{id}/, /complete/...
@@ -851,5 +858,5 @@ _[Mostrar tabla de planes de la sección 9]_
 
 ---
 
-_Documentación generada y revisada en Abril 2026. Verificada contra el código real del repositorio._
+_Documentación generada y revisada en Abril 2026. Última actualización: Fase 20 — Estabilización completada._
 _Proyecto desarrollado como Trabajo de Fin de Ciclo — DAW._

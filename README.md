@@ -1,8 +1,10 @@
-# 📝 Genio Academy — Plataforma de Aprendizaje Incremental
+# 🚀 Genio Academy — Plataforma de Aprendizaje Incremental
 
 Genio Academy es una plataforma de academia online diseñada específicamente para estudiantes de la ESO. A diferencia de las plataformas tradicionales, organiza el contenido por **niveles de conocimiento específicos** y no por cursos académicos, lo que permite un aprendizaje personalizado y progresivo.
 
 La plataforma incluye un sistema de **gamificación RPG** (XP, niveles, vidas Roguelike), **minijuegos educativos** de recuperación, un **tutor virtual socrático con IA** (Groq / LLaMA), un **claustro interactivo** de profesores y **videollamadas de tutoría en directo** via Jitsi Meet.
+
+> ⚠️ **Nota importante para desarrolladores:** El proyecto usa Docker con una base de datos PostgreSQL independiente. Los scripts de Django (`manage.py migrate`, etc.) deben ejecutarse **dentro del contenedor activo** mediante `docker exec genioacademy-backend-1 python manage.py <comando>` y NO con `docker-compose exec` si el archivo `.env` no está presente en el host.
 
 ---
 
@@ -123,6 +125,8 @@ Mecánica Roguelike y motores de minijuegos para fomentar la retención del alum
   * 3 planetas (vidas) por alumno en el backend.
   * Regeneración pasiva: recuperación de 1 planeta cada cierto tiempo (`last_life_lost_at`).
   * `LivesPanel.jsx` muestra la salud del alumno e integra los minijuegos.
+  * **Al fallar una pregunta del simulador** se llama automáticamente a `POST /api/users/lives/decrease/` restando 1 planeta en tiempo real.
+  * **Bloqueo preventivo:** si el alumno llega a 0 planetas, `LessonQuiz.jsx` verifica el estado antes de permitir iniciar la prueba y muestra un aviso de sistemas bloqueados.
 
 * **Fase 15: Sistema de Rescate y Minijuegos Educativos** ✅
   * 5 motores de juego en React: Parejas, Cálculo, Sopa de Letras, Completar y Verdadero/Falso.
@@ -146,16 +150,24 @@ Conexión humana y especializada para estudiantes de Plan 3.
 ### 🔧 HITO VII: Calidad, Contenido y Cierre Técnico
 Afinación del proyecto para su entrega, exposición y uso real.
 
-* **Fase 18: Inserción de Contenidos** ✅
-  * Cursos sembrados en todas las materias de la ESO mediante `seed_data.py` (ejecutado en el shell de Django).
-  * `seed_data.py` incluye categorías, niveles y cursos básicos de Matemáticas y Física.
-  * Soporte de renderizado HTML en `CoursePlayer.jsx` (`dangerouslySetInnerHTML`) para contenido enriquecido que el administrador puede insertar manualmente desde el panel de Django.
-
-* **Fase 19: Correcciones Generales y Documentación Interna** ✅
-  * Revisión y “españolización” de variables y funciones propias en todo el código.
-  * Adición de comentarios exhaustivos en cada archivo para facilitar el mantenimiento.
-  * Múltiples commits atómicos en la rama `release/correccionesGenerales`.
-
+* **Fase 18: Inserción de Contenidos** ✅
+  * Cursos sembrados mediante seed_data.py y populate_one.py.
+  * Soporte de renderizado HTML en CoursePlayer.jsx (dangerouslySetInnerHTML) para contenido enriquecido.
+
+* **Fase 19: Correcciones Generales y Documentación Interna** ✅
+  * Revisión y españolización de variables y funciones propias en todo el código.
+  * Adición de comentarios exhaustivos en cada archivo para facilitar el mantenimiento.
+  * Múltiples commits atómicos en la rama 
+elease/correccionesGenerales.
+
+* **Fase 20: Estabilización y Mecánica de Penalización** ✅
+  * **Catálogo resiliente:** CategoryViewSet configurado como público (AllowAny). Fallback sin token en Courses.jsx garantiza carga siempre.
+  * **Refresco de sesión seguro:** SafeTokenRefreshView evita errores 500 con usuarios eliminados de BD.
+  * **Penalización en simuladores:** LessonQuiz.jsx llama a POST /api/users/lives/decrease/ al fallar una respuesta.
+  * **Bloqueo por vidas:** Con 0 planetas, el simulador bloquea el inicio de nuevas pruebas.
+  * **Dashboard mejorado:** Nuevos endpoints my_active_courses y my_full_journey para historial del alumno.
+  * **Bug crítico resuelto:** Migración courses.0004_usercourseprogress estaba pendiente en PostgreSQL Docker.
+
 ---
 
 ## 🎨 Identidad Visual y UI: El Universo Astro
@@ -204,7 +216,7 @@ La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina 
 | `feature/interfaz-profesor` | Panel docente (`/teacher-dashboard`): bandeja de consultas y tabla de alumnos |
 | `feature/tutorias` | Sistema de tutorías: modal de solicitud, videollamadas Jitsi y notificaciones en tiempo real |
 | `feature/microcursos` | Expansión del catálogo: +25 cursos en todas las materias de la ESO via `seed_data.py` |
-| `feature/contenido-formateado` | Lecciones con HTML enriquecido y ejercicios via `seed_content.py` |
+| `feature/contenido-formateado` | Catálogo estable (AllowAny), bloqueo de simuladores por vidas, penalización automática al fallar, fix migración PostgreSQL, `SafeTokenRefreshView`, endpoints `my_active_courses` y `my_full_journey` |
 | `feature/docs` | Documentación técnica y actualizaciones del README |
 
 ---
@@ -212,21 +224,26 @@ La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina 
 ## 🛠️ Guía de Comandos (Cheat Sheet)
 
 ### 🔹 Gestión del Entorno (Docker)
-*   **Levantar / Reconstruir:** `docker-compose up --build`
-*   **Levantar normalmente:** `docker-compose up`
-*   **Detener servicios:** `docker-compose down`
-*   **Limpieza total (borra contenedores y BD):** `docker-compose down -v`
+*   **Levantar / Reconstruir:** `docker compose up --build`
+*   **Levantar normalmente:** `docker compose up`
+*   **Detener servicios:** `docker compose down`
+*   **Limpieza total (borra contenedores y BD):** `docker compose down -v`
+*   **Reiniciar solo el backend:** `docker compose restart backend`
+*   **Ver logs en tiempo real:** `docker compose logs -f backend`
 
 ### 🔹 Comandos de Backend (Django)
-*   **Ejecutar Migraciones:** `docker-compose exec backend python manage.py migrate`
-*   **Poblar BD con cursos (básico):** `docker-compose exec backend python manage.py shell < seed_data.py`
-*   **Crear Superusuario:** `docker-compose exec backend python manage.py createsuperuser`
-*   **Crear App:** `docker-compose exec backend python manage.py startapp nombre_de_la_app`
-*   **Consola de Django:** `docker-compose exec backend python manage.py shell`
+
+> ⚠️ Si el archivo `backend/.env` no existe en el host, usa `docker exec` directamente con el nombre del contenedor en lugar de `docker compose exec`.
+
+*   **Ejecutar Migraciones:** `docker exec genioacademy-backend-1 python manage.py migrate`
+*   **Ver migraciones pendientes:** `docker exec genioacademy-backend-1 python manage.py showmigrations`
+*   **Poblar BD con cursos:** `docker exec genioacademy-backend-1 python manage.py shell < seed_data.py`
+*   **Crear Superusuario:** `docker exec genioacademy-backend-1 python manage.py createsuperuser`
+*   **Consola de Django:** `docker exec -it genioacademy-backend-1 python manage.py shell`
 
 ### 🔹 Comandos de Frontend (React)
-*   **Instalar librerías (contenedor en marcha):** `docker-compose exec frontend npm install nombre-libreria`
-*   **Instalar librerías (contenedor parado):** `docker-compose run --rm frontend npm install nombre-libreria`
+*   **Instalar librerías (contenedor en marcha):** `docker compose exec frontend npm install nombre-libreria`
+*   **Instalar librerías (contenedor parado):** `docker compose run --rm frontend npm install nombre-libreria`
 
 ---
 
@@ -240,11 +257,14 @@ La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina 
 | `POST` | `/api/users/register/` | Registro de nuevo alumno |
 
 ### Catálogo Educativo
-| Método | Endpoint | Descripción |
-|---|---|---|
-| `GET` | `/api/courses/categories/` | Árbol completo: asignaturas → niveles → cursos |
-| `GET` | `/api/courses/courses/{id}/` | Detalle de curso con lecciones y ejercicios |
-| `POST` | `/api/courses/courses/{id}/complete/` | Completar curso (suma XP, sube nivel si toca) |
+| Método | Endpoint | Acceso | Descripción |
+|---|---|---|---|
+| `GET` | `/api/courses/categories/` | 🌐 Público | Árbol completo: asignaturas → niveles → cursos. JWT opcional para calcular progreso |
+| `GET` | `/api/courses/courses/{id}/` | 🔒 Autenticado | Detalle de curso con lecciones y ejercicios |
+| `POST` | `/api/courses/courses/{id}/start/` | 🔒 Autenticado | Marcar curso como iniciado (crea `UserCourseProgress`) |
+| `POST` | `/api/courses/courses/{id}/complete/` | 🔒 Autenticado | Completar curso (suma XP, sube nivel si toca) |
+| `GET` | `/api/courses/courses/my_active_courses/` | 🔒 Autenticado | Cursos del alumno en progreso (no completados) |
+| `GET` | `/api/courses/courses/my_full_journey/` | 🔒 Autenticado | Historial completo de cursos del alumno (en progreso + completados) |
 
 ### Gestión de Usuarios
 | Método | Endpoint | Descripción |
@@ -292,9 +312,10 @@ Categoría (asignatura)
 ```
 
 ### Autenticación JWT
-* El token `access` tiene una vida corta. El interceptor de Axios lo renueva automáticamente usando el `refresh` token sin interrumpir al usuario.
+* El token `access` tiene una vida de 1 día. El interceptor de Axios lo renueva automáticamente usando el `refresh` token sin interrumpir al usuario.
 * El payload del JWT incluye campos personalizados: `user_id`, `username`, `current_student_level`, `experience_points`, `subscription_level`, `selected_avatar`, `is_teacher`.
-* **Nota:** `lives_count` **no** está en el JWT. El frontend lo obtiene en peticiones separadas a `/api/users/lives/`.
+* **Nota:** `lives_count` **no** está en el JWT porque cambia con frecuencia. El frontend lo obtiene en peticiones separadas a `/api/users/lives/`.
+* **Sesiones huérfanas:** Si existe un refresh token guardado en el navegador de un usuario ya eliminado de la BD, el endpoint `/api/token/refresh/` devuelve `401 AuthenticationFailed` (no 500) gracias a `SafeTokenRefreshView`. El interceptor de Axios detecta este caso y limpia la sesión local automáticamente.
 
 ### Seguridad del Contenido HTML
 * En `CoursePlayer.jsx` se usa `dangerouslySetInnerHTML` para renderizar la teoría con formato (colores, negrita, etc.).
