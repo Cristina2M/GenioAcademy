@@ -156,12 +156,16 @@ CORS_ALLOWED_ORIGINS = [
     # Desarrollo local
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    # Producción: dominio principal y subdominio www
+    # Producción: dominio personalizado
     "https://cristina2daw.es",
     "https://www.cristina2daw.es",
-    # URLs de Vercel (dominio asignado y previews)
+    # Vercel: dominio principal del proyecto
     "https://genio-academy.vercel.app",
-    "https://genio-academy-hhggfz2dc-cristina2ms-projects.vercel.app",
+]
+
+# Acepta cualquier subdominio de Vercel (cada preview tiene una URL única)
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://.*\.vercel\.app$",
 ]
 
 # ── LOGGING ──
