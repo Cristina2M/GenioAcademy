@@ -261,6 +261,98 @@ COURSES_DATA = {
             'answer': 'Constante'
         }
     ],
+    'Relatividad Básica': [
+        {
+            'title': 'El Tiempo es Elástico',
+            'content': '<h3 class="text-2xl text-fuchsia-400 font-bold mb-4">Dilatación Temporal</h3><p class="mb-4 text-slate-300 text-lg">Einstein descubrió que cuanto más rápido viajas, más lento pasa el tiempo para ti. ¡Esmeralda de 20 años podría ser más joven que su hermano menor tras un viaje luz!</p>',
+            'question': '¿Qué ocurre con el tiempo a velocidades cercanas a la luz?',
+            'options': ['Se acelera', 'Se ralentiza', 'Se detiene por completo'],
+            'answer': 'Se ralentiza'
+        },
+        {
+            'title': 'E = mc²',
+            'content': '<h3 class="text-2xl text-fuchsia-400 font-bold mb-4">Energía y Masa</h3><p class="mb-4 text-slate-300 text-lg">La masa y la energía son dos caras de la misma moneda. Una pequeña cantidad de materia puede liberar una energía descomunal.</p>',
+            'question': 'En la famosa ecuación de Einstein, ¿qué representa la letra "c"?',
+            'options': ['Velocidad de la luz', 'Constante gravitatoria', 'Carga eléctrica'],
+            'answer': 'Velocidad de la luz'
+        },
+        {
+            'title': 'Curvatura del Espacio-Tiempo',
+            'content': '<h3 class="text-2xl text-fuchsia-400 font-bold mb-4">La Gran Malla Cósmica</h3><p class="mb-4 text-slate-300 text-lg">La gravedad no es una fuerza de atracción mágica, sino la deformación que los planetas y estrellas causan en el tejido del universo.</p>',
+            'question': '¿Cómo describe la relatividad general a la gravedad?',
+            'options': ['Como una fuerza invisible', 'Como una curvatura del espacio-tiempo', 'Como una presión atmosférica'],
+            'answer': 'Como una curvatura del espacio-tiempo'
+        }
+    ],
+    'Óptica Espacial': [
+        {
+            'title': 'Mirando al Pasado',
+            'content': '<h3 class="text-2xl text-cyan-300 font-bold mb-4">Luz y Telescopios</h3><p class="mb-4 text-slate-300 text-lg">Cuando miras una estrella lejana, estás viendo luz que salió de allí hace millones de años. ¡Los telescopios son máquinas del tiempo!</p>',
+            'question': '¿Qué estamos viendo realmente cuando observamos una estrella a 100 años luz?',
+            'options': ['Su estado actual', 'Cómo era hace 100 años', 'Su futuro'],
+            'answer': 'Cómo era hace 100 años'
+        },
+        {
+            'title': 'Refracción en Nebulosas',
+            'content': '<h3 class="text-2xl text-cyan-300 font-bold mb-4">Desviación de la Trayectoria</h3><p class="mb-4 text-slate-300 text-lg">La luz cambia de dirección cuando pasa de un medio a otro (como del vacío a un gas denso). Esto crea espejismos cósmicos.</p>',
+            'question': '¿Cómo se llama el fenómeno donde la luz cambia de dirección al cambiar de medio?',
+            'options': ['Refracción', 'Reflexión', 'Difracción'],
+            'answer': 'Refracción'
+        },
+        {
+            'title': 'El Espectro Visible',
+            'content': '<h3 class="text-2xl text-cyan-300 font-bold mb-4">Arcoíris de Datos</h3><p class="mb-4 text-slate-300 text-lg">La luz blanca es una mezcla de todos los colores. Al descomponerla, podemos saber de qué están hechas las estrellas lejanas.</p>',
+            'question': '¿Qué instrumento se usa para separar la luz en sus colores componentes?',
+            'options': ['Prisma', 'Espejo plano', 'Lente convergente'],
+            'answer': 'Prisma'
+        }
+    ],
+    'Dinámica de Fluidos': [
+        {
+            'title': 'Ríos de Plasma',
+            'content': '<h3 class="text-2xl text-sky-400 font-bold mb-4">Líquidos y Gases en Movimiento</h3><p class="mb-4 text-slate-300 text-lg">En el espacio, los gases de las nebulosas se comportan como fluidos. Estudiar su presión y velocidad es clave para la navegación.</p>',
+            'question': '¿Qué propiedad de un fluido mide su resistencia a fluir (espesor)?',
+            'options': ['Viscosidad', 'Densidad', 'Volumen'],
+            'answer': 'Viscosidad'
+        },
+        {
+            'title': 'El Principio de Bernoulli',
+            'content': '<h3 class="text-2xl text-sky-400 font-bold mb-4">Presión y Velocidad</h3><p class="mb-4 text-slate-300 text-lg">A mayor velocidad de un fluido, menor es su presión. Este principio ayuda a que las naves manioquen en atmósferas planetarias.</p>',
+            'question': 'Si la velocidad de un fluido aumenta, ¿qué ocurre con su presión según Bernoulli?',
+            'options': ['Disminuye', 'Aumenta', 'Se mantiene igual'],
+            'answer': 'Disminuye'
+        },
+        {
+            'title': 'Flujo Laminar vs Turbulento',
+            'content': '<h3 class="text-2xl text-sky-400 font-bold mb-4">Caos en la Corriente</h3><p class="mb-4 text-slate-300 text-lg">Un flujo suave y ordenado es laminar. Si hay remolinos y desorden, es turbulento. ¡Evita las turbulencias en tu reentrada!</p>',
+            'question': '¿Cómo se describe un flujo de fluido suave y ordenado en capas?',
+            'options': ['Laminar', 'Turbulento', 'Estático'],
+            'answer': 'Laminar'
+        }
+    ],
+    'La Biosfera': [
+        {
+            'title': 'El Caparazón de la Vida',
+            'content': '<h3 class="text-2xl text-emerald-400 font-bold mb-4">Ecosistemas Globales</h3><p class="mb-4 text-slate-300 text-lg">La biosfera es la capa de la Tierra donde se desarrolla la vida. Incluye desde las profundidades del océano hasta las nubes altas.</p>',
+            'question': '¿Qué término define al conjunto de seres vivos y el medio físico donde habitan?',
+            'options': ['Ecosistema', 'Población', 'Comunidad'],
+            'answer': 'Ecosistema'
+        },
+        {
+            'title': 'La Cadena Trófica',
+            'content': '<h3 class="text-2xl text-emerald-400 font-bold mb-4">¿Quién se come a quién?</h3><p class="mb-4 text-slate-300 text-lg">La energía fluye de los productores (plantas) a los consumidores (animales). Sin productores, la vida en el planeta colapsaría.</p>',
+            'question': '¿Cómo se llaman los organismos que fabrican su propio alimento?',
+            'options': ['Productores', 'Descomponedores', 'Herbívoros'],
+            'answer': 'Productores'
+        },
+        {
+            'title': 'Fotosíntesis y Oxígeno',
+            'content': '<h3 class="text-2xl text-emerald-400 font-bold mb-4">Fábricas de Aire Urbano</h3><p class="mb-4 text-slate-300 text-lg">Las plantas usan la luz solar para convertir CO2 en oxígeno. Este proceso es vital para mantener una atmósfera respirable.</p>',
+            'question': '¿Qué gas absorben las plantas durante la fotosíntesis?',
+            'options': ['Dióxido de Carbono (CO2)', 'Oxígeno (O2)', 'Nitrógeno'],
+            'answer': 'Dióxido de Carbono (CO2)'
+        }
+    ],
     # I will add more courses as I go to avoid giant files in one turn
 }
 
