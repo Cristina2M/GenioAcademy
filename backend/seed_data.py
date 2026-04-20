@@ -1,3 +1,10 @@
+import os
+import django
+
+# Configuraciones para usar los modelos de Django directamente
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
+django.setup()
+
 from courses.models import Category, KnowledgeLevel, Course
 
 # Limpiar para evitar duplicados
