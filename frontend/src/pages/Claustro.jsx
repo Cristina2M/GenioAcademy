@@ -10,10 +10,10 @@ import '../styles/professors.css';
 const HARDCODED_PROFESSORS = [
     {
         id: 1,
-        full_name: "Dra. Elena Vega",
+        full_name: "Dra. Elara Vantaris",
         title: "Comandante de Misiones Matemáticas",
         avatar_url: "/assets/professors/prof_math.png",
-        bio: "Doctorada en Astrofísica por el MIT. Elena ha dedicado 15 años a descifrar los patrones numéricos que rigen las órbitas planetarias.",
+        bio: "Doctorada en Astrofísica por el MIT. Elara ha dedicado más de una década a descifrar los patrones numéricos que rigen las órbitas planetarias y la lógica universal.",
         cv_json: {
             education: [
                 { degree: "Ph.D. en Astrofísica Relevante", institution: "MIT, USA" },
@@ -30,10 +30,10 @@ const HARDCODED_PROFESSORS = [
     },
     {
         id: 2,
-        full_name: "Dr. Julian Thorne",
-        title: "Arquitecto de Leyes de la Física",
+        full_name: "Dra. Lyra Nova",
+        title: "Arquitecta de Leyes de la Física y Química",
         avatar_url: "/assets/professors/prof_chem.png",
-        bio: "Especialista en mecánica cuántica y termodinámica aplicada. Su pasión es hacer que lo invisible se vuelva comprensible para las mentes jóvenes.",
+        bio: "Especialista en mecánica cuántica y termodinámica aplicada. Su pasión es hacer que lo invisible se vuelva comprensible y fascinante para las mentes jóvenes.",
         cv_json: {
             education: [
                 { degree: "Ph.D. en Física de Partículas", institution: "CERN Academy" },
@@ -50,10 +50,10 @@ const HARDCODED_PROFESSORS = [
     },
     {
         id: 3,
-        full_name: "Dra. Sarah Bloom",
-        title: "Exploradora de Biología y Geodesia",
+        full_name: "Dr. Aris Thorne",
+        title: "Explorador de Biología y Geología",
         avatar_url: "/assets/professors/prof_bio.png",
-        bio: "Bióloga marina y experta en exobiología. Ha liderado misiones para entender la vida en entornos extremos de la Tierra y más allá.",
+        bio: "Bióloga marina y experta en exobiología. Ha liderado misiones para entender la vida en entornos extremos de la Tierra y en mundos lejanos.",
         cv_json: {
             education: [
                 { degree: "Doctorado en Exobiología", institution: "NASA Fellowship" },
@@ -70,30 +70,10 @@ const HARDCODED_PROFESSORS = [
     },
     {
         id: 4,
-        full_name: "Dr. Marco Polo II",
-        title: "Cronista de Geografía e Historia",
-        avatar_url: "/assets/professors/prof_geo.png",
-        bio: "Historiador y cartógrafo moderno. Marco cree que entender nuestro pasado es la única brújula real para navegar el futuro de la humanidad.",
-        cv_json: {
-            education: [
-                { degree: "Cum Laude en Historia Universal", institution: "U. de Bolonia" },
-                { degree: "Especialista en Cartografía Digital", institution: "Google Earth Labs" },
-                { degree: "Máster en Arqueología Espacial", institution: "Yale" }
-            ],
-            experience: [
-                { role: "Curador de Museos", company: "The Smithsonian" },
-                { role: "Explorador de Campo", company: "National Geographic" },
-                { role: "Asesor Histórico", company: "UNESCO" }
-            ],
-            methods: ["Mapas Holográficos", "Storytelling", "Análisis Forense"]
-        }
-    },
-    {
-        id: 5,
-        full_name: "Dra. Isabella Lyra",
+        full_name: "Dra. Sarah Moon",
         title: "Embajadora de Lengua y Literatura",
         avatar_url: "/assets/professors/prof_lang.png",
-        bio: "Lingüista experta en comunicación inter-cultural. Isabella transforma la lectura en el viaje más emocionante que un estudiante puede emprender.",
+        bio: "Lingüista experta en comunicación inter-cultural. Sarah transforma el análisis sintáctico y la literatura en el viaje más emocionante que un estudiante puede emprender.",
         cv_json: {
             education: [
                 { degree: "Ph.D. en Literatura Comparada", institution: "Salamanca" },
@@ -106,6 +86,46 @@ const HARDCODED_PROFESSORS = [
                 { role: "Guionista Creativa", company: "Pixar Animation Studios" }
             ],
             methods: ["Escritura Creativa", "Retórica Moderna", "Debates Dialécticos"]
+        }
+    },
+    {
+        id: 5,
+        full_name: "Dra. Kiara Stone",
+        title: "Cronista de Geografía e Historia",
+        avatar_url: "/assets/professors/prof_geo.png",
+        bio: "Historiadora y cartógrafa moderna. Kiara cree que entender nuestro pasado es la única brújula real para navegar el futuro de nuestra civilización.",
+        cv_json: {
+            education: [
+                { degree: "Cum Laude en Historia Universal", institution: "U. de Bolonia" },
+                { degree: "Especialista en Cartografía Digital", institution: "Google Earth Labs" },
+                { degree: "Máster en Arqueología Espacial", institution: "Yale" }
+            ],
+            experience: [
+                { role: "Curadora de Museos", company: "The Smithsonian" },
+                { role: "Exploradora de Campo", company: "National Geographic" },
+                { role: "Asesora Histórica", company: "UNESCO" }
+            ],
+            methods: ["Mapas Holográficos", "Storytelling", "Análisis Forense"]
+        }
+    },
+    {
+        id: 6,
+        full_name: "Dr. Theo Canvas",
+        title: "Maestro de Expresión Artística",
+        avatar_url: "/assets/professors/prof_art.png",
+        bio: "Visionario del arte digital y tradicional. Theo enseña a los estudiantes a plasmar sus ideas en lienzos infinitos utilizando tanto pinceles como algoritmos.",
+        cv_json: {
+            education: [
+                { degree: "Doctorado en Bellas Artes", institution: "Royal College of Art" },
+                { degree: "Máster en Diseño Digital", institution: "Parsons School of Design" },
+                { degree: "Grado en Historia del Arte", institution: "Louvre School" }
+            ],
+            experience: [
+                { role: "Concept Artist Principal", company: "Industrial Light & Magic" },
+                { role: "Director de Arte", company: "Ubisoft" },
+                { role: "Artista de Galería", company: "MoMA New York" }
+            ],
+            methods: ["Pintura Digital", "Escultura 3D", "Luz y Color"]
         }
     }
 ];
