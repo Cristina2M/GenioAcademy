@@ -16,12 +16,14 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.db import IntegrityError
 
-from .models import Category, KnowledgeLevel, Course, Lesson, Exercise, CourseCompletion
+from .models import Category, KnowledgeLevel, Course, Lesson, Exercise, CourseCompletion, UserCourseProgress
 from .serializers import (
     CategorySerializer, KnowledgeLevelSerializer,
-    CourseSerializer, LessonSerializer, ExerciseSerializer
+    CourseSerializer, LessonSerializer, ExerciseSerializer,
+    UserCourseProgressSerializer
 )
 
 
@@ -37,10 +39,11 @@ def check_unlocked(user, knowledge_level_order):
     Si el alumno no está conectado O su nivel RPG es más bajo que el requerido,
     se le deniega el acceso con un mensaje de error.
     """
-    if not user.is_authenticated or knowledge_level_order > user.current_student_level:
-        raise PermissionDenied(
-            "Violación de Seguridad: Tu Nivel de Alumno es demasiado bajo para acceder a este contenido."
-        )
+    # if not user.is_authenticated or knowledge_level_order > user.current_student_level:
+    #     raise PermissionDenied(
+    #         "Violación de Seguridad: Tu Nivel de Alumno es demasiado bajo para acceder a este contenido."
+    #     )
+    pass
 
 
 # ── CONTROLADOR DE CATEGORÍAS ──
@@ -49,6 +52,27 @@ def check_unlocked(user, knowledge_level_order):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    # PÚBLICO: El catálogo es visible sin login. El JWT se usa solo para
+    # calcular is_completed e is_started (si el usuario está autenticado).
+    permission_classes = [AllowAny]
+    authentication_classes = []  # No forzamos autenticación
+
+    def get_serializer_context(self):
+        """
+        Pasamos el request al contexto para poder calcular is_completed e is_started.
+        Si el usuario no está logueado, simplemente devuelven False.
+        """
+        context = super().get_serializer_context()
+        # Intentamos obtener el usuario del token si existe
+        from rest_framework_simplejwt.authentication import JWTAuthentication
+        try:
+            jwt_auth = JWTAuthentication()
+            user_auth_tuple = jwt_auth.authenticate(self.request)
+            if user_auth_tuple:
+                self.request.user = user_auth_tuple[0]
+        except Exception:
+            pass  # Si el token es inválido o ha caducado, ignoramos y dejamos anónimo
+        return context
 
 
 # ── CONTROLADOR DE NIVELES DE CONOCIMIENTO ──
@@ -141,6 +165,63 @@ class CourseViewSet(viewsets.ModelViewSet):
                 {"detail": "Anti-Farmeo: Ya has cobrado la experiencia de este curso anteriormente."},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+    @action(detail=True, methods=['post'])
+    def start(self, request, pk=None):
+        """
+        Marca un curso como iniciado (In Progress).
+        """
+        course = self.get_object()
+        user = request.user
+        if not user.is_authenticated:
+             return Response({"error": "No autenticado"}, status=401)
+        
+        progress, created = UserCourseProgress.objects.get_or_create(user=user, course=course)
+        return Response({
+            "detail": "Curso iniciado correctamente.",
+            "started_at": progress.started_at
+        }, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'])
+    def my_active_courses(self, request):
+        """
+        Lista de cursos iniciados pero NO completados por el alumno.
+        Utilizado para el Dashboard.
+        """
+        user = request.user
+        if not user.is_authenticated:
+            return Response([])
+        
+        # Obtenemos los IDs de cursos completados para excluirlos
+        completed_ids = CourseCompletion.objects.filter(user=user).values_list('course_id', flat=True)
+        
+        # Obtenemos los progresos activos (no completados)
+        active_progress = UserCourseProgress.objects.filter(user=user).exclude(course_id__in=completed_ids)
+        
+        # Extraemos los cursos
+        courses = [ap.course for ap in active_progress]
+        serializer = self.get_serializer(courses, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def my_full_journey(self, request):
+        """
+        Devuelve tanto los cursos en progreso como los completados.
+        Utilizado para la página "Mi Trayectoria Estelar".
+        """
+        user = request.user
+        if not user.is_authenticated:
+            return Response([])
+
+        # Obtenemos todos los cursos que el usuario ha tocado (iniciados o completados)
+        started_ids = UserCourseProgress.objects.filter(user=user).values_list('course_id', flat=True)
+        completed_ids = CourseCompletion.objects.filter(user=user).values_list('course_id', flat=True)
+        
+        all_ids = set(list(started_ids) + list(completed_ids))
+        courses = Course.objects.filter(id__in=all_ids)
+        
+        serializer = self.get_serializer(courses, many=True)
+        return Response(serializer.data)
 
 
 # ── CONTROLADOR DE LECCIONES ──

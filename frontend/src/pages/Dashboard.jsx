@@ -15,7 +15,7 @@
 
 import { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Target, Trophy, Flame, Compass, Play, BookOpen, Star, Lock, X, Rocket, GraduationCap } from 'lucide-react';
+import { Target, Trophy, Flame, Compass, Play, BookOpen, Star, Lock, X, Rocket, GraduationCap, ChevronRight } from 'lucide-react';
 import AuthContext from '../context/AuthContext';
 import axiosInstance from '../api/axios';
 import { getStudentAvatar, avatarDatabase } from '../utils/avatarUtils';
@@ -25,9 +25,9 @@ export default function Dashboard() {
   const { user, updateAvatar } = useContext(AuthContext);
   const [actualizandoAvatar, setActualizandoAvatar] = useState(false);
 
-  // El curso que le sugerimos al alumno (obtenido del backend)
-  const [cursoSugerido, setCursoSugerido] = useState(null);
-  const [cargandoCurso, setCargandoCurso] = useState(true);
+  // Cursos que el alumno tiene en progreso (obtenidos del backend)
+  const [activeCourses, setActiveCourses] = useState([]);
+  const [cargandoCursos, setCargandoCursos] = useState(true);
 
   // ─────────────────────────────────────────────
   // CÁLCULOS DE GAMIFICACIÓN (Barra de Progreso XP)
@@ -67,44 +67,12 @@ export default function Dashboard() {
   useEffect(() => {
     const cargarCursos = async () => {
       try {
-        // Pedimos el árbol de categorías al backend.
-        // Cada categoría tiene niveles, y cada nivel tiene cursos con "is_locked" e "is_completed".
-        const respuesta = await axiosInstance.get('courses/categories/');
-        const categorias = respuesta.data;
-
-        let cursoDesbloquedoencontrado = null; // El primero que esté desbloqueado Y sin completar
-        let ultimoCursoVisto = null;            // El último que hayamos visto, por si todo está completado
-
-        // Recorremos el árbol: categoría → nivel → cursos
-        for (const cat of categorias) {
-          for (const nivel of cat.knowledge_levels) {
-            // Solo miramos niveles que el alumno puede acceder (no bloqueados)
-            if (!nivel.is_locked && nivel.courses && nivel.courses.length > 0) {
-              for (const curso of nivel.courses) {
-                ultimoCursoVisto = curso;
-                if (!curso.is_completed) {
-                  // ¡Encontramos un curso pendiente! Este es el que sugerimos.
-                  cursoDesbloquedoencontrado = curso;
-                  break;
-                }
-              }
-            }
-            if (cursoDesbloquedoencontrado) break;
-          }
-          if (cursoDesbloquedoencontrado) break;
-        }
-
-        if (cursoDesbloquedoencontrado) {
-          setCursoSugerido(cursoDesbloquedoencontrado);
-        } else if (ultimoCursoVisto) {
-          // Si el alumno ha completado todos los cursos disponibles,
-          // le sugerimos el último para que pueda repasar.
-          setCursoSugerido(ultimoCursoVisto);
-        }
+        const respuesta = await axiosInstance.get('courses/courses/my_active_courses/');
+        setActiveCourses(respuesta.data);
       } catch (error) {
-        console.error('Error al obtener cursos sugeridos', error);
+        console.error('Error al obtener cursos activos', error);
       } finally {
-        setCargandoCurso(false);
+        setCargandoCursos(false);
       }
     };
 
@@ -215,49 +183,58 @@ export default function Dashboard() {
               <Target className="w-6 h-6 text-pink-500" /> Operación Principal
             </h2>
 
-            {/* Tarjeta del curso sugerido (datos reales de la base de datos) */}
-            <div className="bg-gradient-to-br from-slate-900 to-slate-800 border-2 border-cyan-500/30 rounded-2xl p-6 shadow-[0_0_20px_rgba(34,211,238,0.15)] hover:border-cyan-500/60 transition-colors relative overflow-hidden group">
-              {/* Icono decorativo de fondo grande */}
-              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                <Target className="w-24 h-24 text-cyan-400" />
-              </div>
-
-              <h3 className="text-cyan-400 font-bold mb-1 uppercase tracking-widest text-xs flex items-center gap-2">
-                Misión Sugerida {cargandoCurso && <span className="loading loading-spinner loading-xs"></span>}
-              </h3>
-
-              {/* Título del curso (o mensaje si no hay ninguno disponible) */}
-              <h2 className="text-white text-xl font-bold mb-4">
-                {cursoSugerido ? cursoSugerido.title : 'Inscríbete en una Misión'}
-              </h2>
-
-              {/* Barra de progreso del curso (verde = completado, azul = en progreso) */}
-              {cursoSugerido && (
-                <div className="flex flex-col gap-2 mb-6 relative z-10">
-                  <div className="flex justify-between text-xs text-slate-300">
-                    <span>Estado Misión</span>
-                    <span>{cursoSugerido.is_completed ? 'Completada ✔' : '0%'}</span>
-                  </div>
-                  <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-white/10">
-                    <div className={`h-full ${cursoSugerido.is_completed ? 'bg-green-500 w-full' : 'bg-gradient-to-r from-cyan-500 to-pink-500 w-[0%]'}`}></div>
-                  </div>
+            {/* Lista de Misiones Activas (sin completar) */}
+            <div className="space-y-4">
+              {cargandoCursos ? (
+                <div className="flex justify-center p-8 bg-slate-900/40 rounded-2xl border border-white/5">
+                  <span className="loading loading-spinner text-cyan-400"></span>
+                </div>
+              ) : activeCourses.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {activeCourses.map((curso) => (
+                    <div key={curso.id} className="bg-gradient-to-br from-slate-900 to-slate-800 border border-cyan-500/30 rounded-2xl p-6 shadow-lg hover:border-cyan-400/50 transition-all group relative overflow-hidden">
+                       <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                          <Rocket className="w-12 h-12 text-cyan-400" />
+                       </div>
+                       <h3 className="text-cyan-400 font-bold mb-1 uppercase tracking-widest text-[10px]">Misión en Curso</h3>
+                       <h2 className="text-white text-lg font-bold mb-4 pr-8 line-clamp-1">{curso.title}</h2>
+                       <Link 
+                         to={`/player/${curso.id}`}
+                         className="btn btn-sm btn-block bg-cyan-500 hover:bg-cyan-400 text-slate-950 border-none font-bold shadow-lg shadow-cyan-900/20"
+                       >
+                          Continuar <Play className="w-3 h-3 ml-1" />
+                       </Link>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="bg-slate-900/40 backdrop-blur-md border border-dashed border-white/10 rounded-2xl p-10 text-center">
+                   <Compass className="w-12 h-12 text-slate-700 mx-auto mb-4" />
+                   <h3 className="text-xl font-bold text-slate-500">Sin misiones activas</h3>
+                   <p className="text-slate-600 text-sm mt-2">Visita el catálogo estelar para elegir tu próximo destino.</p>
+                   <Link to="/courses" className="btn btn-outline border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-slate-950 mt-6 rounded-xl">
+                      Explorar Catálogo
+                   </Link>
                 </div>
               )}
 
-              {/* Botón de acción: va al curso o al catálogo si no hay curso sugerido */}
-              <div className="flex gap-4">
-                {cursoSugerido ? (
-                  <Link
-                    to={`/player/${cursoSugerido.id}`}
-                    className={`btn ${cursoSugerido.is_completed ? 'bg-slate-700 hover:bg-slate-600 text-white' : 'bg-cyan-500 hover:bg-cyan-400 text-slate-900'} border-none w-full shadow-[0_0_15px_rgba(34,211,238,0.4)] font-bold relative z-10 transition-transform`}
-                  >
-                    {cursoSugerido.is_completed ? 'Repasar Entrenamiento' : 'Entrar a la Academia'} <Play className="w-4 h-4 ml-1" />
-                  </Link>
-                ) : (
-                  <Link to="/courses" className="btn btn-outline border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-slate-900 w-full relative z-10">
-                    Explorar Catálogo <Compass className="w-4 h-4 ml-1" />
-                  </Link>
-                )}
+              {/* Botón para ver trayectoria completa */}
+              <div className="pt-4">
+                <Link 
+                  to="/dashboard/journey"
+                  className="btn btn-block bg-slate-800 hover:bg-slate-700 text-slate-200 border border-white/10 rounded-2xl flex items-center justify-between px-6 h-16 group"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center border border-purple-500/30 group-hover:scale-110 transition-transform">
+                      <Trophy className="w-5 h-5 text-purple-400" />
+                    </div>
+                    <div className="text-left">
+                      <p className="font-bold text-sm">Ver Mi Trayectoria Estelar</p>
+                      <p className="text-[10px] text-slate-500 italic">Historial completo y medallas desbloqueadas</p>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-slate-500 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </div>
             </div>
 

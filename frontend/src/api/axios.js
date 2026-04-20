@@ -34,11 +34,21 @@ axiosInstance.interceptors.request.use(
 );
 
 // Interceptor de Respuestas: El Centinela de los JWT
-// Protege al usuario de los "401 Unauthorized" si el Token de Acceso principal (5 mins de vida) se desgasta.
+// Protege al usuario de los "401 Unauthorized" si el Token de Acceso principal se desgasta.
 axiosInstance.interceptors.response.use(
     (response) => response, // Dejamos pasar las respuestas válidas (HTTP 200, 201)
     async (error) => {
         const interceptada = error.config; // Guardamos un clon de la petición original
+        const url = interceptada?.url || '';
+        
+        // Si el error viene del propio endpoint de refresco, evitamos bucles infinitos
+        // y limpiamos la sesión directamente
+        if (url.includes('token/refresh/')) {
+            console.error("Sesión inválida detectada en refresh. Forzando deslogueo.");
+            localStorage.removeItem('authTokens');
+            window.location.href = '/login';
+            return Promise.reject(error);
+        }
         
         // Si Django grita 401 (Prohibido) y NO estábamos ya intentando renovar un token...
         if (error.response && error.response.status === 401 && !interceptada._retry) {
@@ -73,11 +83,10 @@ axiosInstance.interceptors.response.use(
                     return axiosInstance(interceptada);
                 }
             } catch (err) {
-                // EXCEPCIÓN LETAL: El Refresh Token (normalmente 24 horas a 14 días) también ha muerto. 
-                // Esto significa que lleva días sin entrar a la App o alguien borró su cuenta.
+                // EXCEPCIÓN LETAL: El Refresh Token también ha muerto o el usuario ya no existe.
+                // En cualquier caso, borramos la sesión y mandamos al login.
                 console.error("Sesión Expirada por completo. Forzando deslogueo.");
                 localStorage.removeItem('authTokens');
-                // Redirigir rígidamente al inicio para que recargue y el AuthContext salte a null
                 window.location.href = '/login'; 
                 return Promise.reject(err);
             }

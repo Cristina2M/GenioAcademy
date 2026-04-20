@@ -163,3 +163,34 @@ class CourseCompletion(models.Model):
 
     def __str__(self):
         return f'{self.user.username} completó "{self.course.title}" el {self.completed_at.strftime("%d/%m/%Y")}'
+
+# ── PROGRESO DE CURSO (EN CURSO) ──
+# Registra cuándo un alumno inicia un curso por primera vez.
+# A diferencia de CourseCompletion, esto se crea al abrir el curso, no al terminarlo.
+class UserCourseProgress(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='started_courses'
+    )
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name='started_by_users'
+    )
+    started_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Iniciado el'
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name='Último acceso'
+    )
+
+    class Meta:
+        verbose_name = 'Progreso de Curso'
+        verbose_name_plural = 'Progresos de Curso'
+        unique_together = ('user', 'course')
+
+    def __str__(self):
+        return f'{self.user.username} - {self.course.title} (Iniciado: {self.started_at.strftime("%d/%m/%Y")})'

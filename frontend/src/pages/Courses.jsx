@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { BookOpen, Star } from 'lucide-react';
+import { BookOpen, Star, PlayCircle, Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/axios';
 
 // ==========================================
@@ -12,16 +13,28 @@ export default function Courses() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [startingCourseId, setStartingCourseId] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        // Usamos axiosInstance (no fetch nativo) para enviar el JWT automáticamente.
-        // Esto permite que el backend calcule is_locked e is_completed correctamente.
+        // Usamos axiosInstance (con JWT si hay sesión) para que el backend calcule
+        // is_locked e is_completed correctamente cuando el alumno está conectado.
         const response = await axiosInstance.get('courses/categories/');
         setCategories(response.data);
       } catch (err) {
-        setError(err.message || 'Se perdió la conexión de telemetría con el servidor galáctico');
+        // Si falla por cualquier motivo de autenticación (sesión caducada, token roto...),
+        // hacemos un segundo intento sin token para que el catálogo cargue siempre.
+        // El endpoint es público (AllowAny), así que esto es seguro.
+        try {
+          const fallback = await axiosInstance.get('courses/categories/', {
+            headers: { Authorization: undefined }
+          });
+          setCategories(fallback.data);
+        } catch (fallbackErr) {
+          setError(fallbackErr.message || 'Se perdió la conexión de telemetría con el servidor galáctico');
+        }
       } finally {
         setLoading(false);
       }
@@ -29,6 +42,22 @@ export default function Courses() {
 
     fetchCourses();
   }, []);
+
+  const handleStartCourse = async (courseId) => {
+    setStartingCourseId(courseId);
+    try {
+      // Llamamos al endpoint de "start" para crear el registro de progreso (In Progress)
+      await axiosInstance.post(`courses/courses/${courseId}/start/`);
+      // Redirigimos al reproductor
+      navigate(`/player/${courseId}`);
+    } catch (err) {
+      console.error('Error al iniciar curso:', err);
+      // Aunque falle el registro de progreso, permitimos entrar al curso
+      navigate(`/player/${courseId}`);
+    } finally {
+      setStartingCourseId(false);
+    }
+  };
 
   return (
     <div className="min-h-screen relative pt-12 pb-32">
@@ -90,9 +119,28 @@ export default function Courses() {
                         <ul className="space-y-3 mt-3 flex-grow">
                           {level.courses && level.courses.length > 0 ? (
                             level.courses.map((course) => (
-                              <li key={course.id} className="flex items-start gap-2 text-slate-300 group-hover:text-slate-200 transition-colors">
-                                <Star className="w-4 h-4 text-amber-400 mt-1 flex-shrink-0 drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]" /> 
-                                <span className="leading-snug">{course.title}</span>
+                              <li 
+                                key={course.id} 
+                                onClick={() => handleStartCourse(course.id)}
+                                className="flex items-center justify-between p-3 rounded-xl hover:bg-white/5 transition-all cursor-pointer border border-transparent hover:border-white/10 group/item"
+                              >
+                                <div className="flex items-start gap-3">
+                                  <Star className={`w-4 h-4 mt-1 flex-shrink-0 drop-shadow-[0_0_5px_rgba(251,191,36,0.5)] ${course.is_completed ? 'text-green-400' : 'text-amber-400'}`} /> 
+                                  <div>
+                                    <p className={`text-sm font-bold leading-snug group-hover/item:text-cyan-400 transition-colors ${course.is_completed ? 'text-slate-400 line-through' : 'text-slate-200'}`}>
+                                      {course.title}
+                                    </p>
+                                    {course.is_started && !course.is_completed && (
+                                      <span className="text-[10px] text-cyan-500 font-black uppercase tracking-tighter">En progreso</span>
+                                    )}
+                                  </div>
+                                </div>
+                                
+                                {startingCourseId === course.id ? (
+                                  <Loader2 className="w-4 h-4 text-cyan-400 animate-spin" />
+                                ) : (
+                                  <PlayCircle className="w-5 h-5 text-slate-600 transition-all opacity-0 group-hover/item:opacity-100 group-hover/item:text-cyan-400" />
+                                )}
                               </li>
                             ))
                           ) : (
