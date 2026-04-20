@@ -192,6 +192,75 @@ COURSES_DATA = {
             'answer': '3'
         }
     ],
+    'Leyes de la Termodinámica': [
+        {
+            'title': 'La Energía no Desaparece',
+            'content': '<h3 class="text-2xl text-red-400 font-bold mb-4">Conservación Estelar</h3><p class="mb-4 text-slate-300 text-lg">La Primera Ley dice que la energía se transforma. El calor de una estrella puede convertirse en luz y movimiento.</p>',
+            'question': '¿Qué dice la primera ley de la termodinámica?',
+            'options': ['La energía se crea', 'La energía se transforma', 'La energía desaparece'],
+            'answer': 'La energía se transforma'
+        },
+        {
+            'title': 'El Frío Absoluto',
+            'content': '<h3 class="text-2xl text-red-400 font-bold mb-4">Cero Kelvin</h3><p class="mb-4 text-slate-300 text-lg">A medida que bajamos la temperatura, los átomos se mueven menos. En el cero absoluto (-273°C), todo movimiento se detiene.</p>',
+            'question': '¿A cuántos grados Celsius equivale aproximadamente el cero absoluto?',
+            'options': ['-273°C', '0°C', '-100°C'],
+            'answer': '-273°C'
+        },
+        {
+            'title': 'Entropía y Caos',
+            'content': '<h3 class="text-2xl text-red-400 font-bold mb-4">El Desorden del Universo</h3><p class="mb-4 text-slate-300 text-lg">La entropía siempre tiende a aumentar. El universo tiende al desorden a menos que apliquemos energía para organizarlo.</p>',
+            'question': '¿Qué concepto mide el grado de desorden de un sistema?',
+            'options': ['Entropía', 'Entalpía', 'Energía cinética'],
+            'answer': 'Entropía'
+        }
+    ],
+    'Electromagnetismo Básico': [
+        {
+            'title': 'Campos de Fuerza Reales',
+            'content': '<h3 class="text-2xl text-yellow-400 font-bold mb-4">Magnetismo Planetario</h3><p class="mb-4 text-slate-300 text-lg">Ciertas piedras y el núcleo de algunos planetas atraen metales. Esto es debido a los campos magnéticos.</p>',
+            'question': '¿Qué parte de la Tierra genera su campo magnético protector?',
+            'options': ['El núcleo de hierro', 'La corteza rocosa', 'La atmósfera'],
+            'answer': 'El núcleo de hierro'
+        },
+        {
+            'title': 'Corriente Eléctrica',
+            'content': '<h3 class="text-2xl text-yellow-400 font-bold mb-4">Flujo de Electrones</h3><p class="mb-4 text-slate-300 text-lg">La electricidad es el movimiento de electrones a través de un conductor, como el cable de cobre de una nave.</p>',
+            'question': '¿Cómo se llama el material que permite que la electricidad pase fácilmente?',
+            'options': ['Conductor', 'Aislante', 'Semiconductor'],
+            'answer': 'Conductor'
+        },
+        {
+            'title': 'Inducción Electromagnética',
+            'content': '<h3 class="text-2xl text-yellow-400 font-bold mb-4">Generando Energía</h3><p class="mb-4 text-slate-300 text-lg">Si mueves un imán cerca de un cable, ¡generas electricidad! Así funcionan los generadores de nuestras estaciones espaciales.</p>',
+            'question': '¿Qué ocurre al mover un imán dentro de una bobina de cable?',
+            'options': ['Se genera corriente eléctrica', 'El imán pierde su fuerza', 'El cable se derrite'],
+            'answer': 'Se genera corriente eléctrica'
+        }
+    ],
+    'Cinemática': [
+        {
+            'title': 'Trayectorias de Vuelo',
+            'content': '<h3 class="text-2xl text-indigo-400 font-bold mb-4">Posición y Tiempo</h3><p class="mb-4 text-slate-300 text-lg">La cinemática estudia el movimiento sin importar qué lo causa. Solo nos fijamos en dónde está la nave y cuánto tarda en llegar.</p>',
+            'question': '¿Qué magnitud mide el espacio recorrido por unidad de tiempo?',
+            'options': ['Velocidad', 'Aceleración', 'Inercia'],
+            'answer': 'Velocidad'
+        },
+        {
+            'title': 'El Empuje Final',
+            'content': '<h3 class="text-2xl text-indigo-400 font-bold mb-4">Aceleración Constante</h3><p class="mb-4 text-slate-300 text-lg">Acelerar es cambiar la velocidad. Si tu nave va cada vez más rápido para escapar de un planeta, estás acelerando.</p>',
+            'question': 'Si un vehículo espacial mantiene su velocidad constante, ¿cuál es su aceleración?',
+            'options': ['Cero', 'Positiva', 'Negativa'],
+            'answer': 'Cero'
+        },
+        {
+            'title': 'Movimiento Rectilíneo',
+            'content': '<h3 class="text-2xl text-indigo-400 font-bold mb-4">Líneas en el Vacío</h3><p class="mb-4 text-slate-300 text-lg">El movimiento más simple es en línea recta. En el espacio, sin obstáculos, la mayoría de los viajes son MRU (Movimiento Rectilíneo Uniforme).</p>',
+            'question': 'En un MRU, ¿como es la velocidad?',
+            'options': ['Constante', 'Variable', 'Siempre aumenta'],
+            'answer': 'Constante'
+        }
+    ],
     # I will add more courses as I go to avoid giant files in one turn
 }
 
