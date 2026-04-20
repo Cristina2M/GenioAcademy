@@ -5,6 +5,7 @@ import AuthContext from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import StudentCardModal from '../components/StudentCardModal';
+import { getStudentAvatar } from '../utils/avatarUtils';
 
 const TeacherDashboard = () => {
     const { user } = useContext(AuthContext);
@@ -168,7 +169,8 @@ const StudentsTab = ({ students, onSelectStudent }) => {
                         <tr key={s.id} className="hover:bg-white/[0.02]">
                             <td className="py-6 px-8 flex items-center gap-4">
                                 <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-indigo-500/30">
-                                    <img src={`/assets/buho/${s.avatar}.png`} alt="Avatar" className="w-full h-full object-cover" />
+                                    {/* getStudentAvatar resuelve el ID del búho del alumno a la ruta real del asset */}
+                                    <img src={getStudentAvatar(s.avatar || 'buho1')} alt="Avatar" className="w-full h-full object-cover" />
                                 </div>
                                 <span className="font-bold text-white">{s.username}</span>
                             </td>

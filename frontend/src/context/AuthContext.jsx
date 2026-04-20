@@ -56,12 +56,17 @@ export const AuthProvider = ({ children }) => {
                 const data = response.data;
                 // Guardarlo en Memoria RAM
                 setAuthTokens(data);
-                setUser(jwtDecode(data.access));
+                const decodedUser = jwtDecode(data.access);
+                setUser(decodedUser);
                 // Guardarlo en Disco Duro Persistente (localStorage)
                 localStorage.setItem('authTokens', JSON.stringify(data));
                 
                 // Redirigir como un campeón al espacio exterior
-                navigate('/dashboard');
+                if (decodedUser.is_teacher) {
+                    navigate('/teacher-dashboard');
+                } else {
+                    navigate('/dashboard');
+                }
                 return { success: true };
             }
         } catch (error) {

@@ -21,7 +21,7 @@ export default function Navbar() {
         {/* Logo sobresaliente (Breakout Logo) */}
         {/* Usamos el componente <Link> de React Router envés de la etiqueta <a> clásica de HTML. 
             Esto hace que la página cambie AL INSTANTE sin recargar todo el navegador de cero. */}
-        <Link to={user ? "/dashboard" : "/"} className="group relative z-[100] w-24 h-24 md:w-36 md:h-36 -mb-12 md:-mb-16 -ml-2 mr-2">
+        <Link to={user ? (user.is_teacher ? "/teacher-dashboard" : "/dashboard") : "/"} className="group relative z-[100] w-24 h-24 md:w-36 md:h-36 -mb-12 md:-mb-16 -ml-2 mr-2">
           <div className="w-full h-full bg-slate-950 rounded-full border-2 border-cyan-500/40 p-2 shadow-[0_15px_30px_rgba(0,0,0,0.6)] group-hover:scale-105 group-hover:border-pink-500/40 transition-all duration-300 flex items-center justify-center">
             <div className="w-full h-full rounded-full bg-gradient-to-br from-pink-500/10 to-cyan-500/10 flex items-center justify-center p-1">
               <img src={logoPrincipal} alt="Genio Academy Logo" className="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]" />
@@ -29,7 +29,7 @@ export default function Navbar() {
           </div>
         </Link>
         
-        <Link to={user ? "/dashboard" : "/"} className="btn btn-ghost hover:bg-transparent h-auto py-2 px-2 hidden sm:flex">
+        <Link to={user ? (user.is_teacher ? "/teacher-dashboard" : "/dashboard") : "/"} className="btn btn-ghost hover:bg-transparent h-auto py-2 px-2 hidden sm:flex">
           <span className="font-extrabold text-2xl tracking-tighter drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]"><span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-400">Genio</span> <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-cyan-400">Academy</span></span>
         </Link>
       </div>
@@ -55,20 +55,25 @@ export default function Navbar() {
           // Vista Usuario Conectado
           <div className="flex items-center gap-2">
             <div className="hidden sm:flex text-right mr-2 flex-col justify-center">
-              <span className="text-sm font-bold text-white leading-tight">Agente {user.username || 'Recluta'}</span>
-              <span className="text-xs text-cyan-400 font-semibold tracking-wide">Nivel de Rango {user.current_student_level || 1}</span>
+              <span className="text-sm font-bold text-white leading-tight">{user.is_teacher ? 'Maestro' : 'Agente'} {user.username || ''}</span>
+              {!user.is_teacher && <span className="text-xs text-cyan-400 font-semibold tracking-wide">Nivel de Rango {user.current_student_level || 1}</span>}
             </div>
             
             {/* Menú Desplegable del Avatar */}
             <div className="dropdown dropdown-end">
               <div tabIndex={0} role="button" className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-cyan-500 p-[2px] hidden sm:flex cursor-pointer hover:scale-105 transition-transform hover:shadow-[0_0_15px_rgba(236,72,153,0.5)]">
                 <div className="w-full h-full bg-slate-900 rounded-full flex items-center justify-center overflow-hidden">
-                   <img src={getStudentAvatar(user.selected_avatar || user.current_student_level)} alt="Avatar" className="w-full h-full object-cover" />
+                   {/* Si es profesor mostramos su foto real, si es alumno su búho personalizado */}
+                   <img
+                     src={user.is_teacher ? user.professor_image : getStudentAvatar(user.selected_avatar || user.current_student_level)}
+                     alt="Avatar"
+                     className="w-full h-full object-cover"
+                   />
                 </div>
               </div>
               <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow-2xl bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-2xl w-52 mt-4 space-y-1 hidden sm:flex">
                 <li>
-                  <Link to="/dashboard" className="text-slate-200 hover:text-white hover:bg-white/10 rounded-xl transition-all font-semibold">
+                  <Link to={user.is_teacher ? "/teacher-dashboard" : "/dashboard"} className="text-slate-200 hover:text-white hover:bg-white/10 rounded-xl transition-all font-semibold">
                     <UserIcon className="w-4 h-4 text-cyan-400"/> Mi Panel Base
                   </Link>
                 </li>
@@ -109,7 +114,7 @@ export default function Navbar() {
             <li><Link to="/claustro">Claustro</Link></li>
             {user ? (
                <>
-                 <li><Link to="/dashboard" className="text-cyan-400 font-bold border border-cyan-500/30 rounded-lg my-1">Mi Panel Base</Link></li>
+                 <li><Link to={user.is_teacher ? "/teacher-dashboard" : "/dashboard"} className="text-cyan-400 font-bold border border-cyan-500/30 rounded-lg my-1">Mi Panel Base</Link></li>
                  <li><button onClick={logoutUser} className="text-red-400 hover:bg-red-500/20 rounded-lg">Desconectar nave</button></li>
                </>
             ) : (

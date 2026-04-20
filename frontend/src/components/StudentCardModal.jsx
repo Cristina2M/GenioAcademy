@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { X, Sparkles, AlertTriangle, Battery, BatteryFull, BatteryMedium, Cpu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getStudentAvatar } from '../utils/avatarUtils';
 
 const StudentCardModal = ({ student, onClose }) => {
     if (!student) return null;
@@ -37,7 +38,8 @@ const StudentCardModal = ({ student, onClose }) => {
                     <div className="px-8 pb-8 flex flex-col items-center">
                         {/* Avatar */}
                         <div className="relative -mt-16 w-32 h-32 rounded-full border-4 border-[#0a0a14] bg-indigo-900 overflow-hidden mb-4 shadow-[0_0_20px_rgba(99,102,241,0.4)]">
-                             <img src={`/assets/buho/${student.avatar}.png`} alt={student.username} className="w-full h-full object-cover" />
+                            {/* getStudentAvatar traduce el ID del búho a la ruta real importada por Vite */}
+                             <img src={getStudentAvatar(student.avatar || 'buho1')} alt={student.username} className="w-full h-full object-cover" />
                         </div>
 
                         <h2 className="text-3xl font-black text-white mb-1">{student.username}</h2>
