@@ -36,34 +36,47 @@ class LessonSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# ── SERIALIZADOR DE CURSOS ──
-# Incluye sus lecciones anidadas y calcula si el alumno ya lo completó.
 class CourseSerializer(serializers.ModelSerializer):
     # Igual que con ejercicios: devuelve todas las lecciones del curso con sus datos completos.
     lessons = LessonSerializer(many=True, read_only=True)
 
     # "SerializerMethodField" es un campo especial que se calcula al vuelo con una función.
-    # En este caso, nos permite saber si el alumno que está pidiendo los datos ha completado el curso.
+    is_completed = serializers.SerializerMethodField()
     # Nos permite saber si el alumno ya ha comenzado este curso.
     is_started = serializers.SerializerMethodField()
 
+    # Campos extra para facilitar el filtrado en el frontend
+    knowledge_level_name = serializers.SerializerMethodField()
+    category_name = serializers.SerializerMethodField()
+
     class Meta:
         model = Course
-        fields = '__all__'
+        # Listamos los campos explícitamente para incluir los calculados
+        fields = [
+            'id', 'knowledge_level', 'knowledge_level_name', 'category_name', 
+            'title', 'description', 'xp_reward', 'lessons', 'is_completed', 'is_started'
+        ]
+
+    def get_knowledge_level_name(self, obj):
+        try:
+            return obj.knowledge_level.name
+        except:
+            return "Sin Nivel"
+
+    def get_category_name(self, obj):
+        try:
+            return obj.knowledge_level.category.name
+        except:
+            return "Sin Asignatura"
 
     def get_is_completed(self, obj):
         """
-        Esta función se llama automáticamente por Django REST para calcular "is_completed".
         Comprueba si existe un registro de completitud para este alumno + este curso.
         """
-        # Obtenemos la petición HTTP para saber quién está preguntando
         request = self.context.get('request')
-
-        # Si no hay petición o el usuario no está conectado, devolvemos False por defecto
-        if not request or not request.user.is_authenticated:
+        if not request or not getattr(request, 'user', None) or not request.user.is_authenticated:
             return False
 
-        # Buscamos en la tabla de "completitudes" si existe una fila para este par (alumno, curso)
         from .models import CourseCompletion
         return CourseCompletion.objects.filter(user=request.user, course=obj).exists()
 
@@ -72,7 +85,7 @@ class CourseSerializer(serializers.ModelSerializer):
         Comprueba si el alumno ha iniciado el curso (existe en UserCourseProgress).
         """
         request = self.context.get('request')
-        if not request or not request.user.is_authenticated:
+        if not request or not getattr(request, 'user', None) or not request.user.is_authenticated:
             return False
         return UserCourseProgress.objects.filter(user=request.user, course=obj).exists()
 
@@ -98,34 +111,30 @@ class KnowledgeLevelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = KnowledgeLevel
-        fields = '__all__'
+        # Incluimos los campos del modelo + los calculados (courses, is_locked)
+        fields = ['id', 'category', 'name', 'order', 'courses', 'is_locked']
 
     def get_is_locked(self, obj):
         """
         Compara el "orden" del nivel con el "nivel RPG" del alumno.
-        Si el nivel exige más de lo que el alumno tiene, devolvemos True (bloqueado).
         """
         request = self.context.get('request')
 
-        # Si no hay alumno conectado, todos los niveles están bloqueados
-        if not request or not request.user.is_authenticated:
+        # Si el usuario no está autenticado o es None, el nivel está bloqueado
+        if not request or not getattr(request, 'user', None) or not request.user.is_authenticated:
             return True
 
-        # El nivel está bloqueado si su dificultad (order) supera el nivel del alumno
-        # return obj.order > request.user.current_student_level
-        
         # ELIMINACIÓN DE RESTRICCIONES: Ahora todos los niveles están abiertos.
-        # Siempre devolvemos False para is_locked.
         return False
 
 
 # ── SERIALIZADOR DE CATEGORÍAS ──
 # Es el serializador raíz: devuelve la asignatura completa con todos sus niveles y cursos.
-# Este es el que usa el Dashboard y el Catálogo para mostrar todo el árbol de contenido.
 class CategorySerializer(serializers.ModelSerializer):
     # Todos los niveles de conocimiento de esta categoría, con sus cursos y ejercicios
     knowledge_levels = KnowledgeLevelSerializer(many=True, read_only=True)
 
     class Meta:
         model = Category
-        fields = '__all__'
+        # Incluimos los campos del modelo + los calculados (knowledge_levels)
+        fields = ['id', 'name', 'description', 'knowledge_levels']
