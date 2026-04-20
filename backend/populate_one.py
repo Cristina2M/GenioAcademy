@@ -422,6 +422,98 @@ COURSES_DATA = {
             'answer': 'Monera'
         }
     ],
+    'ADN Estelar': [
+        {
+            'title': 'El Libro de Instrucciones',
+            'content': '<h3 class="text-2xl text-teal-400 font-bold mb-4">La Doble Hélice</h3><p class="mb-4 text-slate-300 text-lg">El ADN es una molécula larga que contiene toda la información para construir y operar un ser vivo. Tiene forma de escalera de caracol.</p>',
+            'question': '¿Qué molécula contiene las instrucciones genéticas de los seres vivos?',
+            'options': ['ADN', 'Proteína', 'Glúcido'],
+            'answer': 'ADN'
+        },
+        {
+            'title': 'Genes y Cromosomas',
+            'content': '<h3 class="text-2xl text-teal-400 font-bold mb-4">Empaquetando Datos</h3><p class="mb-4 text-slate-300 text-lg">El ADN se organiza en paquetes llamados cromosomas. Los humanos tenemos 46, pero otras especies galácticas pueden tener cientos.</p>',
+            'question': '¿Cómo se llaman los fragmentos de ADN que contienen la información para un carácter específico?',
+            'options': ['Genes', 'Átomos', 'Células'],
+            'answer': 'Genes'
+        },
+        {
+            'title': 'Mutaciones en el Vacío',
+            'content': '<h3 class="text-2xl text-teal-400 font-bold mb-4">Errores de Copiado</h3><p class="mb-4 text-slate-300 text-lg">A veces, al copiar el ADN, ocurren errores llamados mutaciones. La radiación espacial puede aumentar la frecuencia de estos cambios.</p>',
+            'question': '¿Qué término define un cambio permanente en la secuencia de ADN?',
+            'options': ['Mutación', 'Traducción', 'Replicación'],
+            'answer': 'Mutación'
+        }
+    ],
+    'Selección Natural': [
+        {
+            'title': 'Sobre vivencia del más Apto',
+            'content': '<h3 class="text-2xl text-emerald-500 font-bold mb-4">La Teoría de Darwin</h3><p class="mb-4 text-slate-300 text-lg">Los individuos con características que les ayudan a sobrevivir en su entorno tienen más probabilidades de tener descendencia.</p>',
+            'question': '¿Quién propuso la teoría de la evolución por selección natural?',
+            'options': ['Charles Darwin', 'Gregor Mendel', 'Isaac Newton'],
+            'answer': 'Charles Darwin'
+        },
+        {
+            'title': 'Adaptaciones Extremas',
+            'content': '<h3 class="text-2xl text-emerald-500 font-bold mb-4">Evolución en Otros Mundos</h3><p class="mb-4 text-slate-300 text-lg">Si un planeta tiene mucha gravedad, las especies evolucionarán con huesos más densos y fuertes para no ser aplastadas.</p>',
+            'question': '¿Cómo se llama el proceso por el cual una especie se ajusta a su entorno?',
+            'options': ['Adaptación', 'Extinción', 'Migración'],
+            'answer': 'Adaptación'
+        },
+        {
+            'title': 'El Ancestro Común',
+            'content': '<h3 class="text-2xl text-emerald-500 font-bold mb-4">Árbol de la Vida</h3><p class="mb-4 text-slate-300 text-lg">Toda la vida en la Tierra (y quizás en otros rincones) comparte un ancestro común lejano del que todos descendemos.</p>',
+            'question': '¿Qué indica que dos especies diferentes tengan ADN similar?',
+            'options': ['Parentesco evolutivo', 'Que viven cerca', 'Es pura coincidencia'],
+            'answer': 'Parentesco evolutivo'
+        }
+    ],
+    'Egipto y los Faraones': [
+        {
+            'title': 'El Don del Nilo',
+            'content': '<h3 class="text-2xl text-orange-300 font-bold mb-4">Vida en el Desierto</h3><p class="mb-4 text-slate-300 text-lg">Sin el río Nilo, la civilización egipcia no habría existido. Sus crecidas anuales fertilizaban la tierra para el cultivo.</p>',
+            'question': '¿Qué río fue fundamental para el desarrollo del Antiguo Egipto?',
+            'options': ['Nilo', 'Tigris', 'Eúfrates'],
+            'answer': 'Nilo'
+        },
+        {
+            'title': 'Pirámides y Eternidad',
+            'content': '<h3 class="text-2xl text-orange-300 font-bold mb-4">Ingeniería para los Dioses</h3><p class="mb-4 text-slate-300 text-lg">Las pirámides eran tumbas monumentales para los faraones, diseñadas para durar para siempre y ayudarles en el más allá.</p>',
+            'question': '¿Cuál era la función principal de las grandes pirámides?',
+            'options': ['Tumbas reales', 'Graneros', 'Observatorios astronómicos'],
+            'answer': 'Tumbas reales'
+        },
+        {
+            'title': 'Jeroglíficos: El Código Sagrado',
+            'content': '<h3 class="text-2xl text-orange-300 font-bold mb-4">Escritura en Piedra</h3><p class="mb-4 text-slate-300 text-lg">Los egipcios usaban dibujos llamados jeroglíficos para escribir. Fue un misterio hasta que se descubrió la Piedra de Rosetta.</p>',
+            'question': '¿Cómo se llama el sistema de escritura basado en dibujos del Antiguo Egipto?',
+            'options': ['Jeroglíficos', 'Cuneiforme', 'Alfabeto'],
+            'answer': 'Jeroglíficos'
+        }
+    ],
+    'El Imperio Romano': [
+        {
+            'title': 'Todos los Caminos llevan a Roma',
+            'content': '<h3 class="text-2xl text-red-500 font-bold mb-4">La Gran Expansión</h3><p class="mb-4 text-slate-300 text-lg">Roma pasó de ser una pequeña ciudad a controlar todo el Mediterráneo gracias a su poderoso ejército y sus leyes.</p>',
+            'question': '¿Qué mar llamaban los romanos "Mare Nostrum"?',
+            'options': ['Mediterráneo', 'Rojo', 'Muerto'],
+            'answer': 'Mediterráneo'
+        },
+        {
+            'title': 'Ingeniería y Acueductos',
+            'content': '<h3 class="text-2xl text-red-500 font-bold mb-4">Construyendo el Mundo</h3><p class="mb-4 text-slate-300 text-lg">Los romanos eran maestros ingenieros. Inventaron el hormigón y construyeron acueductos para llevar agua a las ciudades.</p>',
+            'question': '¿Qué estructura romana se utilizaba para transportar agua a largas distancias?',
+            'options': ['Acueducto', 'Circo', 'Termas'],
+            'answer': 'Acueducto'
+        },
+        {
+            'title': 'El Legado del Latín',
+            'content': '<h3 class="text-2xl text-red-500 font-bold mb-4">La Lengua del Imperio</h3><p class="mb-4 text-slate-300 text-lg">El latín es el padre de muchas lenguas actuales como el español, francés e italiano. También es la base del derecho moderno.</p>',
+            'question': '¿Cómo se llama el idioma que hablaban los antiguos romanos?',
+            'options': ['Latín', 'Griego', 'Arameo'],
+            'answer': 'Latín'
+        }
+    ],
     # I will add more courses as I go to avoid giant files in one turn
 }
 
