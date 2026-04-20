@@ -59,7 +59,7 @@ export default function Mission() {
               </li>
               <li className="flex gap-4 items-start">
                 <span className="text-cyan-400 mt-1 text-2xl">✅</span> 
-                <span><strong>Micro-clases focalizadas:</strong> Compras habilidades, no cursos anuales. Solucionamos la laguna exacta que necesita para sacar adelante sus exámenes de instituto hoy mismo.</span>
+                <span><strong>Microclases focalizadas:</strong> Compras habilidades, no cursos anuales. Solucionamos la laguna exacta que necesita para sacar adelante sus exámenes de instituto hoy mismo.</span>
               </li>
               <li className="flex gap-4 items-start">
                 <span className="text-cyan-400 mt-1 text-2xl">✅</span> 
@@ -82,7 +82,7 @@ export default function Mission() {
               <div>
                 <h3 className="text-3xl font-bold text-white mb-4">Currículo Troceado para Victorias Rápidas</h3>
                 <p className="text-slate-300 text-lg leading-relaxed">
-                  Ya no vendemos cursos rígidos enteros de "Matemáticas de 3º ESO". Si tu hijo o hija es excelente en geometría pero tiene problemas severos con las fracciones, <strong>no le hacemos perder el tiempo</strong> repitiendo lo que ya sabe. Nuestro temario está troceado en conocimientos hiper-específicos. Entra al catálogo, selecciona "Fracciones", y domina esa cápsula en exclusiva para lograr un subidón de la nota inmediato y directo.
+                  Ya no vendemos cursos rígidos enteros de "Matemáticas de 3º ESO". Si tu hijo o hija es excelente en geometría pero tiene problemas severos con las fracciones, <strong>no le hacemos perder el tiempo</strong> repitiendo lo que ya sabe. Nuestro temario está troceado en conocimientos hiperespecíficos. Entra al catálogo, selecciona "Fracciones", y domina esa cápsula en exclusiva para lograr un subidón de la nota inmediato y directo.
                 </p>
               </div>
             </div>
@@ -136,7 +136,7 @@ export default function Mission() {
               </div>
               <ul className="space-y-4 mb-8 text-left w-full text-sm">
                 <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-cyan-400 flex-shrink-0" /> Acceso visual ilimitado al índice del Catálogo Estelar.</li>
-                <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-cyan-400 flex-shrink-0" /> Micro-clases teóricas completas basadas en texto.</li>
+                <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-cyan-400 flex-shrink-0" /> Microclases teóricas completas basadas en texto.</li>
                 <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-cyan-400 flex-shrink-0" /> Evaluaciones básicas limitadas al final de la lección.</li>
               </ul>
               <div className="mt-auto w-full">
@@ -185,7 +185,7 @@ export default function Mission() {
             <div className="bg-slate-900/40 backdrop-blur-xl border border-white/10 rounded-3xl p-8 hover:-translate-y-2 transition-transform duration-300 flex flex-col items-center text-center">
               <Users className="w-12 h-12 text-purple-400 mb-6" />
               <h3 className="text-2xl font-bold text-purple-300 mb-2">Agujero de Gusano</h3>
-              <p className="text-slate-400 mb-6 min-h-[50px]">La experiencia mega-premium para recuperar control cuando hay suspensos críticos importantes.</p>
+              <p className="text-slate-400 mb-6 min-h-[50px]">La experiencia megapremium para recuperar control cuando hay suspensos críticos importantes.</p>
               <div className="text-4xl font-black text-white mb-8 border-b border-white/10 pb-6 w-full">
                 24,99€<span className="text-xl text-slate-400 font-normal">/mes</span>
               </div>
@@ -242,7 +242,7 @@ export default function Mission() {
                 ¿Sirve Genio Academy para un niño que va bien en clase o solo es para reforzar?
               </div>
               <div className="collapse-content text-slate-400 text-lg leading-relaxed">
-                <p>Es para ambos perfiles. Como Genio Academy se basa en <strong className="text-pink-300">"Cápsulas Híper-Específicas"</strong>, los estudiantes sobresalientes lo utilizan de maravilla para avanzar en temas de cursos superiores o potenciar sus habilidades, saciando el aburrimiento típico que a veces sufren en la escuela presencial.</p>
+                <p>Es para ambos perfiles. Como Genio Academy se basa en <strong className="text-pink-300">"Cápsulas Hiperespecíficas"</strong>, los estudiantes sobresalientes lo utilizan de maravilla para avanzar en temas de cursos superiores o potenciar sus habilidades, saciando el aburrimiento típico que a veces sufren en la escuela presencial.</p>
               </div>
             </div>
 

@@ -37,70 +37,70 @@ export default function CoursePlayer() {
   const [course, setCourse] = useState(null);       // Datos completos del curso (de la API)
   const [loading, setLoading] = useState(true);     // ¿Estamos cargando el curso?
 
-  const [activeLesson, setActiveLesson] = useState(null);           // Lección seleccionada en el sidebar
-  const [activeTab, setActiveTab] = useState('theory');             // Pestaña activa: 'theory' o 'quiz'
-  const [passedLessons, setPassedLessons] = useState([]);           // IDs de lecciones superadas en esta sesión
+  const [leccionActiva, setLeccionActiva] = useState(null);           // Lección seleccionada en el sidebar
+  const [pestanaActiva, setPestanaActiva] = useState('theory');       // Pestaña activa: 'theory' o 'quiz'
+  const [leccionesSuperadas, setLeccionesSuperadas] = useState([]);   // IDs de lecciones superadas en esta sesión
 
-  const [showVictoryModal, setShowVictoryModal] = useState(false);
-  const [victoryData, setVictoryData] = useState(null);
-  const [claiming, setClaiming] = useState(false);
+  const [mostrarModalVictoria, setMostrarModalVictoria] = useState(false);
+  const [datosVictoria, setDatosVictoria] = useState(null);
+  const [reclamando, setReclamando] = useState(false);
 
   // Modal para tutorías
-  const [showTutoringModal, setShowTutoringModal] = useState(false);
+  const [mostrarModalTutoria, setMostrarModalTutoria] = useState(false);
 
   // Estado del modal anti-farmeo (aparece si alguien intenta completar un curso ya completado)
-  const [errorModal, setErrorModal] = useState('');
+  const [modalError, setModalError] = useState('');
 
   // ─────────────────────────────────────────────
   // PLAN DEL ALUMNO: para mostrar/ocultar Astro y Tutorías
   // ─────────────────────────────────────────────
   // Plan 1 = Órbita Base (sin IA), Plan 2 = IA, Plan 3 = Tutorías
-  const subscriptionLevel = user?.subscription_level || 1;
-  const hasAIAccess = subscriptionLevel >= 2;
-  const hasTutoringAccess = subscriptionLevel >= 3;
+  const nivelSuscripcion = user?.subscription_level || 1;
+  const tieneAccesoIA = nivelSuscripcion >= 2;
+  const tieneAccesoTutorias = nivelSuscripcion >= 3;
 
   // ─────────────────────────────────────────────
   // FUNCIÓN: Marcar una lección como superada
   // ─────────────────────────────────────────────
   // Cuando el alumno completa el quiz de una lección, avisamos aquí
   // para que el sidebar la marque como "Sector Controlado" (verde).
-  const handleLessonPass = (id) => {
-    if (!passedLessons.includes(id)) {
-      setPassedLessons(prev => [...prev, id]);
+  const marcarLeccionSuperada = (id) => {
+    if (!leccionesSuperadas.includes(id)) {
+      setLeccionesSuperadas(prev => [...prev, id]);
     }
   };
 
   // ─────────────────────────────────────────────
   // FUNCIÓN: Reclamar la recompensa al terminar el curso
   // ─────────────────────────────────────────────
-  const handleClaimReward = async () => {
+  const reclamarRecompensa = async () => {
     if (course?.is_completed) {
       // MODO REPASO: El alumno ya completó este curso antes.
       // No llamamos al backend (no hay XP que ganar), solo mostramos un mensaje de ánimo.
-      setVictoryData({
+      setDatosVictoria({
         detail: 'El entrenamiento extra curte el carácter. ¡Sigue así!',
         experience_points: user?.experience_points || 0,
         level: user?.current_student_level || 1,
         level_up: false,
         is_review: true, // Marcamos que es repaso para que el modal no muestre XP
       });
-      setShowVictoryModal(true);
+      setMostrarModalVictoria(true);
       return;
     }
 
     // MODO NORMAL: Primera vez que completa el curso.
     // Llamamos al backend para registrar la completitud y sumar XP.
-    setClaiming(true);
-    const result = await completeMission(courseId);
-    setClaiming(false);
+    setReclamando(true);
+    const resultado = await completeMission(courseId);
+    setReclamando(false);
 
-    if (result.success) {
+    if (resultado.success) {
       // El backend devolvió los datos actualizados del alumno (nuevo XP, nivel, etc.)
-      setVictoryData(result.payload);
-      setShowVictoryModal(true);
+      setDatosVictoria(resultado.payload);
+      setMostrarModalVictoria(true);
     } else {
       // Algo salió mal (lo más probable: el backend detectó farmeo y rechazó la petición)
-      setErrorModal(result.error);
+      setModalError(resultado.error);
     }
   };
 
@@ -108,14 +108,14 @@ export default function CoursePlayer() {
   // EFECTO: Cargar los datos del curso al entrar a la pantalla
   // ─────────────────────────────────────────────
   useEffect(() => {
-    const fetchCourse = async () => {
+    const cargarCurso = async () => {
       try {
         // Pedimos los datos del curso al backend (teoría, lecciones, ejercicios, etc.)
-        const response = await axiosInstance.get(`courses/courses/${courseId}/`);
-        setCourse(response.data);
+        const respuesta = await axiosInstance.get(`courses/courses/${courseId}/`);
+        setCourse(respuesta.data);
         // Seleccionamos automáticamente la primera lección para mostrarla
-        if (response.data.lessons && response.data.lessons.length > 0) {
-          setActiveLesson(response.data.lessons[0]);
+        if (respuesta.data.lessons && respuesta.data.lessons.length > 0) {
+          setLeccionActiva(respuesta.data.lessons[0]);
         }
       } catch (error) {
         console.error('Error cargando el curso', error);
@@ -123,12 +123,12 @@ export default function CoursePlayer() {
         setLoading(false);
       }
     };
-    fetchCourse();
+    cargarCurso();
   }, [courseId]);
 
   // Si el curso no tiene lecciones en la base de datos,
   // usamos lecciones de ejemplo para que la interfaz no quede vacía.
-  const displayedLessons = course?.lessons?.length > 0
+  const leccionesMostradas = course?.lessons?.length > 0
     ? course.lessons
     : [
         { id: 991, title: 'Transmisión Base', isCompleted: true, content: 'Contenido clasificado.' },
@@ -136,7 +136,7 @@ export default function CoursePlayer() {
       ];
 
   // ID de la lección que está seleccionada en el sidebar
-  const currentActiveLessonId = activeLesson ? activeLesson.id : displayedLessons[0].id;
+  const idLeccionActiva = leccionActiva ? leccionActiva.id : leccionesMostradas[0].id;
 
   // ─────────────────────────────────────────────
   // RENDERS CONDICIONALES (mientras carga / si hay error)
@@ -197,7 +197,7 @@ export default function CoursePlayer() {
             <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-30"></div>
             <div className="absolute top-4 left-4 flex gap-2">
               <span className="badge badge-error gap-1 animate-pulse border-none font-bold text-xs"><div className="w-2 h-2 rounded-full bg-white"></div> LIVE</span>
-              <span className="badge bg-slate-800/80 text-white border-none font-bold text-xs">{(activeLesson && activeLesson.title) || 'Lección Activa'}</span>
+              <span className="badge bg-slate-800/80 text-white border-none font-bold text-xs">{(leccionActiva && leccionActiva.title) || 'Lección Activa'}</span>
             </div>
           </div>
 
@@ -212,36 +212,36 @@ export default function CoursePlayer() {
               {/* Pestañas: "Manual Teórico" y "Simulador" */}
               <div className="flex bg-slate-800/80 p-1 rounded-xl w-fit">
                 <button
-                  onClick={() => setActiveTab('theory')}
-                  className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'theory' ? 'bg-cyan-500 text-slate-900 shadow-[0_0_10px_rgba(34,211,238,0.3)]' : 'text-slate-400 hover:text-white'}`}
+                  onClick={() => setPestanaActiva('theory')}
+                  className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${pestanaActiva === 'theory' ? 'bg-cyan-500 text-slate-900 shadow-[0_0_10px_rgba(34,211,238,0.3)]' : 'text-slate-400 hover:text-white'}`}
                 >
                   Manual Teórico
                 </button>
                 <button
-                  onClick={() => setActiveTab('quiz')}
-                  className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 ${activeTab === 'quiz' ? 'bg-cyan-500 text-slate-900 shadow-[0_0_10px_rgba(34,211,238,0.3)]' : 'text-slate-400 hover:text-white'}`}
+                  onClick={() => setPestanaActiva('quiz')}
+                  className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 ${pestanaActiva === 'quiz' ? 'bg-cyan-500 text-slate-900 shadow-[0_0_10px_rgba(34,211,238,0.3)]' : 'text-slate-400 hover:text-white'}`}
                 >
-                  Simulador {passedLessons.includes(currentActiveLessonId) && <CheckCircle className="w-4 h-4"/>}
+                  Simulador {leccionesSuperadas.includes(idLeccionActiva) && <CheckCircle className="w-4 h-4"/>}
                 </button>
               </div>
             </div>
 
             {/* Contenido de la pestaña activa */}
-            {activeTab === 'theory' ? (
+            {pestanaActiva === 'theory' ? (
               // Pestaña de teoría: muestra el contenido de la lección
               <div className="prose prose-invert prose-p:text-slate-300 prose-headings:text-white max-w-none">
-                {activeLesson?.content ? (
-                  <div dangerouslySetInnerHTML={{ __html: activeLesson.content }} />
+                {leccionActiva?.content ? (
+                  <div dangerouslySetInnerHTML={{ __html: leccionActiva.content }} />
                 ) : (
                   <>
-                    <p>{course.description || 'Esta es la información teórica analizada en los registros. Sumérgete en estos conocimientos para afianzar tus competencias lógicas.'}</p>
+                    <p>{course?.description || 'Esta es la información teórica analizada en los registros. Sumérgete en estos conocimientos para afianzar tus competencias lógicas.'}</p>
                     <p>Aquí se volcarán todos los apuntes del profesor con fórmulas matemáticas y ejercicios interactivos.</p>
                   </>
                 )}
               </div>
             ) : (
               // Pestaña del simulador: muestra el componente de preguntas
-              <LessonQuiz lesson={activeLesson || displayedLessons[0]} onPassed={handleLessonPass} />
+              <LessonQuiz lesson={leccionActiva || leccionesMostradas[0]} onPassed={marcarLeccionSuperada} />
             )}
           </div>
         </div>
@@ -255,27 +255,27 @@ export default function CoursePlayer() {
 
             {/* Lista de lecciones del curso */}
             <div className="space-y-3">
-              {displayedLessons.map((lesson, idx) => (
+              {leccionesMostradas.map((leccion, idx) => (
                 <button
-                  key={lesson.id}
-                  onClick={() => setActiveLesson(lesson)}
+                  key={leccion.id}
+                  onClick={() => setLeccionActiva(leccion)}
                   className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-colors ${
-                    currentActiveLessonId === lesson.id
+                    idLeccionActiva === leccion.id
                       ? 'bg-cyan-500/20 border border-cyan-500/50 shadow-[0_0_10px_rgba(34,211,238,0.2)]'
                       : 'bg-slate-800/50 border border-transparent hover:bg-slate-700/50'
                   }`}
                 >
                   {/* Icono diferente según el estado de la lección */}
-                  {passedLessons.includes(lesson.id) ? (
+                  {leccionesSuperadas.includes(leccion.id) ? (
                     <CheckCircle className="w-5 h-5 text-green-400 shrink-0 shadow-[0_0_10px_rgba(74,222,128,0.2)] rounded-full bg-green-400/10" />
-                  ) : currentActiveLessonId === lesson.id ? (
+                  ) : idLeccionActiva === leccion.id ? (
                     <PlayCircle className="w-5 h-5 text-cyan-400 shrink-0" />
                   ) : (
                     <div className="w-5 h-5 rounded-full border border-slate-500 shrink-0 flex items-center justify-center text-[10px] text-slate-500 font-bold">{idx + 1}</div>
                   )}
                   <div className="flex flex-col overflow-hidden">
-                    <span className={`text-sm font-semibold truncate ${currentActiveLessonId === lesson.id ? 'text-white' : 'text-slate-300'}`}>{lesson.title}</span>
-                    <span className="text-xs text-slate-500">{passedLessons.includes(lesson.id) ? 'Sector Controlado' : 'Asimilación Pendiente'}</span>
+                    <span className={`text-sm font-semibold truncate ${idLeccionActiva === leccion.id ? 'text-white' : 'text-slate-300'}`}>{leccion.title}</span>
+                    <span className="text-xs text-slate-500">{leccionesSuperadas.includes(leccion.id) ? 'Sector Controlado' : 'Asimilación Pendiente'}</span>
                   </div>
                 </button>
               ))}
@@ -288,17 +288,17 @@ export default function CoursePlayer() {
                 Si faltan lecciones, el botón está bloqueado y muestra el progreso.
             */}
             <div className="mt-8 border-t border-white/10 pt-6">
-              {passedLessons.length >= displayedLessons.length ? (
+              {leccionesSuperadas.length >= leccionesMostradas.length ? (
                 <button
-                  onClick={handleClaimReward}
-                  disabled={claiming}
+                  onClick={reclamarRecompensa}
+                  disabled={reclamando}
                   className={`btn border-none rounded-2xl font-black transition-all transform hover:scale-105 text-white w-full ${
                     course?.is_completed
                       ? 'bg-slate-700 hover:bg-slate-600 shadow-lg'
                       : 'bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 shadow-[0_0_30px_rgba(236,72,153,0.4)]'
                   }`}
                 >
-                  {claiming
+                  {reclamando
                     ? <span className="loading loading-spinner"></span>
                     : <>{course?.is_completed ? 'Terminar Entrenamiento' : 'Completar Misión'} <ArrowRight className="w-5 h-5 ml-2" /></>
                   }
@@ -306,7 +306,7 @@ export default function CoursePlayer() {
               ) : (
                 // Botón desactivado: muestra cuántas lecciones le faltan
                 <button className="btn btn-lg w-full bg-slate-800 text-slate-500 border-none cursor-not-allowed hidden md:flex">
-                  Misión ({passedLessons.length}/{displayedLessons.length})
+                  Misión ({leccionesSuperadas.length}/{leccionesMostradas.length})
                 </button>
               )}
             </div>
@@ -317,11 +317,11 @@ export default function CoursePlayer() {
                 - Plan 2 o 3: Activado pero marcado como "Próximamente" (Hito IV)
             */}
             <div className="mt-4 border-t border-white/10 pt-6">
-              {hasAIAccess ? (
-                // Plan 2 o 3: Búho incluido en el plan, cargamos el chat interactivo
+              {tieneAccesoIA ? (
+                // Plan 2 o 3: Búcho incluido en el plan, cargamos el chat interactivo
                 <AIChatPanel 
                   courseTitle={course?.title || "Curso General"} 
-                  lessonTitle={activeLesson?.title || "Consulta"} 
+                  lessonTitle={leccionActiva?.title || "Consulta"} 
                 />
               ) : (
                 // Plan 1: Astro bloqueado con invitación a subir de plan
@@ -348,9 +348,9 @@ export default function CoursePlayer() {
 
           {/* ── BOTÓN DE SOLICITAR TUTORÍA (NIVEL 3) ── */}
           <div className="mt-4">
-            {hasTutoringAccess ? (
+            {tieneAccesoTutorias ? (
               <button 
-                onClick={() => setShowTutoringModal(true)}
+                onClick={() => setMostrarModalTutoria(true)}
                 className="btn w-full bg-indigo-500 hover:bg-indigo-400 text-white font-bold border-none shadow-[0_0_15px_rgba(99,102,241,0.4)]"
               >
                 Solicitar Tutoría en Directo
@@ -374,7 +374,7 @@ export default function CoursePlayer() {
           Muestra XP ganados si es la primera vez, o mensaje de
           ánimo si es un repaso (sin XP).
           ══════════════════════════════════════════ */}
-      {showVictoryModal && (
+      {mostrarModalVictoria && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md">
           <div className="bg-slate-900 border border-pink-500/20 p-8 rounded-3xl max-w-sm w-full text-center shadow-[0_0_50px_rgba(236,72,153,0.15)] animate-[scale-up_0.3s_ease-out]">
             {/* Círculo con el icono de victoria */}
@@ -384,24 +384,24 @@ export default function CoursePlayer() {
 
             {/* Título diferente según sea primera vez o repaso */}
             <h2 className="text-4xl font-black text-white mb-2 tracking-tight">
-              {victoryData?.is_review ? '¡Entrenamiento Finalizado!' : '¡Misión Superada!'}
+              {datosVictoria?.is_review ? '¡Entrenamiento Finalizado!' : '¡Misión Superada!'}
             </h2>
-            <p className="text-slate-300 text-lg mb-6">{victoryData?.detail}</p>
+            <p className="text-slate-300 text-lg mb-6">{datosVictoria?.detail}</p>
 
             {/* Caja de XP — solo visible si NO es un repaso */}
-            {!victoryData?.is_review && (
+            {!datosVictoria?.is_review && (
               <div className="bg-slate-950/50 rounded-2xl p-5 mb-6 border border-white/5">
                 <div className="flex justify-between items-center text-slate-300">
                   <span className="flex items-center gap-2"><Star className="w-5 h-5 text-yellow-500"/> Experiencia Total</span>
-                  <span className="font-bold text-white text-xl">{victoryData?.experience_points} XP</span>
+                  <span className="font-bold text-white text-xl">{datosVictoria?.experience_points} XP</span>
                 </div>
               </div>
             )}
 
             {/* Notificación de subida de nivel (solo si el alumno subió de nivel con esta misión) */}
-            {victoryData?.level_up && (
+            {datosVictoria?.level_up && (
               <div className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold p-3 rounded-xl mb-6 shadow-[0_0_20px_rgba(236,72,153,0.4)] animate-pulse border border-white/20">
-                🎉 ¡HAS SUBIDO AL NIVEL {victoryData?.level}! 🎉
+                🎉 ¡HAS SUBIDO AL NIVEL {datosVictoria?.level}! 🎉
               </div>
             )}
 
@@ -418,16 +418,16 @@ export default function CoursePlayer() {
           Aparece si el backend detecta que el alumno
           intenta cobrar XP de un curso que ya completó.
           ══════════════════════════════════════════ */}
-      {errorModal && (
+      {modalError && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md">
           <div className="bg-slate-900 border border-red-500/30 p-8 rounded-3xl max-w-sm w-full text-center shadow-[0_0_50px_rgba(239,68,68,0.2)] animate-[scale-up_0.3s_ease-out]">
             <div className="w-24 h-24 mx-auto bg-red-500/20 text-red-500 rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(239,68,68,0.4)]">
               <ShieldAlert className="w-12 h-12" />
             </div>
             <h2 className="text-2xl font-black text-red-400 mb-2">¡Alto ahí, Almirante!</h2>
-            <p className="text-slate-300 mb-8">{errorModal}</p>
+            <p className="text-slate-300 mb-8">{modalError}</p>
             <button
-              onClick={() => setErrorModal('')}
+              onClick={() => setModalError('')}
               className="btn bg-slate-800 hover:bg-slate-700 text-white font-bold border border-white/10 w-full transition-colors"
             >
               Entendido
@@ -437,11 +437,11 @@ export default function CoursePlayer() {
       )}
 
       {/* MODAL DE TUTORÍA */}
-      {showTutoringModal && (
+      {mostrarModalTutoria && (
         <TutoringModal 
           courseId={courseId} 
           courseTitle={course.title}
-          onClose={() => setShowTutoringModal(false)} 
+          onClose={() => setMostrarModalTutoria(false)} 
         />
       )}
 

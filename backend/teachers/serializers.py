@@ -39,4 +39,10 @@ class ConsultationSerializer(serializers.ModelSerializer):
             'course', 'course_title', 'message', 'response', 'status', 
             'meeting_link', 'created_at', 'updated_at'
         ]
-        read_only_fields = ['student', 'status', 'created_at', 'updated_at']
+        # Hacemos que la validación no exija student/professor aquí, 
+        # porque los inyectamos en perform_create de la vista.
+        extra_kwargs = {
+            'student': {'required': False},
+            'professor': {'required': False}
+        }
+        read_only_fields = ['status', 'created_at', 'updated_at']

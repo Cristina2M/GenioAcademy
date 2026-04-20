@@ -42,7 +42,7 @@ export default function Home() {
               
               <p className="py-2 text-2xl text-slate-300/90 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
                 Genio Academy revoluciona tu aprendizaje estructurando el currículo escolar por 
-                <strong className="text-cyan-300 font-bold mx-2">cápsulas hiper-específicas</strong>. 
+                <strong className="text-cyan-300 font-bold mx-2">cápsulas hiperespecíficas</strong>. 
                 Conquista cada tema y descubre de lo que eres capaz.
               </p>
               
@@ -113,8 +113,8 @@ export default function Home() {
                 <div className="w-16 h-16 bg-pink-500/10 rounded-2xl flex items-center justify-center mb-8 text-pink-400 shadow-[inset_0_0_20px_rgba(236,72,153,0.2)] border border-pink-500/20 group-hover:bg-pink-500 group-hover:text-white transition-colors duration-300">
                   <Map className="w-8 h-8"/>
                 </div>
-                <h3 className="card-title text-3xl font-bold text-white mb-4">Micro-Cápsulas</h3>
-                <p className="text-slate-400 text-lg leading-relaxed">Olvídate de matricularte en cursos genéricos enteros. Accede al catálogo, busca exactamente el conocimiento hiper-específico que se te resiste, y destrózalo en un tiempo récord y a tu ritmo logrando victorias rápidas y continuas.</p>
+                <h3 className="card-title text-3xl font-bold text-white mb-4">Microcápsulas</h3>
+                <p className="text-slate-400 text-lg leading-relaxed">Olvídate de matricularte en cursos genéricos enteros. Accede al catálogo, busca exactamente el conocimiento hiperespecífico que se te resiste, y destrózalo en un tiempo récord y a tu ritmo logrando victorias rápidas y continuas.</p>
               </div>
             </div>
 
