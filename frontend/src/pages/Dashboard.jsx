@@ -146,9 +146,9 @@ export default function Dashboard() {
               <div className="absolute inset-0 bg-gradient-to-br from-pink-500 to-cyan-500 rounded-full blur-xl opacity-40 group-hover:opacity-60 transition-opacity"></div>
 
               {/* Marco del avatar con animación cuando se está actualizando */}
-              <div className={`w-32 h-32 rounded-full border-4 ${isUpdatingAvatar ? 'border-amber-400 animate-pulse' : 'border-slate-900'} relative z-10 p-1 bg-gradient-to-br from-cyan-400 to-pink-500 flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(34,211,238,0.3)]`}>
+              <div className={`w-32 h-32 rounded-full border-4 ${actualizandoAvatar ? 'border-amber-400 animate-pulse' : 'border-slate-900'} relative z-10 p-1 bg-gradient-to-br from-cyan-400 to-pink-500 flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(34,211,238,0.3)]`}>
                 <img
-                  src={getStudentAvatar(currentAvatarId)}
+                  src={getStudentAvatar(idAvatarActual)}
                   alt="Avatar del alumno"
                   className="w-full h-full object-cover rounded-full bg-slate-800"
                 />
@@ -161,7 +161,7 @@ export default function Dashboard() {
               {/* Insignia de nivel (esquina inferior derecha del avatar) */}
               <div className="absolute -bottom-2 -right-2 bg-slate-900 rounded-lg p-1 z-20 shadow-xl border border-white/10">
                 <div className="bg-gradient-to-r from-amber-400 to-orange-500 font-black text-slate-900 px-3 py-1 rounded shadow-inner text-sm">
-                  NVL. {currentLevel}
+                  NVL. {nivelActual}
                 </div>
               </div>
             </div>
@@ -414,11 +414,11 @@ export default function Dashboard() {
                     )}
                   </div>
 
-                  <span className={`text-xs font-bold text-center ${isSelected ? 'text-amber-400' : isUnlocked ? 'text-white' : 'text-slate-500'}`}>
+                  <span className={`text-xs font-bold text-center ${estaSeleccionado ? 'text-amber-400' : estaDesbloqueado ? 'text-white' : 'text-slate-500'}`}>
                     {avatar.name}
                   </span>
                   {/* Etiqueta "EQUIPADO" visible en el búho activo */}
-                  {isSelected && (
+                  {estaSeleccionado && (
                     <span className="absolute -top-2 -right-2 bg-amber-500 text-slate-900 text-[10px] font-black px-2 py-0.5 rounded-full shadow-md">EQUIPADO</span>
                   )}
                 </div>
