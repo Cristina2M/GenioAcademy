@@ -182,15 +182,6 @@ export default function LivesPanel() {
         </p>
       )}
 
-      {/* ── BOTÓN DE SIMULACIÓN "PERDER VIDA" (siempre visible para pruebas) ── */}
-      <button
-        onClick={handleLoseLife}
-        disabled={lives === 0}
-        className="w-full btn btn-sm bg-rose-600 hover:bg-rose-500 border-none text-white rounded-xl disabled:bg-slate-700 disabled:text-slate-500 transition-all"
-      >
-        💥 Simular fallo (−1 planeta)
-      </button>
-
       {/* ── PANEL DE MINIJUEGOS (solo Plan 3 con 0 vidas) ── */}
       {can_play_minigame ? (
         <div className="border-t border-slate-700 pt-3 text-center">

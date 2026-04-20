@@ -19,6 +19,7 @@
 
 import { useState, useEffect } from 'react';
 import { ShieldAlert, FileWarning, HelpCircle, RefreshCw, Trophy, Target } from 'lucide-react';
+import axiosInstance from '../api/axios';
 
 export default function LessonQuiz({ lesson, onPassed }) {
 
@@ -80,7 +81,11 @@ export default function LessonQuiz({ lesson, onPassed }) {
             }
         } else {
             // ❌ Respuesta incorrecta → el alumno vuelve a empezar desde el principio
-            // (Las reglas son estrictas: todo o nada)
+            // Restamos un planeta mediante una llamada al backend
+            axiosInstance.post('users/lives/decrease/').catch(err => {
+                console.error("Error al restar planeta:", err);
+            });
+            
             setEstado('FALLADO');
         }
     };
