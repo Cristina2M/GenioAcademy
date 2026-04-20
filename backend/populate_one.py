@@ -146,6 +146,52 @@ COURSES_DATA = {
             'answer': '3/5'
         }
     ],
+    'Geometría de Órbitas': [
+        {
+            'title': 'Formas en el Vacío',
+            'content': '<h3 class="text-2xl text-teal-400 font-bold mb-4">Puntos, Rectas y Planos</h3><p class="mb-4 text-slate-300 text-lg">La geometría estudia el espacio. Un punto es una coordenada, una recta es la trayectoria de un fotón y un plano es la superficie de un panel solar.</p>',
+            'question': '¿Cómo se llama la línea que une el centro de un círculo con cualquier punto de su borde?',
+            'options': ['Radio', 'Diámetro', 'Perímetro'],
+            'answer': 'Radio'
+        },
+        {
+            'title': 'Áreas de Campos de Fuerza',
+            'content': '<h3 class="text-2xl text-teal-400 font-bold mb-4">Superficies Proyectadas</h3><p class="mb-4 text-slate-300 text-lg">Calcular el área es saber cuánto espacio ocupa una forma. Para un cuadrado, multiplicamos lado por lado.</p>',
+            'question': '¿Cuál es el área de un cuadrado de lado 5 unidades?',
+            'options': ['25', '20', '10'],
+            'answer': '25'
+        },
+        {
+            'title': 'Perímetros y Órbitas',
+            'content': '<h3 class="text-2xl text-teal-400 font-bold mb-4">El Borde del Universo</h3><p class="mb-4 text-slate-300 text-lg">El perímetro es la longitud del contorno. Si caminas alrededor de un asteroide rectangular, la distancia total recorrida es su perímetro.</p>',
+            'question': '¿Qué operación realizas para hallar el perímetro de un triángulo?',
+            'options': ['Sumar sus tres lados', 'Multiplicar sus lados', 'Dividir la base por la altura'],
+            'answer': 'Sumar sus tres lados'
+        }
+    ],
+    'Polinomios Estelares': [
+        {
+            'title': 'Monomios de Energía',
+            'content': '<h3 class="text-2xl text-orange-400 font-bold mb-4">Expresiones Simples</h3><p class="mb-4 text-slate-300 text-lg">Un monomio es un número y una letra pegados, como 3x. El número es el coeficiente y la letra es la parte literal.</p>',
+            'question': 'En el monomio 5y, ¿cuál es el coeficiente?',
+            'options': ['5', 'y', '5y'],
+            'answer': '5'
+        },
+        {
+            'title': 'Sumas de Términos Semejantes',
+            'content': '<h3 class="text-2xl text-orange-400 font-bold mb-4">Agrupando Materia</h3><p class="mb-4 text-slate-300 text-lg">Solo puedes sumar monomios si tienen la misma letra. 2x + 3x = 5x. ¡Pero no puedes sumar 2x + 3y!</p>',
+            'question': '¿Cuánto es 4a + 2a - a?',
+            'options': ['5a', '6a', '4a'],
+            'answer': '5a'
+        },
+        {
+            'title': 'Grado de un Polinomio',
+            'content': '<h3 class="text-2xl text-orange-400 font-bold mb-4">Nivel de Potencia</h3><p class="mb-4 text-slate-300 text-lg">El grado es el exponente más alto de la letra. En x² + 3x + 1, el grado es 2 porque el mayor exponente es el 2.</p>',
+            'question': '¿Cuál es el grado del polinomio: x³ + 4x - 5?',
+            'options': ['3', '1', '4'],
+            'answer': '3'
+        }
+    ],
     # I will add more courses as I go to avoid giant files in one turn
 }
 
