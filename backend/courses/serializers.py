@@ -92,12 +92,24 @@ class CourseSerializer(serializers.ModelSerializer):
 
 # ── SERIALIZADOR DE PROGRESO DE CURSO ──
 class UserCourseProgressSerializer(serializers.ModelSerializer):
-    course_title = serializers.ReadOnlyField(source='course.title')
-    category_name = serializers.ReadOnlyField(source='course.knowledge_level.category.name')
+    course_title = serializers.SerializerMethodField()
+    category_name = serializers.SerializerMethodField()
 
     class Meta:
         model = UserCourseProgress
         fields = ['id', 'course', 'course_title', 'category_name', 'started_at', 'updated_at']
+
+    def get_course_title(self, obj):
+        try:
+            return obj.course.title
+        except:
+            return "Curso sin título"
+
+    def get_category_name(self, obj):
+        try:
+            return obj.course.knowledge_level.category.name
+        except:
+            return "Sin Categoría"
 
 
 # ── SERIALIZADOR DE NIVELES DE CONOCIMIENTO ──
