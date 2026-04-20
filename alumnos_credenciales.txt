@@ -1,0 +1,19 @@
+===========================================
+CREDENCIALES DE LOS ALUMNOS GENERADOS
+===========================================
+Contraseña universal para todos: alumno123
+
+
+
+1. Usuario: al1
+   Contraseña: alumno123
+   Plan: 1
+
+2. Usuario: al2
+   Contraseña: alumno123
+   Plan: 2
+
+3. Usuario: al3
+   Contraseña: alumno123
+   Plan: 3
+

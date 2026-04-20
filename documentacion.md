@@ -645,9 +645,9 @@ docker-compose exec backend python manage.py shell < seed_teacher_users.py
 
 | Tipo | Usuario | Contraseña | Acceso |
 |---|---|---|---|
-| Alumno Plan 1 | `alumno1` | `Genio2026!` | Teoría y quiz básico |
-| Alumno Plan 2 | `alumno2` | `Genio2026!` | + Tutor Astro IA |
-| Alumno Plan 3 | `alumno3` | `Genio2026!` | + Minijuegos y tutorías |
+| Alumno Plan 1 | `al1` | `alumno123` | Teoría y quiz básico |
+| Alumno Plan 2 | `al2` | `alumno123` | + Tutor Astro IA |
+| Alumno Plan 3 | `al3` | `alumno123` | + Minijuegos y tutorías |
 | Profesor | `profe_mate` | `Genio2026!` | Panel docente |
 | Superusuario | `admin` | (definido al crear) | Admin Django completo |
 
