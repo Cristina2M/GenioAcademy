@@ -17,3 +17,6 @@ pip install -r requirements.txt
 python manage.py collectstatic --no-input
 
 python manage.py migrate
+
+# Siembra categorías y cursos si la BD está vacía (idempotente)
+python manage.py seed_production
