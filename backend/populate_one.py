@@ -100,6 +100,52 @@ COURSES_DATA = {
             'answer': 'No, es imposible'
         }
     ],
+    'Ecuaciones de 1er Grado': [
+        {
+            'title': 'El Misterio de la X',
+            'content': '<h3 class="text-2xl text-violet-400 font-bold mb-4">La Incógnita Estelar</h3><p class="mb-4 text-slate-300 text-lg">Una ecuación es una balanza en equilibrio. La "X" es un valor oculto que debemos despejar para que ambos lados sigan pesando lo mismo.</p>',
+            'question': 'En la ecuación X + 5 = 12, ¿cuánto vale X?',
+            'options': ['7', '8', '5'],
+            'answer': '7'
+        },
+        {
+            'title': 'Despejando el Radier',
+            'content': '<h3 class="text-2xl text-violet-400 font-bold mb-4">El Salto del Igual</h3><p class="mb-4 text-slate-300 text-lg">Cuando un número cruza el signo "=", cambia su operación: si estaba sumando, pasa restando; si multiplicaba, pasa dividiendo.</p>',
+            'question': 'Si 2X = 10, ¿cuál es el siguiente paso para despejar X?',
+            'options': ['X = 10 / 2', 'X = 10 - 2', 'X = 10 * 2'],
+            'answer': 'X = 10 / 2'
+        },
+        {
+            'title': 'Equilibrio de Antimateria',
+            'content': '<h3 class="text-2xl text-violet-400 font-bold mb-4">Operaciones en Ambos Lados</h3><p class="mb-4 text-slate-300 text-lg">Lo que hagas a un lado del igual, DEBES hacerlo al otro. Si restas 3 a la izquierda, resta 3 a la derecha para no romper el equilibrio cósmico.</p>',
+            'question': 'En 3X - 1 = 8, ¿cuánto vale 3X antes de despejar la X final?',
+            'options': ['9', '7', '10'],
+            'answer': '9'
+        }
+    ],
+    'Fracciones Interestelares': [
+        {
+            'title': 'Partes de la Galaxia',
+            'content': '<h3 class="text-2xl text-blue-400 font-bold mb-4">Numerador y Denominador</h3><p class="mb-4 text-slate-300 text-lg">Una fracción representa una parte de un todo. El denominador (abajo) dice en cuántas partes dividimos la pizza galáctica. El numerador (arriba) dice cuántas nos comemos.</p>',
+            'question': 'En la fracción 3/4, ¿cuál es el denominador?',
+            'options': ['4', '3', '7'],
+            'answer': '4'
+        },
+        {
+            'title': 'Fracciones Equivalentes',
+            'content': '<h3 class="text-2xl text-blue-400 font-bold mb-4">Diferentes Formas, Misma Masa</h3><p class="mb-4 text-slate-300 text-lg">1/2 planeta es lo mismo que 2/4 de planeta. Aunque los números cambien, la cantidad de materia es la misma.</p>',
+            'question': '¿Cuál de estas fracciones es equivalente a 1/2?',
+            'options': ['2/4', '1/3', '2/3'],
+            'answer': '2/4'
+        },
+        {
+            'title': 'Suma de Fragmentos Cósmicos',
+            'content': '<h3 class="text-2xl text-blue-400 font-bold mb-4">Mismo Denominador</h3><p class="mb-4 text-slate-300 text-lg">Si las partes son del mismo tamaño (mismo denominador), solo tienes que sumar los numeradores. ¡Fácil como contar estrellas!</p>',
+            'question': '¿Cuánto es 1/5 + 2/5?',
+            'options': ['3/5', '3/10', '2/5'],
+            'answer': '3/5'
+        }
+    ],
     # I will add more courses as I go to avoid giant files in one turn
 }
 
