@@ -11,7 +11,7 @@
 # ============================================================
 
 from rest_framework import serializers
-from .models import Category, KnowledgeLevel, Course, Lesson, Exercise
+from .models import Category, KnowledgeLevel, Course, Lesson, Exercise, UserCourseProgress
 
 
 # ── SERIALIZADOR DE EJERCICIOS ──
@@ -44,7 +44,8 @@ class CourseSerializer(serializers.ModelSerializer):
 
     # "SerializerMethodField" es un campo especial que se calcula al vuelo con una función.
     # En este caso, nos permite saber si el alumno que está pidiendo los datos ha completado el curso.
-    is_completed = serializers.SerializerMethodField()
+    # Nos permite saber si el alumno ya ha comenzado este curso.
+    is_started = serializers.SerializerMethodField()
 
     class Meta:
         model = Course
@@ -65,6 +66,25 @@ class CourseSerializer(serializers.ModelSerializer):
         # Buscamos en la tabla de "completitudes" si existe una fila para este par (alumno, curso)
         from .models import CourseCompletion
         return CourseCompletion.objects.filter(user=request.user, course=obj).exists()
+
+    def get_is_started(self, obj):
+        """
+        Comprueba si el alumno ha iniciado el curso (existe en UserCourseProgress).
+        """
+        request = self.context.get('request')
+        if not request or not request.user.is_authenticated:
+            return False
+        return UserCourseProgress.objects.filter(user=request.user, course=obj).exists()
+
+
+# ── SERIALIZADOR DE PROGRESO DE CURSO ──
+class UserCourseProgressSerializer(serializers.ModelSerializer):
+    course_title = serializers.ReadOnlyField(source='course.title')
+    category_name = serializers.ReadOnlyField(source='course.knowledge_level.category.name')
+
+    class Meta:
+        model = UserCourseProgress
+        fields = ['id', 'course', 'course_title', 'category_name', 'started_at', 'updated_at']
 
 
 # ── SERIALIZADOR DE NIVELES DE CONOCIMIENTO ──
@@ -92,7 +112,11 @@ class KnowledgeLevelSerializer(serializers.ModelSerializer):
             return True
 
         # El nivel está bloqueado si su dificultad (order) supera el nivel del alumno
-        return obj.order > request.user.current_student_level
+        # return obj.order > request.user.current_student_level
+        
+        # ELIMINACIÓN DE RESTRICCIONES: Ahora todos los niveles están abiertos.
+        # Siempre devolvemos False para is_locked.
+        return False
 
 
 # ── SERIALIZADOR DE CATEGORÍAS ──
