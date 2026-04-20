@@ -698,6 +698,98 @@ COURSES_DATA = {
             'answer': 'Berlín'
         }
     ],
+    'El Sustantivo y Adjetivo': [
+        {
+            'title': 'Los Nombres de las Cosas',
+            'content': '<h3 class="text-2xl text-blue-400 font-bold mb-4">Sustantivos Propios y Comunes</h3><p class="mb-4 text-slate-300 text-lg">El sustantivo es la palabra que usamos para nombrar personas, animales, objetos o planetas. "Nave" es común; "GenioAcademy" es propio.</p>',
+            'question': '¿Qué tipo de sustantivo es "Marte"?',
+            'options': ['Propio', 'Común', 'Abstracto'],
+            'answer': 'Propio'
+        },
+        {
+            'title': 'Dando Color al Cosmos',
+            'content': '<h3 class="text-2xl text-blue-400 font-bold mb-4">El Adjetivo Calificativo</h3><p class="mb-4 text-slate-300 text-lg">Los adjetivos nos dicen cómo son los sustantivos. Una nave puede ser "rápida", "grande" o "plateada".</p>',
+            'question': 'En la frase "El cohete veloz", ¿cuál es el adjetivo?',
+            'options': ['Veloz', 'Cohete', 'El'],
+            'answer': 'Veloz'
+        },
+        {
+            'title': 'Género y Número Sideral',
+            'content': '<h3 class="text-2xl text-blue-400 font-bold mb-4">Concordancia</h3><p class="mb-4 text-slate-300 text-lg">El sustantivo y el adjetivo deben ir siempre de la mano en género (masculino/femenino) y número (singular/plural). ¡No digas "el estrellas brilloso"!</p>',
+            'question': '¿Cuál es la forma correcta de concordancia?',
+            'options': ['Las naves espaciales', 'El naves espaciales', 'Las nave espacial'],
+            'answer': 'Las naves espaciales'
+        }
+    ],
+    'Acentuación Especial': [
+        {
+            'title': 'La Fuerza de la Sílaba',
+            'content': '<h3 class="text-2xl text-indigo-300 font-bold mb-4">Agudas, Llanas y Esdrújulas</h3><p class="mb-4 text-slate-300 text-lg">Todas las palabras tienen una sílaba tónica (la que suena más fuerte). Dependiendo de dónde esté, la palabra tendrá tilde o no.</p>',
+            'question': '¿En qué sílaba llevan el golpe de voz las palabras agudas?',
+            'options': ['En la última', 'En la penúltima', 'En la antepenúltima'],
+            'answer': 'En la última'
+        },
+        {
+            'title': 'Reglas de Navegación Ortográfica',
+            'content': '<h3 class="text-2xl text-indigo-300 font-bold mb-4">¿Cuándo poner Tilde?</h3><p class="mb-4 text-slate-300 text-lg">Las agudas llevan tilde si terminan en n, s o vocal. Las llanas, si NO terminan en n, s o vocal. ¡Las esdrújulas SIEMPRE llevan tilde!</p>',
+            'question': '¿Por qué la palabra "Satélite" lleva tilde?',
+            'options': ['Porque es esdrújula', 'Porque termina en vocal', 'Porque es aguda'],
+            'answer': 'Porque es esdrújula'
+        },
+        {
+            'title': 'Tildes Diacríticas',
+            'content': '<h3 class="text-2xl text-indigo-300 font-bold mb-4">Pequeñas Diferencias, Grandes Significados</h3><p class="mb-4 text-slate-300 text-lg">A veces ponemos tilde para distinguir palabras que se escriben igual pero significan cosas distintas, como "tú" (persona) y "tu" (posesión).</p>',
+            'question': '¿Qué palabra lleva tilde diacrítica para indicar afirmación?',
+            'options': ['Sí', 'Si', 'Se'],
+            'answer': 'Sí'
+        }
+    ],
+    'Tipos de Texto': [
+        {
+            'title': 'Contar Historias',
+            'content': '<h3 class="text-2xl text-violet-400 font-bold mb-4">El Texto Narrativo</h3><p class="mb-4 text-slate-300 text-lg">Narrar es contar sucesos que ocurren en un tiempo y lugar. Un diario de bitácora o una novela de ciencia ficción son textos narrativos.</p>',
+            'question': '¿Cuál es el objetivo principal de un texto narrativo?',
+            'options': ['Contar una historia', 'Explicar cómo funciona algo', 'Convencer de una opinión'],
+            'answer': 'Contar una historia'
+        },
+        {
+            'title': 'Manuales de Usuario',
+            'content': '<h3 class="text-2xl text-violet-400 font-bold mb-4">El Texto Expositivo</h3><p class="mb-4 text-slate-300 text-lg">Sirve para informar sobre un tema de forma clara y objetiva. Esta misma lección es un ejemplo de texto expositivo.</p>',
+            'question': '¿Qué tipo de texto usarías para explicar el funcionamiento de un motor de plasma?',
+            'options': ['Expositivo', 'Narrativo', 'Poético'],
+            'answer': 'Expositivo'
+        },
+        {
+            'title': 'Debates Galácticos',
+            'content': '<h3 class="text-2xl text-violet-400 font-bold mb-4">El Texto Argumentativo</h3><p class="mb-4 text-slate-300 text-lg">Usamos argumentos para defender una idea o convencer a alguien. "Deberíamos explorar Marte porque..." es el inicio de una argumentación.</p>',
+            'question': '¿Qué elemento es esencial en un texto argumentativo?',
+            'options': ['Razones y argumentos', 'Muchos personajes', 'Rimas'],
+            'answer': 'Razones y argumentos'
+        }
+    ],
+    'Sinónimos y Antónimos': [
+        {
+            'title': 'Palabras Gemelas',
+            'content': '<h3 class="text-2xl text-sky-300 font-bold mb-4">Riqueza de Vocabulario</h3><p class="mb-4 text-slate-300 text-lg">Los sinónimos son palabras diferentes que significan lo mismo. "Rápido" y "veloz" son sinónimos.</p>',
+            'question': '¿Cuál es un sinónimo de la palabra "Gélido"?',
+            'options': ['Frío', 'Caliente', 'Húmedo'],
+            'answer': 'Frío'
+        },
+        {
+            'title': 'El Lado Opuesto',
+            'content': '<h3 class="text-2xl text-sky-300 font-bold mb-4">Antónimos</h3><p class="mb-4 text-slate-300 text-lg">Los antónimos son palabras con significados contrarios. "Luz" y "oscuridad" son el ejemplo perfecto en el espacio.</p>',
+            'question': '¿Cuál es el antónimo de "Ascender"?',
+            'options': ['Descender', 'Subir', 'Flotar'],
+            'answer': 'Descender'
+        },
+        {
+            'title': 'Precisión de Sensores',
+            'content': '<h3 class="text-2xl text-sky-300 font-bold mb-4">Elegir la Palabra Exacta</h3><p class="mb-4 text-slate-300 text-lg">En una academia de genios, usar la palabra precisa marca la diferencia. No es lo mismo un planeta "grande" que uno "gigantesco".</p>',
+            'question': '¿Qué logramos al usar sinónimos en un texto?',
+            'options': ['Evitar repeticiones', 'Confundir al lector', 'Hacerlo más corto'],
+            'answer': 'Evitar repeticiones'
+        }
+    ],
     # I will add more courses as I go to avoid giant files in one turn
 }
 
