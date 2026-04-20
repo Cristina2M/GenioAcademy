@@ -514,6 +514,98 @@ COURSES_DATA = {
             'answer': 'Latín'
         }
     ],
+    'Virus y Bacterias': [
+        {
+            'title': 'Agentes Infecciosos',
+            'content': '<h3 class="text-2xl text-rose-400 font-bold mb-4">Microorganismos de Frontera</h3><p class="mb-4 text-slate-300 text-lg">Las bacterias son células completas, mientras que los virus necesitan infectar una célula para reproducirse. Ambos pueden viajar en meteoritos.</p>',
+            'question': '¿Qué microorganismo NO se considera un ser vivo completo porque necesita una célula para replicarse?',
+            'options': ['Virus', 'Bacteria', 'Hongo'],
+            'answer': 'Virus'
+        },
+        {
+            'title': 'Antibióticos y Defensas',
+            'content': '<h3 class="text-2xl text-rose-400 font-bold mb-4">La Guerra Invisble</h3><p class="mb-4 text-slate-300 text-lg">Los antibióticos matan bacterias, pero no sirven contra los virus. Para los virus, usamos vacunas que entrenan a nuestro sistema inmune.</p>',
+            'question': '¿Contra cuál de estos agentes es efectivo un antibiótico?',
+            'options': ['Bacterias', 'Virus', 'Luz ultravioleta'],
+            'answer': 'Bacterias'
+        },
+        {
+            'title': 'Epidemias Interplanetarias',
+            'content': '<h3 class="text-2xl text-rose-400 font-bold mb-4">Protocolos de Cuarentena</h3><p class="mb-4 text-slate-300 text-lg">Al llegar a un nuevo planeta, es vital desinfectar el equipo. Una sola bacteria terrestre podría alterar todo un ecosistema alienígena.</p>',
+            'question': '¿Cómo se llama la propagación de una enfermedad a gran escala por todo un mundo?',
+            'options': ['Pandemia', 'Simbiosis', 'Evolución'],
+            'answer': 'Pandemia'
+        }
+    ],
+    'Anatomía Alienígena': [
+        {
+            'title': 'Sistemas de Soporte Vital',
+            'content': '<h3 class="text-2xl text-indigo-400 font-bold mb-4">Órganos y Funciones</h3><p class="mb-4 text-slate-300 text-lg">El cuerpo humano tiene sistemas (circulatorio, respiratorio, etc.). En otros mundos, estos órganos pueden estar basados en silicio en vez de carbono.</p>',
+            'question': '¿Qué órgano es el motor principal del sistema circulatorio humano?',
+            'options': ['Corazón', 'Pulmón', 'Cerebro'],
+            'answer': 'Corazón'
+        },
+        {
+            'title': 'El Esqueleto de Exo-Materia',
+            'content': '<h3 class="text-2xl text-indigo-400 font-bold mb-4">Estructura y Movimiento</h3><p class="mb-4 text-slate-300 text-lg">Los huesos nos dan forma y protegen órganos. En planetas gaseosos, las especies podrían no tener huesos, sino flotar mediante sacos de gas.</p>',
+            'question': '¿Cuál es la función principal del sistema óseo?',
+            'options': ['Sostén y protección', 'Digestión', 'Pensamiento'],
+            'answer': 'Sostén y protección'
+        },
+        {
+            'title': 'Sentidos en el Vacío',
+            'content': '<h3 class="text-2xl text-indigo-400 font-bold mb-4">Percepción Sensorial</h3><p class="mb-4 text-slate-300 text-lg">La vista y el oído dependen de la luz y el aire. En el espacio, otras especies podrían usar la ecolocalización o campos eléctricos.</p>',
+            'question': '¿Cuál de estos sentidos depende de las vibraciones del aire para funcionar?',
+            'options': ['Oído', 'Vista', 'Gusto'],
+            'answer': 'Oído'
+        }
+    ],
+    'Mesopotamia Antigüa': [
+        {
+            'title': 'La Cuna entre Ríos',
+            'content': '<h3 class="text-2xl text-yellow-600 font-bold mb-4">Tigris y Éufrates</h3><p class="mb-4 text-slate-300 text-lg">Mesopotamia significa "tierra entre ríos". Aquí nacieron las primeras ciudades y la agricultura organizada de la humanidad.</p>',
+            'question': '¿Entre qué dos ríos se encontraba la región de Mesopotamia?',
+            'options': ['Tigris y Éufrates', 'Nilo y Jordán', 'Indo y Ganges'],
+            'answer': 'Tigris y Éufrates'
+        },
+        {
+            'title': 'El Origen de la Escritura',
+            'content': '<h3 class="text-2xl text-yellow-600 font-bold mb-4">Tablillas Cuneiformes</h3><p class="mb-4 text-slate-300 text-lg">Los sumerios inventaron la escritura cuneiforme sobre arcilla para llevar cuentas de sus templos y graneros.</p>',
+            'question': '¿Cómo se llama el primer sistema de escritura de la historia, nacido en Mesopotamia?',
+            'options': ['Cuneiforme', 'Jeroglífico', 'Alfabeto'],
+            'answer': 'Cuneiforme'
+        },
+        {
+            'title': 'El Código de Hammurabi',
+            'content': '<h3 class="text-2xl text-yellow-600 font-bold mb-4">Ojo por Ojo</h3><p class="mb-4 text-slate-300 text-lg">Fue uno de los primeros conjuntos de leyes escritas. Buscaba poner orden y justicia en las ciudades-estado.</p>',
+            'question': '¿Qué rey de Babilonia es famoso por escribir su código de leyes en una estela de piedra?',
+            'options': ['Hammurabi', 'Nabucodonosor', 'Gilgamesh'],
+            'answer': 'Hammurabi'
+        }
+    ],
+    'Antigua Grecia': [
+        {
+            'title': 'La Cuna de la Democracia',
+            'content': '<h3 class="text-2xl text-blue-500 font-bold mb-4">Atenas y el Ágora</h3><p class="mb-4 text-slate-300 text-lg">En Grecia nació la idea de que los ciudadanos podían participar en las decisiones del gobierno.</p>',
+            'question': '¿En qué ciudad griega nació el sistema democrático?',
+            'options': ['Atenas', 'Esparta', 'Troya'],
+            'answer': 'Atenas'
+        },
+        {
+            'title': 'Filosofía y Ciencia',
+            'content': '<h3 class="text-2xl text-blue-500 font-bold mb-4">Buscando la Verdad</h3><p class="mb-4 text-slate-300 text-lg">Sócrates, Platón y Aristóteles se preguntaban el porqué de las cosas, sentando las bases de toda la ciencia moderna.</p>',
+            'question': '¿Cómo llamaban los griegos al "amor por la sabiduría"?',
+            'options': ['Filosofía', 'Filantropía', 'Democracia'],
+            'answer': 'Filosofía'
+        },
+        {
+            'title': 'Dioses del Olimpo',
+            'content': '<h3 class="text-2xl text-blue-500 font-bold mb-4">Mitos y Héroes</h3><p class="mb-4 text-slate-300 text-lg">Los griegos creían en dioses que vivían en el Monte Olimpo y que tenían pasiones muy parecidas a las humanas.</p>',
+            'question': '¿Quién era el rey de los dioses en la mitología griega?',
+            'options': ['Zeus', 'Poseidón', 'Hades'],
+            'answer': 'Zeus'
+        }
+    ],
     # I will add more courses as I go to avoid giant files in one turn
 }
 
