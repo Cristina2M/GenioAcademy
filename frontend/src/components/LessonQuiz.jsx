@@ -23,42 +23,51 @@ import axiosInstance from '../api/axios';
 
 export default function LessonQuiz({ lesson, onPassed }) {
 
-    // Estado de la máquina: controla qué "pantalla" mostrar en cada momento
-    const [estado, setEstado] = useState('INICIO'); // 'INICIO' | 'JUGANDO' | 'FALLADO' | 'SUPERADO'
+    // Estado de las vidas del alumno (para bloquear el inicio si tiene 0)
+    const [vidas, setVidas] = useState(3);
+    const [cargandoVidas, setCargandoVidas] = useState(true);
 
-    // El "pool" es la lista de preguntas seleccionadas y mezcladas para esta ronda
-    const [preguntasRonda, setPreguntasRonda] = useState([]);
+    // Función para consultar las vidas actuales al servidor
+    const consultarVidas = async () => {
+        try {
+            const res = await axiosInstance.get('users/lives/');
+            setVidas(res.data.lives);
+        } catch (err) {
+            console.error("Error al consultar vidas:", err);
+        } finally {
+            setCargandoVidas(false);
+        }
+    };
 
-    // Índice de la pregunta actual (empieza por la 0)
-    const [indicePreguntaActual, setIndicePreguntaActual] = useState(0);
+    // Consultamos vidas al montar y cada vez que volvemos al inicio
+    useEffect(() => {
+        if (estado === 'INICIO') {
+            consultarVidas();
+        }
+    }, [estado]);
 
     // Este efecto se ejecuta cada vez que el alumno cambia de lección
-    // (cuando cambia lesson.id). Sirve para "resetear" el simulador al estado inicial.
     useEffect(() => {
         setEstado('INICIO');
         setPreguntasRonda([]);
         setIndicePreguntaActual(0);
-    }, [lesson?.id]); // El ? es "optional chaining": evita errores si lesson es null
+    }, [lesson?.id]);
 
     // Función que se ejecuta cuando el alumno pulsa "Iniciar Simulación"
     const arrancarSimulador = () => {
-        // Si la lección no tiene ejercicios (el profe aún no los ha creado),
-        // la marcamos como superada para no bloquear al alumno
+        // Doble comprobación de seguridad: si no hay vidas, no arranca
+        if (vidas <= 0) return;
+
+        // Si la lección no tiene ejercicios...
         if (!lesson?.exercises || lesson.exercises.length === 0) {
             setEstado('SUPERADO');
-            if (onPassed) onPassed(lesson.id); // Notificamos al padre que la lección está superada
+            if (onPassed) onPassed(lesson.id);
             return;
         }
 
-        // Mezclamos todas las preguntas disponibles en orden aleatorio
-        // (El truco de 0.5 - Math.random() es una forma rápida de mezclar arrays)
         const preguntasMezcladas = [...lesson.exercises].sort(() => 0.5 - Math.random());
-
-        // Cogemos un máximo de 3 preguntas para no hacer el test demasiado largo.
-        // Si hay menos de 3 disponibles, cogemos todas las que haya.
         const preguntasSeleccionadas = preguntasMezcladas.slice(0, Math.min(3, preguntasMezcladas.length));
 
-        // Guardamos las preguntas seleccionadas y arrancamos el simulador
         setPreguntasRonda(preguntasSeleccionadas);
         setIndicePreguntaActual(0);
         setEstado('JUGANDO');
@@ -66,23 +75,22 @@ export default function LessonQuiz({ lesson, onPassed }) {
 
     // Función que se ejecuta cuando el alumno hace clic en una de las opciones de respuesta
     const manejarRespuesta = (opcionSeleccionada) => {
-        // Obtenemos la pregunta actual del array de preguntas de esta ronda
         const preguntaActual = preguntasRonda[indicePreguntaActual];
 
         if (opcionSeleccionada === preguntaActual.correct_answer) {
-            // ✅ Respuesta correcta
             if (indicePreguntaActual + 1 >= preguntasRonda.length) {
-                // Era la última pregunta → ¡El alumno ha superado el simulador!
                 setEstado('SUPERADO');
-                if (onPassed) onPassed(lesson.id); // Notificamos al padre
+                if (onPassed) onPassed(lesson.id);
             } else {
-                // Aún quedan más preguntas → avanzamos a la siguiente
                 setIndicePreguntaActual(indicePreguntaActual + 1);
             }
         } else {
             // ❌ Respuesta incorrecta → el alumno vuelve a empezar desde el principio
             // Restamos un planeta mediante una llamada al backend
-            axiosInstance.post('users/lives/decrease/').catch(err => {
+            axiosInstance.post('users/lives/decrease/').then(() => {
+                // Actualizamos el contador local tras la resta
+                setVidas(prev => Math.max(0, prev - 1));
+            }).catch(err => {
                 console.error("Error al restar planeta:", err);
             });
             
@@ -95,22 +103,47 @@ export default function LessonQuiz({ lesson, onPassed }) {
 
     // ─── PANTALLA: INICIO ───────────────────────────────────────────────────
     if (estado === 'INICIO') {
+        const sinVidas = vidas <= 0;
+
         return (
             <div className="flex flex-col items-center justify-center p-8 text-center bg-slate-900/40 rounded-2xl border border-white/5">
-                <div className="w-16 h-16 bg-cyan-500/20 text-cyan-400 rounded-full flex items-center justify-center mb-4 border border-cyan-500/30 shadow-[0_0_20px_rgba(34,211,238,0.2)]">
-                    <Target className="w-8 h-8" />
+                <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 border shadow-lg transition-all ${
+                    sinVidas 
+                    ? 'bg-rose-500/20 text-rose-400 border-rose-500/30 shadow-rose-500/10' 
+                    : 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30 shadow-cyan-500/20'
+                }`}>
+                    {sinVidas ? <ShieldAlert className="w-8 h-8" /> : <Target className="w-8 h-8" />}
                 </div>
-                <h3 className="text-xl font-bold text-white tracking-wide mb-2">Simulador de Combate Lógico</h3>
+                
+                <h3 className={`text-xl font-bold tracking-wide mb-2 ${sinVidas ? 'text-rose-400' : 'text-white'}`}>
+                    {sinVidas ? 'Sistemas de Simulación Bloqueados' : 'Simulador de Combate Lógico'}
+                </h3>
+
                 <p className="text-slate-400 max-w-md mb-6 leading-relaxed">
-                    Para dar la lección por asimilada debes superar <strong>{lesson.exercises ? Math.min(3, lesson.exercises.length) : 'las pruebas'}</strong> de nuestras pruebas extraídas de la base de datos central sin cometer <strong className="text-pink-400">ni un solo error</strong>.
+                    {sinVidas 
+                        ? 'Tu nave ha agotado todos sus planetas de energía. Debes esperar a que se regeneren o completar un minijuego de rescate para continuar.'
+                        : <>Para dar la lección por asimilada debes superar <strong>{lesson.exercises ? Math.min(3, lesson.exercises.length) : 'las pruebas'}</strong> de nuestras pruebas sin cometer <strong className="text-pink-400">ni un solo error</strong>.</>
+                    }
                 </p>
-                <button
-                    className="btn btn-outline border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-slate-900 shadow-[0_0_15px_rgba(34,211,238,0.2)] px-8 font-bold"
-                    onClick={arrancarSimulador}
-                >
-                    {/* Si no hay ejercicios, el texto del botón cambia */}
-                    {lesson.exercises?.length === 0 ? 'Protocolo de Emergencia (Sin Pruebas)' : 'Iniciar Simulación Dinámica'}
-                </button>
+
+                {cargandoVidas ? (
+                    <div className="flex items-center gap-2 text-slate-500 text-sm italic">
+                        <RefreshCw className="w-4 h-4 animate-spin" /> Verificando integridad de la nave...
+                    </div>
+                ) : sinVidas ? (
+                    <div className="bg-rose-500/10 border border-rose-500/20 p-3 rounded-xl">
+                        <p className="text-rose-400 text-xs font-bold uppercase tracking-widest">
+                            ⚠️ Se requiere al menos 1 planeta para iniciar
+                        </p>
+                    </div>
+                ) : (
+                    <button
+                        className="btn btn-outline border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-slate-900 shadow-[0_0_15px_rgba(34,211,238,0.2)] px-8 font-bold"
+                        onClick={arrancarSimulador}
+                    >
+                        {lesson.exercises?.length === 0 ? 'Protocolo de Emergencia (Sin Pruebas)' : 'Iniciar Simulación Dinámica'}
+                    </button>
+                )}
             </div>
         );
     }
