@@ -13,11 +13,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny, IsAuthenticated
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.utils import timezone
 from datetime import timedelta
 from .models import CustomUser, MinigameLog
-from .serializers import UserSerializer, MyTokenObtainPairSerializer
+from .serializers import UserSerializer, MyTokenObtainPairSerializer, SafeTokenRefreshSerializer
 
 
 # ── CONTROLADOR DE LOGIN (Token JWT) ──
@@ -25,6 +25,9 @@ from .serializers import UserSerializer, MyTokenObtainPairSerializer
 # Usa nuestro serializador personalizado para que el token incluya XP, nivel, avatar, etc.
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+class SafeTokenRefreshView(TokenRefreshView):
+    serializer_class = SafeTokenRefreshSerializer
 
 
 # ── CONTROLADOR DE REGISTRO ──

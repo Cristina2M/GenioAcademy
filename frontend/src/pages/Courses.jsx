@@ -19,12 +19,22 @@ export default function Courses() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        // Usamos axiosInstance (no fetch nativo) para enviar el JWT automáticamente.
-        // Esto permite que el backend calcule is_locked e is_completed correctamente.
+        // Usamos axiosInstance (con JWT si hay sesión) para que el backend calcule
+        // is_locked e is_completed correctamente cuando el alumno está conectado.
         const response = await axiosInstance.get('courses/categories/');
         setCategories(response.data);
       } catch (err) {
-        setError(err.message || 'Se perdió la conexión de telemetría con el servidor galáctico');
+        // Si falla por cualquier motivo de autenticación (sesión caducada, token roto...),
+        // hacemos un segundo intento sin token para que el catálogo cargue siempre.
+        // El endpoint es público (AllowAny), así que esto es seguro.
+        try {
+          const fallback = await axiosInstance.get('courses/categories/', {
+            headers: { Authorization: undefined }
+          });
+          setCategories(fallback.data);
+        } catch (fallbackErr) {
+          setError(fallbackErr.message || 'Se perdió la conexión de telemetría con el servidor galáctico');
+        }
       } finally {
         setLoading(false);
       }

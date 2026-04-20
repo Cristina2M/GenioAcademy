@@ -12,8 +12,9 @@
 
 from rest_framework import serializers
 from .models import CustomUser
-from django.contrib.auth.hashers import make_password
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
+from rest_framework_simplejwt.settings import api_settings
+from django.contrib.auth import get_user_model
 
 
 # ── SERIALIZADOR DE TOKEN PERSONALIZADO ──
@@ -51,6 +52,22 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
             token['professor_image'] = user.professor_profile.avatar_url or ''
 
         return token
+
+
+# ── SERIALIZADOR DE REFRESCO SEGURO ──
+# SimpleJWT lanza un error 500 (DoesNotExist) si intentamos refrescar un token
+# de un usuario que ha sido borrado de la base de datos.
+# Este serializador captura el error y lo convierte en un 401 limpio.
+class SafeTokenRefreshSerializer(TokenRefreshSerializer):
+    def validate(self, attrs):
+        try:
+            return super().validate(attrs)
+        except get_user_model().DoesNotExist:
+            from rest_framework_simplejwt.exceptions import AuthenticationFailed
+            raise AuthenticationFailed(
+                "El usuario vinculado a este token ya no existe.",
+                code="user_not_found"
+            )
 
 
 # ── SERIALIZADOR DE USUARIO (para REGISTRO) ──
