@@ -58,18 +58,26 @@ class ConsultationViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def my_students(self, request):
         """
-        Retorna los estudiantes que han participado en materias de este profesor.
+        Retorna los estudiantes del Plan 3 (Agujero de Gusano) que han
+        completado cursos en las materias de este profesor.
+
+        Solo se muestran alumnos de Plan 3 porque son los únicos que tienen
+        acceso al sistema de tutorías con profesores. Los planes 1 y 2 no
+        tienen esta funcionalidad habilitada.
         """
         user = request.user
         if not hasattr(user, 'professor_profile'):
             return Response({"error": "No Autorizado."}, status=status.HTTP_403_FORBIDDEN)
-        
+
         prof = user.professor_profile
-        # Encontramos los cursos asociados a las materias que imparte
+        # Filtramos los cursos de las materias que imparte este profesor
         categories = prof.subjects.all()
         completions = CourseCompletion.objects.filter(course__knowledge_level__category__in=categories)
         student_ids = completions.values_list('user_id', flat=True).distinct()
-        students = CustomUser.objects.filter(id__in=student_ids)
+
+        # Solo alumnos con subscription_level=3 (Plan Agujero de Gusano)
+        # Los planes 1 y 2 NO tienen acceso a tutorías, por eso no aparecen aquí
+        students = CustomUser.objects.filter(id__in=student_ids, subscription_level=3)
 
         data = [{
             "id": s.id,
