@@ -353,6 +353,75 @@ COURSES_DATA = {
             'answer': 'Dióxido de Carbono (CO2)'
         }
     ],
+    'Estructura de la Tierra': [
+        {
+            'title': 'Corazón de Hierro',
+            'content': '<h3 class="text-2xl text-amber-500 font-bold mb-4">Núcleo y Manto</h3><p class="mb-4 text-slate-300 text-lg">La Tierra está dividida en capas. El núcleo es de hierro ardiente, el manto es de roca fundida y la corteza es donde pisamos.</p>',
+            'question': '¿Qué capa es líquida y genera el campo magnético?',
+            'options': ['Núcleo Externo', 'Corteza', 'Litosfera'],
+            'answer': 'Núcleo Externo'
+        },
+        {
+            'title': 'Placas en Movimiento',
+            'content': '<h3 class="text-2xl text-amber-500 font-bold mb-4">Tectónica Planetaria</h3><p class="mb-4 text-slate-300 text-lg">La litosfera está fragmentada en placas tectónicas que flotan sobre el manto. Su choque crea montañas y terremotos.</p>',
+            'question': '¿Qué fenómeno ocurre cuando dos placas chocan violentamente?',
+            'options': ['Terremoto', 'Eclipses', 'Mareas bajas'],
+            'answer': 'Terremoto'
+        },
+        {
+            'title': 'Rocas del Abismo',
+            'content': '<h3 class="text-2xl text-amber-500 font-bold mb-4">Igneas, Sedimentarias y Metamórficas</h3><p class="mb-4 text-slate-300 text-lg">Las rocas cambian con el tiempo. El magma se enfría en rocas ígneas, mientras que la presión crea las metamórficas.</p>',
+            'question': '¿Cómo se llaman las rocas formadas por el enfriamiento del magma?',
+            'options': ['Ígneas', 'Sedimentarias', 'Fósiles'],
+            'answer': 'Ígneas'
+        }
+    ],
+    'Célula Eucariota': [
+        {
+            'title': 'La Ciudad Microscópica',
+            'content': '<h3 class="text-2xl text-green-400 font-bold mb-4">Núcleo y Organelos</h3><p class="mb-4 text-slate-300 text-lg">A diferencia de las bacterias, las células eucariotas tienen un núcleo que protege el ADN, como una caja fuerte biológica.</p>',
+            'question': '¿Cuál es la función principal del núcleo celular?',
+            'options': ['Proteger el ADN', 'Fabricar energía', 'Mover la célula'],
+            'answer': 'Proteger el ADN'
+        },
+        {
+            'title': 'Centrales de Energía',
+            'content': '<h3 class="text-2xl text-green-400 font-bold mb-4">Mitocondrias</h3><p class="mb-4 text-slate-300 text-lg">Las mitocondrias son los motores de la célula. Queman nutrientes para dar la energía necesaria para vivir.</p>',
+            'question': '¿Qué organelo se encarga de la respiración celular y obtención de energía?',
+            'options': ['Mitocondria', 'Ribosoma', 'Vacuola'],
+            'answer': 'Mitocondria'
+        },
+        {
+            'title': 'Fábricas de Proteínas',
+            'content': '<h3 class="text-2xl text-green-400 font-bold mb-4">Ribosomas y Retículo</h3><p class="mb-4 text-slate-300 text-lg">La célula construye sus propias piezas usando ribosomas. Es como tener una impresora 3D orgánica en cada célula.</p>',
+            'question': '¿Qué estructura lee el código genético para fabricar proteínas?',
+            'options': ['Ribosoma', 'Aparato de Golgi', 'Lisosoma'],
+            'answer': 'Ribosoma'
+        }
+    ],
+    'Reinos de la Naturaleza': [
+        {
+            'title': 'La Pirámide de la Vida',
+            'content': '<h3 class="text-2xl text-lime-400 font-bold mb-4">Cinco Grandes Grupos</h3><p class="mb-4 text-slate-300 text-lg">Clasificamos la vida en Reinos según su estructura y alimentación: Animal, Vegetal, Fungi (hongos), Protista y Monera.</p>',
+            'question': '¿A qué reino pertenecen los hongos?',
+            'options': ['Fungi', 'Vegetal', 'Animal'],
+            'answer': 'Fungi'
+        },
+        {
+            'title': 'El Reino de las Plantas',
+            'content': '<h3 class="text-2xl text-lime-400 font-bold mb-4">Autótrofos Fotovoltaicos</h3><p class="mb-4 text-slate-300 text-lg">Las plantas son seres vivos que fabrican su propio alimento mediante la fotosíntesis. Son la base de casi toda la vida.</p>',
+            'question': '¿Cómo consiguen energía principalmente las plantas?',
+            'options': ['Fotosíntesis', 'Comiendo insectos', 'Absorbiendo piedras'],
+            'answer': 'Fotosíntesis'
+        },
+        {
+            'title': 'Bacterias del Espacio Profundo',
+            'content': '<h3 class="text-2xl text-lime-400 font-bold mb-4">El Reino Monera</h3><p class="mb-4 text-slate-300 text-lg">Las bacterias son las formas de vida más sencillas y antiguas. No tienen núcleo pero pueden sobrevivir en entornos extremos.</p>',
+            'question': '¿Qué reino engloba a los organismos unicelulares sin núcleo (procariotas)?',
+            'options': ['Monera', 'Protista', 'Fungi'],
+            'answer': 'Monera'
+        }
+    ],
     # I will add more courses as I go to avoid giant files in one turn
 }
 
