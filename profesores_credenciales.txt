@@ -1,0 +1,49 @@
+===========================================
+CREDENCIALES DE LOS PROFESORES GENERADOS
+===========================================
+Contraseña universal para todos: Genio2026!
+===========================================
+
+1. Dra. Elara Vantaris
+   Usuario: elara.vantaris
+   Especialidad principal: Matemáticas
+
+2. Dra. Lyra Nova
+   Usuario: lyra.nova
+   Especialidad principal: Física y Química
+
+3. Dr. Aris Thorne
+   Usuario: aris.thorne
+   Especialidad principal: Biología y Geología
+
+4. Dra. Sarah Moon
+   Usuario: sarah.moon
+   Especialidad principal: Lengua Castellana
+
+5. Dra. Kiara Stone
+   Usuario: kiara.stone
+   Especialidad principal: Geografía e Historia
+
+6. Dr. Felix Quantum
+   Usuario: felix.quantum
+   Especialidad principal: Física y Química
+
+7. Dr. Valerius Prime
+   Usuario: valerius.prime
+   Especialidad principal: Desafíos Lógicos (Matemáticas Avanzadas)
+
+8. Dr. Theo Canvas
+   Usuario: theo.canvas
+   Especialidad principal: Expresión Artística (Educación Plástica)
+
+9. Dra. Aria Sound
+   Usuario: aria.sound
+   Especialidad principal: Educación Musical
+
+---
+¿Cómo hacer pruebas como profesor?
+1. Ve a Mando de Control de Misiones (Login).
+2. Pon cualquiera de esos usuarios (por ejemplo, lyra.nova).
+3. Pon la contraseña Genio2026!
+4. Automáticamente el sistema te detectará como profesor y te llevará a /teacher-dashboard.
+5. Desde ahí podrás ver qué alumnos están en tu materia y la bandeja de Consultas.

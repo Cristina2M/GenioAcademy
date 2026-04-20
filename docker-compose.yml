@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # Base de Datos (PostgreSQL)
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=genio_db
+      - POSTGRES_USER=genio_user
+      - POSTGRES_PASSWORD=genio_password
+
+  # Back-end (Django + Django REST Framework)
+  backend:
+    build: ./backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env          # Carga GROQ_API_KEY y otros secretos desde el archivo .env local
+    environment:
+      - DATABASE_URL=postgres://genio_user:genio_password@db:5432/genio_db
+    depends_on:
+      - db
+
+  # Front-end (React + Tailwind CSS)
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"  # Cambiado de 3000 a 5173
+    stdin_open: true
+    tty: true
+
+volumes:
+  postgres_data:
