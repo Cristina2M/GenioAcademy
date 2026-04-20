@@ -17,12 +17,38 @@
 // ============================================================
 
 import React, { useEffect, useState } from 'react';
-import { X, Sparkles, AlertTriangle, Battery, BatteryFull, BatteryMedium, Cpu } from 'lucide-react';
+import { X, Sparkles, AlertTriangle, Battery, BatteryFull, BatteryMedium, Cpu, Video } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import axiosInstance from '../api/axios';
 
-const StudentCardModal = ({ student, onClose }) => {
+const StudentCardModal = ({ student, onClose, onIniciarLlamada }) => {
+    // Estados para la videollamada directa
+    const [nombreLlamada, setNombreLlamada] = useState('');
+    const [llamando, setLlamando] = useState(false);
+
     // Si no hay alumno seleccionado, no renderizamos nada (el modal permanece invisible)
     if (!student) return null;
+
+    // Función para que el profesor inicie una videollamada sin ticket previo
+    const manejarLlamadaDirecta = async () => {
+        if (!nombreLlamada.trim()) return;
+        setLlamando(true);
+        try {
+            // Creamos una consulta "fantasma" que represente esta llamada directa
+            const respuesta = await axiosInstance.post('teachers/consultations/', {
+                student: student.id,
+                message: `Llamada Directa: ${nombreLlamada}`
+            });
+            // Iniciamos la videollamada usando el ID de la consulta recién creada
+            await onIniciarLlamada(respuesta.data.id);
+            onClose(); // Cerramos la ficha del alumno para ver la pantalla de Jitsi
+        } catch (error) {
+            console.error("Error al iniciar llamada directa:", error);
+            alert("No se pudo iniciar la conexión galáctica.");
+        } finally {
+            setLlamando(false);
+        }
+    };
 
     return (
         <AnimatePresence>
@@ -91,6 +117,29 @@ const StudentCardModal = ({ student, onClose }) => {
                                      student.lives > 0 ? <BatteryMedium className="w-6 h-6 text-amber-500" /> :
                                      <Battery className="w-6 h-6 text-red-500" />}
                                 </div>
+                            </div>
+                        </div>
+
+                        {/* Sección de Videollamada Directa */}
+                        <div className="w-full mt-6 bg-white/5 border border-white/10 rounded-2xl p-6">
+                            <h4 className="text-white font-bold mb-4 flex items-center gap-2">
+                                <Video className="w-4 h-4 text-red-500" /> Iniciar Transmisión Directa
+                            </h4>
+                            <div className="flex flex-col gap-3">
+                                <input 
+                                    type="text"
+                                    placeholder="Nombre de la sesión (ej: Repaso de dudas)"
+                                    className="input input-sm bg-black/40 border-white/10 text-white rounded-lg focus:border-indigo-500"
+                                    value={nombreLlamada}
+                                    onChange={(e) => setNombreLlamada(e.target.value)}
+                                />
+                                <button 
+                                    onClick={manejarLlamadaDirecta}
+                                    disabled={llamando || !nombreLlamada.trim()}
+                                    className="btn btn-sm bg-indigo-600 hover:bg-indigo-500 text-white border-none w-full shadow-lg shadow-indigo-600/20 disabled:opacity-50"
+                                >
+                                    {llamando ? 'Conectando...' : 'Llamar al Alumno'}
+                                </button>
                             </div>
                         </div>
 

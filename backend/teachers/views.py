@@ -94,15 +94,22 @@ class ConsultationViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         """
-        Se ejecuta justo antes de guardar una consulta nueva.
-        Comprobamos que el alumno tenga Plan 3 (Agujero de Gusano).
-        Si no lo tiene, rechazamos la petición con error 403.
+        Se ejecuta al crear una consulta nueva.
+        Si es un profesor: Se usa para llamadas directas desde la ficha del alumno.
+        Si es un alumno: Se verifica que tenga Plan 3.
         """
         usuario = self.request.user
-        if usuario.subscription_level < 3:
-            raise PermissionDenied("Se requiere Nivel 3 (Agujero de Gusano) para solicitar tutorías.")
-        # Guardamos automáticamente el alumno conectado como 'student'
-        serializer.save(student=usuario)
+        
+        if hasattr(usuario, 'professor_profile'):
+            # El profesor inicia la consulta (llamada directa)
+            # El id del alumno debe venir en el cuerpo del POST
+            serializer.save(professor=usuario.professor_profile)
+        else:
+            # El alumno solicita la tutoría
+            if usuario.subscription_level < 3:
+                raise PermissionDenied("Se requiere Nivel 3 (Agujero de Gusano) para solicitar tutorías.")
+            # Guardamos automáticamente al alumno conectado
+            serializer.save(student=usuario)
 
     @action(detail=False, methods=['get'])
     def my_students(self, request):
@@ -210,6 +217,33 @@ class ConsultationViewSet(viewsets.ModelViewSet):
         consulta.is_live_call = False     # Ya no hay llamada activa
         # Guardamos la respuesta escrita que el profe haya dejado (opcional)
         consulta.response = request.data.get('response', 'Videollamada finalizada con éxito.')
+        consulta.save()
+
+        return Response(self.get_serializer(consulta).data)
+
+    @action(detail=True, methods=['post'])
+    def resolve(self, request, pk=None):
+        """
+        Endpoint POST: /api/teachers/consultations/{id}/resolve/
+
+        El profesor resuelve la consulta enviando una respuesta de texto,
+        sin necesidad de realizar una videollamada.
+        """
+        usuario = request.user
+        if not hasattr(usuario, 'professor_profile'):
+            return Response({"error": "Solo un docente puede resolver consultas."}, status=status.HTTP_403_FORBIDDEN)
+
+        consulta = self.get_object()
+        if consulta.professor != usuario.professor_profile:
+            return Response({"error": "No puedes resolver una consulta que no es tuya."}, status=status.HTTP_403_FORBIDDEN)
+
+        respuesta_texto = request.data.get('response')
+        if not respuesta_texto:
+            return Response({"error": "Debes escribir una respuesta para resolver el ticket."}, status=status.HTTP_400_BAD_REQUEST)
+
+        consulta.status = 'ANSWERED'
+        consulta.response = respuesta_texto
+        consulta.is_live_call = False
         consulta.save()
 
         return Response(self.get_serializer(consulta).data)

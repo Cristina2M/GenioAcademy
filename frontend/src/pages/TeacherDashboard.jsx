@@ -162,6 +162,7 @@ const TeacherDashboard = () => {
                             <ConsultationsTab
                                 consultas={consultas}
                                 onIniciarLlamada={iniciarLlamada}
+                                onCargarDatos={cargarDatos}
                             />
                         ) : (
                             <StudentsTab alumnos={alumnos} onSeleccionarAlumno={setAlumnoSeleccionado} />
@@ -174,6 +175,7 @@ const TeacherDashboard = () => {
             <StudentCardModal
                 student={alumnoSeleccionado}
                 onClose={() => setAlumnoSeleccionado(null)}
+                onIniciarLlamada={iniciarLlamada}
             />
 
             {/* Si hay una videollamada activa, mostramos la pantalla de Jitsi por encima de todo */}
@@ -190,12 +192,36 @@ const TeacherDashboard = () => {
 
 
 // ─── COMPONENTE INTERNO: Pestaña de Consultas ───────────────────────────────
-// Muestra la lista de todas las tutorías recibidas.
-// Props:
-//   - consultas: Array de objetos de consulta
-//   - onIniciarLlamada: Función para iniciar la videollamada de una consulta
-const ConsultationsTab = ({ consultas, onIniciarLlamada }) => {
-    // Si no hay consultas, mostramos un mensaje vacío amigable
+const ConsultationsTab = ({ consultas, onIniciarLlamada, onCargarDatos }) => {
+    // Estado local para manejar el texto de respuesta de cada ticket individualmente
+    const [respuestasLocales, setRespuestasLocales] = useState({}); // { consultaId: 'texto' }
+    const [resolviendoId, setResolviendoId] = useState(null);
+
+    const manejarCambioTexto = (id, texto) => {
+        setRespuestasLocales(prev => ({ ...prev, [id]: texto }));
+    };
+
+    const manejarResolucionTexto = async (id) => {
+        const texto = respuestasLocales[id];
+        if (!texto || !texto.trim()) return;
+
+        setResolviendoId(id);
+        try {
+            await axiosInstance.post(`teachers/consultations/${id}/resolve/`, {
+                response: texto
+            });
+            // Refrescamos los datos globales del dashboard
+            onCargarDatos();
+            // Limpiamos el campo de texto de este ticket
+            manejarCambioTexto(id, '');
+        } catch (error) {
+            console.error("Error al resolver consulta por texto:", error);
+            alert("Error al enviar la transmisión de respuesta.");
+        } finally {
+            setResolviendoId(null);
+        }
+    };
+
     if (consultas.length === 0) {
         return (
             <div className="text-center py-24">
@@ -203,29 +229,25 @@ const ConsultationsTab = ({ consultas, onIniciarLlamada }) => {
                     <CheckCircle className="w-8 h-8 text-teal-500" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Bandeja Vacía</h3>
-                <p className="text-slate-400 max-w-sm mx-auto">No hay consultas estelares pendientes en tu sector. ¡Buen trabajo de enseñanza!</p>
+                <p className="text-slate-400 max-w-sm mx-auto">No hay consultas estelares pendientes en tu sector.</p>
             </div>
         );
     }
 
     return (
-        // Lista de consultas separadas por una línea horizontal
         <div className="divide-y divide-white/5">
             {consultas.map(consulta => (
                 <div key={consulta.id} className="p-6 md:p-8 hover:bg-white/[0.02] transition-colors relative">
-                    {/* Borde rojo izquierdo cuando la consulta tiene una llamada activa */}
                     {consulta.is_live_call && (
                         <div className="absolute top-0 left-0 w-1 h-full bg-red-500 shadow-[0_0_15px_red]"></div>
                     )}
-                    <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-8">
-                        {/* Información de la consulta */}
-                        <div className="flex-grow">
-                            {/* Badges de estado: materia + estado de la consulta */}
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        {/* Columna 1: Información del alumno y el problema */}
+                        <div className="lg:col-span-2">
                             <div className="flex items-center gap-3 mb-2">
                                 <span className="bg-indigo-500/20 text-indigo-300 text-xs font-bold px-3 py-1 rounded-full border border-indigo-500/30">
-                                    {consulta.course_title || 'N/A'}
+                                    {consulta.course_title || 'Consulta Directa'}
                                 </span>
-                                {/* Estado visual de la consulta */}
                                 {consulta.status === 'PENDING' ? (
                                     <span className="flex items-center gap-1 text-amber-400 text-xs font-bold uppercase tracking-widest"><Clock className="w-3 h-3"/> Pendiente</span>
                                 ) : consulta.status === 'IN_CALL' ? (
@@ -234,33 +256,56 @@ const ConsultationsTab = ({ consultas, onIniciarLlamada }) => {
                                     <span className="flex items-center gap-1 text-teal-400 text-xs font-bold uppercase tracking-widest"><CheckCircle className="w-3 h-3"/> Resuelta</span>
                                 )}
                             </div>
-                            {/* Nombre del alumno y mensaje de la consulta */}
-                            <h4 className="text-white font-bold text-lg">Consulta de <span className="text-teal-400">{consulta.student_name}</span></h4>
-                            <p className="text-slate-300 mt-3 p-4 bg-black/30 rounded-xl font-medium leading-relaxed italic">
+                            <h4 className="text-white font-bold text-lg">De: <span className="text-teal-400">{consulta.student_name}</span></h4>
+                            <p className="text-slate-300 mt-3 p-4 bg-black/30 rounded-xl font-medium leading-relaxed italic border border-white/5">
                                 "{consulta.message}"
                             </p>
-                            {/* Si ya tiene respuesta, la mostramos */}
                             {consulta.response && (
                                 <div className="mt-4 p-4 border border-teal-500/20 bg-teal-500/5 rounded-xl">
-                                    <span className="block text-teal-400 text-xs font-bold tracking-widest uppercase mb-1">Tu Respuesta</span>
+                                    <span className="block text-teal-400 text-xs font-bold tracking-widest uppercase mb-1">Respuesta Emitida</span>
                                     <p className="text-white text-sm">{consulta.response}</p>
                                 </div>
                             )}
                         </div>
 
-                        {/* Acciones: Botón de videollamada + fecha de recepción */}
-                        <div className="min-w-[250px] flex flex-col gap-3 justify-center border-l md:border-t-0 border-white/10 pt-4 md:pt-0 md:pl-8">
-                            {/* Solo mostramos el botón de videollamada si la consulta está pendiente */}
+                        {/* Columna 2: Acciones del Profesor */}
+                        <div className="flex flex-col gap-4 border-l border-white/10 lg:pl-8">
                             {consulta.status === 'PENDING' && (
-                                <button
-                                    onClick={() => onIniciarLlamada(consulta.id)}
-                                    className="btn w-full bg-gradient-to-r from-red-600 to-pink-600 text-white border-0 hover:from-red-500 hover:to-pink-500 gap-2"
-                                >
-                                    <Video className="w-4 h-4" /> Iniciar Videollamada
-                                </button>
+                                <>
+                                    {/* Sub-sección: Videollamada */}
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Respuesta en Vivo</label>
+                                        <button
+                                            onClick={() => onIniciarLlamada(consulta.id)}
+                                            className="btn btn-sm bg-red-600 hover:bg-red-500 text-white border-0 gap-2"
+                                        >
+                                            <Video className="w-4 h-4" /> Iniciar Llamada
+                                        </button>
+                                    </div>
+
+                                    <div className="h-px bg-white/10 my-1"></div>
+
+                                    {/* Sub-sección: Respuesta de Texto */}
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Responder por Texto</label>
+                                        <textarea 
+                                            placeholder="Escribe la solución o agenda una cita..."
+                                            className="textarea textarea-sm bg-black/40 border-white/10 text-white min-h-[80px] focus:border-teal-500"
+                                            value={respuestasLocales[consulta.id] || ''}
+                                            onChange={(e) => manejarCambioTexto(consulta.id, e.target.value)}
+                                        ></textarea>
+                                        <button
+                                            onClick={() => manejarResolucionTexto(consulta.id)}
+                                            disabled={resolviendoId === consulta.id || !(respuestasLocales[consulta.id] || '').trim()}
+                                            className="btn btn-sm bg-teal-600 hover:bg-teal-500 text-white border-0 shadow-lg shadow-teal-600/20"
+                                        >
+                                            {resolviendoId === consulta.id ? <span className="loading loading-spinner loading-xs"></span> : 'Resolver Ticket'}
+                                        </button>
+                                    </div>
+                                </>
                             )}
-                            <p className="text-[10px] text-slate-500 uppercase tracking-widest text-center mt-2">
-                                RECIBIDA {new Date(consulta.created_at).toLocaleDateString()}
+                            <p className="text-[9px] text-slate-600 uppercase tracking-tighter text-right mt-auto">
+                                Sincronizado: {new Date(consulta.created_at).toLocaleString()}
                             </p>
                         </div>
                     </div>

@@ -39,6 +39,11 @@ const JitsiMeetWrapper = ({ meetingLink, isTeacher, onClose }) => {
 
         // Función que realmente inicializa la sala de Jitsi en el contenedor
         function iniciarJitsi(dominio, sala) {
+            // Limpiamos el contenedor antes de inyectar el iframe (evita duplicados en desarrollo)
+            if (refContenedor.current) {
+                refContenedor.current.innerHTML = "";
+            }
+
             const configuracion = {
                 roomName: sala,                      // Nombre único de la sala
                 parentNode: refContenedor.current,   // El div donde se incrustará el iframe

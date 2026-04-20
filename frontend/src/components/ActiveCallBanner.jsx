@@ -58,7 +58,7 @@ const ActiveCallBanner = () => {
 
         // Configuramos el "polling": repetimos la comprobación cada 30 segundos
         // Esto permite que el banner aparezca aunque el alumno esté en otra página
-        const intervalo = setInterval(comprobarLlamada, 30000);
+        const intervalo = setInterval(comprobarLlamada, 10000);
 
         // Limpieza: cuando el componente deja de renderizarse, cancelamos el intervalo
         // para no dejar "timers fantasma" corriendo en memoria
