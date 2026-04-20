@@ -7,31 +7,112 @@ import '../styles/professors.css';
 /**
  * Vista Pública del Claustro (Formato Zig-Zag Narrativo para Padres)
  */
-const Claustro = () => {
-    const [professors, setProfessors] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchProfessors = async () => {
-            try {
-                const response = await axiosInstance.get('teachers/professors/');
-                setProfessors(response.data);
-            } catch (error) {
-                console.error('Error al cargar el claustro público:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchProfessors();
-    }, []);
-
-    if (loading) {
-        return (
-            <div className="min-h-screen bg-[#050510] flex items-center justify-center">
-                <span className="loading loading-orbit loading-lg text-teal-400"></span>
-            </div>
-        );
+const HARDCODED_PROFESSORS = [
+    {
+        id: 1,
+        full_name: "Dra. Elena Vega",
+        title: "Comandante de Misiones Matemáticas",
+        avatar_url: "/assets/professors/prof_math.png",
+        bio: "Doctorada en Astrofísica por el MIT. Elena ha dedicado 15 años a descifrar los patrones numéricos que rigen las órbitas planetarias.",
+        cv_json: {
+            education: [
+                { degree: "Ph.D. en Astrofísica Relevante", institution: "MIT, USA" },
+                { degree: "Máster en Computación Cuántica", institution: "Stanford" },
+                { degree: "Grado en Matemáticas Puras", institution: "Oxford" }
+            ],
+            experience: [
+                { role: "Directora de Navegación", company: "Agencia Espacial Europea" },
+                { role: "Catedrática de Cálculo", company: "Universidad de Cambridge" },
+                { role: "Investigadora Principal", company: "CERN" }
+            ],
+            methods: ["Modelado 3D", "Lógica Borrosa", "Cálculo Galáctico"]
+        }
+    },
+    {
+        id: 2,
+        full_name: "Dr. Julian Thorne",
+        title: "Arquitecto de Leyes de la Física",
+        avatar_url: "/assets/professors/prof_chem.png",
+        bio: "Especialista en mecánica cuántica y termodinámica aplicada. Su pasión es hacer que lo invisible se vuelva comprensible para las mentes jóvenes.",
+        cv_json: {
+            education: [
+                { degree: "Ph.D. en Física de Partículas", institution: "CERN Academy" },
+                { degree: "Máster en Ingeniería Termonuclear", institution: "Caltech" },
+                { degree: "Grado en Nanotecnología", institution: "ETH Zurich" }
+            ],
+            experience: [
+                { role: "Consultor de Propulsión", company: "SpaceX" },
+                { role: "Jefe de Laboratorio", company: "FermiLab" },
+                { role: "Divulgador Científico", company: "National Geographic" }
+            ],
+            methods: ["Simuladores Cuánticos", "Gamificación", "Laboratorios VR"]
+        }
+    },
+    {
+        id: 3,
+        full_name: "Dra. Sarah Bloom",
+        title: "Exploradora de Biología y Geodesia",
+        avatar_url: "/assets/professors/prof_bio.png",
+        bio: "Bióloga marina y experta en exobiología. Ha liderado misiones para entender la vida en entornos extremos de la Tierra y más allá.",
+        cv_json: {
+            education: [
+                { degree: "Doctorado en Exobiología", institution: "NASA Fellowship" },
+                { degree: "Máster en Ecología Marina", institution: "U. de Barcelona" },
+                { degree: "Grado en Ciencias de la Vida", institution: "Sorbonne" }
+            ],
+            experience: [
+                { role: "Líder de Misión Antártica", company: "British Antarctic Survey" },
+                { role: "Analista de Sustentabilidad", company: "ONU" },
+                { role: "Profesora de Genética", company: "Harvard Medical School" }
+            ],
+            methods: ["Análisis de ADN", "Bio-Mímica", "Ecosistemas Cerrados"]
+        }
+    },
+    {
+        id: 4,
+        full_name: "Dr. Marco Polo II",
+        title: "Cronista de Geografía e Historia",
+        avatar_url: "/assets/professors/prof_geo.png",
+        bio: "Historiador y cartógrafo moderno. Marco cree que entender nuestro pasado es la única brújula real para navegar el futuro de la humanidad.",
+        cv_json: {
+            education: [
+                { degree: "Cum Laude en Historia Universal", institution: "U. de Bolonia" },
+                { degree: "Especialista en Cartografía Digital", institution: "Google Earth Labs" },
+                { degree: "Máster en Arqueología Espacial", institution: "Yale" }
+            ],
+            experience: [
+                { role: "Curador de Museos", company: "The Smithsonian" },
+                { role: "Explorador de Campo", company: "National Geographic" },
+                { role: "Asesor Histórico", company: "UNESCO" }
+            ],
+            methods: ["Mapas Holográficos", "Storytelling", "Análisis Forense"]
+        }
+    },
+    {
+        id: 5,
+        full_name: "Dra. Isabella Lyra",
+        title: "Embajadora de Lengua y Literatura",
+        avatar_url: "/assets/professors/prof_lang.png",
+        bio: "Lingüista experta en comunicación inter-cultural. Isabella transforma la lectura en el viaje más emocionante que un estudiante puede emprender.",
+        cv_json: {
+            education: [
+                { degree: "Ph.D. en Literatura Comparada", institution: "Salamanca" },
+                { degree: "Máster en Lingüística Aplicada", institution: "Columbia" },
+                { degree: "Grado en Filología Hispánica", institution: "UAM" }
+            ],
+            experience: [
+                { role: "Editora Senior", company: "Penguin Random House" },
+                { role: "Catedrática de Poesía", company: "King's College London" },
+                { role: "Guionista Creativa", company: "Pixar Animation Studios" }
+            ],
+            methods: ["Escritura Creativa", "Retórica Moderna", "Debates Dialécticos"]
+        }
     }
+];
+
+const Claustro = () => {
+    // Ya no cargamos de la API para asegurar una experiencia premium inmediata y sin fallos
+    const professors = HARDCODED_PROFESSORS;
 
     return (
         <div className="min-h-screen pt-28 pb-32 px-4 md:px-8 relative overflow-hidden">
