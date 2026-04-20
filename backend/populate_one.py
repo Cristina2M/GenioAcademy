@@ -790,6 +790,98 @@ COURSES_DATA = {
             'answer': 'Evitar repeticiones'
         }
     ],
+    'Sujeto y Predicado': [
+        {
+            'title': '¿Quién realiza la acción?',
+            'content': '<h3 class="text-2xl text-teal-300 font-bold mb-4">El Sujeto</h3><p class="mb-4 text-slate-300 text-lg">El sujeto es la persona, animal o cosa que realiza la acción o de quien se dice algo. Suele concordar en número con el verbo.</p>',
+            'question': 'En la frase "Las estrellas brillan mucho", ¿cuál es el sujeto?',
+            'options': ['Las estrellas', 'Brillan', 'Mucho'],
+            'answer': 'Las estrellas'
+        },
+        {
+            'title': 'Lo que se dice del Sujeto',
+            'content': '<h3 class="text-2xl text-teal-300 font-bold mb-4">El Predicado</h3><p class="mb-4 text-slate-300 text-lg">El predicado es todo lo que no es sujeto. Su núcleo siempre es un verbo.</p>',
+            'question': '¿Cuál es el núcleo del predicado?',
+            'options': ['Un verbo', 'Un sustantivo', 'Un adjetivo'],
+            'answer': 'Un verbo'
+        },
+        {
+            'title': 'Sujetos Ocultos',
+            'content': '<h3 class="text-2xl text-teal-300 font-bold mb-4">Sujeto Elíptico</h3><p class="mb-4 text-slate-300 text-lg">A veces el sujeto no aparece escrito pero sabemos quién es por la terminación del verbo. "Viajamos a Marte" (Nosotros).</p>',
+            'question': '¿Cuál es el sujeto elíptico en "Estudias mucho"?',
+            'options': ['Tú', 'Él', 'Nosotros'],
+            'answer': 'Tú'
+        }
+    ],
+    'Complementos Verbales': [
+        {
+            'title': 'Cazadores de Objetos',
+            'content': '<h3 class="text-2xl text-emerald-400 font-bold mb-4">CD y CI</h3><p class="mb-4 text-slate-300 text-lg">El Complemento Directo (CD) recibe la acción directamente. El Indirecto (CI) indica el destinatario.</p>',
+            'question': 'En "Compré un filtro de aire", ¿qué es "un filtro de aire"?',
+            'options': ['Complemento Directo', 'Complemento Indirecto', 'Sujeto'],
+            'answer': 'Complemento Directo'
+        },
+        {
+            'title': '¿Dónde, Cuándo, Cómo?',
+            'content': '<h3 class="text-2xl text-emerald-400 font-bold mb-4">Circunstanciales</h3><p class="mb-4 text-slate-300 text-lg">Los Complementos Circunstanciales (CC) nos dan información extra sobre la situación: lugar, tiempo, modo, cantidad...</p>',
+            'question': '¿Qué tipo de complemento es "ayer" en "Llegamos ayer"?',
+            'options': ['CC de Tiempo', 'CC de Lugar', 'CC de Modo'],
+            'answer': 'CC de Tiempo'
+        },
+        {
+            'title': 'El Atributo',
+            'content': '<h3 class="text-2xl text-emerald-400 font-bold mb-4">Ser, Estar o Parecer</h3><p class="mb-4 text-slate-300 text-lg">Con verbos copulativos, el complemento que indica una cualidad del sujeto se llama Atributo. "La galaxia es inmensa".</p>',
+            'question': 'En "El astronauta está cansado", ¿qué es "cansado"?',
+            'options': ['Atributo', 'CD', 'CC de Modo'],
+            'answer': 'Atributo'
+        }
+    ],
+    'Oraciones Compuestas': [
+        {
+            'title': 'Uniendo Galaxias de Ideas',
+            'content': '<h3 class="text-2xl text-cyan-400 font-bold mb-4">Coordinadas</h3><p class="mb-4 text-slate-300 text-lg">Las oraciones compuestas tienen más de un verbo. Las coordinadas son independientes y se unen con nexos como "y", "o", "pero".</p>',
+            'question': '¿Qué nexo indica una oración coordinada adversativa (oposición)?',
+            'options': ['Pero', 'Y', 'O'],
+            'answer': 'Pero'
+        },
+        {
+            'title': 'Dependencia Estelar',
+            'content': '<h3 class="text-2xl text-cyan-400 font-bold mb-4">Subordinadas</h3><p class="mb-4 text-slate-300 text-lg">En las subordinadas, una oración depende de la otra para tener sentido completo. "Dijo que vendría".</p>',
+            'question': '¿Cuál es la función principal de una oración subordinada?',
+            'options': ['Depender de la principal', 'Ser totalmente independiente', 'No tener verbo'],
+            'answer': 'Depender de la principal'
+        },
+        {
+            'title': 'Nexos y Relativos',
+            'content': '<h3 class="text-2xl text-cyan-400 font-bold mb-4">Puentes de Comunicación</h3><p class="mb-4 text-slate-300 text-lg">Usamos palabras especiales para unir estas estructuras complejas y construir mensajes ricos y precisos.</p>',
+            'question': '¿Cuál de estas es una oración compuesta?',
+            'options': ['Él vino y ella se fue', 'Mañana lloverá', 'El perro ladra'],
+            'answer': 'Él vino y ella se fue'
+        }
+    ],
+    'Figuras Literarias': [
+        {
+            'title': 'Pintar con Palabras',
+            'content': '<h3 class="text-2xl text-pink-400 font-bold mb-4">La Metáfora</h3><p class="mb-4 text-slate-300 text-lg">Una metáfora identifica un término real con uno imaginario. "Tus ojos son dos luceros".</p>',
+            'question': '¿Qué figura literaria se usa en "Tus cabellos son de oro"?',
+            'options': ['Metáfora', 'Hipérbole', 'Anáfora'],
+            'answer': 'Metáfora'
+        },
+        {
+            'title': 'Exageración Cósmica',
+            'content': '<h3 class="text-2xl text-pink-400 font-bold mb-4">La Hipérbole</h3><p class="mb-4 text-slate-300 text-lg">Consiste en exagerar las cosas para aumentar su intensidad. "Tardó mil años en llegar".</p>',
+            'question': '¿Qué es una hipérbole?',
+            'options': ['Una exageración', 'Una comparación', 'Una repetición'],
+            'answer': 'Una exageración'
+        },
+        {
+            'title': 'Sonidos en Verso',
+            'content': '<h3 class="text-2xl text-pink-400 font-bold mb-4">Aliteración y Onomatopeya</h3><p class="mb-4 text-slate-300 text-lg">Jugamos con los sonidos para crear sensaciones. "El ruido del rayo..." (aliteración de la R).</p>',
+            'question': '¿Cómo se llama la repetición de sonidos similares para causar un efecto?',
+            'options': ['Aliteración', 'Metáfora', 'Personificación'],
+            'answer': 'Aliteración'
+        }
+    ],
     # I will add more courses as I go to avoid giant files in one turn
 }
 
