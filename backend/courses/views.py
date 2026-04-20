@@ -16,6 +16,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.db import IntegrityError
 
 from .models import Category, KnowledgeLevel, Course, Lesson, Exercise, CourseCompletion, UserCourseProgress
@@ -51,6 +52,27 @@ def check_unlocked(user, knowledge_level_order):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    # PÚBLICO: El catálogo es visible sin login. El JWT se usa solo para
+    # calcular is_completed e is_started (si el usuario está autenticado).
+    permission_classes = [AllowAny]
+    authentication_classes = []  # No forzamos autenticación
+
+    def get_serializer_context(self):
+        """
+        Pasamos el request al contexto para poder calcular is_completed e is_started.
+        Si el usuario no está logueado, simplemente devuelven False.
+        """
+        context = super().get_serializer_context()
+        # Intentamos obtener el usuario del token si existe
+        from rest_framework_simplejwt.authentication import JWTAuthentication
+        try:
+            jwt_auth = JWTAuthentication()
+            user_auth_tuple = jwt_auth.authenticate(self.request)
+            if user_auth_tuple:
+                self.request.user = user_auth_tuple[0]
+        except Exception:
+            pass  # Si el token es inválido o ha caducado, ignoramos y dejamos anónimo
+        return context
 
 
 # ── CONTROLADOR DE NIVELES DE CONOCIMIENTO ──
