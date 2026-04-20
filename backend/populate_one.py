@@ -192,6 +192,29 @@ COURSES_DATA = {
             'answer': '3'
         }
     ],
+    'Fuerza y Movimiento': [
+        {
+            'title': '¿Qué es la Fuerza?',
+            'content': '<h3 class="text-2xl text-cyan-400 font-bold mb-4">Impulsando Naves</h3><p class="mb-4 text-slate-300 text-lg">Una fuerza es todo empuje o tracción que puede cambiar el estado de movimiento de un objeto planetario.</p>',
+            'question': 'Si dos asteroides chocan con fuerzas opuestas iguales, ¿qué ocurre?',
+            'options': ['Se detienen', 'Aceleran', 'Giran'],
+            'answer': 'Se detienen'
+        },
+        {
+            'title': 'La Inercia Cósmica',
+            'content': '<h3 class="text-2xl text-cyan-400 font-bold mb-4">La Primera Ley</h3><p class="mb-4 text-slate-300 text-lg">Un objeto en movimiento seguirá moviéndose en línea recta al menos que una fuerza externa lo atraiga o lo frene.</p>',
+            'question': 'Lanzas una llave al espacio vacío (sin gravedad). ¿Qué le pasará?',
+            'options': ['Viajará en línea recta indefinidamente', 'Se detendrá pronto', 'Hará círculos'],
+            'answer': 'Viajará en línea recta indefinidamente'
+        },
+        {
+            'title': 'Acción y Reacción',
+            'content': '<h3 class="text-2xl text-cyan-400 font-bold mb-4">Tercera Ley de Newton</h3><p class="mb-4 text-slate-300 text-lg">Por cada acción, ocurre una fuerza de reacción igual pero en dirección completamente contraria.</p>',
+            'question': 'Al expulsar gases por detrás, la nave se mueve hacia adelante por:',
+            'options': ['Reacción', 'Inercia', 'Fricción'],
+            'answer': 'Reacción'
+        }
+    ],
     'Leyes de la Termodinámica': [
         {
             'title': 'La Energía no Desaparece',
