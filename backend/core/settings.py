@@ -147,6 +147,12 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
+# ── AUTENTICACIÓN ──
+AUTHENTICATION_BACKENDS = [
+    'users.backends.EmailOrUsernameBackend',  # Intentar login por Email o Usuario
+    'django.contrib.auth.backends.ModelBackend', # Fallback al sistema estándar
+]
+
 # ── CORS ──
 # En producción solo permitimos peticiones desde nuestro frontend.
 # En desarrollo (DEBUG=True) permitimos cualquier origen para comodidad.

@@ -42,14 +42,15 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['experience_points'] = user.experience_points
         token['selected_avatar'] = user.selected_avatar
         token['subscription_level'] = user.subscription_level  # Plan 1, 2 o 3
-        token['is_teacher'] = hasattr(user, 'professor_profile')
 
         # Datos del profesor (si el usuario es un maestro)
-        token['is_teacher'] = hasattr(user, 'professor_profile')
+        # hasattr es seguro para verificar relaciones uno-a-uno
         if hasattr(user, 'professor_profile'):
+            token['is_teacher'] = True
             # Guardamos la ruta de imagen real del profesor para que el Navbar la muestre
-            # El campo avatar_url contiene la ruta pública: /assets/professors/prof_math.png
             token['professor_image'] = user.professor_profile.avatar_url or ''
+        else:
+            token['is_teacher'] = False
 
         return token
 
@@ -87,8 +88,7 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """
         Se ejecuta al completar el registro.
-        Convertimos la contraseña en texto plano a un hash seguro (sha256 + salt)
-        antes de guardarla en la base de datos. Nunca guardamos contraseñas en texto.
+        Usamos create_user (método nativo del UserManager de Django)
+        que ya se encarga automáticamente de hashear la contraseña de forma segura.
         """
-        validated_data['password'] = make_password(validated_data.get('password'))
-        return super().create(validated_data)
+        return CustomUser.objects.create_user(**validated_data)
