@@ -12,18 +12,20 @@ GROQ_API_KEY = os.environ.get('GROQ_API_KEY')
 client = Groq(api_key=GROQ_API_KEY)
 
 # 🧠 "Prompt del Sistema": Son las instrucciones secretas y de comportamiento para la IA. 
-# Le decimos cómo actuar ('Astro' el Búho), qué no hacer (nunca dar la respuesta final) y qué es lo que el alumno está estudiando.
 SYSTEM_PROMPT = """Eres "Astro", un tutor de Secundaria paciente y socrático con forma de Búho.
 Estás ayudando a un alumno que estudia el curso "{course_name}", específicamente la lección "{lesson_name}".
 
+INFORMACIÓN DE TIEMPO:
+- El momento actual del alumno es: {time_of_day} (son las {current_time}).
+- Saluda adecuadamente según este horario (Buenos días/Buenas tardes/Buenas noches).
+
 REGLAS ESTRICTAS:
-- Si el alumno pide que le expliques un concepto, SÍ debes explicárselo de forma didáctica (ej: "La suma es la unión de dos cantidades...").
-- SIN EMBARGO, si el alumno te pide la respuesta FINAL de un problema o cálculo concreto, NUNCA se la des directamente. Guíalo para que la descubra él.
+- Si el alumno pide que le expliques un concepto, SÍ debes explicárselo de forma didáctica.
+- NUNCA des la respuesta FINAL directamente. Guíalo para que la descubra él.
 - Habla en español, con lenguaje sencillo y amable.
-- No contestes TODO con una pregunta, solo usa preguntas para que el alumno relacione conceptos lógicos que ya le has explicado.
-- Adapta la dificultad al nivel del alumno.
-- Tus respuestas deben ser cortas (máximo 4 frases) para no abrumarle.
-- Eres un búho muy sabio, puedes usar de vez en cuando alguna referencia espacial o de aves si encaja.
+- No contestes TODO con una pregunta.
+- Tus respuestas deben ser cortas (máximo 4 frases).
+- Aunque seas un búho nocturno, eres consciente del horario del alumno y te adaptas a él.
 """
 
 class ChatView(APIView):
@@ -34,13 +36,25 @@ class ChatView(APIView):
         
         # Protegemos la ruta: Comprobamos si el alumno tiene un plan Avanzado (2 o superior)
         if user.subscription_level < 2:
-            # Si tiene un plan gratuito (1), le denegamos el acceso
             return Response(
                 {"detail": "Acceso denegado. Astro está disponible a partir del Plan Velocidad Luz."},
                 status=status.HTTP_403_FORBIDDEN
             )
             
-        # Extraemos los datos que nos envía el React: los mensajes que ya se han escrito y dónde está el alumno
+        # 1. Obtenemos la hora actual ajustada (España: UTC+2 en verano, UTC+1 en invierno)
+        from django.utils import timezone
+        import datetime
+        ahora = timezone.now() + datetime.timedelta(hours=2) # Ajuste manual a CEST para la demo
+        hora_str = ahora.strftime("%H:%M")
+        hora_int = ahora.hour
+        
+        if 6 <= hora_int < 13:
+            momento = "Mañana"
+        elif 13 <= hora_int < 20:
+            momento = "Tarde"
+        else:
+            momento = "Noche"
+            
         data = request.data
         messages = data.get("messages", [])
         course_title = data.get("courseTitle", "General")
@@ -49,11 +63,14 @@ class ChatView(APIView):
         if not messages:
             return Response({"detail": "Faltan los mensajes."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Preparamos el system prompt con el contexto
-        sys_msg = SYSTEM_PROMPT.format(course_name=course_title, lesson_name=lesson_title)
+        # Preparamos el system prompt con el contexto y la hora
+        sys_msg = SYSTEM_PROMPT.format(
+            course_name=course_title, 
+            lesson_name=lesson_title,
+            time_of_day=momento,
+            current_time=hora_str
+        )
         
-        # Construimos el formato que espera la IA (una lista de mensajes guardada en forma de diccionario)
-        # El primero siempre es la instrucción secreta
         groq_messages = [{"role": "system", "content": sys_msg}]
         
         # Después sumamos toda la charla que llevaba el alumno con Astro para que la IA no pierda el hilo
