@@ -8,7 +8,27 @@ import axios from 'axios';
 //   - En producción (Vercel):           https://api.cristina2daw.es/api/
 // Vite inyecta las variables VITE_* en tiempo de compilación.
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/';
+// LÓGICA DE DETECCIÓN AUTOMÁTICA DE API (Zero-Config)
+// Detectamos el dominio actual para saber a qué backend apuntar sin depender de Vercel.
+const getBaseURL = () => {
+    const hostname = window.location.hostname;
+
+    // 1. Desarrollo Local
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        return 'http://127.0.0.1:8000/api/';
+    }
+
+    // 2. Dominio Personalizado (Producción Final)
+    if (hostname.includes('cristina2daw.es')) {
+        return 'https://api.cristina2daw.es/api/';
+    }
+
+    // 3. Fallback: Dominios de Vercel / Otros
+    // Apuntamos directamente a la URL de Render por defecto
+    return 'https://genio-academy-api.onrender.com/api/';
+};
+
+const API_URL = getBaseURL();
 
 const axiosInstance = axios.create({
     baseURL: API_URL,
