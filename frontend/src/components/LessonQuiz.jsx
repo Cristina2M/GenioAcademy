@@ -46,10 +46,27 @@ export default function LessonQuiz({ lesson, onPassed }) {
 
     // Consultamos vidas al montar y cada vez que volvemos al inicio
     useEffect(() => {
-        if (estado === 'INICIO') {
-            consultarVidas();
+        let interval;
+        
+        // Función para cargar vidas
+        const cargar = () => {
+            if (estado === 'INICIO') {
+                consultarVidas();
+            }
+        };
+
+        cargar();
+
+        // Si el simulador está bloqueado (0 vidas), activamos un polling 
+        // cada 2 segundos para detectar si el alumno gana un minijuego
+        if (estado === 'INICIO' && vidas <= 0) {
+            interval = setInterval(cargar, 2000);
         }
-    }, [estado]);
+
+        return () => {
+            if (interval) clearInterval(interval);
+        };
+    }, [estado, vidas]);
 
     // Este efecto se ejecuta cada vez que el alumno cambia de lección
     useEffect(() => {
