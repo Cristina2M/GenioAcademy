@@ -2,7 +2,7 @@
 ## Genio Academy — Plataforma de Aprendizaje Incremental para la ESO
 
 > **Repositorio GitHub:** https://github.com/Cristina2M/GenioAcademy  
-> **Versión del documento:** Hito VII completado + Fase 20 (Estabilización)  
+> **Versión del documento:** Hito VII completado + Fase 21 (Despliegue Final)  
 > **Fecha:** Abril 2026
 
 ---
@@ -46,6 +46,7 @@ La plataforma combina tres pilares innovadores:
 | V | Sistema de Vidas y Minijuegos Roguelike | ✅ Completado |
 | VI | Catálogo de Profesores y Videoconferencias | ✅ Completado |
 | VII | Correcciones, Contenido y Documentación | ✅ Completado |
+| **+** | **Despliegue y Estabilización Final** | ✅ Completado |
 
 ---
 
@@ -424,6 +425,10 @@ src/
 5. **Catálogo siempre disponible:** `CategoryViewSet` es público (`AllowAny`). El endpoint acepta JWT de forma opcional — si está presente y es válido, calcula `is_completed` e `is_started` por alumno; si no hay token o es inválido, devuelve los cursos sin datos de progreso. Un fallback en `Courses.jsx` hace una segunda petición sin token si la primera falla, garantizando que el catálogo nunca muestre un error al alumno.
 
 6. **Claustro público/privado:** El mismo endpoint `GET /api/teachers/professors/` devuelve resultados distintos según si el usuario está autenticado o no. Sin token: solo profesores `is_featured=True` (para la landing). Con token: claustro completo. Además, `?course_id=X` activa el filtro por materia para el modal de tutoría.
+
+7. **Sincronización Horaria de Astro:** Para mejorar el realismo del tutor socrático, el backend detecta la hora local del servidor (ajustada a la zona horaria del usuario/España) e inyecta dinámicamente un contexto temporal en el `SYSTEM_PROMPT`. Esto permite que Astro sepa si es de día, de tarde o de noche, saludando y guiando en consecuencia.
+
+8. **Autenticación Dual (Email/User):** Se ha implementado un `EmailOrUsernameBackend` personalizado. Esto permite que el endpoint de login (`/api/token/`) acepte indistintamente el correo electrónico o el nombre de usuario, reduciendo la fricción en el acceso de alumnos y profesores.
 
 ---
 
@@ -804,12 +809,33 @@ _[Mostrar tabla de planes de la sección 9]_
 
 **Completado:**
 - ✅ Hito I-VII: infraestructura, backend, frontend, IA, vidas/minijuegos, claustro, calidad.
+- ✅ Despliegue en producción: Hosting en Vercel (Frontend) y Render (Backend) con dominios SSL.
 
 **Próximos pasos:**
-- Despliegue en producción en VPS real con dominio propio.
 - Contenido educativo real de la ESO en todas las asignaturas.
 - Modo competitivo: tablas de clasificación por nivel y asignatura.
 - App móvil nativa (Expo + React Native) reutilizando la misma API.
+
+---
+
+## 12. Entornos de Ejecución y Producción
+
+La plataforma se ha migrado con éxito desde un entorno local de desarrollo a una infraestructura en la nube distribuida y profesional.
+
+### 🌐 Dominios Oficiales
+* **Plataforma (Frontend):** [https://cristina2daw.es](https://cristina2daw.es)
+* **API Central (Backend):** [https://api.cristina2daw.es](https://api.cristina2daw.es)
+
+### 🏗️ Lógica Zero-Config
+Para facilitar el despliegue continuo (CI/CD), el frontend implementa un detector de entorno inteligente en `src/api/axios.js`. 
+1. Si detecta `localhost`, apunta automáticamente al backend local de Docker.
+2. Si detecta el dominio `cristina2daw.es`, apunta automáticamente a la API de Render.
+Esto elimina la necesidad de configurar manualmente variables de entorno en Vercel tras cada despliegue.
+
+### ⚙️ Optimización de Producción
+* **Base de Datos:** PostgreSQL en Render con backups automáticos.
+* **Seguridad:** Certificados SSL Let's Encrypt activos en todos los puntos finales.
+* **Cold Start:** Se ha documentado una latencia inicial de ~40s en el backend debido al tier gratuito de Render (suspensión por inactividad), lo cual se ha comunicado en el Manual de Usuario para gestionar expectativas.
 
 ---
 
@@ -858,5 +884,5 @@ _[Mostrar tabla de planes de la sección 9]_
 
 ---
 
-_Documentación generada y revisada en Abril 2026. Última actualización: Fase 20 — Estabilización completada._
+_Documentación generada y revisada en Abril 2026. Última actualización: Fase 21 — Despliegue en producción completado._
 _Proyecto desarrollado como Trabajo de Fin de Ciclo — DAW._
