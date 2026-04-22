@@ -55,10 +55,10 @@ export default function Home() {
               
               <div className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start">
                 <Link to="/courses" className="btn border-none bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-900 btn-lg shadow-[0_0_30px_rgba(34,211,238,0.4)] rounded-2xl px-8 font-extrabold text-lg hover:-translate-y-1 transition-transform">
-                  Entrar al Catálogo <ArrowRight className="ml-2 w-6 h-6"/>
+                  Ver todos los Cursos <ArrowRight className="ml-2 w-6 h-6"/>
                 </Link>
                 <Link to="/mission" className="btn bg-slate-900/60 backdrop-blur-md border border-slate-600 text-white hover:bg-slate-800 hover:border-pink-500/50 btn-lg rounded-2xl px-8 text-lg hover:-translate-y-1 transition-all">
-                  Descubrir la Filosofía
+                  Cómo ayudamos a tu hijo
                 </Link>
               </div>
 
@@ -219,10 +219,10 @@ export default function Home() {
                         
                         <div className="relative btn border-white/10 bg-slate-900 text-white hover:bg-slate-800 rounded-2xl px-10 py-6 h-auto flex flex-col gap-2 transition-all">
                             <span className="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-400 uppercase tracking-tighter">
-                                Conoce a nuestro equipo
+                                Ver nuestros Profesores
                             </span>
                             <div className="flex items-center gap-2 text-slate-400 group-hover:text-white transition-colors">
-                                <span className="text-xs font-bold uppercase tracking-widest">Explorar Claustro</span>
+                                <span className="text-xs font-bold uppercase tracking-widest">Listado de Docentes</span>
                                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                             </div>
                         </div>
