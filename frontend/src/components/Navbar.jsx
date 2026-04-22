@@ -116,7 +116,7 @@ export default function Navbar() {
                 <li><Link to="/claustro">Claustro</Link></li>
               </>
             ) : (
-              <li><Link to="/courses" className="text-cyan-400 font-bold">Cursos</Link></li>
+              <li><Link to="/courses" className="text-white font-bold">Cursos</Link></li>
             )}
             {user ? (
                <>
