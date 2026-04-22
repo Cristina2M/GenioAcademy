@@ -132,11 +132,20 @@ class ConsultationViewSet(viewsets.ModelViewSet):
         # Buscamos las categorías (asignaturas) que imparte este profesor
         materias = perfil_profesor.subjects.all()
 
-        # Buscamos todos los alumnos que hayan completado algún curso de esas materias
-        completitudes = CourseCompletion.objects.filter(course__knowledge_level__category__in=materias)
+        from courses.models import UserCourseProgress
 
-        # Extraemos los IDs únicos de esos alumnos (sin repeticiones)
-        ids_alumnos = completitudes.values_list('user_id', flat=True).distinct()
+        # 1. Alumnos que han COMPLETADO cursos del profesor
+        ids_completados = CourseCompletion.objects.filter(
+            course__knowledge_level__category__in=materias
+        ).values_list('user_id', flat=True)
+
+        # 2. Alumnos que han INICIADO cursos del profesor (aunque no los terminen)
+        ids_iniciados = UserCourseProgress.objects.filter(
+            course__knowledge_level__category__in=materias
+        ).values_list('user_id', flat=True)
+
+        # Combinamos ambos sets de IDs para tener la lista única de alumnos "interesados"
+        ids_alumnos = set(list(ids_completados) + list(ids_iniciados))
 
         # Solo mostramos alumnos del Plan 3 (Agujero de Gusano): los únicos con acceso a tutorías
         # Los planes 1 y 2 no tienen esta funcionalidad habilitada, por eso no aparecen aquí
