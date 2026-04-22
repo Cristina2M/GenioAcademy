@@ -27,7 +27,6 @@ export default function Dashboard() {
 
   // Cursos que el alumno tiene en progreso (obtenidos del backend)
   const [activeCourses, setActiveCourses] = useState([]);
-  const [cargandoCursos, setCargandoCursos] = useState(true);
 
   // ─────────────────────────────────────────────
   // CÁLCULOS DE GAMIFICACIÓN (Barra de Progreso XP)
