@@ -264,8 +264,8 @@ export default function Mission() {
                 <Link to="/courses" className="btn bg-cyan-500 hover:bg-cyan-400 text-slate-900 border-none btn-lg px-8 rounded-2xl font-bold shadow-[0_0_30px_rgba(34,211,238,0.5)]">
                   Ver Catálogo de Cursos
                 </Link>
-                <Link to="/login" className="btn btn-outline border-indigo-400 text-indigo-300 hover:bg-indigo-500 hover:text-white btn-lg px-8 rounded-2xl shadow-[0_0_20px_rgba(79,70,229,0.3)] backdrop-blur-md">
-                  Contactar con la Academia <ArrowRight className="ml-2 w-5 h-5"/>
+                <Link to="/register" className="btn btn-outline border-indigo-400 text-indigo-300 hover:bg-indigo-500 hover:text-white btn-lg px-8 rounded-2xl shadow-[0_0_20px_rgba(79,70,229,0.3)] backdrop-blur-md">
+                  Unirse a la Academia <ArrowRight className="ml-2 w-5 h-5"/>
                 </Link>
               </div>
             </div>
