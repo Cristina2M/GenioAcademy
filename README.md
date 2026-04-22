@@ -30,14 +30,14 @@ Debe preexistir o ser inyectado por Docker un contexto de variables (`.env` o co
 
 ### 🧪 Cuentas de Prueba
 
-Para poder probar la plataforma sin registrarse, existen las siguientes cuentas predefinidas:
+Para poder probar la plataforma sin registrarse, existen las siguientes cuentas predefinidas. **Nota:** El sistema permite el acceso tanto con el nombre de usuario como con el correo electrónico asociado.
 
 | Tipo | Usuario | Contraseña | Acceso |
 |---|---|---|---|
 | Alumno (Plan 1) | `al1` | `alumno123` | Catálogo básico |
 | Alumno (Plan 2) | `al2` | `alumno123` | Catálogo + Astro IA |
 | Alumno (Plan 3) | `al3` | `alumno123` | Todo + Tutorías |
-| Profesor | `profe_mate` | `Genio2026!` | Panel docente |
+| Profesor (Matemáticas) | `aris.thorne` | `Genio2026!` | Panel docente |
 | Superusuario | `admin` | (ver `.env`) | Admin de Django |
 
 ---
