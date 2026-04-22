@@ -20,6 +20,18 @@ El sistema se compone de tres contenedores principales:
 2. **Backend**: Django + Django REST Framework. *Puerto: `8000` (localhost:8000)*
 3. **Database**: PostgreSQL. *Puerto interno: `5432`*
 
+---
+
+## 🌍 Producción y Despliegue
+
+La plataforma se encuentra desplegada y operativa en los siguientes dominios oficiales:
+
+*   **Frontend (Vercel):** [https://cristina2daw.es](https://cristina2daw.es)
+*   **Backend (Render):** [https://api.cristina2daw.es](https://api.cristina2daw.es)
+
+### ⚙️ Configuración Zero-Config de API
+El frontend implementa una lógica de auto-detección de entorno. No es necesario configurar variables `VITE_API_URL` manualmente para producción; la aplicación detecta si está en el dominio oficial y apunta automáticamente al backend de Render.
+
 ### 🔐 Gestión de Credenciales y Entorno (.env)
 
 Por normativas de seguridad, los secretos del marco de trabajo no se vuelcan al repositorio público.
