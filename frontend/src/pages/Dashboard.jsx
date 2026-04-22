@@ -133,14 +133,6 @@ export default function Dashboard() {
       color: 'from-orange-500/20 to-amber-600/20', 
       unlocked: (user?.streak_count || 0) >= 5
     },
-    { 
-      id: 'master',
-      name: 'Sabio Estelar', 
-      desc: 'Completa 5 misiones con éxito',
-      icon: <Trophy className="w-6 h-6 text-amber-300"/>, 
-      color: 'from-amber-500/20 to-yellow-600/20', 
-      unlocked: completedCourses.length >= 5 
-    },
   ];
 
   // Función que se ejecuta cuando el alumno hace clic en un avatar de la galería
