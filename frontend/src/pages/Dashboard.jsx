@@ -15,7 +15,7 @@
 
 import { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Target, Trophy, Flame, Compass, Play, BookOpen, Star, Lock, X, Rocket, GraduationCap, ChevronRight } from 'lucide-react';
+import { Target, Trophy, Flame, Compass, Play, BookOpen, Star, Lock, X, Rocket, GraduationCap, ChevronRight, ShieldCheck } from 'lucide-react';
 import AuthContext from '../context/AuthContext';
 import axiosInstance from '../api/axios';
 import { getStudentAvatar, avatarDatabase } from '../utils/avatarUtils';
@@ -61,23 +61,80 @@ export default function Dashboard() {
   const nivelSuscripcion = user?.subscription_level || 1;
   const tieneAccesoIA = nivelSuscripcion >= 2; // Astro requiere Plan 2 o superior
 
+  // Historial completo del alumno (iniciados y completados)
+  const [journeyCourses, setJourneyCourses] = useState([]);
+  const [cargandoCursos, setCargandoCursos] = useState(true);
+
   // ─────────────────────────────────────────────
-  // OBTENER EL CURSO SUGERIDO AL ARRANCAR
+  // OBTENER EL PROGRESO AL ARRANCAR
   // ─────────────────────────────────────────────
   useEffect(() => {
-    const cargarCursos = async () => {
+    const cargarDatos = async () => {
       try {
-        const respuesta = await axiosInstance.get('courses/courses/my_active_courses/');
-        setActiveCourses(respuesta.data);
+        // Cursos activos (para la sección de Operación Principal)
+        const resActivos = await axiosInstance.get('courses/courses/my_active_courses/');
+        setActiveCourses(resActivos.data);
+
+        // Trayectoria completa (para calcular logros reales)
+        const resJourney = await axiosInstance.get('courses/courses/my_full_journey/');
+        setJourneyCourses(resJourney.data);
       } catch (error) {
-        console.error('Error al obtener cursos activos', error);
+        console.error('Error al obtener datos del dashboard', error);
       } finally {
         setCargandoCursos(false);
       }
     };
 
-    cargarCursos();
+    cargarDatos();
   }, []);
+
+  // ─────────────────────────────────────────────
+  // LÓGICA DE LOGROS DINÁMICOS
+  // ─────────────────────────────────────────────
+  const completedCourses = journeyCourses.filter(c => c.is_completed);
+  
+  const achievements = [
+    { 
+      id: 'first_step',
+      name: 'Primer Despegue', 
+      desc: 'Inicia tu primer curso',
+      icon: <Rocket className="w-6 h-6 text-orange-400"/>, 
+      color: 'from-orange-500/20 to-red-600/20', 
+      unlocked: journeyCourses.length > 0 
+    },
+    { 
+      id: 'math_novice',
+      name: 'Matemático Novato', 
+      desc: 'Completa un curso de Matemáticas',
+      icon: <Target className="w-6 h-6 text-blue-400"/>, 
+      color: 'from-blue-500/20 to-cyan-500/20', 
+      unlocked: completedCourses.some(c => c.category_name.includes('Matemáticas'))
+    },
+    { 
+      id: 'explorer',
+      name: 'Explorador Curioso', 
+      desc: 'Inicia 3 cursos diferentes',
+      icon: <Compass className="w-6 h-6 text-emerald-400"/>, 
+      color: 'from-emerald-500/20 to-green-600/20', 
+      unlocked: journeyCourses.length >= 3
+    },
+    { 
+      id: 'veteran',
+      name: 'Agente Veterano', 
+      desc: 'Alcanza el Nivel 3 de Rango',
+      icon: <ShieldCheck className="w-6 h-6 text-purple-400"/>, 
+      color: 'from-purple-500/20 to-indigo-600/20', 
+      unlocked: nivelActual >= 3
+    },
+    { 
+      id: 'master',
+      name: 'Sabio Estelar', 
+      desc: 'Completa 5 misiones con éxito',
+      icon: <Trophy className="w-6 h-6 text-amber-300"/>, 
+      color: 'from-amber-500/20 to-yellow-600/20', 
+      unlocked: completedCourses.length >= 5 
+    },
+  ];
 
   // Función que se ejecuta cuando el alumno hace clic en un avatar de la galería
   const seleccionarAvatar = async (idAvatar) => {
@@ -243,21 +300,36 @@ export default function Dashboard() {
               <Trophy className="w-6 h-6 text-amber-500" /> Vitrina de Reconocimientos
             </h2>
             {/* Las medallas son por ahora estáticas (decorativas). En el futuro se conectarán al backend. */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {[
-                { name: 'Primer Despegue', icon: <Flame className="w-6 h-6 text-orange-500"/>, color: 'from-orange-500/20 to-red-600/20', unlocked: true },
-                { name: 'Matemático Novato', icon: <Target className="w-6 h-6 text-blue-400"/>, color: 'from-blue-500/20 to-cyan-500/20', unlocked: true },
-                { name: 'Cartógrafo Espacial', icon: <Compass className="w-6 h-6 text-emerald-400"/>, color: 'from-emerald-500/20 to-green-600/20', unlocked: false },
-                { name: 'Sabio Estelar', icon: <Trophy className="w-6 h-6 text-amber-300"/>, color: 'from-amber-500/20 to-yellow-600/20', unlocked: false },
-              ].map((badge, idx) => (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+              {achievements.map((badge) => (
                 <div
-                  key={idx}
-                  className={`rounded-2xl p-4 border flex flex-col items-center justify-center text-center transition-all ${badge.unlocked ? `bg-gradient-to-br ${badge.color} border-white/20 shadow-lg` : 'bg-slate-900/30 border-white/5 grayscale opacity-50'}`}
+                  key={badge.id}
+                  className={`group relative rounded-2xl p-4 border flex flex-col items-center justify-center text-center transition-all duration-500 ${
+                    badge.unlocked 
+                      ? `bg-gradient-to-br ${badge.color} border-white/20 shadow-lg hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)]` 
+                      : 'bg-slate-900/30 border-white/5 opacity-40 hover:opacity-60'
+                  }`}
                 >
-                  <div className="w-14 h-14 rounded-full bg-slate-900 border border-white/10 shadow-inner flex items-center justify-center mb-3">
-                    {badge.icon}
+                  {/* Tooltip de descripción (aparece al hover) */}
+                  <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-2 px-3 rounded-lg border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-30 shadow-2xl">
+                    {badge.desc}
+                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-800 rotate-45 border-r border-b border-white/10"></div>
                   </div>
-                  <span className="text-xs font-bold text-white tracking-wide">{badge.name}</span>
+
+                  <div className={`w-14 h-14 rounded-full bg-slate-950 border border-white/10 shadow-inner flex items-center justify-center mb-3 relative overflow-hidden ${!badge.unlocked && 'grayscale'}`}>
+                    {badge.unlocked && (
+                      <div className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent animate-pulse"></div>
+                    )}
+                    {badge.icon}
+                    {!badge.unlocked && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-slate-950/40 backdrop-blur-[1px]">
+                        <Lock className="w-4 h-4 text-slate-500" />
+                      </div>
+                    )}
+                  </div>
+                  <span className={`text-[10px] font-black uppercase tracking-tighter ${badge.unlocked ? 'text-white' : 'text-slate-600'}`}>
+                    {badge.name}
+                  </span>
                 </div>
               ))}
             </div>
