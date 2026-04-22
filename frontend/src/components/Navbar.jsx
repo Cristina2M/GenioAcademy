@@ -108,10 +108,16 @@ export default function Navbar() {
               Al añadir este onClick analizamos si el usuario hizo clic en un enlace (document.activeElement)
               y forzamos la pérdida de foco (.blur()) para que el menú se pliegue automáticamente. */}
           <ul tabIndex={0} className="menu menu-sm dropdown-content bg-slate-900 border border-white/10 rounded-box z-10 mt-3 w-52 p-2 shadow-2xl" onClick={() => { const elem = document.activeElement; if (elem) { elem.blur(); } }}>
-            <li><Link to="/">Inicio</Link></li>
-            <li><Link to="/courses">Catálogo Estelar</Link></li>
-            <li><Link to="/mission">La Misión</Link></li>
-            <li><Link to="/claustro">Claustro</Link></li>
+            {!user ? (
+              <>
+                <li><Link to="/">Inicio</Link></li>
+                <li><Link to="/courses">Catálogo Estelar</Link></li>
+                <li><Link to="/mission">La Misión</Link></li>
+                <li><Link to="/claustro">Claustro</Link></li>
+              </>
+            ) : (
+              <li><Link to="/courses" className="text-cyan-400 font-bold">Cursos</Link></li>
+            )}
             {user ? (
                <>
                  <li><Link to={user.is_teacher ? "/teacher-dashboard" : "/dashboard"} className="text-cyan-400 font-bold border border-cyan-500/30 rounded-lg my-1">Mi Panel Base</Link></li>
