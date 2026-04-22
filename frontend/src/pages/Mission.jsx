@@ -172,7 +172,7 @@ export default function Mission() {
                 <li className="flex items-start gap-3 text-white font-medium border-b border-white/5 pb-2"><CheckCircle2 className="w-5 h-5 text-pink-500 flex-shrink-0" /> Todo lo incluido en "Órbita Base"</li>
                 <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> <strong>Ejercicios Interactivos Ilimitados</strong> (Sin barreras) que se corrigen automáticamente.</li>
                 <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> <strong>Asistente Educativo de IA "Búho Genio" 24/7</strong> para resolver dudas en cualquier tarea.</li>
-                <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> Panel de métricas estelar para que los padres supervisen el progreso en tiempo real.</li>
+                <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> Panel de métricas estelar integrado para supervisar el progreso y los logros en tiempo real.</li>
               </ul>
               <div className="mt-auto w-full">
                 <Link to="/register" className="btn bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white border-none w-full rounded-2xl shadow-[0_0_20px_rgba(236,72,153,0.4)] text-lg">
