@@ -80,6 +80,20 @@ class CustomUser(AbstractUser):
         help_text='Punto de partida del reloj de regeneración de 2 horas.'
     )
 
+    # ── SISTEMA DE RACHAS (STREAKS) ──
+    streak_count = models.IntegerField(
+        default=0,
+        verbose_name='Racha de días',
+        help_text='Días consecutivos que el alumno se ha conectado.'
+    )
+
+    last_streak_update = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name='Última actualización de racha',
+        help_text='Fecha en la que se incrementó la racha por última vez.'
+    )
+
     def __str__(self):
         # Cómo se ve este alumno en el panel de administración de Django
         return f"{self.username} — Nivel {self.current_student_level} (Plan {self.get_subscription_level_display()}) | Vidas: {self.lives_count}/3"

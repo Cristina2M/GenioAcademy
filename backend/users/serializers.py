@@ -42,6 +42,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['experience_points'] = user.experience_points
         token['selected_avatar'] = user.selected_avatar
         token['subscription_level'] = user.subscription_level  # Plan 1, 2 o 3
+        token['streak_count'] = user.streak_count
 
         # Datos del profesor (si el usuario es un maestro)
         # hasattr es seguro para verificar relaciones uno-a-uno

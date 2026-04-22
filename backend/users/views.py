@@ -26,6 +26,23 @@ from .serializers import UserSerializer, MyTokenObtainPairSerializer, SafeTokenR
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        if response.status_code == 200:
+            # Si el login es exitoso, actualizamos la racha
+            from django.contrib.auth import get_user_model
+            User = get_user_model()
+            username = request.data.get('username')
+            try:
+                user = User.objects.get(username=username)
+                sync_streak(user)
+                # Opcional: podrías refrescar el token aquí si quisieras que el streak_count
+                # viaje en el primer token, pero por ahora se actualizará en la DB.
+                # Como el frontend lo pedirá en el Dashboard, estará sincronizado.
+            except User.DoesNotExist:
+                pass
+        return response
+
 class SafeTokenRefreshView(TokenRefreshView):
     serializer_class = SafeTokenRefreshSerializer
 
@@ -135,6 +152,36 @@ def sync_lives(user):
             # Avanzamos el reloj solo el tiempo consumido (respetando el sobrante)
             user.last_life_lost_at += timedelta(seconds=LIFE_REGEN_SECONDS * lives_to_restore)
         user.save()
+
+def sync_streak(user):
+    """
+    Sincroniza la racha de conexión del alumno.
+    - Si se conecta en un nuevo día consecutivo: racha +1.
+    - Si se salta un día: racha se reinicia a 1.
+    - Si se conecta el mismo día: no hace nada.
+    """
+    now = timezone.now().date()
+    
+    if not user.last_streak_update:
+        user.streak_count = 1
+        user.last_streak_update = now
+        user.save()
+        return
+
+    if user.last_streak_update == now:
+        # Ya se actualizó hoy
+        return
+
+    yesterday = now - timedelta(days=1)
+    if user.last_streak_update == yesterday:
+        # Conexión consecutiva
+        user.streak_count += 1
+    else:
+        # Se rompió la racha
+        user.streak_count = 1
+    
+    user.last_streak_update = now
+    user.save()
         
 def get_lives_data(user):
     """

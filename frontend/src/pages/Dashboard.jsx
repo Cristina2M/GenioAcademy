@@ -126,6 +126,14 @@ export default function Dashboard() {
       unlocked: nivelActual >= 3
     },
     { 
+      id: 'streak_5',
+      name: 'Disciplina de Acero', 
+      desc: 'Conéctate 5 días seguidos',
+      icon: <Flame className="w-6 h-6 text-orange-500"/>, 
+      color: 'from-orange-500/20 to-amber-600/20', 
+      unlocked: (user?.streak_count || 0) >= 5
+    },
+    { 
       id: 'master',
       name: 'Sabio Estelar', 
       desc: 'Completa 5 misiones con éxito',
@@ -196,7 +204,14 @@ export default function Dashboard() {
                 <h1 className="text-4xl font-black text-white drop-shadow-md tracking-tight">
                   Hola de nuevo, <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{user?.username || 'Agente'}</span>
                 </h1>
-                <p className="text-slate-400 mt-1 font-medium">Estás a un paso de dominar el siguiente desafío.</p>
+                <p className="text-slate-400 mt-1 font-medium flex items-center gap-2">
+                  Estás a un paso de dominar el siguiente desafío.
+                  {(user?.streak_count || 0) > 0 && (
+                    <span className="flex items-center gap-1 bg-orange-500/10 text-orange-500 px-2 py-0.5 rounded-full text-[10px] font-bold border border-orange-500/20 animate-pulse">
+                      <Flame className="w-3 h-3" /> Racha: {user.streak_count} {user.streak_count === 1 ? 'día' : 'días'}
+                    </span>
+                  )}
+                </p>
               </div>
 
               {/* Barra de XP: muestra cuánto ha ganado dentro de su nivel actual */}
