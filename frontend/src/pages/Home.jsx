@@ -43,15 +43,15 @@ export default function Home() {
                 <Star className="w-5 h-5 text-amber-400" /> La nueva era de la Educación Secundaria
               </div>
               
-              <h1 className="text-6xl md:text-8xl font-black tracking-tight text-white mb-6 leading-[1.1] drop-shadow-lg">
-                El universo de aprendizaje a tu <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 drop-shadow-[0_0_20px_rgba(236,72,153,0.3)]">propio ritmo</span>
-              </h1>
-              
-              <p className="py-2 text-2xl text-slate-300/90 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
-                Genio Academy revoluciona tu aprendizaje estructurando el currículo escolar por 
-                <strong className="text-cyan-300 font-bold mx-2">cápsulas hiperespecíficas</strong>. 
-                Conquista cada tema y descubre de lo que eres capaz.
-              </p>
+                <h1 className="text-6xl md:text-8xl font-black tracking-tight text-white mb-6 leading-[1.1] drop-shadow-lg">
+                El universo del saber a tu <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 drop-shadow-[0_0_20px_rgba(236,72,153,0.3)]">propio ritmo</span>
+                </h1>
+                
+                <p className="py-2 text-2xl text-slate-300/90 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
+                  Genio Academy revoluciona tu aprendizaje estructurando el currículo escolar en 
+                  <strong className="text-cyan-300 font-bold mx-2">cápsulas estelares</strong>. 
+                  Domina cada tema y despega hacia el éxito académico.
+                </p>
               
               <div className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start">
                 <Link to="/courses" className="btn border-none bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-900 btn-lg shadow-[0_0_30px_rgba(34,211,238,0.4)] rounded-2xl px-8 font-extrabold text-lg hover:-translate-y-1 transition-transform">
@@ -120,8 +120,8 @@ export default function Home() {
                 <div className="w-16 h-16 bg-pink-500/10 rounded-2xl flex items-center justify-center mb-8 text-pink-400 shadow-[inset_0_0_20px_rgba(236,72,153,0.2)] border border-pink-500/20 group-hover:bg-pink-500 group-hover:text-white transition-colors duration-300">
                   <Map className="w-8 h-8"/>
                 </div>
-                <h3 className="card-title text-3xl font-bold text-white mb-4">Microcápsulas</h3>
-                <p className="text-slate-400 text-lg leading-relaxed">Olvídate de matricularte en cursos genéricos enteros. Accede al catálogo, busca exactamente el conocimiento hiperespecífico que se te resiste, y destrózalo en un tiempo récord y a tu ritmo logrando victorias rápidas y continuas.</p>
+                <h3 className="card-title text-3xl font-bold text-white mb-4">Cápsulas de Saber</h3>
+                <p className="text-slate-400 text-lg leading-relaxed">Olvida los cursos genéricos e interminables. Accede a nuestro catálogo y encuentra la píldora exacta de conocimiento que necesitas dominar. Aprende a tu ritmo, superando desafíos específicos y celebrando victorias constantes.</p>
               </div>
             </div>
 
@@ -131,8 +131,8 @@ export default function Home() {
                 <div className="w-16 h-16 bg-cyan-500/10 rounded-2xl flex items-center justify-center mb-8 text-cyan-400 shadow-[inset_0_0_20px_rgba(34,211,238,0.2)] border border-cyan-500/20 group-hover:bg-cyan-500 group-hover:text-white transition-colors duration-300">
                   <BrainCircuit className="w-8 h-8"/>
                 </div>
-                <h3 className="card-title text-3xl font-bold text-white mb-4">IA Estelar</h3>
-                <p className="text-slate-400 text-lg leading-relaxed">¿Te estancas en un ejercicio a las 2 de la madrugada? Resuelve dudas al instante con nuestro Búho Inteligente. Está entrenado exclusivamente sobre la teoría para dar pistas socráticas sin revelar nunca directamente el tesoro a tus hijos.</p>
+                <h3 className="card-title text-3xl font-bold text-white mb-4">Guía Inteligente</h3>
+                <p className="text-slate-400 text-lg leading-relaxed">¿Dudas a media noche? El Búho Genio está siempre alerta. Nuestra IA está entrenada para ofrecer pistas socráticas y guiar a tus hijos hacia la solución, asegurando que el aprendizaje sea real y profundo.</p>
               </div>
             </div>
 

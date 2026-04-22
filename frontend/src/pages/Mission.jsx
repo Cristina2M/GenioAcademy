@@ -80,9 +80,9 @@ export default function Mission() {
                 <Target className="w-16 h-16 text-pink-400" />
               </div>
               <div>
-                <h3 className="text-3xl font-bold text-white mb-4">Currículo Troceado para Victorias Rápidas</h3>
+                <h3 className="text-3xl font-bold text-white mb-4">Aprendizaje Modular y Eficiente</h3>
                 <p className="text-slate-300 text-lg leading-relaxed">
-                  Ya no vendemos cursos rígidos enteros de "Matemáticas de 3º ESO". Si tu hijo o hija es excelente en geometría pero tiene problemas severos con las fracciones, <strong>no le hacemos perder el tiempo</strong> repitiendo lo que ya sabe. Nuestro temario está troceado en conocimientos hiperespecíficos. Entra al catálogo, selecciona "Fracciones", y domina esa cápsula en exclusiva para lograr un subidón de la nota inmediato y directo.
+                  Ya no es necesario navegar por cursos infinitos. Si tu hijo domina la geometría pero se estanca con las fracciones, <strong>optimizamos su tiempo</strong> centrándonos solo en lo que necesita. Nuestras cápsulas estelares permiten un avance quirúrgico, logrando resultados visibles en tiempo récord.
                 </p>
               </div>
             </div>
@@ -93,9 +93,9 @@ export default function Mission() {
                 <Brain className="w-16 h-16 text-purple-400" />
               </div>
               <div className="lg:text-right">
-                <h3 className="text-3xl font-bold text-white mb-4">Inteligencia Artificial Especializada & Profesores Humanos</h3>
+                <h3 className="text-3xl font-bold text-white mb-4">Sinergia entre IA y Talento Humano</h3>
                 <p className="text-slate-300 text-lg leading-relaxed">
-                  Genio Academy nunca duerme. Contamos con un <strong>Asistente Estelar de Inteligencia Artificial ("Búho Genio")</strong>, entrenado exclusivamente con nuestro temario para resolver dudas de los ejercicios hasta la madrugada si tienen un examen al día siguiente. Y para cuando una máquina no basta, nuestros niveles de suscripción premium proporcionan <strong>tutorías 1 a 1 integradas</strong> con profesores expertos. Siempre habrá alguien ahí para desatascar la mente.
+                  Genio Academy combina lo mejor de ambos mundos. Nuestro <strong>Búho Genio</strong> ofrece asistencia inmediata 24/7 para resolver dudas al instante, mientras que nuestros <strong>profesores expertos</strong> guían el proceso mediante tutorías personalizadas, asegurando que ningún alumno se pierda en el vacío.
                 </p>
               </div>
             </div>
@@ -106,9 +106,9 @@ export default function Mission() {
                 <ShieldCheck className="w-16 h-16 text-cyan-400" />
               </div>
               <div>
-                <h3 className="text-3xl font-bold text-white mb-4">El Santuario de la Confianza y la Práctica</h3>
+                <h3 className="text-3xl font-bold text-white mb-4">Un Entorno Seguro para el Error</h3>
                 <p className="text-slate-300 text-lg leading-relaxed">
-                  Sabemos que la barrera número uno para el rendimiento bajo es el miedo atroz al ridículo en clase. Nuestra plataforma fomenta la práctica intensiva y privada. Tienen <strong>ejercicios gamificados e ilimitados</strong> con corrección instantánea y pistas. Es un entorno libre de prejuicios en donde sentirse estancado es normal y superar cada nivel se siente como ganar en su videojuego favorito. Promovemos el <em>'aprender haciendo'</em> de forma contínua y adictiva.
+                  Eliminamos el miedo al fallo. En nuestra academia, equivocarse es parte del viaje espacial. Fomentamos la experimentación privada y constante, donde cada error se convierte en una pista para el éxito, transformando la frustración en la chispa necesaria para aprender.
                 </p>
               </div>
             </div>
