@@ -213,9 +213,7 @@ export default function CoursePlayer() {
               Tu navegador no soporta la reproducción de vídeos.
             </video>
             
-            <div className="absolute top-4 left-4 flex gap-2 pointer-events-none">
-              <span className="badge bg-slate-800/80 text-white border-none font-bold text-xs">{(leccionActiva && leccionActiva.title) || 'Lección Activa'}</span>
-            </div>
+            {/* El div de etiquetas ha sido eliminado para una visualización limpia */}
           </div>
 
           {/* Caja de Teoría y Quiz */}
