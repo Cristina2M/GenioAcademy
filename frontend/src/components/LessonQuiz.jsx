@@ -27,6 +27,11 @@ export default function LessonQuiz({ lesson, onPassed }) {
     const [vidas, setVidas] = useState(3);
     const [cargandoVidas, setCargandoVidas] = useState(true);
 
+    // ── ESTADOS DEL SIMULADOR ──
+    const [estado, setEstado] = useState('INICIO');             // 'INICIO', 'JUGANDO', 'FALLADO', 'SUPERADO'
+    const [preguntasRonda, setPreguntasRonda] = useState([]);    // Preguntas seleccionadas para esta sesión
+    const [indicePreguntaActual, setIndicePreguntaActual] = useState(0); // Por qué pregunta vamos
+
     // Función para consultar las vidas actuales al servidor
     const consultarVidas = async () => {
         try {
