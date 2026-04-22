@@ -1,7 +1,7 @@
 import { ArrowRight, Map, BrainCircuit, Compass, Telescope, Star, Users, GraduationCap, ShieldCheck } from 'lucide-react';
 import { Link, Navigate } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import axiosInstance from '../api/axios';
 import AuthContext from '../context/AuthContext';
 import buhoMascot from '../assets/img/stikers/buho1.png';
 import ProfessorCard from '../components/ProfessorCard';
@@ -17,7 +17,7 @@ export default function Home() {
 
   useEffect(() => {
     // Cargar solo los profesores destacados (acceso público)
-    axios.get('http://localhost:8000/api/teachers/professors/')
+    axiosInstance.get('teachers/professors/')
       .then(res => setFeaturedProfs(res.data))
       .catch(err => console.error("Error cargando profesores destacados:", err));
   }, []);
