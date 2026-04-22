@@ -192,17 +192,28 @@ export default function CoursePlayer() {
               key={`${courseId}-${leccionActiva?.id}`}
               className="w-full h-full object-contain"
               controls
-              poster="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=2070&auto=format&fit=crop"
             >
               <source 
-                src={`/assets/videosTeoria/curso${courseId}/video-explicacion-${leccionesMostradas.indexOf(leccionActiva) + 1}.mp4`} 
+                src={(() => {
+                  // Buscamos el índice real por ID para evitar fallos de referencia
+                  const idx = leccionesMostradas.findIndex(l => l.id === leccionActiva?.id);
+                  const videoNum = (idx === -1) ? 1 : idx + 1;
+                  
+                  let folder = `curso${courseId}`; 
+                  if (course.title.includes("Sumas")) folder = "curso1";
+                  if (course.title.includes("Restas")) folder = "curso2";
+                  if (course.title.includes("Ecuaciones")) folder = "curso3";
+                  
+                  const finalPath = `/assets/videosTeoria/${folder}/video-explicacion-${videoNum}.mp4`;
+                  console.log("Intentando cargar vídeo:", finalPath);
+                  return finalPath;
+                })()} 
                 type="video/mp4" 
               />
               Tu navegador no soporta la reproducción de vídeos.
             </video>
             
             <div className="absolute top-4 left-4 flex gap-2 pointer-events-none">
-              <span className="badge badge-error gap-1 animate-pulse border-none font-bold text-xs"><div className="w-2 h-2 rounded-full bg-white"></div> EN LÍNEA</span>
               <span className="badge bg-slate-800/80 text-white border-none font-bold text-xs">{(leccionActiva && leccionActiva.title) || 'Lección Activa'}</span>
             </div>
           </div>
