@@ -172,7 +172,7 @@ export default function Mission() {
                 <li className="flex items-start gap-3 text-white font-medium border-b border-white/5 pb-2"><CheckCircle2 className="w-5 h-5 text-pink-500 flex-shrink-0" /> Todo lo incluido en "Órbita Base"</li>
                 <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> <strong>Ejercicios Interactivos Ilimitados</strong> (Sin barreras) que se corrigen automáticamente.</li>
                 <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> <strong>Asistente Educativo de IA "Búho Genio" 24/7</strong> para resolver dudas en cualquier tarea.</li>
-                <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> Panel de métricas y reporte mensual de progreso enviado a los padres.</li>
+                <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> Panel de métricas estelar para que los padres supervisen el progreso en tiempo real.</li>
               </ul>
               <div className="mt-auto w-full">
                 <Link to="/register" className="btn bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white border-none w-full rounded-2xl shadow-[0_0_20px_rgba(236,72,153,0.4)] text-lg">
@@ -185,15 +185,15 @@ export default function Mission() {
             <div className="bg-slate-900/40 backdrop-blur-xl border border-white/10 rounded-3xl p-8 hover:-translate-y-2 transition-transform duration-300 flex flex-col items-center text-center">
               <Users className="w-12 h-12 text-purple-400 mb-6" />
               <h3 className="text-2xl font-bold text-purple-300 mb-2">Agujero de Gusano</h3>
-              <p className="text-slate-400 mb-6 min-h-[50px]">La experiencia megapremium para recuperar control cuando hay suspensos críticos importantes.</p>
+              <p className="text-slate-400 mb-6 min-h-[50px]">La experiencia definitiva con apoyo humano directo para superar cualquier obstáculo académico.</p>
               <div className="text-4xl font-black text-white mb-8 border-b border-white/10 pb-6 w-full">
                 24,99€<span className="text-xl text-slate-400 font-normal">/mes</span>
               </div>
               <ul className="space-y-4 mb-8 text-left w-full text-sm">
                 <li className="flex items-start gap-3 text-slate-200 font-medium border-b border-white/5 pb-2"><CheckCircle2 className="w-5 h-5 text-purple-500 flex-shrink-0" /> Todo lo incluido en "Velocidad Luz"</li>
-                <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-purple-400 flex-shrink-0" /> <strong>2 horas de Tutoría Privada Semanal ("1 a 1")</strong> por videollamada con un profesor titular de Genio Academy.</li>
-                <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-purple-400 flex-shrink-0" /> Corrección manual de simulacros de Exámenes Oficiales de ESO.</li>
-                <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-purple-400 flex-shrink-0" /> <strong>Seguimiento Personalizado:</strong> Plan de ruta semanal trazado por el tutor en contacto con el padre/tutor legal.</li>
+                <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-purple-400 flex-shrink-0" /> <strong>Tutoría Privada ("1 a 1")</strong> por videollamada con un profesor titular de Genio Academy.</li>
+                <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-purple-400 flex-shrink-0" /> <strong>Resolución de Dudas Personalizada:</strong> Envía tus ejercicios complejos y recibe una guía detallada del docente.</li>
+                <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-purple-400 flex-shrink-0" /> <strong>Seguimiento Directo:</strong> Comunicación fluida entre el tutor y el alumno para trazar la mejor ruta de estudio.</li>
               </ul>
               <div className="mt-auto w-full">
                 <Link to="/register" className="btn bg-slate-800/80 border border-purple-500/50 text-purple-300 hover:bg-purple-600 hover:text-white hover:border-purple-400 w-full rounded-2xl transition-all">
@@ -232,7 +232,7 @@ export default function Mission() {
                 ¿Cómo sé si realmente están progresando y no perdiendo el tiempo?
               </div>
               <div className="collapse-content text-slate-400 text-lg leading-relaxed">
-                <p>En el plan central y premium, como tutor principal, recibirás notificaciones y un panel con <strong className="text-pink-300">métricas claras de tiempo útil, ejercicios aprobados y áreas de fricción</strong>. En caso de suscripción superior, un profesor humano hablará contigo rutinariamente para exponerte las mejoras metodológicas implementadas y evitar que te preocupes excesivamente la noche antes del examen escolar.</p>
+                <p>En el plan central y premium, como tutor principal, tendrás acceso a un <strong className="text-pink-300">panel con métricas claras de tiempo útil, cursos completados y logros alcanzados</strong>. En caso de suscripción superior, podrás agendar videollamadas con un profesor humano para resolver los desafíos más complejos y asegurar que el progreso sea constante.</p>
               </div>
             </div>
 
