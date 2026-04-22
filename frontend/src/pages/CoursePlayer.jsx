@@ -186,17 +186,23 @@ export default function CoursePlayer() {
         {/* ── COLUMNA IZQUIERDA: Vídeo + Teoría/Quiz (70% del ancho) ── */}
         <div className="w-full lg:w-3/4 flex flex-col gap-6">
 
-          {/* Pantalla de vídeo (simulada por ahora con imagen de fondo) */}
-          <div className="relative w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(34,211,238,0.15)] border-2 border-slate-800 flex flex-col items-center justify-center group">
-            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-900/20 to-pink-900/10 pointer-events-none"></div>
-            <div className="absolute inset-0 flex items-center justify-center z-10">
-              <button className="btn btn-circle btn-lg border-none bg-cyan-500/80 hover:bg-cyan-400 hover:scale-110 transition-transform shadow-[0_0_30px_rgba(34,211,238,0.6)]">
-                <PlayCircle className="w-12 h-12 text-slate-900 ml-1" />
-              </button>
-            </div>
-            <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-30"></div>
-            <div className="absolute top-4 left-4 flex gap-2">
-              <span className="badge badge-error gap-1 animate-pulse border-none font-bold text-xs"><div className="w-2 h-2 rounded-full bg-white"></div> LIVE</span>
+          {/* Reproductor de Vídeo Real */}
+          <div className="relative w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(34,211,238,0.15)] border-2 border-slate-800 group">
+            <video 
+              key={`${courseId}-${leccionActiva?.id}`}
+              className="w-full h-full object-contain"
+              controls
+              poster="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=2070&auto=format&fit=crop"
+            >
+              <source 
+                src={`/assets/videosTeoria/curso${courseId}/video-explicacion-${leccionesMostradas.indexOf(leccionActiva) + 1}.mp4`} 
+                type="video/mp4" 
+              />
+              Tu navegador no soporta la reproducción de vídeos.
+            </video>
+            
+            <div className="absolute top-4 left-4 flex gap-2 pointer-events-none">
+              <span className="badge badge-error gap-1 animate-pulse border-none font-bold text-xs"><div className="w-2 h-2 rounded-full bg-white"></div> EN LÍNEA</span>
               <span className="badge bg-slate-800/80 text-white border-none font-bold text-xs">{(leccionActiva && leccionActiva.title) || 'Lección Activa'}</span>
             </div>
           </div>
