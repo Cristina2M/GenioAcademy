@@ -124,10 +124,10 @@ export default function Mission() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch relative z-10 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10 items-stretch relative z-10 max-w-6xl mx-auto">
             
             {/* Nivel 1 - Órbita Base */}
-            <div className="bg-slate-900/40 backdrop-blur-xl border border-white/10 rounded-3xl p-8 hover:-translate-y-2 transition-transform duration-300 flex flex-col items-center text-center">
+            <div className="bg-slate-900/40 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 hover:-translate-y-2 transition-transform duration-300 flex flex-col items-center text-center max-w-md mx-auto lg:max-w-none w-full">
               <BookOpen className="w-12 h-12 text-slate-400 mb-6" />
               <h3 className="text-2xl font-bold text-white mb-2">Órbita Base</h3>
               <p className="text-slate-400 mb-6 min-h-[50px]">El acceso perfecto para mentes autodidactas que solo necesitan los materiales.</p>
@@ -147,7 +147,7 @@ export default function Mission() {
             </div>
 
             {/* Nivel 2 - Velocidad Luz (Destacado) */}
-            <div className="bg-slate-800/80 backdrop-blur-xl border-2 border-pink-500 rounded-3xl p-8 transform md:-translate-y-4 shadow-[0_0_40px_rgba(236,72,153,0.3)] relative flex flex-col items-center text-center">
+            <div className="bg-slate-800/80 backdrop-blur-xl border-2 border-pink-500 rounded-3xl p-6 md:p-8 lg:transform lg:-translate-y-4 shadow-[0_0_40px_rgba(236,72,153,0.3)] relative flex flex-col items-center text-center max-w-md mx-auto lg:max-w-none w-full">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-black px-6 py-2 rounded-full text-sm tracking-wide shadow-lg uppercase">
                 La Misión Estrella ⭐
               </div>
@@ -182,7 +182,7 @@ export default function Mission() {
             </div>
 
             {/* Nivel 3 - Agujero de Gusano */}
-            <div className="bg-slate-900/40 backdrop-blur-xl border border-white/10 rounded-3xl p-8 hover:-translate-y-2 transition-transform duration-300 flex flex-col items-center text-center">
+            <div className="bg-slate-900/40 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 hover:-translate-y-2 transition-transform duration-300 flex flex-col items-center text-center max-w-md mx-auto lg:max-w-none w-full">
               <Users className="w-12 h-12 text-purple-400 mb-6" />
               <h3 className="text-2xl font-bold text-purple-300 mb-2">Agujero de Gusano</h3>
               <p className="text-slate-400 mb-6 min-h-[50px]">La experiencia definitiva con apoyo humano directo para superar cualquier obstáculo académico.</p>
