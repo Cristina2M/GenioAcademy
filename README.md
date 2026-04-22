@@ -42,7 +42,7 @@ Debe preexistir o ser inyectado por Docker un contexto de variables (`.env` o co
 
 ### 🧪 Cuentas de Prueba
 
-Para poder probar la plataforma sin registrarse, existen las siguientes cuentas predefinidas. **Nota:** El sistema permite el acceso tanto con el nombre de usuario como con el correo electrónico asociado.
+Para poder probar la plataforma sin registrarse, existen las siguientes cuentas predefinidas. **Nota:** El sistema permite el acceso tanto con el nombre de usuario como con el correo electrónico asociado (Dual Login).
 
 | Tipo | Usuario | Contraseña | Acceso |
 |---|---|---|---|
@@ -162,24 +162,29 @@ Conexión humana y especializada para estudiantes de Plan 3.
 ### 🔧 HITO VII: Calidad, Contenido y Cierre Técnico
 Afinación del proyecto para su entrega, exposición y uso real.
 
-* **Fase 18: Inserción de Contenidos** ✅
-  * Cursos sembrados mediante seed_data.py y populate_one.py.
-  * Soporte de renderizado HTML en CoursePlayer.jsx (dangerouslySetInnerHTML) para contenido enriquecido.
-
-* **Fase 19: Correcciones Generales y Documentación Interna** ✅
-  * Revisión y españolización de variables y funciones propias en todo el código.
-  * Adición de comentarios exhaustivos en cada archivo para facilitar el mantenimiento.
-  * Múltiples commits atómicos en la rama 
-elease/correccionesGenerales.
-
-* **Fase 20: Estabilización y Mecánica de Penalización** ✅
-  * **Catálogo resiliente:** CategoryViewSet configurado como público (AllowAny). Fallback sin token en Courses.jsx garantiza carga siempre.
-  * **Refresco de sesión seguro:** SafeTokenRefreshView evita errores 500 con usuarios eliminados de BD.
-  * **Penalización en simuladores:** LessonQuiz.jsx llama a POST /api/users/lives/decrease/ al fallar una respuesta.
-  * **Bloqueo por vidas:** Con 0 planetas, el simulador bloquea el inicio de nuevas pruebas.
-  * **Dashboard mejorado:** Nuevos endpoints my_active_courses y my_full_journey para historial del alumno.
-  * **Bug crítico resuelto:** Migración courses.0004_usercourseprogress estaba pendiente en PostgreSQL Docker.
-
+* **Fase 18: Inserción de Contenidos** ✅
+  * Cursos sembrados mediante seed_data.py y populate_one.py.
+  * Soporte de renderizado HTML en CoursePlayer.jsx (dangerouslySetInnerHTML) para contenido enriquecido.
+
+* **Fase 19: Correcciones Generales y Documentación Interna** ✅
+  * Revisión y españolización de variables y funciones propias en todo el código.
+  * Adición de comentarios exhaustivos en cada archivo para facilitar el mantenimiento.
+  * Múltiples commits atómicos en la rama `release/correccionesGenerales`.
+
+* **Fase 20: Estabilización y Mecánica de Penalización** ✅
+  * **Catálogo resiliente:** CategoryViewSet configurado como público (AllowAny). Fallback sin token en Courses.jsx garantiza carga siempre.
+  * **Refresco de sesión seguro:** SafeTokenRefreshView evita errores 500 con usuarios eliminados de BD.
+  * **Penalización en simuladores:** LessonQuiz.jsx llama a POST /api/users/lives/decrease/ al fallar una respuesta.
+  * **Bloqueo por vidas:** Con 0 planetas, el simulador bloquea el inicio de nuevas pruebas.
+  * **Dashboard mejorado:** Nuevos endpoints my_active_courses y my_full_journey para historial del alumno.
+  * **Bug crítico resuelto:** Migración courses.0004_usercourseprogress estaba pendiente en PostgreSQL Docker.
+
+* **Fase 21: Despliegue Final y Auditoría de Contenidos** ✅
+  * Configuración de dominios personalizados con SSL en Vercel y Render.
+  * Implementación de **Zero-Config API** en el frontend para resiliencia entre entornos.
+  * Siembra masiva de profesores y especialidades en producción (`seed_production`).
+  * Optimización de Astro IA: sincronización horaria y personalidad socrática mejorada.
+
 ---
 
 ## 🎨 Identidad Visual y UI: El Universo Astro
@@ -206,30 +211,17 @@ La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina 
 | `release/backend` | Primera versión estable del backend Django + DRF |
 | `release/hito-3` | Cierre del Hito III: frontend completo y conectado al backend |
 | `release/revision2` | Segunda ronda de revisión general antes de los hitos de gamificación |
-| `release/correccionesGenerales` | Limpieza de código, españolización de variables y comentarios exhaustivos (rama actual) |
+| `release/correccionesGenerales` | Limpieza de código, españolización de variables y comentarios exhaustivos |
 
 ### Ramas de Feature (desarrollo de funcionalidades)
 | Rama | Funcionalidad desarrollada |
 |---|---|
-| `feature/bd` | Modelado inicial de la base de datos (CustomUser, Cursos, Niveles) |
-| `feature/backendV1` | Primera versión del backend: API REST, serializadores y migraciones |
 | `feature/motorLogica` | Motor de lógica incremental: progresión de XP, subida de nivel y bloqueo 403 |
 | `feature/autenticacionFrontend` | Sistema de login/registro en React conectado al JWT del backend |
-| `feature/frontend` | Base del frontend: estructura de páginas y enrutamiento SPA |
-| `feature/frontendV1` | Primera versión estable del frontend con todas las páginas base |
-| `feature/home-v2` | Rediseño de la página de inicio con estética espacial mejorada |
-| `feature/panelEstudiante` | Dashboard del alumno: avatar, XP, misión sugerida y medallas |
-| `feature/reproductorCursos` | Componente `CoursePlayer.jsx`: teoría, simulador de preguntas y sidebar |
-| `feature/Catalogo` | Página de catálogo de cursos con filtros por materia y nivel |
-| `feature/mision` | Página "La Misión": propósito de la academia y planes de suscripción |
 | `feature/IA` | Integración de Astro: tutor socrático con Groq + LLaMA + `AIChatPanel.jsx` |
 | `feature/vidas` | Sistema Roguelike: 3 planetas, regeneración pasiva y 5 minijuegos de recuperación |
-| `feature/claustro` | Página del Claustro: catálogo público de profesores con cards animadas |
-| `feature/interfaz-profesor` | Panel docente (`/teacher-dashboard`): bandeja de consultas y tabla de alumnos |
 | `feature/tutorias` | Sistema de tutorías: modal de solicitud, videollamadas Jitsi y notificaciones en tiempo real |
-| `feature/microcursos` | Expansión del catálogo: +25 cursos en todas las materias de la ESO via `seed_data.py` |
-| `feature/contenido-formateado` | Catálogo estable (AllowAny), bloqueo de simuladores por vidas, penalización automática al fallar, fix migración PostgreSQL, `SafeTokenRefreshView`, endpoints `my_active_courses` y `my_full_journey` |
-| `feature/docs` | Documentación técnica y actualizaciones del README |
+| `feature/docs2` | Actualización de documentación de producción y estabilización final (rama actual) |
 
 ---
 
@@ -239,7 +231,6 @@ La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina 
 *   **Levantar / Reconstruir:** `docker compose up --build`
 *   **Levantar normalmente:** `docker compose up`
 *   **Detener servicios:** `docker compose down`
-*   **Limpieza total (borra contenedores y BD):** `docker compose down -v`
 *   **Reiniciar solo el backend:** `docker compose restart backend`
 *   **Ver logs en tiempo real:** `docker compose logs -f backend`
 
@@ -248,14 +239,9 @@ La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina 
 > ⚠️ Si el archivo `backend/.env` no existe en el host, usa `docker exec` directamente con el nombre del contenedor en lugar de `docker compose exec`.
 
 *   **Ejecutar Migraciones:** `docker exec genioacademy-backend-1 python manage.py migrate`
-*   **Ver migraciones pendientes:** `docker exec genioacademy-backend-1 python manage.py showmigrations`
-*   **Poblar BD con cursos:** `docker exec genioacademy-backend-1 python manage.py shell < seed_data.py`
+*   **Poblar BD (Local):** `docker exec genioacademy-backend-1 python manage.py shell < seed_data.py`
+*   **Poblar BD (Producción):** `docker exec genioacademy-backend-1 python manage.py seed_production`
 *   **Crear Superusuario:** `docker exec genioacademy-backend-1 python manage.py createsuperuser`
-*   **Consola de Django:** `docker exec -it genioacademy-backend-1 python manage.py shell`
-
-### 🔹 Comandos de Frontend (React)
-*   **Instalar librerías (contenedor en marcha):** `docker compose exec frontend npm install nombre-libreria`
-*   **Instalar librerías (contenedor parado):** `docker compose run --rm frontend npm install nombre-libreria`
 
 ---
 
@@ -264,79 +250,46 @@ La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina 
 ### Sesión y Autenticación
 | Método | Endpoint | Descripción |
 |---|---|---|
-| `POST` | `/api/token/` | Login: devuelve `access` y `refresh` tokens |
-| `POST` | `/api/token/refresh/` | Renueva el token de acceso caducado |
+| `POST` | `/api/token/` | Login Dual (Email/User): devuelve tokens JWT |
 | `POST` | `/api/users/register/` | Registro de nuevo alumno |
 
 ### Catálogo Educativo
 | Método | Endpoint | Acceso | Descripción |
 |---|---|---|---|
-| `GET` | `/api/courses/categories/` | 🌐 Público | Árbol completo: asignaturas → niveles → cursos. JWT opcional para calcular progreso |
+| `GET` | `/api/courses/categories/` | 🌐 Público | Árbol completo de asignaturas y niveles |
 | `GET` | `/api/courses/courses/{id}/` | 🔒 Autenticado | Detalle de curso con lecciones y ejercicios |
-| `POST` | `/api/courses/courses/{id}/start/` | 🔒 Autenticado | Marcar curso como iniciado (crea `UserCourseProgress`) |
-| `POST` | `/api/courses/courses/{id}/complete/` | 🔒 Autenticado | Completar curso (suma XP, sube nivel si toca) |
-| `GET` | `/api/courses/courses/my_active_courses/` | 🔒 Autenticado | Cursos del alumno en progreso (no completados) |
-| `GET` | `/api/courses/courses/my_full_journey/` | 🔒 Autenticado | Historial completo de cursos del alumno (en progreso + completados) |
-
-### Gestión de Usuarios
-| Método | Endpoint | Descripción |
-|---|---|---|
-| `POST` | `/api/users/register/` | Registro de nuevo alumno |
-| `GET` | `/api/users/management/` | Lista de usuarios (admin) |
-| `POST` | `/api/users/management/{id}/update_avatar/` | Cambiar avatar de búcho (devuelve JWT nuevo) |
-| `GET` | `/api/users/lives/` | Estado de vidas y cooldowns de minijuegos |
-| `POST` | `/api/users/lives/decrease/` | Restar 1 vida al alumno |
-| `POST` | `/api/users/minigames/play/` | Validar resultado de minijuego (requiere Plan 3 con 0 vidas) |
 
 ### Sistema de Tutorías y Profesores
 | Método | Endpoint | Descripción |
 |---|---|---|
-| `GET` | `/api/teachers/professors/` | Lista de profesores (con `?course_id=X` para filtrar) |
-| `GET/POST` | `/api/teachers/consultations/` | Ver/Crear consultas de tutoría |
-| `GET` | `/api/teachers/consultations/active_calls/` | Comprueba si hay llamada activa (polling alumno) |
-| `GET` | `/api/teachers/consultations/my_students/` | Alumnos del profesor (solo docentes) |
+| `GET` | `/api/teachers/professors/` | Lista de profesores (filtro por materia) |
+| `POST` | `/api/teachers/consultations/` | Crear consulta de tutoría |
 | `POST` | `/api/teachers/consultations/{id}/start_call/` | Iniciar videollamada Jitsi (solo docentes) |
-| `POST` | `/api/teachers/consultations/{id}/end_call/` | Finalizar videollamada (solo docentes) |
-
-### Tutor IA (Astro)
-| Método | Endpoint | Descripción |
-|---|---|---|
-| `POST` | `/api/ai/chat/` | Enviar mensaje a Astro (requiere Plan 2+) |
 
 ---
 
 ## 🏛️ Detalles Técnicos
 
 ### Arquitectura del Frontend
-1. **Tailwind v4**: La configuración se centraliza en `src/index.css` mediante `@import "tailwindcss";` y `@plugin "daisyui";`.
-2. **PostCSS**: Se utiliza `@tailwindcss/postcss` para procesar los estilos dentro de Vite.
-3. **Estado Global**: `AuthContext.jsx` provee los datos del alumno (extraídos del JWT) y las funciones de sesión a toda la app.
-
-### Arquitectura del Backend (Estructura de Datos)
-El núcleo educativo sigue esta jerarquía:
-```
-Categoría (asignatura)
-  └── NivelConocimiento (Nivel 1, 2, 3)
-        └── Curso
-              ├── Lección (con contenido HTML enriquecido)
-              │     └── Ejercicio (pregunta + opciones + respuesta correcta)
-              └── CourseCompletion (registro por alumno)
-```
+1. **Zero-Config API**: El archivo `src/api/axios.js` detecta automáticamente el hostname para apuntar a `localhost` o a `api.cristina2daw.es`.
+2. **Tailwind v4**: Estilos centralizados en `src/index.css` con variables modernas.
+3. **Estado Global**: `AuthContext.jsx` gestiona la sesión mediante persistencia de JWT en `localStorage`.
 
 ### Autenticación JWT
-* El token `access` tiene una vida de 1 día. El interceptor de Axios lo renueva automáticamente usando el `refresh` token sin interrumpir al usuario.
-* El payload del JWT incluye campos personalizados: `user_id`, `username`, `current_student_level`, `experience_points`, `subscription_level`, `selected_avatar`, `is_teacher`.
-* **Nota:** `lives_count` **no** está en el JWT porque cambia con frecuencia. El frontend lo obtiene en peticiones separadas a `/api/users/lives/`.
-* **Sesiones huérfanas:** Si existe un refresh token guardado en el navegador de un usuario ya eliminado de la BD, el endpoint `/api/token/refresh/` devuelve `401 AuthenticationFailed` (no 500) gracias a `SafeTokenRefreshView`. El interceptor de Axios detecta este caso y limpia la sesión local automáticamente.
+* El payload incluye campos personalizados como `subscription_level` y `is_teacher` para el renderizado condicional de la UI.
+* **SafeTokenRefreshView**: Evita errores 500 durante la renovación de tokens en usuarios inexistentes.
+* **Sistema de Login Dual**: El backend implementa un `EmailOrUsernameBackend` que permite a los usuarios autenticarse indistintamente con su `username` o su `email`, mejorando la accesibilidad y la experiencia de usuario.
 
 ### Seguridad del Contenido HTML
-* En `CoursePlayer.jsx` se usa `dangerouslySetInnerHTML` para renderizar la teoría con formato (colores, negrita, etc.).
-* Este enfoque es seguro porque el contenido HTML lo inyecta **exclusivamente el administrador** a través de los scripts `seed_content.py`, nunca el alumno.
+* En `CoursePlayer.jsx` se usa `dangerouslySetInnerHTML`. Este enfoque es seguro ya que el contenido es inyectado exclusivamente por los administradores del sistema via scripts de confianza.
+
+### Inteligencia Artificial (Astro)
+* **Sincronización Horaria**: El backend inyecta dinámicamente la hora local del alumno (ajustada a CEST/CET) en el prompt del sistema. Esto permite que Astro adapte sus saludos y comentarios según sea mañana, tarde o noche, eliminando inconsistencias temporales.
+* **Modelo**: Se utiliza `llama-3.1-8b-instant` vía Groq para obtener respuestas con latencia inferior a 1 segundo.
 
 ---
 
 ## 💡 Notas de Desarrollo
 
 * **Hot Reload**: Los cambios en CSS y JSX se reflejan al instante gracias a Vite.
-* **Extensiones de Archivo**: Para las configuraciones de PostCSS y Tailwind, se usa `.js` o `.cjs` según la compatibilidad con CommonJS detectada en Docker.
-* **Españolización del Código**: Las variables y funciones propias del proyecto están escritas en español. Las palabras reservadas de React, Django y los frameworks (useState, className, serializer, etc.) se mantienen en inglés porque son parte del lenguaje/framework.
+* **Españolización del Código**: Se mantiene una estricta coherencia en el lenguaje de las variables de negocio (español) y las palabras reservadas del framework (inglés).
