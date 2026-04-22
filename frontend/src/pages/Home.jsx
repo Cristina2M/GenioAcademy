@@ -1,12 +1,19 @@
 import { ArrowRight, Map, BrainCircuit, Compass, Telescope, Star, Users, GraduationCap, ShieldCheck } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { Link, Navigate } from 'react-router-dom';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import AuthContext from '../context/AuthContext';
 import buhoMascot from '../assets/img/stikers/buho1.png';
 import ProfessorCard from '../components/ProfessorCard';
 
 export default function Home() {
+  const { user } = useContext(AuthContext);
   const [featuredProfs, setFeaturedProfs] = useState([]);
+
+  // Si el usuario ya está logueado, le redirigimos a su panel base automáticamente
+  if (user) {
+    return <Navigate to={user.is_teacher ? "/teacher-dashboard" : "/dashboard"} replace />;
+  }
 
   useEffect(() => {
     // Cargar solo los profesores destacados (acceso público)
