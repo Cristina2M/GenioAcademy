@@ -118,12 +118,20 @@ export default function Login() {
               </button>
             </form>
 
-            <div className="mt-8 text-center text-sm text-slate-400 border-t border-white/5 pt-6">
-              ¿Eres un nuevo recluta? <br className="sm:hidden"/>
-              <Link to="/register" className="text-pink-400 hover:text-pink-300 font-bold ml-1 transition-colors drop-shadow-[0_0_10px_rgba(236,72,153,0.3)] hover:underline inline-flex items-center">
-                Inicia tu proceso de admisión <ArrowRight className="w-4 h-4 ml-1 inline"/>
-              </Link>
+            <div className="mt-8 text-center text-sm text-slate-400 border-t border-white/5 pt-6 space-y-3">
+              <div>
+                <Link to="/forgot-password" className="text-cyan-400 hover:text-cyan-300 text-xs font-semibold transition-colors">
+                  ¿Olvidaste tu contraseña?
+                </Link>
+              </div>
+              <div>
+                ¿Eres un nuevo recluta? <br className="sm:hidden"/>
+                <Link to="/register" className="text-pink-400 hover:text-pink-300 font-bold ml-1 transition-colors drop-shadow-[0_0_10px_rgba(236,72,153,0.3)] hover:underline inline-flex items-center">
+                  Inicia tu proceso de admisión <ArrowRight className="w-4 h-4 ml-1 inline"/>
+                </Link>
+              </div>
             </div>
+
 
           </div>
         </div>

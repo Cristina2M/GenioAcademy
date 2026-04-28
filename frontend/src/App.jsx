@@ -11,6 +11,8 @@ import Claustro from './pages/Claustro';
 import StudentCatalog from './pages/StudentCatalog';
 import TeacherDashboard from './pages/TeacherDashboard';
 import MySpaceJourney from './pages/MySpaceJourney';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './utils/PrivateRoute';
 import spaceBg from './assets/img/logo-fondo.jpg';
@@ -61,6 +63,8 @@ function App() {
               <Route path="/mission" element={<Mission />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
               
               {/* Rutas Privadas y de Usuario (Protegidas por PrivateRoute) */}
               <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
