@@ -34,6 +34,12 @@ const StudentCatalog = () => {
             }
         };
         fetchData();
+
+        // Al entrar al Claustro, marcamos todas las notificaciones como leídas
+        // para que el badge del Navbar desaparezca
+        if (user?.subscription_level >= 3) {
+            axiosInstance.post('teachers/consultations/mark_as_read/').catch(() => {});
+        }
     }, []);
 
     const filteredProfessors = professors.filter(p => {
