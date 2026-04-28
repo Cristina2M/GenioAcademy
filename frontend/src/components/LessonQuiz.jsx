@@ -108,6 +108,10 @@ export default function LessonQuiz({ lesson, onPassed }) {
             }
         } else {
             // ❌ Respuesta incorrecta → el alumno vuelve a empezar desde el principio
+            
+            // Despachamos un evento inmediato para que LivesPanel reaccione AL INSTANTE
+            window.dispatchEvent(new CustomEvent('planetaPerdido'));
+
             // Restamos un planeta mediante una llamada al backend
             axiosInstance.post('users/lives/decrease/').then(() => {
                 // Actualizamos el contador local tras la resta

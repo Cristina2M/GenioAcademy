@@ -61,6 +61,24 @@ export default function LivesPanel() {
     fetchLives();
   }, [fetchLives]);
 
+  // Escuchar eventos globales para actualizaciones instantáneas de UI (ej. desde el Simulador)
+  useEffect(() => {
+    const handlePlanetaPerdido = () => {
+      setLivesData(prev => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          lives: Math.max(0, prev.lives - 1)
+        };
+      });
+      // Pedimos datos al servidor poco después para asegurar sincronía
+      setTimeout(fetchLives, 500);
+    };
+
+    window.addEventListener('planetaPerdido', handlePlanetaPerdido);
+    return () => window.removeEventListener('planetaPerdido', handlePlanetaPerdido);
+  }, [fetchLives]);
+
   // Polling independiente al servidor cada 1 segundo para mantener sincronía
   // Esto garantiza que los planetas se actualicen sin necesidad de recargar
   useEffect(() => {
