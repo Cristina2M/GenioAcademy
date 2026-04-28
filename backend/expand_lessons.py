@@ -15,8 +15,14 @@ def expand_lessons():
     for lesson in lessons:
         original_content = lesson.content
         
-        # Si la lección ya ha sido expandida, la saltamos para no duplicar contenido
-        if "Desglose Teórico" in original_content or "El Consejo de Astro" in original_content:
+        # Si la lección ya ha sido expandida con el emoji viejo, lo actualizamos
+        if "Desglose Teórico" in original_content:
+            if '<span class="text-3xl">🦉</span>' in original_content:
+                lesson.content = original_content.replace(
+                    '<div class="w-16 h-16 rounded-full bg-slate-900 border-2 border-pink-500/50 flex items-center justify-center flex-shrink-0 shadow-[0_0_15px_rgba(236,72,153,0.3)]">\n        <span class="text-3xl">🦉</span>\n    </div>',
+                    '<div class="w-16 h-16 rounded-full bg-slate-900 border-2 border-pink-500/50 flex items-center justify-center flex-shrink-0 shadow-[0_0_15px_rgba(236,72,153,0.3)] overflow-hidden">\n        <img src="/assets/astro.png" alt="Astro" class="w-full h-full object-cover">\n    </div>'
+                )
+                lesson.save()
             continue
             
         # Extraer el texto original para reutilizarlo como base
@@ -86,8 +92,8 @@ def expand_lessons():
 
   <!-- Consejo del Búho -->
   <div class="bg-gradient-to-r from-purple-900/30 to-pink-900/30 p-6 rounded-2xl border border-pink-500/20 flex gap-5 items-center">
-    <div class="w-16 h-16 rounded-full bg-slate-900 border-2 border-pink-500/50 flex items-center justify-center flex-shrink-0 shadow-[0_0_15px_rgba(236,72,153,0.3)]">
-        <span class="text-3xl">🦉</span>
+    <div class="w-16 h-16 rounded-full bg-slate-900 border-2 border-pink-500/50 flex items-center justify-center flex-shrink-0 shadow-[0_0_15px_rgba(236,72,153,0.3)] overflow-hidden">
+        <img src="/assets/astro.png" alt="Astro" class="w-full h-full object-cover">
     </div>
     <div>
       <h4 class="text-lg font-bold text-pink-300 mb-1">El Consejo de Astro</h4>
