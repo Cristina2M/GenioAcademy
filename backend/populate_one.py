@@ -915,7 +915,11 @@ def populate(course_title):
     
     try:
         course = Course.objects.get(title=course_title)
-        course.lessons.all().delete()
+        if course.lessons.exists():
+            print(f"Saltando '{course_title}' porque ya tiene lecciones.")
+            return
+            
+        print(f"Poblando '{course_title}'...")
         
         for i, data in enumerate(COURSES_DATA[course_title], 1):
             lesson = Lesson.objects.create(
@@ -940,4 +944,6 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         populate(sys.argv[1])
     else:
-        print("Uso: python populate_one.py 'Nombre del Curso'")
+        print("Poblando todos los cursos disponibles...")
+        for course_title in COURSES_DATA.keys():
+            populate(course_title)
