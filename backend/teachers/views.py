@@ -347,3 +347,192 @@ class ConsultationViewSet(viewsets.ModelViewSet):
         Consultation.objects.filter(student=usuario, is_read=False).update(is_read=True)
 
         return Response({'detail': 'Notificaciones marcadas como leídas.'})
+
+
+# ── EDITOR DE CURSOS PARA PROFESORES ──────────────────────────────────────────
+# Los tres ViewSets siguientes permiten al profesor crear, editar y borrar
+# el contenido de SUS materias (las asignaturas que tiene asignadas).
+# Un profesor NO puede tocar cursos de materias que no son suyas.
+
+class TeacherCourseViewSet(viewsets.ModelViewSet):
+    """
+    CRUD de cursos para profesores.
+    Rutas:
+      GET    /api/teachers/mis-cursos/         → lista de cursos del profesor
+      POST   /api/teachers/mis-cursos/         → crea un curso nuevo
+      GET    /api/teachers/mis-cursos/{id}/    → detalle de un curso
+      PUT    /api/teachers/mis-cursos/{id}/    → edita un curso
+      DELETE /api/teachers/mis-cursos/{id}/   → elimina un curso
+    También expone un endpoint extra:
+      GET    /api/teachers/mis-cursos/niveles_disponibles/
+             → devuelve los KnowledgeLevels de las materias del profesor
+               para que el frontend los muestre en el selector al crear un curso.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer_class(self):
+        from courses.serializers import CourseSerializer
+        return CourseSerializer
+
+    def get_queryset(self):
+        usuario = self.request.user
+        if not hasattr(usuario, 'professor_profile'):
+            return []
+        materias = usuario.professor_profile.subjects.all()
+        from courses.models import Course
+        return Course.objects.filter(
+            knowledge_level__category__in=materias
+        ).select_related('knowledge_level').prefetch_related('lessons')
+
+    def perform_create(self, serializer):
+        """Valida que el KnowledgeLevel elegido pertenezca a las materias del profesor."""
+        usuario = self.request.user
+        if not hasattr(usuario, 'professor_profile'):
+            raise PermissionDenied("Solo los profesores pueden crear cursos.")
+
+        knowledge_level = serializer.validated_data.get('knowledge_level')
+        materias = usuario.professor_profile.subjects.all()
+        if knowledge_level.category not in materias:
+            raise PermissionDenied(
+                "No puedes crear cursos en materias que no impartes."
+            )
+        serializer.save()
+
+    def perform_update(self, serializer):
+        """Valida que el profesor es dueño del curso antes de editarlo."""
+        usuario = self.request.user
+        instance = self.get_object()
+        materias = usuario.professor_profile.subjects.all()
+        if instance.knowledge_level.category not in materias:
+            raise PermissionDenied("No puedes editar cursos de otras materias.")
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        """Valida que el profesor es dueño del curso antes de borrarlo."""
+        usuario = self.request.user
+        materias = usuario.professor_profile.subjects.all()
+        if instance.knowledge_level.category not in materias:
+            raise PermissionDenied("No puedes eliminar cursos de otras materias.")
+        instance.delete()
+
+    @action(detail=False, methods=['get'])
+    def niveles_disponibles(self, request):
+        """
+        Devuelve los KnowledgeLevels de las materias del profesor
+        para que el selector del formulario muestre opciones válidas.
+        """
+        usuario = request.user
+        if not hasattr(usuario, 'professor_profile'):
+            return Response([], status=status.HTTP_403_FORBIDDEN)
+
+        from courses.models import KnowledgeLevel
+        from courses.serializers import KnowledgeLevelSerializer
+        materias = usuario.professor_profile.subjects.all()
+        niveles = KnowledgeLevel.objects.filter(category__in=materias).select_related('category')
+        data = [
+            {
+                'id': n.id,
+                'name': n.name,
+                'order': n.order,
+                'category_name': n.category.name
+            }
+            for n in niveles
+        ]
+        return Response(data)
+
+
+class TeacherLessonViewSet(viewsets.ModelViewSet):
+    """
+    CRUD de lecciones para profesores.
+    Rutas:
+      GET    /api/teachers/lecciones/        → todas las lecciones de los cursos del prof
+      POST   /api/teachers/lecciones/        → crea una lección
+      PUT    /api/teachers/lecciones/{id}/   → edita una lección
+      DELETE /api/teachers/lecciones/{id}/  → elimina una lección
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer_class(self):
+        from courses.serializers import LessonSerializer
+        return LessonSerializer
+
+    def get_queryset(self):
+        usuario = self.request.user
+        if not hasattr(usuario, 'professor_profile'):
+            return []
+        materias = usuario.professor_profile.subjects.all()
+        from courses.models import Lesson
+        return Lesson.objects.filter(
+            course__knowledge_level__category__in=materias
+        ).select_related('course')
+
+    def _validar_curso_del_profesor(self, course):
+        usuario = self.request.user
+        if not hasattr(usuario, 'professor_profile'):
+            raise PermissionDenied("Solo los profesores pueden gestionar lecciones.")
+        materias = usuario.professor_profile.subjects.all()
+        if course.knowledge_level.category not in materias:
+            raise PermissionDenied("No puedes gestionar lecciones de materias ajenas.")
+
+    def perform_create(self, serializer):
+        course = serializer.validated_data.get('course')
+        self._validar_curso_del_profesor(course)
+        serializer.save()
+
+    def perform_update(self, serializer):
+        instance = self.get_object()
+        self._validar_curso_del_profesor(instance.course)
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        self._validar_curso_del_profesor(instance.course)
+        instance.delete()
+
+
+class TeacherExerciseViewSet(viewsets.ModelViewSet):
+    """
+    CRUD de ejercicios para profesores.
+    Rutas:
+      GET    /api/teachers/ejercicios/        → todos los ejercicios de los cursos del prof
+      POST   /api/teachers/ejercicios/        → crea un ejercicio
+      PUT    /api/teachers/ejercicios/{id}/   → edita un ejercicio
+      DELETE /api/teachers/ejercicios/{id}/  → elimina un ejercicio
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer_class(self):
+        from courses.serializers import ExerciseSerializer
+        return ExerciseSerializer
+
+    def get_queryset(self):
+        usuario = self.request.user
+        if not hasattr(usuario, 'professor_profile'):
+            return []
+        materias = usuario.professor_profile.subjects.all()
+        from courses.models import Exercise
+        return Exercise.objects.filter(
+            lesson__course__knowledge_level__category__in=materias
+        ).select_related('lesson__course')
+
+    def _validar_leccion_del_profesor(self, lesson):
+        usuario = self.request.user
+        if not hasattr(usuario, 'professor_profile'):
+            raise PermissionDenied("Solo los profesores pueden gestionar ejercicios.")
+        materias = usuario.professor_profile.subjects.all()
+        if lesson.course.knowledge_level.category not in materias:
+            raise PermissionDenied("No puedes gestionar ejercicios de materias ajenas.")
+
+    def perform_create(self, serializer):
+        lesson = serializer.validated_data.get('lesson')
+        self._validar_leccion_del_profesor(lesson)
+        serializer.save()
+
+    def perform_update(self, serializer):
+        instance = self.get_object()
+        self._validar_leccion_del_profesor(instance.lesson)
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        self._validar_leccion_del_profesor(instance.lesson)
+        instance.delete()
+
