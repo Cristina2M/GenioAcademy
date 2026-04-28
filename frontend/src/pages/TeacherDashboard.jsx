@@ -17,13 +17,14 @@
 // ============================================================
 
 import React, { useState, useEffect, useContext } from 'react';
-import { Mail, Users, CheckCircle, Clock, Search, Video, Inbox } from 'lucide-react';
+import { Mail, Users, CheckCircle, Clock, Search, Video, Inbox, BookOpen } from 'lucide-react';
 import axiosInstance from '../api/axios';
 import AuthContext from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import StudentCardModal from '../components/StudentCardModal';
 import JitsiMeetWrapper from '../components/JitsiMeetWrapper';
+import CourseEditorTab from '../components/CourseEditorTab';
 
 // ─── COMPONENTE PRINCIPAL: Panel del Profesor ───────────────────────────────
 const TeacherDashboard = () => {
@@ -132,20 +133,24 @@ const TeacherDashboard = () => {
                     </div>
 
                     {/* Selector de pestañas */}
-                    <div className="flex gap-2 bg-white/5 p-1 rounded-2xl border border-white/10 backdrop-blur-md">
-                        {/* Pestaña: Consultas */}
+                    <div className="flex flex-wrap gap-2 bg-white/5 p-1 rounded-2xl border border-white/10 backdrop-blur-md">
                         <button
                             onClick={() => setPestanaActiva('inbox')}
-                            className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all text-sm ${pestanaActiva === 'inbox' ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/25' : 'text-slate-400 hover:text-white'}`}
+                            className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold transition-all text-sm ${pestanaActiva === 'inbox' ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/25' : 'text-slate-400 hover:text-white'}`}
                         >
                             <Inbox className="w-4 h-4" /> Consultas
                         </button>
-                        {/* Pestaña: Mis Alumnos */}
                         <button
                             onClick={() => setPestanaActiva('students')}
-                            className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all text-sm ${pestanaActiva === 'students' ? 'bg-pink-500 text-white shadow-lg shadow-pink-500/25' : 'text-slate-400 hover:text-white'}`}
+                            className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold transition-all text-sm ${pestanaActiva === 'students' ? 'bg-pink-500 text-white shadow-lg shadow-pink-500/25' : 'text-slate-400 hover:text-white'}`}
                         >
                             <Users className="w-4 h-4" /> Mis Alumnos
+                        </button>
+                        <button
+                            onClick={() => setPestanaActiva('cursos')}
+                            className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold transition-all text-sm ${pestanaActiva === 'cursos' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/25' : 'text-slate-400 hover:text-white'}`}
+                        >
+                            <BookOpen className="w-4 h-4" /> Mis Cursos
                         </button>
                     </div>
                 </div>
@@ -158,14 +163,18 @@ const TeacherDashboard = () => {
                 ) : (
                     <div className="bg-white/5 rounded-3xl border border-white/10 overflow-hidden backdrop-blur-xl">
                         {/* Mostramos el componente de la pestaña activa */}
-                        {pestanaActiva === 'inbox' ? (
+                        {pestanaActiva === 'inbox' && (
                             <ConsultationsTab
                                 consultas={consultas}
                                 onIniciarLlamada={iniciarLlamada}
                                 onCargarDatos={cargarDatos}
                             />
-                        ) : (
+                        )}
+                        {pestanaActiva === 'students' && (
                             <StudentsTab alumnos={alumnos} onSeleccionarAlumno={setAlumnoSeleccionado} />
+                        )}
+                        {pestanaActiva === 'cursos' && (
+                            <CourseEditorTab />
                         )}
                     </div>
                 )}
