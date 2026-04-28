@@ -15,6 +15,10 @@ def expand_lessons():
     for lesson in lessons:
         original_content = lesson.content
         
+        # Si la lección ya ha sido expandida, la saltamos para no duplicar contenido
+        if "Desglose Teórico" in original_content or "El Consejo de Astro" in original_content:
+            continue
+            
         # Extraer el texto original para reutilizarlo como base
         # El contenido actual suele ser: <h3...>Titulo</h3><p...>Texto</p><div...>Ejemplo</div>
         # Usamos expresiones regulares simples para intentar sacar el texto del párrafo principal

@@ -20,3 +20,6 @@ python manage.py migrate
 
 # Siembra categorías y cursos si la BD está vacía (idempotente)
 python manage.py seed_production
+
+# Expande el contenido de las lecciones existentes (idempotente)
+python expand_lessons.py
