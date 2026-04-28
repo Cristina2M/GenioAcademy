@@ -125,7 +125,17 @@ export default function LivesPanel() {
   // Recibe el id del minijuego directamente para evitar el estado desactualizado
   const handleMinigame = useCallback(async (minigameId, won) => {
     // Actualización optimista
-    if (!won) {
+    if (won) {
+      setLivesData(prev => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          lives: Math.min(prev.max_lives, prev.lives + 1)
+        };
+      });
+      // Avisamos a toda la app para que el Simulador se desbloquee sin esperas
+      window.dispatchEvent(new CustomEvent('planetaRecuperado'));
+    } else {
       setLivesData(prev => ({
         ...prev,
         minigames_cooldowns: {

@@ -63,8 +63,17 @@ export default function LessonQuiz({ lesson, onPassed }) {
             interval = setInterval(cargar, 2000);
         }
 
+        // Listener para reacción inmediata cuando ganamos vida en otro lado
+        const handlePlanetaRecuperado = () => {
+            setVidas(prev => prev + 1);
+            // Actualizamos en segundo plano
+            setTimeout(cargar, 500);
+        };
+        window.addEventListener('planetaRecuperado', handlePlanetaRecuperado);
+
         return () => {
             if (interval) clearInterval(interval);
+            window.removeEventListener('planetaRecuperado', handlePlanetaRecuperado);
         };
     }, [estado, vidas]);
 
