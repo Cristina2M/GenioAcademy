@@ -340,3 +340,132 @@ class MinigamePlayView(APIView):
             data['detail'] = 'No superaste el minijuego esta vez. Cooldown activado.'
         
         return Response(data)
+
+
+# ── RECUPERACIÓN DE CONTRASEÑA ──
+
+class ForgotPasswordView(APIView):
+    """
+    Endpoint POST: /api/users/forgot-password/
+
+    El alumno envía su email. Si existe en la BD, generamos un token
+    seguro de Django y mandamos el enlace de reset.
+
+    En desarrollo (local): el email se imprime en la consola del servidor.
+    En producción (Render): se envía por SMTP (requiere EMAIL_HOST_USER y
+                            EMAIL_HOST_PASSWORD en las variables de entorno).
+
+    Por seguridad, siempre devolvemos el mismo mensaje tanto si el email
+    existe como si no (para no revelar qué cuentas están registradas).
+    """
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        from django.contrib.auth.tokens import PasswordResetTokenGenerator
+        from django.utils.http import urlsafe_base64_encode
+        from django.utils.encoding import force_bytes
+        from django.core.mail import send_mail
+        from django.conf import settings
+
+        email = request.data.get('email', '').strip()
+        if not email:
+            return Response(
+                {'error': 'El campo email es obligatorio.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Buscamos el usuario — si no existe, devolvemos el mismo mensaje
+        # para no revelar qué emails están registrados
+        try:
+            user = CustomUser.objects.get(email=email)
+        except CustomUser.DoesNotExist:
+            return Response({
+                'detail': 'Si existe una cuenta con ese email, recibirás el enlace en breve.'
+            })
+
+        # Generamos el token y el UID codificado (sistema nativo de Django)
+        token_gen = PasswordResetTokenGenerator()
+        token = token_gen.make_token(user)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+
+        # Construimos el enlace que irá en el email
+        frontend_url = getattr(settings, 'FRONTEND_URL', 'http://localhost:5173')
+        enlace = f'{frontend_url}/reset-password/{uid}/{token}/'
+
+        # Enviamos el email (consola en dev, SMTP en producción)
+        send_mail(
+            subject='Recupera tu contraseña — Genio Academy 🔑',
+            message=(
+                f'Hola {user.username},\n\n'
+                f'Recibimos una solicitud para resetear tu contraseña en Genio Academy.\n\n'
+                f'Haz clic en el siguiente enlace para crear una nueva (válido durante 1 hora):\n'
+                f'{enlace}\n\n'
+                f'Si no fuiste tú quien lo solicitó, ignora este mensaje.\n\n'
+                f'— El equipo de Genio Academy'
+            ),
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[email],
+            fail_silently=False,
+        )
+
+        return Response({
+            'detail': 'Si existe una cuenta con ese email, recibirás el enlace en breve.'
+        })
+
+
+class ResetPasswordView(APIView):
+    """
+    Endpoint POST: /api/users/reset-password/
+
+    Recibe el UID y token generados por forgot_password, valida que
+    sean correctos y actualiza la contraseña del usuario.
+
+    Body: { uid, token, password }
+    """
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        from django.contrib.auth.tokens import PasswordResetTokenGenerator
+        from django.utils.http import urlsafe_base64_decode
+        from django.utils.encoding import force_str
+
+        uid = request.data.get('uid', '')
+        token = request.data.get('token', '')
+        nueva_pass = request.data.get('password', '')
+
+        if not all([uid, token, nueva_pass]):
+            return Response(
+                {'error': 'Faltan datos: uid, token y password son obligatorios.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if len(nueva_pass) < 8:
+            return Response(
+                {'error': 'La contraseña debe tener al menos 8 caracteres.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Decodificamos el UID para obtener el usuario
+        try:
+            user_pk = force_str(urlsafe_base64_decode(uid))
+            user = CustomUser.objects.get(pk=user_pk)
+        except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
+            return Response(
+                {'error': 'El enlace de recuperación no es válido.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Verificamos que el token sea correcto y no haya expirado (Django: 1 hora por defecto)
+        token_gen = PasswordResetTokenGenerator()
+        if not token_gen.check_token(user, token):
+            return Response(
+                {'error': 'El enlace ha expirado o ya fue usado. Solicita uno nuevo.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Actualizamos la contraseña de forma segura (hashed)
+        user.set_password(nueva_pass)
+        user.save()
+
+        return Response({'detail': 'Contraseña actualizada correctamente. Ya puedes iniciar sesión.'})
+
