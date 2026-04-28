@@ -196,8 +196,8 @@ export default function Home() {
                                 <Compass className="w-6 h-6 text-purple-400" />
                             </div>
                             <div>
-                                <h4 className="text-white font-bold text-sm uppercase tracking-wide">Seguimiento Constante</h4>
-                                <p className="text-slate-500 text-xs mt-1">Manténgase siempre informado sobre el progreso real y los hitos alcanzados por su hijo en cada cápsula.</p>
+                                <h4 className="text-white font-bold text-sm uppercase tracking-wide">Progreso Gamificado</h4>
+                                <p className="text-slate-500 text-xs mt-1">Fomentamos la autonomía de su hijo. Nuestro sistema de experiencia y niveles le motiva a superarse día a día.</p>
                             </div>
                         </div>
                         <div className="flex gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">

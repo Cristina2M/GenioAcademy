@@ -229,10 +229,10 @@ export default function Mission() {
             <div className="collapse collapse-plus bg-slate-900/60 border border-white/5 shadow-lg group">
               <input type="radio" name="my-accordion-3" />
               <div className="collapse-title text-xl font-medium text-white group-hover:text-cyan-300 transition-colors">
-                ¿Cómo sé si realmente están progresando y no perdiendo el tiempo?
+                ¿Cómo garantiza la plataforma que el alumno progrese y no pierda el tiempo?
               </div>
               <div className="collapse-content text-slate-400 text-lg leading-relaxed">
-                <p>En el plan central y premium, como tutor principal, tendrás acceso a un <strong className="text-pink-300">panel con métricas claras de tiempo útil, cursos completados y logros alcanzados</strong>. En caso de suscripción superior, podrás agendar videollamadas con un profesor humano para resolver los desafíos más complejos y asegurar que el progreso sea constante.</p>
+                <p>Nuestra plataforma fomenta la responsabilidad y la autonomía. El alumno dispone de su propio <strong className="text-pink-300">dashboard con estadísticas visuales, experiencia RPG, niveles y un recuento de cursos completados</strong>. Al ver su progreso gamificado de forma tan clara, la motivación nace del propio estudiante. Además, en las suscripciones superiores, puede realizar consultas a profesores humanos para resolver cualquier atasco y asegurar el avance.</p>
               </div>
             </div>
 
