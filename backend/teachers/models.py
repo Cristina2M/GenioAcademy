@@ -97,6 +97,10 @@ class Consultation(models.Model):
     meeting_link = models.CharField(max_length=500, blank=True, verbose_name='Enlace de Videollamada (Jitsi)')
     is_live_call = models.BooleanField(default=False, verbose_name='Videollamada en Curso')
 
+    # Notificación: False = el alumno aún no ha visto la respuesta del profesor.
+    # Se pone a True cuando el alumno accede a su bandeja de consultas.
+    is_read = models.BooleanField(default=True, verbose_name='Leído por el alumno')
+
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Creado el')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Actualizado el')
 

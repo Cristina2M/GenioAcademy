@@ -224,6 +224,7 @@ class ConsultationViewSet(viewsets.ModelViewSet):
         # Actualizamos el estado: la consulta queda cerrada y marcada como respondida
         consulta.status = 'ANSWERED'      # Estado: "Respondida"
         consulta.is_live_call = False     # Ya no hay llamada activa
+        consulta.is_read = False          # El alumno aún no ha visto esta respuesta
         # Guardamos la respuesta escrita que el profe haya dejado (opcional)
         consulta.response = request.data.get('response', 'Videollamada finalizada con éxito.')
         consulta.save()
@@ -253,6 +254,7 @@ class ConsultationViewSet(viewsets.ModelViewSet):
         consulta.status = 'ANSWERED'
         consulta.response = respuesta_texto
         consulta.is_live_call = False
+        consulta.is_read = False  # El alumno aún no ha visto esta respuesta
         consulta.save()
 
         return Response(self.get_serializer(consulta).data)
@@ -287,3 +289,44 @@ class ConsultationViewSet(viewsets.ModelViewSet):
 
         # No hay llamada activa: devolvemos objeto vacío
         return Response({})
+
+    @action(detail=False, methods=['get'])
+    def unread_count(self, request):
+        """
+        Endpoint GET: /api/teachers/consultations/unread_count/
+
+        El alumno llama a este endpoint para saber cuántas respuestas
+        del profesor aún no ha leído. El resultado se usa para mostrar
+        el badge rojo en el Navbar.
+        """
+        usuario = request.user
+
+        # Solo para alumnos (los profes no reciben notificaciones de este tipo)
+        if hasattr(usuario, 'professor_profile'):
+            return Response({'unread': 0})
+
+        # Contamos las consultas de este alumno con respuesta no leída
+        cuenta = Consultation.objects.filter(
+            student=usuario,
+            is_read=False
+        ).count()
+
+        return Response({'unread': cuenta})
+
+    @action(detail=False, methods=['post'])
+    def mark_as_read(self, request):
+        """
+        Endpoint POST: /api/teachers/consultations/mark_as_read/
+
+        El alumno llama a este endpoint cuando entra a ver sus consultas.
+        Marca todas sus notificaciones como leídas de golpe.
+        """
+        usuario = request.user
+
+        if hasattr(usuario, 'professor_profile'):
+            return Response({'detail': 'Solo para alumnos.'})
+
+        # Marcamos todas las consultas no leídas de este alumno como leídas
+        Consultation.objects.filter(student=usuario, is_read=False).update(is_read=True)
+
+        return Response({'detail': 'Notificaciones marcadas como leídas.'})

@@ -37,7 +37,7 @@ class ConsultationSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'student', 'student_name', 'professor', 'professor_name', 
             'course', 'course_title', 'message', 'response', 'status', 
-            'meeting_link', 'created_at', 'updated_at'
+            'meeting_link', 'is_live_call', 'is_read', 'created_at', 'updated_at'
         ]
         # Hacemos que la validación no exija student/professor aquí, 
         # porque los inyectamos en perform_create de la vista.
@@ -45,4 +45,4 @@ class ConsultationSerializer(serializers.ModelSerializer):
             'student': {'required': False},
             'professor': {'required': False}
         }
-        read_only_fields = ['status', 'created_at', 'updated_at']
+        read_only_fields = ['status', 'is_read', 'created_at', 'updated_at']
