@@ -152,14 +152,31 @@ class ConsultationViewSet(viewsets.ModelViewSet):
         alumnos = UsuarioPersonalizado.objects.filter(id__in=ids_alumnos, subscription_level=3)
 
         # Construimos la respuesta con los datos que necesita el frontend
-        datos = [{
-            "id": alumno.id,
-            "username": alumno.username,
-            "level": alumno.current_student_level,   # Nivel RPG del alumno
-            "xp": alumno.experience_points,          # XP acumulado
-            "lives": alumno.lives_count,             # Planetas (vidas) actuales
-            "avatar": alumno.selected_avatar         # Búho seleccionado
-        } for alumno in alumnos]
+        datos = []
+        for alumno in alumnos:
+            # Cursos completados del alumno en las materias de ESTE profesor
+            cursos_completados = list(CourseCompletion.objects.filter(
+                user=alumno,
+                course__knowledge_level__category__in=materias
+            ).values_list('course__title', flat=True))
+
+            # Número de consultas previas con este profesor
+            num_consultas = Consultation.objects.filter(
+                student=alumno,
+                professor=perfil_profesor
+            ).count()
+
+            datos.append({
+                "id": alumno.id,
+                "username": alumno.username,
+                "level": alumno.current_student_level,
+                "xp": alumno.experience_points,
+                "lives": alumno.lives_count,
+                "avatar": alumno.selected_avatar,
+                "streak": alumno.streak_count,
+                "cursos_completados": cursos_completados,
+                "num_consultas": num_consultas,
+            })
 
         return Response(datos)
 
