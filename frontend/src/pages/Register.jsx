@@ -118,7 +118,7 @@ export default function Register() {
                 <ul className="space-y-4 mb-8 text-left w-full text-sm">
                   <li className="flex items-start gap-3 text-white font-medium border-b border-white/5 pb-2"><CheckCircle2 className="w-5 h-5 text-pink-500 flex-shrink-0" /> Todo lo incluido en Base</li>
                   <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> Ejercicios Interactivos Ilimitados</li>
-                  <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> Asistente de IA (Búho Genio) 24/7</li>
+                  <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> Asistente de IA (Astro) 24/7</li>
                 </ul>
                 <div className="mt-auto w-full">
                   <button className="btn bg-gradient-to-r from-pink-500 to-purple-600 group-hover:from-pink-400 group-hover:to-purple-500 text-white border-none w-full rounded-2xl shadow-[0_0_20px_rgba(236,72,153,0.4)] text-lg">

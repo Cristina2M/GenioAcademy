@@ -95,7 +95,7 @@ export default function Mission() {
               <div className="lg:text-right">
                 <h3 className="text-3xl font-bold text-white mb-4">Sinergia entre IA y Talento Humano</h3>
                 <p className="text-slate-300 text-lg leading-relaxed">
-                  Genio Academy combina lo mejor de ambos mundos. Nuestro <strong>Búho Genio</strong> ofrece asistencia inmediata 24/7 para resolver dudas al instante, mientras que nuestros <strong>profesores expertos</strong> guían el proceso mediante tutorías personalizadas, asegurando que ningún alumno se pierda en el vacío.
+                  Genio Academy combina lo mejor de ambos mundos. Nuestro <strong>Asistente Astro</strong> ofrece asistencia inmediata 24/7 para resolver dudas al instante, mientras que nuestros <strong>profesores expertos</strong> guían el proceso mediante tutorías personalizadas, asegurando que ningún alumno se pierda en el vacío.
                 </p>
               </div>
             </div>
@@ -171,7 +171,7 @@ export default function Mission() {
               <ul className="space-y-4 mb-8 text-left w-full text-base">
                 <li className="flex items-start gap-3 text-white font-medium border-b border-white/5 pb-2"><CheckCircle2 className="w-5 h-5 text-pink-500 flex-shrink-0" /> Todo lo incluido en "Órbita Base"</li>
                 <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> <strong>Ejercicios Interactivos Ilimitados</strong> (Sin barreras) que se corrigen automáticamente.</li>
-                <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> <strong>Asistente Educativo de IA "Búho Genio" 24/7</strong> para resolver dudas en cualquier tarea.</li>
+                <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> <strong>Asistente Educativo de IA "Astro" 24/7</strong> para resolver dudas en cualquier tarea.</li>
                 <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> Panel de métricas estelar integrado para supervisar el progreso y los logros en tiempo real.</li>
               </ul>
               <div className="mt-auto w-full">
@@ -222,7 +222,7 @@ export default function Mission() {
                 ¿Qué pasa si mi hijo necesita ayuda urgente con los deberes a altas horas?
               </div>
               <div className="collapse-content text-slate-400 text-lg leading-relaxed">
-                <p>Nuestra Inteligencia Artificial "Búho Genio" (incluída en el plan Velocidad Luz) está capacitada con el temario oficial de Secundaria. Es capaz de guiar a tu hijo paso a paso hacia la respuesta <strong className="text-pink-300">sin darle jamás el resultado masticado o directo.</strong> Es el equivalente a tener un tutor muy paciente al lado del escritorio, disponible a las 2 de la madrugada para que nunca se rinda y se acueste habiendo resuelto sus deberes.</p>
+                <p>Nuestra Inteligencia Artificial "Astro" (incluída en el plan Velocidad Luz) está capacitada con el temario oficial de Secundaria. Es capaz de guiar a tu hijo paso a paso hacia la respuesta <strong className="text-pink-300">sin darle jamás el resultado masticado o directo.</strong> Es el equivalente a tener un tutor muy paciente al lado del escritorio, disponible a las 2 de la madrugada para que nunca se rinda y se acueste habiendo resuelto sus deberes.</p>
               </div>
             </div>
 

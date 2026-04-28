@@ -94,7 +94,7 @@ export default function Home() {
                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] border border-white/5 rounded-full animate-[spin_60s_linear_infinite]"></div>
                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[85%] border border-cyan-500/10 rounded-full animate-[spin_40s_linear_infinite_reverse]"></div>
                
-               <img src={buhoMascot} alt="Búho Genio Mascot" className="relative z-10 w-96 lg:w-[32rem] drop-shadow-[0_20px_50px_rgba(0,0,0,0.6)] animate-[bounce_5s_ease-in-out_infinite]" />
+               <img src={buhoMascot} alt="Astro Mascot" className="relative z-10 w-96 lg:w-[32rem] drop-shadow-[0_20px_50px_rgba(0,0,0,0.6)] animate-[bounce_5s_ease-in-out_infinite]" />
                
             </div>
 
@@ -132,7 +132,7 @@ export default function Home() {
                   <BrainCircuit className="w-8 h-8"/>
                 </div>
                 <h3 className="card-title text-3xl font-bold text-white mb-4">Guía Inteligente</h3>
-                <p className="text-slate-400 text-lg leading-relaxed">¿Dudas a media noche? El Búho Genio está siempre alerta. Nuestra IA está entrenada para ofrecer pistas socráticas y guiar a tus hijos hacia la solución, asegurando que el aprendizaje sea real y profundo.</p>
+                <p className="text-slate-400 text-lg leading-relaxed">¿Dudas a media noche? Astro está siempre alerta. Nuestra IA está entrenada para ofrecer pistas socráticas y guiar a tus hijos hacia la solución, asegurando que el aprendizaje sea real y profundo.</p>
               </div>
             </div>
 

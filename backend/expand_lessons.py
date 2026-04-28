@@ -86,7 +86,7 @@ def expand_lessons():
         <span class="text-3xl">🦉</span>
     </div>
     <div>
-      <h4 class="text-lg font-bold text-pink-300 mb-1">El Consejo del Búho Genio</h4>
+      <h4 class="text-lg font-bold text-pink-300 mb-1">El Consejo de Astro</h4>
       <p class="text-slate-300 text-sm leading-relaxed">
         Nunca intentes memorizar la teoría en crudo. La memoria se evapora en el vacío del espacio, pero la <strong>lógica y la comprensión</strong> perduran para siempre. Si fallas en el ejercicio de abajo, analiza el porqué, ajusta tus coordenadas y vuelve a intentarlo.
       </p>
