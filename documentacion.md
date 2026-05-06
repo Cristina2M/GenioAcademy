@@ -1344,6 +1344,8 @@ La idea básica es:
 - Para cada funcionalidad nueva se crea una rama `feature/nombre-de-la-funcionalidad`.
 - Cuando se acerca una entrega importante, se crea una rama `release/` para hacer los últimos ajustes.
 
+![Árbol de Commits y Ramas de Git](capturas_doc/arbolGit.jpg)
+
 ### Ramas principales
 
 | Rama | Para qué sirve |
