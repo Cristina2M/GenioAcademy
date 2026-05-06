@@ -113,6 +113,9 @@ Esta sección explica cómo está organizada la base de datos del proyecto. El M
 
 Para diseñarlo usé el panel de administración de Django junto con el ORM (Object-Relational Mapper), que es la herramienta que tiene Django para definir los modelos de datos en Python y que él mismo se encarga de traducirlos a tablas SQL en PostgreSQL.
 
+
+![Diagrama de la Base de Datos](capturas_doc/baseDeDatos.jpg)
+
 ### ¿Qué es una clave primaria (PK) y una clave foránea (FK)?
 
 Antes de ver el diagrama, una aclaración rápida para quien no esté familiarizado:
@@ -758,6 +761,8 @@ La plataforma está disponible en dos formas:
 
 > **Nota importante sobre el tiempo de carga inicial:** Si accedes por primera vez o llevas un rato sin entrar, el backend puede tardar hasta 40 segundos en responder la primera petición. Esto es normal y se debe a que el servidor gratuito de Render se "duerme" cuando no hay actividad. Después de esa primera carga, todo funciona con normalidad.
 
+![Página Principal](capturas_doc/paginaPrincipal.jpg)
+
 ### 7.2 Registro de una cuenta nueva
 
 1. Accede a la página principal. Verás la landing page con el diseño espacial de Genio Academy.
@@ -781,6 +786,8 @@ La plataforma está disponible en dos formas:
 ### 7.4 El Dashboard (Panel de Control del Alumno)
 
 El Dashboard es tu centro de mando personal. Desde aquí puedes ver tu progreso, elegir tu próxima misión y personalizar tu perfil.
+
+![Panel del Estudiante](capturas_doc/panelEstudiante.jpg)
 
 **¿Qué hay en el Dashboard?**
 
@@ -813,6 +820,8 @@ En la sección "Catálogo Estelar" (`/courses`) verás todas las asignaturas dis
 
 Al hacer clic en un curso disponible entrarás al reproductor. La pantalla se divide en dos columnas:
 
+![Reproductor de Curso y Simulador](capturas_doc/simuladorCurso.jpg)
+
 **Columna izquierda (contenido principal, 70% del ancho):**
 
 - **Vídeo de teoría:** Un reproductor con el vídeo de introducción a la lección actual.
@@ -830,6 +839,8 @@ Al hacer clic en un curso disponible entrarás al reproductor. La pantalla se di
 ### 7.7 El Tutor Astro (Inteligencia Artificial)
 
 Astro es el asistente de IA de Genio Academy. Está disponible en el sidebar del reproductor de cursos para alumnos con Plan 2 o superior.
+
+![Chat interactivo con Astro](capturas_doc/chatAstro.jpg)
 
 **Cómo usarlo:**
 1. Escribe tu duda en el campo de texto del panel de Astro.
