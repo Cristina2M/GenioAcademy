@@ -1,9 +1,9 @@
-# 📚 DOCUMENTACIÓN TÉCNICA Y DE USUARIO
+﻿# 📚 DOCUMENTACIÓN TÉCNICA Y DE USUARIO
 ## Genio Academy — Plataforma de Aprendizaje Incremental para la ESO
 
 > **Repositorio GitHub:** https://github.com/Cristina2M/GenioAcademy  
-> **Versión del documento:** Hito VII completado + Fase 21 (Despliegue Final)  
-> **Fecha:** Abril 2026
+> **Versión del documento:** Hito VII completado + Fase 21 (Despliegue Final) + Expansión de Contenido  
+> **Fecha:** Mayo 2026
 
 ---
 
@@ -463,7 +463,8 @@ GenioAcademy/
 │   │   ├── models.py            → Category, KnowledgeLevel, Course, Lesson, Exercise, CourseCompletion, UserCourseProgress
 │   │   ├── serializers.py       → Serialización del árbol de contenido
 │   │   ├── views.py             → API de cursos con bloqueo por nivel RPG
-│   │   └── urls.py              → Rutas: /categories/, /courses/{id}/, /complete/...
+│   │   ├── urls.py              → Rutas: /categories/, /courses/{id}/, /complete/...
+│   │   └── management/commands/seed_exercises.py → Comando Django: puebla lecciones y ejercicios en cursos existentes
 │   │
 │   ├── ai/                      → App del tutor Astro
 │   │   ├── views.py             → Proxy seguro hacia la API de Groq
@@ -635,17 +636,20 @@ cd GenioAcademy
 docker-compose up --build
 
 # 4. En otra terminal: ejecutar migraciones y crear el admin
-docker-compose exec backend python manage.py migrate
-docker-compose exec backend python manage.py createsuperuser
+docker exec genioacademy-backend-1 python manage.py migrate
+docker exec genioacademy-backend-1 python manage.py createsuperuser
 
 # 5. Sembrar la base de datos (categorías y cursos básicos)
-docker-compose exec backend python manage.py shell < seed_data.py
+docker exec genioacademy-backend-1 python manage.py shell < seed_data.py
 
-# 6. Sembrar el claustro de profesores
-docker-compose exec backend python manage.py shell < seed_teachers.py
+# 6. Sembrar lecciones y ejercicios en los cursos
+docker exec genioacademy-backend-1 python manage.py seed_exercises
 
-# 7. Crear cuentas de prueba para profesores
-docker-compose exec backend python manage.py shell < seed_teacher_users.py
+# 7. Sembrar el claustro de profesores
+docker exec genioacademy-backend-1 python manage.py shell < seed_teachers.py
+
+# 8. Crear cuentas de prueba para profesores
+docker exec genioacademy-backend-1 python manage.py shell < seed_teacher_users.py
 ```
 
 **Accesos locales:**
@@ -660,7 +664,7 @@ docker-compose exec backend python manage.py shell < seed_teacher_users.py
 | Alumno Plan 1 | `al1` | `alumno123` | Teoría y quiz básico |
 | Alumno Plan 2 | `al2` | `alumno123` | + Tutor Astro IA |
 | Alumno Plan 3 | `al3` | `alumno123` | + Minijuegos y tutorías |
-| Profesor | `profe_mate` | `Genio2026!` | Panel docente |
+| Profesor (Matemáticas) | `aris.thorne` | `Genio2026!` | Panel docente |
 | Superusuario | `admin` | (definido al crear) | Admin Django completo |
 
 ### 8.3 Comandos Útiles
@@ -672,11 +676,12 @@ docker-compose up --build       # Reconstruir las imágenes y levantar
 docker-compose down             # Parar los contenedores
 docker-compose down -v          # Parar y borrar volúmenes (borra la BD)
 
-# Backend
-docker-compose exec backend python manage.py migrate        # Aplicar migraciones
-docker-compose exec backend python manage.py makemigrations # Crear nuevas migraciones
-docker-compose exec backend python manage.py shell          # Consola Python con el ORM de Django
-docker-compose exec backend python manage.py createsuperuser
+# Gestión de contenedores
+docker exec genioacademy-backend-1 python manage.py migrate        # Aplicar migraciones
+docker exec genioacademy-backend-1 python manage.py makemigrations # Crear nuevas migraciones
+docker exec genioacademy-backend-1 python manage.py shell          # Consola Python con el ORM de Django
+docker exec genioacademy-backend-1 python manage.py createsuperuser
+docker exec genioacademy-backend-1 python manage.py seed_exercises # Poblar lecciones y ejercicios en cursos existentes
 
 # Frontend
 docker-compose exec frontend npm install nombre-libreria     # Instalar librería (con contenedor activo)
@@ -881,8 +886,14 @@ Esto elimina la necesidad de configurar manualmente variables de entorno en Verc
 | `feature/microcursos` | Expansión del catálogo con más cursos por materia via `seed_data.py` |
 | `feature/contenido-formateado` | Soporte de HTML enriquecido en lecciones y ejercicios |
 | `feature/docs` | Documentación técnica y actualizaciones del README |
+| `feature/docs2` | Segunda actualización de documentación y estabilización de producción |
+
+#### Ramas de Release adicionales
+| Rama | Propósito |
+|------|-----------|
+| `release/contenido` | Expansión del catálogo educativo: seed de ejercicios, mejora de teoría y estabilización final (rama actual) |
 
 ---
 
-_Documentación generada y revisada en Abril 2026. Última actualización: Fase 21 — Despliegue en producción completado._
+_Documentación generada y revisada en Mayo 2026. Última actualización: Expansión de contenido educativo en `release/contenido`._
 _Proyecto desarrollado como Trabajo de Fin de Ciclo — DAW._

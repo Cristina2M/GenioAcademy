@@ -212,6 +212,7 @@ La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina 
 | `release/hito-3` | Cierre del Hito III: frontend completo y conectado al backend |
 | `release/revision2` | Segunda ronda de revisión general antes de los hitos de gamificación |
 | `release/correccionesGenerales` | Limpieza de código, españolización de variables y comentarios exhaustivos |
+| `release/contenido` | Expansión de contenido educativo, seed de ejercicios y estabilización final (rama actual) |
 
 ### Ramas de Feature (desarrollo de funcionalidades)
 | Rama | Funcionalidad desarrollada |
@@ -221,7 +222,7 @@ La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina 
 | `feature/IA` | Integración de Astro: tutor socrático con Groq + LLaMA + `AIChatPanel.jsx` |
 | `feature/vidas` | Sistema Roguelike: 3 planetas, regeneración pasiva y 5 minijuegos de recuperación |
 | `feature/tutorias` | Sistema de tutorías: modal de solicitud, videollamadas Jitsi y notificaciones en tiempo real |
-| `feature/docs2` | Actualización de documentación de producción y estabilización final (rama actual) |
+| `feature/docs2` | Actualización de documentación de producción y estabilización final |
 
 ---
 
