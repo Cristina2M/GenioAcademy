@@ -20,91 +20,90 @@
 9. [Plan de Negocio](#9-plan-de-negocio)
 10. [Diapositivas para la Exposición (Guión)](#10-diapositivas-para-la-exposición-guión)
 11. [Enlace al Código en GitHub](#11-enlace-al-código-en-github)
+12. [Entornos de Ejecución y Producción](#12-entornos-de-ejecución-y-producción)
+13. [Dificultades Encontradas](#13-dificultades-encontradas)
 
 ---
 
 ## 1. Anteproyecto Actualizado
 
-### Descripcion General
+### Descripción General
 
-**Genio Academy** es una plataforma web de academia online que he desarrollado como Proyecto de Fin de Ciclo del Grado Superior de Desarrollo de Aplicaciones Web. La idea surgio porque llevo tiempo pensando que las plataformas de estudio online que existen (tipo Udemy, Khan Academy, etc.) no estan pensadas para estudiantes de secundaria en Espana. El problema es que o son demasiado generalistas, o estan en ingles, o no tienen en cuenta que cada alumno aprende a un ritmo distinto.
+**Genio Academy** es una plataforma web de academia online que he desarrollado como Proyecto de Fin de Ciclo del Grado Superior de Desarrollo de Aplicaciones Web. La idea surgió porque llevo tiempo pensando que las plataformas de estudio online que existen (tipo Udemy o Khan Academy) no están del todo adaptadas a las necesidades reales de los estudiantes de secundaria en España. El principal problema es que o son demasiado generalistas, o están en inglés, o no tienen en cuenta que cada alumno aprende a un ritmo distinto.
 
-La idea principal de Genio Academy es que el contenido esta organizado por **niveles de conocimiento progresivos** dentro de cada asignatura, en lugar de seguir el esquema tipico de "curso 1 ESO, curso 2 ESO...". Esto significa que un alumno que va muy bien en mates puede avanzar mas rapido en esa asignatura aunque en lengua vaya al ritmo normal. Es aprendizaje adaptativo, basicamente.
+El concepto central de Genio Academy es que el contenido está organizado por **niveles de conocimiento progresivos** dentro de cada asignatura, en lugar de seguir el esquema típico de cursos cerrados por edad. Esto significa que un alumno que domina bien las matemáticas puede avanzar más rápido en esa materia, aunque en lengua vaya al ritmo normal. Se trata, básicamente, de un aprendizaje adaptativo.
 
-Para que fuera mas atractivo y los alumnos quisieran usarlo de verdad (no solo porque se lo manden), decidi incorporar mecanicas de videojuego. Si me pongo a pensar en lo que me motiva a mi a usar apps como Duolingo o a jugar a cualquier RPG, es la sensacion de que estas progresando, subiendo de nivel, desbloqueando cosas. Eso lo queria replicar aqui pero aplicado al estudio de verdad.
+Para que la plataforma resultara más atractiva y los alumnos quisieran usarla de verdad (no solo porque se lo manden en clase), decidí incorporar mecánicas propias de los videojuegos. Si analizo lo que motiva a los usuarios a utilizar aplicaciones como Duolingo o cualquier juego RPG, es esa sensación de estar progresando, de subir de nivel y desbloquear logros. He querido replicar esa experiencia pero aplicada al estudio real.
 
 La plataforma se apoya en **cuatro pilares** principales:
 
-- Gamificacion tipo RPG: Los alumnos acumulan puntos de experiencia (XP) completando cursos. Cuando acumulan suficiente XP suben de nivel, y cada nivel nuevo desbloquea mas contenido y nuevos avatares de buho para personalizar su perfil.
+- **Gamificación tipo RPG:** Los alumnos acumulan puntos de experiencia (XP) completando cursos. Cuando reúnen suficiente XP suben de nivel, y cada nuevo nivel desbloquea más contenido y nuevos avatares de búho para personalizar su perfil.
 
-- Tutor IA (Astro): Hay un asistente de inteligencia artificial integrado en el reproductor de cursos llamado Astro. Lo interesante es que no te da las respuestas directamente: usa el **metodo socratico**, que consiste en hacerte preguntas para que tu mismo llegues a la solucion. Lo implemente usando la API de Groq con el modelo llama-3.1-8b-instant, que es muy rapido. Astro ademas sabe en que leccion estas en cada momento, asi que sus respuestas son contextuales.
+- **Tutor IA (Astro):** Hay un asistente de inteligencia artificial integrado en el reproductor de cursos llamado Astro. Lo interesante es que no da las respuestas directamente, sino que utiliza el **método socrático**: hace preguntas para que el propio alumno llegue a la solución. Lo he implementado conectando el backend con la API de Groq y el modelo `llama-3.1-8b-instant`. Astro además sabe en qué lección estás en cada momento, por lo que sus respuestas siempre tienen contexto.
 
-- Mecanica Roguelike de Vidas: Los alumnos tienen 3 planetas (vidas). Si fallan una evaluacion pierden un planeta. Esto es importante porque hace que el sistema de evaluacion tenga consecuencias reales, no que sea algo que puedes repetir sin limite hasta acertar por casualidad. Los planetas se recuperan solos con el tiempo, y si tienes el plan mas alto puedes recuperar uno inmediatamente jugando a un minijuego educativo.
+- **Mecánica Roguelike de Vidas:** Los alumnos disponen de 3 "planetas" (vidas). Si fallan una evaluación, pierden un planeta. Esto es importante porque otorga consecuencias reales a las pruebas, evitando que se puedan repetir sin límite hasta acertar por casualidad. Los planetas se recuperan solos con el tiempo, o, si se tiene el plan superior, superando minijuegos educativos.
 
-- Claustro Interactivo: Es el catalogo de profesores de la plataforma. Los usuarios del plan premium pueden solicitar tutorias directas con un profesor especializado y conectarse mediante videollamada integrada (sin salir de la web).
+- **Claustro Interactivo:** Es el catálogo de profesores especializados. Los usuarios del plan premium pueden solicitar tutorías directas y conectarse mediante videollamada integrada (sin salir de la plataforma).
 
-Desde el punto de vista tecnico, el proyecto esta desarrollado con una arquitectura de **microservicios** usando Docker: el frontend es una SPA en React + Vite, el backend es una API REST en Django, y la base de datos es PostgreSQL. Esta desplegado en produccion en dos servicios en la nube: Vercel para el frontend y Render para el backend.
+Técnicamente, el proyecto está estructurado como una arquitectura de **microservicios** usando Docker: el frontend es una SPA en React + Vite, el backend es una API REST en Django, y la base de datos es PostgreSQL. Actualmente está desplegado en producción utilizando servicios en la nube como Vercel y Render.
 
 ### Estado de desarrollo por Hitos
 
-El proyecto lo organice en hitos (etapas). Aqui un resumen de en que estado esta cada uno:
+El proyecto se planificó en distintas etapas o hitos. Aquí un resumen del estado de cada uno:
 
-| Hito | Descripcion | Estado |
+| Hito | Descripción | Estado |
 |------|-------------|--------|
-| I | Fundamentos e Infraestructura DevOps (Docker, estructura inicial) | Completado |
-| II | Backend y Base de Datos (Django, PostgreSQL, API REST) | Completado |
-| III | Frontend y Experiencia de Usuario (React, diseno, paginas) | Completado |
-| IV | Integracion de Inteligencia Artificial (tutor Astro con Groq) | Completado |
-| V | Sistema de Vidas y Minijuegos Roguelike | Completado |
-| VI | Catalogo de Profesores y Videoconferencias Jitsi | Completado |
-| VII | Correcciones generales, contenido educativo y documentacion | Completado |
-| + | Despliegue en produccion y estabilizacion final | Completado |
+| I | Fundamentos e Infraestructura DevOps (Docker, estructura inicial) | ✅ Completado |
+| II | Backend y Base de Datos (Django, PostgreSQL, API REST) | ✅ Completado |
+| III | Frontend y Experiencia de Usuario (React, diseño, páginas) | ✅ Completado |
+| IV | Integración de Inteligencia Artificial (tutor Astro con Groq) | ✅ Completado |
+| V | Sistema de Vidas y Minijuegos Roguelike | ✅ Completado |
+| VI | Catálogo de Profesores y Videoconferencias Jitsi | ✅ Completado |
+| VII | Correcciones generales, contenido educativo y documentación | ✅ Completado |
+| **+** | **Despliegue en producción y estabilización final** | ✅ Completado |
 
 ---
 
-## 2. Objetivos y Justificacion del Proyecto
+## 2. Objetivos y Justificación del Proyecto
 
-### Problematica Detectada
+### Problemática Detectada
 
-Antes de empezar a programar nada estuve dandole vueltas al problema que queria resolver, porque si no tienes claro el "para que" es muy facil acabar haciendo algo que no sirve de mucho.
+Antes de empezar a programar, dediqué un tiempo a analizar el problema que quería resolver. Si no tienes claro el "para qué", es fácil terminar desarrollando algo que técnicamente funcione pero que nadie necesite.
 
-El problema principal que vi es que **los alumnos de la ESO no tienen una herramienta digital de estudio que sea realmente para ellos**. Lo que hay actualmente en el mercado tiene varias carencias:
+El problema principal que observé es que **los alumnos de la ESO carecen de una herramienta digital de estudio que esté pensada genuinamente para ellos**. Lo que hay actualmente en el mercado presenta varias carencias:
 
-1. **Falta de motivacion real:** Plataformas como Moodle (la que usan muchos institutos) son funcionales pero bastante aburridas. No hay nada que te incentive a seguir estudiando mas alla de la obligacion. Y si no hay motivacion intrinseca, la gente no las usa.
+1. **Falta de motivación real:** Plataformas como Moodle son funcionales pero visual y mecánicamente aburridas. No hay nada que incentive a seguir estudiando más allá de la mera obligación impuesta por el profesor.
+2. **Ritmo único para todos:** En un aula convencional todos avanzan al mismo ritmo. Si tienes dificultades en un área, el grupo sigue adelante; si sobresales, te estancas esperando al resto.
+3. **Falta de refuerzo inmediato:** Cuando un estudiante tiene una duda estudiando por la tarde en casa, no siempre hay alguien que le pueda ayudar al momento.
+4. **Ausencia de consecuencias pedagógicas:** En muchas plataformas puedes hacer el mismo test infinidad de veces hasta acertar todas las opciones por ensayo y error. Esto hace que el proceso de evaluación no se tome en serio.
 
-2. **Ritmo unico para todos:** En las aulas, todos los alumnos avanzan al mismo ritmo. Si eres bueno en matematicas pero tienes dificultades en historia, el sistema no se adapta a eso. Tienes que esperar al grupo en lo que se te da bien, y en lo que no llegas avanzas igual aunque no lo hayas asimilado bien.
+### Solución Propuesta
 
-3. **Falta de refuerzo inmediato:** Cuando un alumno tiene una duda a las 10 de la noche estudiando para un examen, no hay nadie que le pueda ayudar. El tutor no esta disponible 24 horas al dia.
+Genio Academy pretende dar respuesta a estas carencias mediante:
 
-4. **Ausencia de consecuencias pedagogicas:** En la mayoria de plataformas puedes hacer el mismo test infinitas veces hasta acertarlo. Eso hace que los alumnos no se tomen en serio el proceso de evaluacion.
+**Aprendizaje incremental personalizado:** El contenido se organiza por niveles de dificultad en cada materia. No puedes acceder al siguiente nivel hasta que demuestres que dominas el actual. Esto no es solo una restricción visual: lo gestiona el backend mediante comprobaciones, de forma que intentar acceder a un curso superior al nivel RPG actual devuelve un error `403 Forbidden`.
 
-### Solucion Propuesta
+**Gamificación con consecuencias reales:** He procurado que los elementos de juego no sean solo adornos cosméticos. Todo tiene una función:
+- Los **puntos de experiencia (XP)** acumulados te permiten subir de nivel. La fórmula que utilizo es: `XP necesarios = nivel_actual × 500`. Así, los primeros niveles son rápidos de superar para "enganchar" al estudiante, y luego el reto va creciendo.
+- Las **vidas (planetas)** aseguran que evaluar conocimientos tenga consecuencias.
+- El **avatar** representa visualmente el progreso, ya que los búhos más elaborados requieren haber alcanzado niveles altos.
 
-Genio Academy intenta dar respuesta a todos esos problemas:
+**Tutor inteligente accesible:** Astro está disponible 24/7 para ayudar con el temario. Su configuración prohíbe que dé respuestas directas; en su lugar, guía al alumno con pistas y preguntas, fomentando que sea él quien construya la respuesta.
 
-**Aprendizaje incremental personalizado:** El contenido se organiza por niveles de dificultad dentro de cada asignatura. No puedes acceder al siguiente nivel hasta que hayas demostrado que dominas el anterior. Esto lo gestiona el backend: si intentas acceder a un curso cuyo nivel supera tu nivel RPG actual, el servidor devuelve un error 403 Forbidden. Asi no es solo una restriccion visual en el frontend (que se podria saltear facilmente), sino que esta controlada a nivel de API.
+**Conectividad con profesores reales:** Para el apoyo que la IA no puede cubrir, el sistema incluye la opción de contactar con especialistas para tutorías por videollamada en vivo.
 
-**Gamificacion con consecuencias reales:** He intentado que los elementos de juego no sean solo decorativos. Cada cosa tiene una funcion:
-- Los **puntos de experiencia (XP)** que ganas al completar un curso van sumando hasta que subes de nivel. La formula que uso es: XP necesarios = nivel_actual x 500. Es decir, para pasar de nivel 1 a nivel 2 necesitas 500 XP, de nivel 2 a 3 necesitas 1000 XP, y asi progresivamente. Esto hace que los primeros niveles se suban facil para enganchar, y luego el reto crece.
-- Las **vidas (planetas)** hacen que evaluar tenga consecuencias. Fallar no es gratis.
-- El **avatar** representa visualmente tu progreso real, porque los buhos mas chulos se desbloquean en niveles altos.
+### Objetivos Específicos
 
-**Tutor inteligente accesible:** Astro esta disponible 24/7 para cualquier duda sobre el temario. Lo importante es que no da la respuesta directa (eso fomentaria la vagancia), sino que usa preguntas intermedias para guiar al alumno. Esto es el metodo socratico, que lo investigue un poco y basicamente es la forma en que Socrates ensenaba: en lugar de decirte la verdad, te hace preguntas para que la descubras tu mismo. La idea es que asi el conocimiento se asienta mejor.
+Los objetivos concretos que me marqué al inicio del proyecto fueron:
 
-**Conectividad con profesores reales:** Para los alumnos que necesitan atencion personalizada, el Plan 3 incluye un sistema de tutorias con videollamada en directo con un profesor especializado en la materia.
-
-### Objetivos Especificos
-
-Estos son los objetivos concretos que me marque al inicio del proyecto:
-
-- Desarrollar una plataforma web completa y funcional usando tecnologias modernas (React, Django, PostgreSQL, Docker).
-- Implementar un sistema de autenticacion seguro con JWT (JSON Web Tokens) que ademas incluya informacion de gamificacion del alumno.
-- Crear un motor de logica educativa que controle el acceso al contenido segun el nivel real del alumno, con validacion tanto en frontend como en backend.
-- Integrar un asistente de IA de forma segura, sin que la clave de API quede expuesta en el codigo del cliente.
-- Disenar un sistema de vidas (planetas) que tenga consecuencias reales sobre la experiencia del usuario.
-- Implementar tres planes de suscripcion con funcionalidades diferenciadas y acceso controlado por el backend.
-- Construir un catalogo de profesores con sistema de tutorias y videollamadas integradas.
-- Desplegar el proyecto en produccion con dominio propio y certificados SSL.
+- Desarrollar una plataforma web funcional y responsiva utilizando tecnologías modernas (React, Django, PostgreSQL, Docker).
+- Implementar un sistema de autenticación seguro con tokens JWT, que a la vez integren la información de gamificación del alumno para evitar consultas innecesarias a la base de datos.
+- Crear una lógica educativa robusta que controle el acceso al contenido según el nivel, con validación tanto en cliente como en servidor.
+- Integrar un asistente de inteligencia artificial de forma segura, canalizando todas las peticiones a través del backend para no exponer la clave de la API.
+- Diseñar un sistema de vidas (planetas) con penalizaciones y regeneración pasiva y activa (minijuegos).
+- Diferenciar funcionalidades mediante tres planes de suscripción gestionados desde el servidor.
+- Construir un catálogo de profesores con un flujo completo de solicitud y videollamada.
+- Desplegar el proyecto en producción con dominio propio y certificados de seguridad SSL.
 
 ---
 
@@ -1409,6 +1408,26 @@ Esto elimina la necesidad de configurar variables de entorno diferentes en Verce
 **Limitación conocida del tier gratuito de Render:** El servidor backend se "suspende" tras 15 minutos de inactividad. La primera petición tras un período de inactividad puede tardar hasta 40 segundos en responder. Esto se ha comunicado en el manual de usuario para gestionar expectativas. En un entorno de producción real se usaría un tier de pago que mantiene el servidor siempre activo.
 
 ---
+
+
+---
+
+## 13. Dificultades Encontradas
+
+A lo largo del desarrollo de este proyecto me he encontrado bastantes obstáculos que me han obligado a investigar y replantear algunas soluciones técnicas. Estas son las dificultades más destacadas que superé:
+
+**1. La integración de la Inteligencia Artificial (Astro)**
+Al principio, mi idea era utilizar **Ollama** para ejecutar un modelo de inteligencia artificial de forma local dentro de un contenedor Docker en mi ordenador. Quería que el proyecto fuera 100% independiente. Sin embargo, mi equipo no tenía la capacidad de procesamiento ni la memoria RAM necesarias. Tras configurar todo el entorno y lograr que funcionara, la latencia era inaceptable: a veces tenía que esperar hasta 20 minutos para que la IA respondiera a un simple "Hola". Fue una experiencia exasperante. La solución fue pivotar hacia un servicio en la nube que fuera extremadamente rápido, y por eso acabé utilizando la API de **Groq**. Es increíblemente veloz y me permitió lograr esa sensación de chat socrático en tiempo real sin quemar el ordenador.
+
+**2. Problemas con la base de datos en local**
+Configurar PostgreSQL dentro de Docker Compose me dio bastantes dolores de cabeza en los primeros hitos. Hubo conflictos con los volúmenes de persistencia de datos (a veces al borrar los contenedores o limpiar cachés perdía toda la información y tenía que volver a registrar usuarios y cargar los cursos a mano). Fue muy frustrante. Por eso acabé invirtiendo tiempo en crear los scripts en Python (`seed_data.py`, `seed_exercises.py`, etc.) para poder poblar la base de datos automáticamente en segundos cada vez que el entorno local se rompía o necesitaba reiniciarlo desde cero.
+
+**3. El despliegue a producción y los recursos gratuitos**
+Pasar del entorno seguro de "localhost" a que la plataforma esté accesible en internet fue probablemente el mayor reto de todos. Como no tenía presupuesto para servidores de pago, tuve que buscar la forma de encajar toda la arquitectura en las capas gratuitas (free tiers) de Vercel (para el frontend) y Render (para el backend y la base de datos). 
+
+El principal problema de esto es que los servidores gratuitos de Render se "suspenden" (entran en modo sleep) después de un rato sin tráfico para ahorrar recursos. Esto provocaba que, si alguien entraba a la web después de unas horas de inactividad, el backend tardara muchísimo en arrancar y la página del frontend diera error de "Servidor inaccesible". Para mitigarlo, optimicé todo lo que pude y añadí mensajes en la interfaz para que el usuario sepa que ese retraso inicial es normal. También tuve muchos problemas con la configuración de políticas CORS y variables de entorno para asegurar que el frontend desplegado en Vercel pudiera comunicarse correctamente con la API remota en Render, ya que al principio bloqueaba todas las peticiones.
+
+A pesar de la frustración que generaron estos bloqueos en su momento, pelearme con el despliegue es probablemente la parte del proyecto en la que más he aprendido sobre cómo se operan las aplicaciones reales en el mundo laboral.
 
 *Documentación técnica y de usuario del Proyecto de Fin de Ciclo — Grado Superior en Desarrollo de Aplicaciones Web.*
 *Última actualización: Mayo 2026.*
