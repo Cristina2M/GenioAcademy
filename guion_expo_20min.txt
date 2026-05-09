@@ -1,0 +1,241 @@
+GUION DE DEFENSA — GENIO ACADEMY (15-20 min)
+Grado Superior DAW · Cristina
+==========================================
+
+ESTRUCTURA GENERAL
+------------------
+[0:00–1:00]  Presentación (1 min)
+[1:00–3:30]  El problema y mi solución (2,5 min)
+[3:30–6:00]  Arquitectura técnica (2,5 min)
+[6:00–11:00] Demo en vivo (5 min)
+[11:00–14:00] Las 3 decisiones técnicas clave (3 min)
+[14:00–15:30] Dificultades reales y aprendizajes (1,5 min)
+[15:30–16:30] Roadmap y conclusión (1 min)
+[16:30–??]  Turno de preguntas
+
+
+==========================================
+DIAPOSITIVA 1 — PORTADA (0:00 – 1:00)
+==========================================
+
+"Buenos días. Me llamo Cristina y el proyecto que voy a presentar se llama
+Genio Academy. Es una plataforma de aprendizaje online para alumnos de la ESO
+que combina gamificación tipo RPG, un tutor de Inteligencia Artificial y la
+posibilidad de conectar con profesores reales por videollamada, todo dentro de
+la misma web."
+
+[Gesto hacia la pantalla] "La tenéis desplegada en producción en cristina2daw.es,
+así que durante la demo vais a ver el producto real funcionando, no un prototipo."
+
+
+==========================================
+DIAPOSITIVA 2 — EL PROBLEMA (1:00 – 2:15)
+==========================================
+
+"¿Por qué existe este proyecto? Porque todas las plataformas de estudio que
+hay ahora mismo tienen el mismo problema: son aburridas y no se adaptan al
+ritmo de cada alumno.
+
+Moodle es funcional pero no motiva a nadie a usarla de forma voluntaria.
+Khan Academy es excelente pero está en inglés y no está adaptada al currículo
+de la ESO española. Y en ninguna de ellas estudiar tiene consecuencias: puedes
+repetir el mismo test cuarenta veces hasta acertar al azar.
+
+Genio Academy parte de una premisa distinta: que aprender puede parecerse más
+a jugar a un videojuego RPG que a rellenar fichas."
+
+
+==========================================
+DIAPOSITIVA 3 — LA SOLUCIÓN: 4 PILARES (2:15 – 3:30)
+==========================================
+
+"La plataforma se sostiene en cuatro pilares:
+
+PRIMERO — Aprendizaje incremental. El contenido está bloqueado por niveles
+de conocimiento reales. No puedes saltar al siguiente nivel sin demostrar
+que dominas el anterior. Y esto no es solo visual: si un alumno intenta
+acceder directamente a un curso superior por la URL, el backend le responde
+con un 403 Forbidden. La restricción está en el servidor.
+
+SEGUNDO — Sistema de vidas Roguelike. El alumno tiene 3 planetas. Fallar una
+evaluación cuesta un planeta. Esto hace que las pruebas no sean algo que se
+pueda ignorar.
+
+TERCERO — Tutor Astro. Un asistente de IA disponible 24/7 que no da respuestas
+directas, sino que guía al alumno con preguntas. Es el método socrático
+aplicado a la IA.
+
+CUARTO — Claustro de profesores. Para cuando la IA no es suficiente, los
+alumnos del plan premium pueden solicitar una tutoría con un profesor real
+y conectarse por videollamada sin salir de la plataforma."
+
+
+==========================================
+DIAPOSITIVA 4 — ARQUITECTURA TÉCNICA (3:30 – 6:00)
+==========================================
+
+"Técnicamente, el proyecto es una arquitectura de microservicios en Docker.
+Tres contenedores que se orquestan con Docker Compose:
+
+  - Frontend: React 18 + Vite. Una SPA (Single Page Application).
+  - Backend: Python con Django y Django REST Framework. Una API REST.
+  - Base de datos: PostgreSQL.
+
+[Señalar diagrama si lo tenéis en la diapositiva]
+
+En producción, el frontend está en Vercel y el backend en Render, con el
+dominio cristina2daw.es para la web y api.cristina2daw.es para la API.
+
+La autenticación es con JWT, pero personalizado: el token no solo guarda el
+ID del usuario, sino también su nivel RPG, sus XP y su avatar. Esto evita
+consultas innecesarias a la base de datos cada vez que el alumno cambia de
+página.
+
+Ahora os enseño cómo funciona todo esto en la práctica."
+
+
+==========================================
+DEMO EN VIVO (6:00 – 11:00) — 5 minutos
+==========================================
+
+[ABRIR EL NAVEGADOR EN cristina2daw.es]
+
+--- PASO 1: Landing page (30 seg) ---
+"Esta es la página principal. Podéis ver la estética espacial que hemos
+llamado Dark Glassmorphism: fondos oscuros, efectos de desenfoque y
+animaciones de partículas."
+
+--- PASO 2: Registro y login (45 seg) ---
+"El registro me pide elegir un plan antes de crear la cuenta. Uso al3 /
+alumno123 para entrar directamente. Este alumno tiene el plan premium."
+
+[Hacer login con al3]
+
+--- PASO 3: Dashboard (1 min) ---
+"Este es el panel del alumno. Arriba tengo mi avatar de búho, mi nivel RPG
+actual y la barra de progreso de XP. Abajo, mis medallas de cursos completados
+y la galería de avatares, donde los que están bloqueados muestran el nivel
+que necesito para desbloquearlos."
+
+--- PASO 4: Catálogo y bloqueo (45 seg) ---
+"En el Catálogo Estelar veo todas las asignaturas. Los cursos con candado
+están bloqueados. Si intento entrar, el servidor me devuelve un error.
+No hay forma de saltárselo."
+
+--- PASO 5: CoursePlayer + Astro (1 min 30 seg) ---
+"Entro en un curso disponible. A la izquierda tengo la teoría y las pestañas
+del simulador. A la derecha el sidebar con las lecciones y el chat de Astro.
+Le hago una pregunta a Astro..."
+[Escribir: 'No entiendo el concepto de esta lección, ¿puedes ayudarme?']
+"Fijaos que Astro no da la respuesta directa. Hace preguntas para que yo
+llegue a ella. Eso es el método socrático."
+
+--- PASO 6: Panel de planetas (30 seg) ---
+"Aquí tengo mis planetas. Si fallara una pregunta, perdería uno y empezaría
+una cuenta atrás para recuperarlo. Con el plan premium, si llegara a cero,
+podría recuperar uno superando uno de los cinco minijuegos de rescate."
+
+
+==========================================
+DIAPOSITIVA 5 — 3 DECISIONES TÉCNICAS CLAVE (11:00 – 14:00)
+==========================================
+
+"Quiero destacar tres decisiones técnicas que me parecen importantes:
+
+PRIMERA — Regeneración de vidas sin Celery.
+La regeneración pasiva de planetas se podría haber resuelto con un sistema
+de colas de tareas en segundo plano, como Celery con Redis. Pero eso añade
+complejidad y más servicios que mantener. En su lugar, cuando el alumno
+consulta sus vidas, el servidor calcula al momento cuánto tiempo ha pasado
+desde que perdió el último planeta y cuántos debe haber recuperado. El
+resultado es exactamente el mismo, sin procesos en segundo plano.
+
+SEGUNDA — Zero-Config API.
+Para que el frontend funcione en local y en producción sin cambiar ninguna
+variable, implementé una lógica de autodetección: si el navegador está en
+'localhost', apunta al backend de Docker. Si está en 'cristina2daw.es',
+apunta automáticamente a la API de producción. Esto elimina errores manuales
+en cada despliegue.
+
+TERCERA — Proxy de IA en el backend.
+El alumno nunca habla directamente con Groq. El frontend manda la pregunta a
+mi propio backend, que añade las instrucciones de comportamiento de Astro y el
+contexto de la lección activa, y luego llama a Groq con mi clave de API. Así
+la clave nunca llega al navegador del alumno y Astro siempre sabe en qué
+lección está el alumno."
+
+
+==========================================
+DIAPOSITIVA 6 — DIFICULTADES REALES (14:00 – 15:30)
+==========================================
+
+"Voy a ser honesta con las dificultades que tuve, porque creo que es la parte
+más útil de una defensa.
+
+La más frustrante fue la IA. Mi plan original era usar Ollama para correr un
+modelo de lenguaje de forma local dentro de Docker. Conseguí que funcionara,
+pero tardaba hasta 20 minutos en responder a un 'Hola'. Mi ordenador no tenía
+capacidad para eso. La solución fue cambiar a Groq, que es increíblemente
+rápido porque tiene hardware especializado para inferencia de IA.
+
+La segunda fue el despliegue. Pasar de 'funciona en mi máquina' a 'funciona
+en internet con recursos gratuitos' fue más complicado de lo que esperaba.
+Los errores de CORS, las variables de entorno en Render, los dominios
+personalizados... cada paso tenía su propio problema.
+
+Pero es precisamente en esos problemas donde más aprendí."
+
+
+==========================================
+DIAPOSITIVA 7 — CONCLUSIÓN Y ROADMAP (15:30 – 16:30)
+==========================================
+
+"Para terminar: Genio Academy demuestra que es posible construir una
+plataforma educativa real, con IA, gamificación y videollamadas, usando
+las tecnologías que hemos aprendido en el ciclo DAW, y desplegada en internet
+con un coste operativo de menos de 35 euros al mes.
+
+Si siguiera desarrollándola, el siguiente paso sería una app móvil en React
+Native que reutilice la misma API, y un panel para centros educativos que
+permita a los profesores ver el progreso de toda la clase.
+
+Muchas gracias. Quedo disponible para cualquier pregunta o para mostrar
+cualquier parte del código o de la plataforma que os interese."
+
+
+==========================================
+NOTAS PARA EL TURNO DE PREGUNTAS
+==========================================
+
+Preguntas que probablemente hagan:
+
+- "¿Por qué Django y no Node.js para el backend?"
+  → Porque Django tiene un ORM muy potente y un panel de administración
+    incorporado que me ahorra tener que construir todo el CRUD de contenido
+    educativo desde cero. Además, la seguridad viene configurada por defecto.
+
+- "¿Cómo aseguras que el alumno no puede saltarse el bloqueo por nivel?"
+  → Doble validación: en el frontend el curso aparece con candado, y si alguien
+    intenta acceder por URL directa, el backend comprueba el nivel del JWT antes
+    de devolver los datos y responde con un 403.
+
+- "¿Qué es JWT y por qué lo usas?"
+  → JWT es un estándar para transmitir información de forma segura entre cliente
+    y servidor. Lo uso porque permite incluir datos del usuario en el propio
+    token, que está firmado criptográficamente. El frontend puede leer el nivel
+    y XP del alumno sin hacer una petición extra al servidor.
+
+- "¿Por qué no usas WebSockets para las notificaciones de videollamada?"
+  → Los WebSockets añaden complejidad de infraestructura y no son triviales de
+    desplegar en el tier gratuito de Render. El polling cada 30 segundos es
+    suficiente para este caso de uso y es mucho más sencillo de mantener.
+
+- "¿Qué es dangerouslySetInnerHTML y por qué lo usas?"
+  → Es una propiedad de React que inyecta HTML directamente en el DOM. Lo uso
+    para renderizar el contenido enriquecido de las lecciones. El riesgo de XSS
+    está mitigado porque ese contenido solo pueden crearlo los administradores
+    a través del panel de Django, no los usuarios.
+
+- "¿Cuánto cuesta mantenerlo?"
+  → Unos 15-35 euros al mes. Con solo 5 suscriptores del plan básico se cubren
+    los gastos operativos.
