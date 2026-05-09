@@ -114,7 +114,7 @@ Esta sección explica cómo está organizada la base de datos del proyecto. El M
 Para diseñarlo usé el panel de administración de Django junto con el ORM (Object-Relational Mapper), que es la herramienta que tiene Django para definir los modelos de datos en Python y que él mismo se encarga de traducirlos a tablas SQL en PostgreSQL.
 
 
-![Diagrama de la Base de Datos](capturas_doc/baseDeDatos.jpg)
+![Diagrama de la Base de Datos](capturas_doc/baseDeDatos.png)
 
 ### ¿Qué es una clave primaria (PK) y una clave foránea (FK)?
 
@@ -761,7 +761,7 @@ La plataforma está disponible en dos formas:
 
 > **Nota importante sobre el tiempo de carga inicial:** Si accedes por primera vez o llevas un rato sin entrar, el backend puede tardar hasta 40 segundos en responder la primera petición. Esto es normal y se debe a que el servidor gratuito de Render se "duerme" cuando no hay actividad. Después de esa primera carga, todo funciona con normalidad.
 
-![Página Principal](capturas_doc/paginaPrincipal.jpg)
+![Página Principal](capturas_doc/paginaPrincipal.png)
 
 ### 7.2 Registro de una cuenta nueva
 
@@ -787,7 +787,7 @@ La plataforma está disponible en dos formas:
 
 El Dashboard es tu centro de mando personal. Desde aquí puedes ver tu progreso, elegir tu próxima misión y personalizar tu perfil.
 
-![Panel del Estudiante](capturas_doc/panelEstudiante.jpg)
+![Panel del Estudiante](capturas_doc/panelEstudiante.png)
 
 **¿Qué hay en el Dashboard?**
 
@@ -820,7 +820,7 @@ En la sección "Catálogo Estelar" (`/courses`) verás todas las asignaturas dis
 
 Al hacer clic en un curso disponible entrarás al reproductor. La pantalla se divide en dos columnas:
 
-![Reproductor de Curso y Simulador](capturas_doc/simuladorCurso.jpg)
+![Reproductor de Curso y Simulador](capturas_doc/simuladorCurso.png)
 
 **Columna izquierda (contenido principal, 70% del ancho):**
 
@@ -840,7 +840,7 @@ Al hacer clic en un curso disponible entrarás al reproductor. La pantalla se di
 
 Astro es el asistente de IA de Genio Academy. Está disponible en el sidebar del reproductor de cursos para alumnos con Plan 2 o superior.
 
-![Chat interactivo con Astro](capturas_doc/chatAstro.jpg)
+![Chat interactivo con Astro](capturas_doc/chatAstro.png)
 
 **Cómo usarlo:**
 1. Escribe tu duda en el campo de texto del panel de Astro.
@@ -1344,7 +1344,7 @@ La idea básica es:
 - Para cada funcionalidad nueva se crea una rama `feature/nombre-de-la-funcionalidad`.
 - Cuando se acerca una entrega importante, se crea una rama `release/` para hacer los últimos ajustes.
 
-![Árbol de Commits y Ramas de Git](capturas_doc/arbolGit.jpg)
+![Árbol de Commits y Ramas de Git](capturas_doc/arbolGit.png)
 
 ### Ramas principales
 
