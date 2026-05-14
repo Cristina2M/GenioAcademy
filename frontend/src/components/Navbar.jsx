@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useContext, useState, useEffect } from 'react';
 import AuthContext from '../context/AuthContext';
 import LanguageContext from '../context/LanguageContext';
@@ -16,6 +16,7 @@ import axiosInstance from '../api/axios';
 export default function Navbar() {
   const { user, logoutUser } = useContext(AuthContext);
   const { language, toggleLanguage } = useContext(LanguageContext);
+  const location = useLocation();
 
   // Número de respuestas del profesor que el alumno aún no ha leído
   const [unreadCount, setUnreadCount] = useState(0);
@@ -61,7 +62,19 @@ export default function Navbar() {
       </div>
 
       {/* Links de navegación desktop */}
-      <div className="flex-none hidden lg:flex">
+      <div className="flex-none hidden lg:flex items-center">
+        {/* Selector de idioma (solo en landing pages) */}
+        {['/', '/mission', '/claustro'].includes(location.pathname) && (
+          <button 
+            onClick={toggleLanguage}
+            className="btn btn-ghost btn-sm rounded-full mr-2 text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 flex items-center gap-1"
+            title="Change Language"
+          >
+            <Globe className="w-4 h-4" />
+            <span className="text-xs font-bold uppercase">{language}</span>
+          </button>
+        )}
+        
         <ul className="menu menu-horizontal px-1 font-medium text-slate-200">
           {!user && (
             <>
@@ -76,16 +89,6 @@ export default function Navbar() {
           )}
         </ul>
       </div>
-
-      {/* Selector de idioma */}
-      <button 
-        onClick={toggleLanguage}
-        className="btn btn-ghost btn-circle ml-2 text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 hidden sm:flex"
-        title="Change Language"
-      >
-        <Globe className="w-5 h-5" />
-        <span className="text-xs font-bold uppercase">{language}</span>
-      </button>
 
       {/* Zona derecha: badge + avatar + menú */}
       <div className="flex-none ml-2 flex items-center gap-1 sm:gap-2">
@@ -166,6 +169,19 @@ export default function Navbar() {
             className="menu menu-sm dropdown-content bg-slate-900 border border-white/10 rounded-box z-10 mt-3 w-52 p-2 shadow-2xl"
             onClick={() => { const elem = document.activeElement; if (elem) elem.blur(); }}
           >
+            {/* Selector de idioma móvil (solo en landing pages) */}
+            {['/', '/mission', '/claustro'].includes(location.pathname) && (
+              <li className="mb-2 border-b border-white/10 pb-2">
+                <button 
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleLanguage(); }} 
+                  className="text-cyan-400 font-bold flex items-center justify-between"
+                >
+                  <span className="flex items-center gap-2"><Globe className="w-4 h-4"/> Idioma / Language</span>
+                  <span className="badge badge-sm badge-info uppercase">{language}</span>
+                </button>
+              </li>
+            )}
+            
             {!user ? (
               <>
                 <li><Link to="/">Inicio</Link></li>
