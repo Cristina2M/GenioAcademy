@@ -1314,15 +1314,15 @@ Este es el guión que tengo pensado para la presentación del proyecto ante el t
 
 Recorrido de demo: Registro → Dashboard → Catálogo Estelar → CoursePlayer (teoría + quiz) → Chat con Astro → Panel de Planetas → Solicitar Tutoría → ActiveCallBanner → Videollamada Jitsi
 
-### Diapositiva 5 — Arquitectura Técnica
+### Diapositiva 5 — Arquitectura y Decisiones Técnicas
 
-¿Cómo está construido por dentro?
+¿Cómo está construido por dentro y por qué?
 
-- **3 microservicios en Docker:** Frontend (React + Vite en puerto 5173), Backend (Django + DRF en puerto 8000), Base de Datos (PostgreSQL en puerto 5432).
-- **API REST** con autenticación JWT enriquecida con datos de gamificación (nivel, XP, avatar, plan).
-- **IA en la nube** con Groq + LLaMA 3.1 8B: sin saturar el servidor propio y con latencia inferior a 1 segundo.
-- El backend actúa como proxy seguro: el navegador del alumno nunca conoce la API key de Groq.
-- **Desplegado en producción:** Frontend en Vercel (cristina2daw.es) + Backend en Render (api.cristina2daw.es).
+- **3 microservicios en Docker:** Frontend (React + Vite), Backend (Django + DRF), Base de Datos (PostgreSQL).
+- **API REST** con autenticación JWT enriquecida con datos de gamificación.
+- **Pivotaje de Despliegue:** De la idea inicial de usar Kubernetes, se pasó a un modelo **PaaS (Vercel y Render)** para optimizar costes y complejidad en esta fase de MVP.
+- **Pivotaje de IA:** De Ollama local a **Groq Cloud (LLaMA 3.1 8B)**. El hardware local generaba cuellos de botella; Groq nos permite una inferencia LPU casi instantánea. El backend actúa como proxy seguro ocultando la API Key.
+- **UI/UX e Internacionalización:** Diseño *Glassmorphism* moderno, con un sistema de traducción condicional (i18n) para hacer la plataforma accesible de forma profesional bilingüe.
 
 ### Diapositiva 6 — Modelo de Datos
 
@@ -1359,19 +1359,21 @@ Decisiones de diseño clave: JWT enriquecido con datos RPG, regeneración de vid
 - **Break-even:** Solo 5 suscriptores del Plan 1 cubren los costes operativos.
 - **Modelo escalable:** de B2C (familias individuales) a B2B (licencias para centros educativos).
 
-### Diapositiva 10 — Conclusión y Hoja de Ruta
+### Diapositiva 10 — Conclusión, Metodología y Hoja de Ruta
 
 **"Estudiar es el único juego en el que ganar de verdad cambia tu vida."**
 
 **Lo que he completado en este proyecto:**
 - 7 hitos de desarrollo: infraestructura, backend, frontend, IA, vidas/minijuegos, claustro y calidad.
-- Despliegue en producción con dominio propio y SSL: https://cristina2daw.es
+- Despliegue en producción real: https://cristina2daw.es
+
+**Decisiones de Metodología (Agile):**
+- He aplicado el concepto de **Producto Mínimo Viable (MVP)**. Funcionalidades como validación por email, generación de PDFs o integración con n8n se movieron al backlog conscientemente. El objetivo era asegurar que el "core" innovador (IA en tiempo real, videollamadas y gamificación) fuera impecable.
 
 **Lo que vendría después (si siguiera desarrollándolo):**
+- Desarrollo de las funciones del backlog (PDFs de notas, email).
 - Contenido educativo completo de todas las asignaturas de la ESO.
-- Modo competitivo con tablas de clasificación por nivel y asignatura.
 - App móvil nativa con React Native reutilizando la misma API.
-- Panel B2B para centros educativos con informes de progreso por clase.
 
 ---
 
