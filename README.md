@@ -4,6 +4,8 @@ Genio Academy es una plataforma de academia online diseñada específicamente pa
 
 La plataforma incluye un sistema de **gamificación RPG** (XP, niveles, vidas Roguelike), **minijuegos educativos** de recuperación, un **tutor virtual socrático con IA** (Groq / LLaMA), un **claustro interactivo** de profesores y **videollamadas de tutoría en directo** via Jitsi Meet.
 
+> 📺 **Presentación oficial (Tribunal):** [Ver Diapositivas en Canva](https://canva.link/76zised6tl9vdk2)
+
 > ⚠️ **Nota importante para desarrolladores:** El proyecto usa Docker con una base de datos PostgreSQL independiente. Los scripts de Django (`manage.py migrate`, etc.) deben ejecutarse **dentro del contenedor activo** mediante `docker exec genioacademy-backend-1 python manage.py <comando>` y NO con `docker-compose exec` si el archivo `.env` no está presente en el host.
 
 ---
