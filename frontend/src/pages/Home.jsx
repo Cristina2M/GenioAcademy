@@ -3,11 +3,13 @@ import { Link, Navigate } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
 import axiosInstance from '../api/axios';
 import AuthContext from '../context/AuthContext';
+import LanguageContext from '../context/LanguageContext';
 import buhoMascot from '../assets/img/stikers/buho1.png';
 import ProfessorCard from '../components/ProfessorCard';
 
 export default function Home() {
   const { user } = useContext(AuthContext);
+  const { language } = useContext(LanguageContext);
   const [featuredProfs, setFeaturedProfs] = useState([]);
 
   // Si el usuario ya está logueado, le redirigimos a su panel base automáticamente
@@ -40,25 +42,38 @@ export default function Home() {
               
               {/* Etiqueta flotante */}
               <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-slate-900/80 border border-cyan-500/30 text-cyan-300 font-semibold mb-8 shadow-[0_0_20px_rgba(34,211,238,0.2)] backdrop-blur-md animate-[bounce_4s_infinite]">
-                <Star className="w-5 h-5 text-amber-400" /> La nueva era de la Educación Secundaria
+                <Star className="w-5 h-5 text-amber-400" /> {language === 'es' ? 'La nueva era de la Educación Secundaria' : 'The New Era of High School Education'}
               </div>
               
                 <h1 className="text-6xl md:text-8xl font-black tracking-tight text-white mb-6 leading-[1.1] drop-shadow-lg">
-                El universo del saber a tu <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 drop-shadow-[0_0_20px_rgba(236,72,153,0.3)]">propio ritmo</span>
+                  {language === 'es' ? 'El universo del saber a tu ' : 'The universe of knowledge at your '}
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 drop-shadow-[0_0_20px_rgba(236,72,153,0.3)]">
+                    {language === 'es' ? 'propio ritmo' : 'own pace'}
+                  </span>
                 </h1>
                 
                 <p className="py-2 text-2xl text-slate-300/90 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
-                  Genio Academy revoluciona tu aprendizaje estructurando el currículo escolar en 
-                  <strong className="text-cyan-300 font-bold mx-2">cápsulas estelares</strong>. 
-                  Domina cada tema y despega hacia el éxito académico.
+                  {language === 'es' ? (
+                    <>
+                      Genio Academy revoluciona tu aprendizaje estructurando el currículo escolar en 
+                      <strong className="text-cyan-300 font-bold mx-2">cápsulas estelares</strong>. 
+                      Domina cada tema y despega hacia el éxito académico.
+                    </>
+                  ) : (
+                    <>
+                      Genio Academy revolutionizes your learning by structuring the school curriculum into 
+                      <strong className="text-cyan-300 font-bold mx-2">stellar capsules</strong>. 
+                      Master each topic and blast off to academic success.
+                    </>
+                  )}
                 </p>
               
               <div className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start">
                 <Link to="/courses" className="btn border-none bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-900 btn-lg shadow-[0_0_30px_rgba(34,211,238,0.4)] rounded-2xl px-8 font-extrabold text-lg hover:-translate-y-1 transition-transform">
-                  Ver todos los Cursos <ArrowRight className="ml-2 w-6 h-6"/>
+                  {language === 'es' ? 'Ver todos los Cursos' : 'View all Courses'} <ArrowRight className="ml-2 w-6 h-6"/>
                 </Link>
                 <Link to="/mission" className="btn bg-slate-900/60 backdrop-blur-md border border-slate-600 text-white hover:bg-slate-800 hover:border-pink-500/50 btn-lg rounded-2xl px-8 text-lg hover:-translate-y-1 transition-all">
-                  Cómo ayudamos a tu hijo
+                  {language === 'es' ? 'Cómo ayudamos a tu hijo' : 'How we help your child'}
                 </Link>
               </div>
 

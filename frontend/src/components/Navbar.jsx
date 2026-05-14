@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useContext, useState, useEffect } from 'react';
 import AuthContext from '../context/AuthContext';
-import { LogOut, User as UserIcon, Bell } from 'lucide-react';
+import LanguageContext from '../context/LanguageContext';
+import { LogOut, User as UserIcon, Bell, Globe } from 'lucide-react';
 import logoPrincipal from '../assets/img/logo.png';
 import { getStudentAvatar } from '../utils/avatarUtils';
 import axiosInstance from '../api/axios';
@@ -14,6 +15,7 @@ import axiosInstance from '../api/axios';
 
 export default function Navbar() {
   const { user, logoutUser } = useContext(AuthContext);
+  const { language, toggleLanguage } = useContext(LanguageContext);
 
   // Número de respuestas del profesor que el alumno aún no ha leído
   const [unreadCount, setUnreadCount] = useState(0);
@@ -75,8 +77,18 @@ export default function Navbar() {
         </ul>
       </div>
 
+      {/* Selector de idioma */}
+      <button 
+        onClick={toggleLanguage}
+        className="btn btn-ghost btn-circle ml-2 text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 hidden sm:flex"
+        title="Change Language"
+      >
+        <Globe className="w-5 h-5" />
+        <span className="text-xs font-bold uppercase">{language}</span>
+      </button>
+
       {/* Zona derecha: badge + avatar + menú */}
-      <div className="flex-none ml-4 flex items-center gap-1 sm:gap-2">
+      <div className="flex-none ml-2 flex items-center gap-1 sm:gap-2">
         {user ? (
           <div className="flex items-center gap-2">
             {/* Nombre y nivel del usuario */}
