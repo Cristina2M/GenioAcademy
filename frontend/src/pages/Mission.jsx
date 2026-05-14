@@ -1,8 +1,12 @@
 import { Rocket, Target, Users, BookOpen, ShieldCheck, Brain, ArrowRight, Star, CheckCircle2, HelpCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import buhoMascot from '../assets/img/stikers/buho5.png'; // Cambiamos el buho para variar
+import { useContext } from 'react';
+import LanguageContext from '../context/LanguageContext';
+import buhoMascot from '../assets/img/stikers/buho5.png';
 
 export default function Mission() {
+  const { language } = useContext(LanguageContext);
+
   return (
     <div className="min-h-screen relative pt-16 pb-32">
       {/* Fondos Decorativos */}
@@ -15,13 +19,15 @@ export default function Mission() {
         {/* Cabecera para Padres */}
         <div className="text-center mb-24 lg:w-4/5 mx-auto">
           <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-slate-800/80 border border-purple-500/30 text-purple-300 font-semibold mb-8 shadow-[0_0_15px_rgba(168,85,247,0.2)]">
-            <Star className="w-5 h-5 text-amber-400" /> Para Padres, Madres y Tutores Inconformistas
+            <Star className="w-5 h-5 text-amber-400" /> {language === 'es' ? 'Para Padres, Madres y Tutores Inconformistas' : 'For Nonconformist Parents and Guardians'}
           </span>
           <h1 className="text-5xl md:text-7xl font-black tracking-tight text-white drop-shadow-md mb-8 leading-tight">
-            El futuro de tus hijos no cabe en un aula <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">tradicional</span>
+            {language === 'es' ? 'El futuro de tus hijos no cabe en un aula ' : 'Your children\'s future does not fit in a '}<span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">{language === 'es' ? 'tradicional' : 'traditional classroom'}</span>
           </h1>
           <p className="text-xl md:text-2xl text-slate-300 leading-relaxed font-light">
-            Genio Academy es la primera plataforma online para alumnos de Educación Secundaria (ESO) diseñada para romper las limitaciones del modelo clásico. Aquí, el temario se adapta al estudiante, y no al revés.
+            {language === 'es' 
+              ? 'Genio Academy es la primera plataforma online para alumnos de Educación Secundaria (ESO) diseñada para romper las limitaciones del modelo clásico. Aquí, el temario se adapta al estudiante, y no al revés.'
+              : 'Genio Academy is the first online platform for High School students designed to break the limitations of the classic model. Here, the syllabus adapts to the student, and not the other way around.'}
           </p>
         </div>
 
@@ -29,20 +35,20 @@ export default function Mission() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
           <div className="bg-slate-900/40 backdrop-blur-xl border border-red-500/20 rounded-3xl p-8 md:p-10 shadow-lg relative overflow-hidden group">
             <h3 className="text-2xl font-bold text-red-400 mb-6 flex items-center gap-3">
-              <span className="w-8 h-1 bg-red-400 rounded-full"></span> El Problema Actual
+              <span className="w-8 h-1 bg-red-400 rounded-full"></span> {language === 'es' ? 'El Problema Actual' : 'The Current Problem'}
             </h3>
             <ul className="space-y-5 text-slate-300 text-lg">
               <li className="flex gap-4 items-start">
                 <span className="text-red-400 mt-1">❌</span> 
-                <span><strong>El ritmo es inamovible:</strong> El profesor avanza para 30 alumnos al mismo tiempo. Si no lo entiendes, te quedas atrás irremediablemente.</span>
+                <span><strong>{language === 'es' ? 'El ritmo es inamovible:' : 'The pace is unmovable:'}</strong> {language === 'es' ? 'El profesor avanza para 30 alumnos al mismo tiempo. Si no lo entiendes, te quedas atrás irremediablemente.' : 'The teacher advances for 30 students at the same time. If you don\'t understand, you are left behind hopelessly.'}</span>
               </li>
               <li className="flex gap-4 items-start">
                 <span className="text-red-400 mt-1">❌</span> 
-                <span><strong>La bola de nieve de las lagunas:</strong> Las matemáticas son secuenciales. No entender el nivel básico hace imposible aprobar el nivel avanzado.</span>
+                <span><strong>{language === 'es' ? 'La bola de nieve de las lagunas:' : 'The snowball of knowledge gaps:'}</strong> {language === 'es' ? 'Las matemáticas son secuenciales. No entender el nivel básico hace imposible aprobar el nivel avanzado.' : 'Math is sequential. Not understanding the basic level makes it impossible to pass the advanced level.'}</span>
               </li>
               <li className="flex gap-4 items-start">
                 <span className="text-red-400 mt-1">❌</span> 
-                <span><strong>Penalización social:</strong> Los errores se marcan en rojo frente a todos. Esto anula la confianza y genera fobia a intentar resolver problemas difíciles.</span>
+                <span><strong>{language === 'es' ? 'Penalización social:' : 'Social penalization:'}</strong> {language === 'es' ? 'Los errores se marcan en rojo frente a todos. Esto anula la confianza y genera fobia a intentar resolver problemas difíciles.' : 'Errors are marked in red in front of everyone. This kills confidence and generates a phobia of trying to solve difficult problems.'}</span>
               </li>
             </ul>
           </div>
@@ -50,20 +56,20 @@ export default function Mission() {
           <div className="bg-slate-900/40 backdrop-blur-xl border border-cyan-500/30 rounded-3xl p-8 md:p-10 shadow-[0_0_30px_rgba(34,211,238,0.1)] relative overflow-hidden group">
             <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-cyan-600/20 rounded-full blur-3xl group-hover:bg-cyan-500/30 transition-colors"></div>
             <h3 className="text-2xl font-bold text-cyan-400 mb-6 flex items-center gap-3 relative z-10">
-              <span className="w-8 h-1 bg-cyan-400 rounded-full"></span> La Galaxia "Genio"
+              <span className="w-8 h-1 bg-cyan-400 rounded-full"></span> {language === 'es' ? 'La Galaxia "Genio"' : 'The "Genio" Galaxy'}
             </h3>
             <ul className="space-y-5 text-slate-300 text-lg relative z-10">
               <li className="flex gap-4 items-start">
                 <span className="text-cyan-400 mt-1 text-2xl">✅</span> 
-                <span><strong>Aprendizaje a tu ritmo:</strong> Como un "Netflix". Tu hijo consume, repasa y avanza en los conceptos al ritmo que su cerebro dicta, sin estrés de calendario.</span>
+                <span><strong>{language === 'es' ? 'Aprendizaje a tu ritmo:' : 'Learning at your pace:'}</strong> {language === 'es' ? 'Como un "Netflix". Tu hijo consume, repasa y avanza en los conceptos al ritmo que su cerebro dicta, sin estrés de calendario.' : 'Like a "Netflix". Your child consumes, reviews and advances concepts at the pace their brain dictates, without calendar stress.'}</span>
               </li>
               <li className="flex gap-4 items-start">
                 <span className="text-cyan-400 mt-1 text-2xl">✅</span> 
-                <span><strong>Microclases focalizadas:</strong> Compras habilidades, no cursos anuales. Solucionamos la laguna exacta que necesita para sacar adelante sus exámenes de instituto hoy mismo.</span>
+                <span><strong>{language === 'es' ? 'Microclases focalizadas:' : 'Focused micro-classes:'}</strong> {language === 'es' ? 'Compras habilidades, no cursos anuales. Solucionamos la laguna exacta que necesita para sacar adelante sus exámenes de instituto hoy mismo.' : 'You buy skills, not annual courses. We solve the exact gap they need to pass their school exams today.'}</span>
               </li>
               <li className="flex gap-4 items-start">
                 <span className="text-cyan-400 mt-1 text-2xl">✅</span> 
-                <span><strong>El error como herramienta:</strong> Nuestra IA y nuestro entorno premian el intento constante. Fracasar no baja la nota en un examen público, sube la experiencia en un juego mental privado.</span>
+                <span><strong>{language === 'es' ? 'El error como herramienta:' : 'Error as a tool:'}</strong> {language === 'es' ? 'Nuestra IA y nuestro entorno premian el intento constante. Fracasar no baja la nota en un examen público, sube la experiencia en un juego mental privado.' : 'Our AI and our environment reward constant attempts. Failing doesn\'t lower a grade in a public exam, it raises experience in a private mental game.'}</span>
               </li>
             </ul>
           </div>
@@ -71,7 +77,7 @@ export default function Mission() {
 
         {/* Profundizamos en el Método */}
         <div className="mb-32">
-          <h2 className="text-4xl md:text-5xl font-bold text-center text-white mb-20 drop-shadow-sm">Nuestra Metodología en 3 Pilares</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-center text-white mb-20 drop-shadow-sm">{language === 'es' ? 'Nuestra Metodología en 3 Pilares' : 'Our Methodology in 3 Pillars'}</h2>
           
           <div className="space-y-12">
             {/* Pilar 1 */}
@@ -80,9 +86,11 @@ export default function Mission() {
                 <Target className="w-16 h-16 text-pink-400" />
               </div>
               <div>
-                <h3 className="text-3xl font-bold text-white mb-4">Aprendizaje Modular y Eficiente</h3>
+                <h3 className="text-3xl font-bold text-white mb-4">{language === 'es' ? 'Aprendizaje Modular y Eficiente' : 'Modular and Efficient Learning'}</h3>
                 <p className="text-slate-300 text-lg leading-relaxed">
-                  Ya no es necesario navegar por cursos infinitos. Si tu hijo domina la geometría pero se estanca con las fracciones, <strong>optimizamos su tiempo</strong> centrándonos solo en lo que necesita. Nuestras cápsulas estelares permiten un avance quirúrgico, logrando resultados visibles en tiempo récord.
+                  {language === 'es' 
+                    ? 'Ya no es necesario navegar por cursos infinitos. Si tu hijo domina la geometría pero se estanca con las fracciones, optimizamos su tiempo centrándonos solo en lo que necesita. Nuestras cápsulas estelares permiten un avance quirúrgico, logrando resultados visibles en tiempo récord.'
+                    : 'It is no longer necessary to navigate endless courses. If your child masters geometry but gets stuck with fractions, we optimize their time by focusing only on what they need. Our stellar capsules allow surgical advancement, achieving visible results in record time.'}
                 </p>
               </div>
             </div>
@@ -93,9 +101,11 @@ export default function Mission() {
                 <Brain className="w-16 h-16 text-purple-400" />
               </div>
               <div className="lg:text-right">
-                <h3 className="text-3xl font-bold text-white mb-4">Sinergia entre IA y Talento Humano</h3>
+                <h3 className="text-3xl font-bold text-white mb-4">{language === 'es' ? 'Sinergia entre IA y Talento Humano' : 'Synergy between AI and Human Talent'}</h3>
                 <p className="text-slate-300 text-lg leading-relaxed">
-                  Genio Academy combina lo mejor de ambos mundos. Nuestro <strong>Asistente Astro</strong> ofrece asistencia inmediata 24/7 para resolver dudas al instante, mientras que nuestros <strong>profesores expertos</strong> guían el proceso mediante tutorías personalizadas, asegurando que ningún alumno se pierda en el vacío.
+                  {language === 'es'
+                    ? 'Genio Academy combina lo mejor de ambos mundos. Nuestro Asistente Astro ofrece asistencia inmediata 24/7 para resolver dudas al instante, mientras que nuestros profesores expertos guían el proceso mediante tutorías personalizadas, asegurando que ningún alumno se pierda en el vacío.'
+                    : 'Genio Academy combines the best of both worlds. Our Astro Assistant offers immediate 24/7 assistance to resolve doubts instantly, while our expert teachers guide the process through personalized tutoring, ensuring no student gets lost in the void.'}
                 </p>
               </div>
             </div>
@@ -106,9 +116,11 @@ export default function Mission() {
                 <ShieldCheck className="w-16 h-16 text-cyan-400" />
               </div>
               <div>
-                <h3 className="text-3xl font-bold text-white mb-4">Un Entorno Seguro para el Error</h3>
+                <h3 className="text-3xl font-bold text-white mb-4">{language === 'es' ? 'Un Entorno Seguro para el Error' : 'A Safe Environment for Failure'}</h3>
                 <p className="text-slate-300 text-lg leading-relaxed">
-                  Eliminamos el miedo al fallo. En nuestra academia, equivocarse es parte del viaje espacial. Fomentamos la experimentación privada y constante, donde cada error se convierte en una pista para el éxito, transformando la frustración en la chispa necesaria para aprender.
+                  {language === 'es'
+                    ? 'Eliminamos el miedo al fallo. En nuestra academia, equivocarse es parte del viaje espacial. Fomentamos la experimentación privada y constante, donde cada error se convierte en una pista para el éxito, transformando la frustración en la chispa necesaria para aprender.'
+                    : 'We eliminate the fear of failure. In our academy, making mistakes is part of the space journey. We encourage private and constant experimentation, where every mistake becomes a clue for success, transforming frustration into the necessary spark to learn.'}
                 </p>
               </div>
             </div>
@@ -118,9 +130,11 @@ export default function Mission() {
         {/* Planes de Misión (Pricing) */}
         <div className="mb-32">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Misiones adaptadas a cada familia</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">{language === 'es' ? 'Misiones adaptadas a cada familia' : 'Missions tailored to every family'}</h2>
             <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-              No importa si necesitas un pequeño apoyo puntual, o requieres una inmersión completa para aprobar un trimestre crítico. Tenemos un billete preparado en nuestra nave nodriza.
+              {language === 'es'
+                ? 'No importa si necesitas un pequeño apoyo puntual, o requieres una inmersión completa para aprobar un trimestre crítico. Tenemos un billete preparado en nuestra nave nodriza.'
+                : 'It doesn\'t matter if you need a little timely support, or require full immersion to pass a critical term. We have a ticket ready in our mothership.'}
             </p>
           </div>
 
@@ -129,19 +143,19 @@ export default function Mission() {
             {/* Nivel 1 - Órbita Base */}
             <div className="bg-slate-900/40 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 hover:-translate-y-2 transition-transform duration-300 flex flex-col items-center text-center max-w-md mx-auto lg:max-w-none w-full">
               <BookOpen className="w-12 h-12 text-slate-400 mb-6" />
-              <h3 className="text-2xl font-bold text-white mb-2">Órbita Base</h3>
-              <p className="text-slate-400 mb-6 min-h-[50px]">El acceso perfecto para mentes autodidactas que solo necesitan los materiales.</p>
+              <h3 className="text-2xl font-bold text-white mb-2">{language === 'es' ? 'Órbita Base' : 'Base Orbit'}</h3>
+              <p className="text-slate-400 mb-6 min-h-[50px]">{language === 'es' ? 'El acceso perfecto para mentes autodidactas que solo necesitan los materiales.' : 'The perfect access for self-taught minds who just need the materials.'}</p>
               <div className="text-4xl font-black text-white mb-8 border-b border-white/10 pb-6 w-full">
-                6,99€<span className="text-sm font-normal text-slate-500 block mt-2">/mes</span>
+                6,99€<span className="text-sm font-normal text-slate-500 block mt-2">/{language === 'es' ? 'mes' : 'month'}</span>
               </div>
               <ul className="space-y-4 mb-8 text-left w-full text-sm">
-                <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-cyan-400 flex-shrink-0" /> Acceso visual ilimitado al índice del Catálogo Estelar.</li>
-                <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-cyan-400 flex-shrink-0" /> Microclases teóricas completas basadas en texto.</li>
-                <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-cyan-400 flex-shrink-0" /> Evaluaciones básicas limitadas al final de la lección.</li>
+                <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-cyan-400 flex-shrink-0" /> {language === 'es' ? 'Acceso visual ilimitado al índice del Catálogo Estelar.' : 'Unlimited visual access to the Stellar Catalog index.'}</li>
+                <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-cyan-400 flex-shrink-0" /> {language === 'es' ? 'Microclases teóricas completas basadas en texto.' : 'Complete text-based theoretical micro-classes.'}</li>
+                <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-cyan-400 flex-shrink-0" /> {language === 'es' ? 'Evaluaciones básicas limitadas al final de la lección.' : 'Limited basic assessments at the end of the lesson.'}</li>
               </ul>
               <div className="mt-auto w-full">
                 <Link to="/register" className="btn btn-outline border-cyan-500/50 text-cyan-300 hover:bg-cyan-500 hover:text-black hover:border-cyan-400 w-full rounded-2xl">
-                  Empezar por 6,99€
+                  {language === 'es' ? 'Empezar por 6,99€' : 'Start for €6.99'}
                 </Link>
               </div>
             </div>
@@ -149,34 +163,28 @@ export default function Mission() {
             {/* Nivel 2 - Velocidad Luz (Destacado) */}
             <div className="bg-slate-800/80 backdrop-blur-xl border-2 border-pink-500 rounded-3xl p-6 md:p-8 lg:transform lg:-translate-y-4 shadow-[0_0_40px_rgba(236,72,153,0.3)] relative flex flex-col items-center text-center max-w-md mx-auto lg:max-w-none w-full">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-black px-6 py-2 rounded-full text-sm tracking-wide shadow-lg uppercase">
-                La Misión Estrella ⭐
+                {language === 'es' ? 'La Misión Estrella ⭐' : 'Star Mission ⭐'}
               </div>
               <Rocket className="w-14 h-14 text-pink-400 mb-6 drop-shadow-[0_0_15px_rgba(236,72,153,0.5)]" />
-              <h3 className="text-3xl font-bold text-pink-300 mb-2">Velocidad Luz</h3>
-              <p className="text-slate-300 mb-6 min-h-[50px]">El equilibrio perfecto: Acompañamiento impulsado por Inteligencia Artificial y datos.</p>
+              <h3 className="text-3xl font-bold text-pink-300 mb-2">{language === 'es' ? 'Velocidad Luz' : 'Light Speed'}</h3>
+              <p className="text-slate-300 mb-6 min-h-[50px]">{language === 'es' ? 'El equilibrio perfecto: Acompañamiento impulsado por Inteligencia Artificial y datos.' : 'The perfect balance: Accompaniment driven by Artificial Intelligence and data.'}</p>
               <div className="w-full border-b border-white/10 pb-6 mb-6">
                 <div className="flex items-center justify-center gap-3 mb-2">
                   <span className="text-slate-400 line-through text-2xl font-bold">12,99€</span>
                   <span className="bg-green-500/20 text-green-300 border border-green-500/30 text-xs font-black px-2 py-0.5 rounded-full">-23%</span>
                 </div>
                 <div className="text-6xl font-black text-white">
-                  9,99€<span className="text-xl text-pink-300 font-normal">/mes</span>
+                  9,99€<span className="text-xl text-pink-300 font-normal">/{language === 'es' ? 'mes' : 'month'}</span>
                 </div>
-                <div className="mt-3 bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-400/30 rounded-xl px-4 py-2 flex items-center justify-center gap-2">
-                  <span className="text-lg">🚀</span>
-                  <span className="text-amber-300 font-black text-sm uppercase tracking-wide">Precio Fundador · Solo los 2 primeros meses</span>
-                </div>
-                <p className="text-slate-500 text-xs mt-2">Después, 12,99€/mes. Cancela cuando quieras.</p>
               </div>
               <ul className="space-y-4 mb-8 text-left w-full text-base">
-                <li className="flex items-start gap-3 text-white font-medium border-b border-white/5 pb-2"><CheckCircle2 className="w-5 h-5 text-pink-500 flex-shrink-0" /> Todo lo incluido en "Órbita Base"</li>
-                <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> <strong>Ejercicios Interactivos Ilimitados</strong> (Sin barreras) que se corrigen automáticamente.</li>
-                <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> <strong>Asistente Educativo de IA "Astro" 24/7</strong> para resolver dudas en cualquier tarea.</li>
-                <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> Panel de métricas estelar integrado para supervisar el progreso y los logros en tiempo real.</li>
+                <li className="flex items-start gap-3 text-white font-medium border-b border-white/5 pb-2"><CheckCircle2 className="w-5 h-5 text-pink-500 flex-shrink-0" /> {language === 'es' ? 'Todo lo incluido en "Órbita Base"' : 'Everything included in "Base Orbit"'}</li>
+                <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> <strong>{language === 'es' ? 'Ejercicios Interactivos Ilimitados' : 'Unlimited Interactive Exercises'}</strong> {language === 'es' ? '(Sin barreras) que se corrigen automáticamente.' : '(No barriers) that auto-correct.'}</li>
+                <li className="flex items-start gap-3 text-slate-200"><CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" /> <strong>{language === 'es' ? 'Asistente Educativo de IA "Astro" 24/7' : '"Astro" AI Educational Assistant 24/7'}</strong> {language === 'es' ? 'para resolver dudas en cualquier tarea.' : 'to solve doubts in any task.'}</li>
               </ul>
               <div className="mt-auto w-full">
                 <Link to="/register" className="btn bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white border-none w-full rounded-2xl shadow-[0_0_20px_rgba(236,72,153,0.4)] text-lg">
-                  Empezar por 9,99€
+                  {language === 'es' ? 'Empezar por 9,99€' : 'Start for €9.99'}
                 </Link>
               </div>
             </div>
@@ -184,68 +192,23 @@ export default function Mission() {
             {/* Nivel 3 - Agujero de Gusano */}
             <div className="bg-slate-900/40 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 hover:-translate-y-2 transition-transform duration-300 flex flex-col items-center text-center max-w-md mx-auto lg:max-w-none w-full">
               <Users className="w-12 h-12 text-purple-400 mb-6" />
-              <h3 className="text-2xl font-bold text-purple-300 mb-2">Agujero de Gusano</h3>
-              <p className="text-slate-400 mb-6 min-h-[50px]">La experiencia definitiva con apoyo humano directo para superar cualquier obstáculo académico.</p>
+              <h3 className="text-2xl font-bold text-purple-300 mb-2">{language === 'es' ? 'Agujero de Gusano' : 'Wormhole'}</h3>
+              <p className="text-slate-400 mb-6 min-h-[50px]">{language === 'es' ? 'La experiencia definitiva con apoyo humano directo para superar cualquier obstáculo académico.' : 'The ultimate experience with direct human support to overcome any academic obstacle.'}</p>
               <div className="text-4xl font-black text-white mb-8 border-b border-white/10 pb-6 w-full">
-                24,99€<span className="text-xl text-slate-400 font-normal">/mes</span>
+                24,99€<span className="text-xl text-slate-400 font-normal">/{language === 'es' ? 'mes' : 'month'}</span>
               </div>
               <ul className="space-y-4 mb-8 text-left w-full text-sm">
-                <li className="flex items-start gap-3 text-slate-200 font-medium border-b border-white/5 pb-2"><CheckCircle2 className="w-5 h-5 text-purple-500 flex-shrink-0" /> Todo lo incluido en "Velocidad Luz"</li>
-                <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-purple-400 flex-shrink-0" /> <strong>Tutoría Privada ("1 a 1")</strong> por videollamada con un profesor titular de Genio Academy.</li>
-                <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-purple-400 flex-shrink-0" /> <strong>Resolución de Dudas Personalizada:</strong> Envía tus ejercicios complejos y recibe una guía detallada del docente.</li>
-                <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-purple-400 flex-shrink-0" /> <strong>Seguimiento Directo:</strong> Comunicación fluida entre el tutor y el alumno para trazar la mejor ruta de estudio.</li>
+                <li className="flex items-start gap-3 text-slate-200 font-medium border-b border-white/5 pb-2"><CheckCircle2 className="w-5 h-5 text-purple-500 flex-shrink-0" /> {language === 'es' ? 'Todo lo incluido en "Velocidad Luz"' : 'Everything included in "Light Speed"'}</li>
+                <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-purple-400 flex-shrink-0" /> <strong>{language === 'es' ? 'Tutoría Privada' : 'Private Tutoring'}</strong> {language === 'es' ? 'por videollamada con un profesor titular de Genio Academy.' : 'via video call with a tenured Genio Academy teacher.'}</li>
+                <li className="flex items-start gap-3 text-slate-300"><CheckCircle2 className="w-5 h-5 text-purple-400 flex-shrink-0" /> <strong>{language === 'es' ? 'Resolución de Dudas Personalizada:' : 'Personalized Doubt Resolution:'}</strong> {language === 'es' ? 'Envía tus ejercicios complejos y recibe una guía detallada del docente.' : 'Send your complex exercises and receive a detailed guide from the teacher.'}</li>
               </ul>
               <div className="mt-auto w-full">
                 <Link to="/register" className="btn bg-slate-800/80 border border-purple-500/50 text-purple-300 hover:bg-purple-600 hover:text-white hover:border-purple-400 w-full rounded-2xl transition-all">
-                  Consultar Disponibilidad
+                  {language === 'es' ? 'Consultar Disponibilidad' : 'Check Availability'}
                 </Link>
               </div>
             </div>
             
-          </div>
-        </div>
-
-        {/* Preguntas Frecuentes (FAQ) */}
-        <div className="mb-24">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white flex items-center justify-center gap-4">
-              <HelpCircle className="w-10 h-10 text-cyan-400" /> Resolución de Coordendas (FAQ)
-            </h2>
-            <p className="text-xl text-slate-400 mt-4">Las dudas más habituales de los comandantes familiares en la base.</p>
-          </div>
-          
-          <div className="max-w-4xl mx-auto space-y-4">
-            
-            <div className="collapse collapse-plus bg-slate-900/60 border border-white/5 shadow-lg group">
-              <input type="radio" name="my-accordion-3" defaultChecked />
-              <div className="collapse-title text-xl font-medium text-white group-hover:text-cyan-300 transition-colors">
-                ¿Qué pasa si mi hijo necesita ayuda urgente con los deberes a altas horas?
-              </div>
-              <div className="collapse-content text-slate-400 text-lg leading-relaxed">
-                <p>Nuestra Inteligencia Artificial "Astro" (incluída en el plan Velocidad Luz) está capacitada con el temario oficial de Secundaria. Es capaz de guiar a tu hijo paso a paso hacia la respuesta <strong className="text-pink-300">sin darle jamás el resultado masticado o directo.</strong> Es el equivalente a tener un tutor muy paciente al lado del escritorio, disponible a las 2 de la madrugada para que nunca se rinda y se acueste habiendo resuelto sus deberes.</p>
-              </div>
-            </div>
-
-            <div className="collapse collapse-plus bg-slate-900/60 border border-white/5 shadow-lg group">
-              <input type="radio" name="my-accordion-3" />
-              <div className="collapse-title text-xl font-medium text-white group-hover:text-cyan-300 transition-colors">
-                ¿Cómo garantiza la plataforma que el alumno progrese y no pierda el tiempo?
-              </div>
-              <div className="collapse-content text-slate-400 text-lg leading-relaxed">
-                <p>Nuestra plataforma fomenta la responsabilidad y la autonomía. El alumno dispone de su propio <strong className="text-pink-300">dashboard con estadísticas visuales, experiencia RPG, niveles y un recuento de cursos completados</strong>. Al ver su progreso gamificado de forma tan clara, la motivación nace del propio estudiante. Además, en las suscripciones superiores, puede realizar consultas a profesores humanos para resolver cualquier atasco y asegurar el avance.</p>
-              </div>
-            </div>
-
-            <div className="collapse collapse-plus bg-slate-900/60 border border-white/5 shadow-lg group">
-              <input type="radio" name="my-accordion-3" />
-              <div className="collapse-title text-xl font-medium text-white group-hover:text-cyan-300 transition-colors">
-                ¿Sirve Genio Academy para un niño que va bien en clase o solo es para reforzar?
-              </div>
-              <div className="collapse-content text-slate-400 text-lg leading-relaxed">
-                <p>Es para ambos perfiles. Como Genio Academy se basa en <strong className="text-pink-300">"Cápsulas Hiperespecíficas"</strong>, los estudiantes sobresalientes lo utilizan de maravilla para avanzar en temas de cursos superiores o potenciar sus habilidades, saciando el aburrimiento típico que a veces sufren en la escuela presencial.</p>
-              </div>
-            </div>
-
           </div>
         </div>
 
@@ -256,16 +219,18 @@ export default function Mission() {
           
           <div className="relative z-10 flex flex-col md:flex-row items-center gap-12 justify-between">
             <div className="text-left md:w-2/3">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">¿Listo para encender los motores del éxito escolar?</h2>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">{language === 'es' ? '¿Listo para encender los motores del éxito escolar?' : 'Ready to start the engines of school success?'}</h2>
               <p className="text-indigo-200 text-xl lg:text-2xl mb-10 leading-relaxed font-light">
-                Invertir en la educación <strong>adaptativa</strong> de tus hijos es garantizarles habilidades transversales para toda la vida: gestión eficiente del tiempo de estudio, autonomía ante la frustración y una relación mental sana con el error.
+                {language === 'es' 
+                  ? 'Invertir en la educación adaptativa de tus hijos es garantizarles habilidades transversales para toda la vida: gestión eficiente del tiempo de estudio, autonomía ante la frustración y una relación mental sana con el error.'
+                  : 'Investing in the adaptive education of your children is to guarantee them cross-cutting skills for life: efficient management of study time, autonomy in the face of frustration and a healthy mental relationship with failure.'}
               </p>
               <div className="flex flex-col sm:flex-row gap-5">
                 <Link to="/courses" className="btn bg-cyan-500 hover:bg-cyan-400 text-slate-900 border-none btn-lg px-8 rounded-2xl font-bold shadow-[0_0_30px_rgba(34,211,238,0.5)]">
-                  Ver Catálogo de Cursos
+                  {language === 'es' ? 'Ver Catálogo de Cursos' : 'View Course Catalog'}
                 </Link>
                 <Link to="/register" className="btn btn-outline border-indigo-400 text-indigo-300 hover:bg-indigo-500 hover:text-white btn-lg px-8 rounded-2xl shadow-[0_0_20px_rgba(79,70,229,0.3)] backdrop-blur-md">
-                  Unirse a la Academia <ArrowRight className="ml-2 w-5 h-5"/>
+                  {language === 'es' ? 'Unirse a la Academia' : 'Join the Academy'} <ArrowRight className="ml-2 w-5 h-5"/>
                 </Link>
               </div>
             </div>

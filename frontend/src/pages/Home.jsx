@@ -122,9 +122,14 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="text-center mb-16 relative">
-             <span className="text-cyan-400 font-bold tracking-widest uppercase mb-3 block">Nuestra nave nodriza</span>
+             <span className="text-cyan-400 font-bold tracking-widest uppercase mb-3 block">
+               {language === 'es' ? 'Nuestra nave nodriza' : 'Our Mothership'}
+             </span>
              <h2 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white drop-shadow-md">
-               Una Plataforma de Otro <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-orange-400">Mundo</span>
+               {language === 'es' ? 'Una Plataforma de Otro ' : 'A Platform from Another '}
+               <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-orange-400">
+                 {language === 'es' ? 'Mundo' : 'World'}
+               </span>
              </h2>
           </div>
 
@@ -135,8 +140,14 @@ export default function Home() {
                 <div className="w-16 h-16 bg-pink-500/10 rounded-2xl flex items-center justify-center mb-8 text-pink-400 shadow-[inset_0_0_20px_rgba(236,72,153,0.2)] border border-pink-500/20 group-hover:bg-pink-500 group-hover:text-white transition-colors duration-300">
                   <Map className="w-8 h-8"/>
                 </div>
-                <h3 className="card-title text-3xl font-bold text-white mb-4">Cápsulas de Saber</h3>
-                <p className="text-slate-400 text-lg leading-relaxed">Olvida los cursos genéricos e interminables. Accede a nuestro catálogo y encuentra la píldora exacta de conocimiento que necesitas dominar. Aprende a tu ritmo, superando desafíos específicos y celebrando victorias constantes.</p>
+                <h3 className="card-title text-3xl font-bold text-white mb-4">
+                  {language === 'es' ? 'Cápsulas de Saber' : 'Knowledge Capsules'}
+                </h3>
+                <p className="text-slate-400 text-lg leading-relaxed">
+                  {language === 'es' 
+                    ? 'Olvida los cursos genéricos e interminables. Accede a nuestro catálogo y encuentra la píldora exacta de conocimiento que necesitas dominar. Aprende a tu ritmo, superando desafíos específicos y celebrando victorias constantes.' 
+                    : 'Forget generic and endless courses. Access our catalog and find the exact knowledge pill you need to master. Learn at your own pace, overcoming specific challenges and celebrating constant victories.'}
+                </p>
               </div>
             </div>
 
@@ -146,8 +157,14 @@ export default function Home() {
                 <div className="w-16 h-16 bg-cyan-500/10 rounded-2xl flex items-center justify-center mb-8 text-cyan-400 shadow-[inset_0_0_20px_rgba(34,211,238,0.2)] border border-cyan-500/20 group-hover:bg-cyan-500 group-hover:text-white transition-colors duration-300">
                   <BrainCircuit className="w-8 h-8"/>
                 </div>
-                <h3 className="card-title text-3xl font-bold text-white mb-4">Guía Inteligente</h3>
-                <p className="text-slate-400 text-lg leading-relaxed">¿Dudas a media noche? Astro está siempre alerta. Nuestra IA está entrenada para ofrecer pistas socráticas y guiar a tus hijos hacia la solución, asegurando que el aprendizaje sea real y profundo.</p>
+                <h3 className="card-title text-3xl font-bold text-white mb-4">
+                  {language === 'es' ? 'Guía Inteligente' : 'Intelligent Guide'}
+                </h3>
+                <p className="text-slate-400 text-lg leading-relaxed">
+                  {language === 'es'
+                    ? '¿Dudas a media noche? Astro está siempre alerta. Nuestra IA está entrenada para ofrecer pistas socráticas y guiar a tus hijos hacia la solución, asegurando que el aprendizaje sea real y profundo.'
+                    : 'Doubts at midnight? Astro is always alert. Our AI is trained to offer Socratic hints and guide your children towards the solution, ensuring that learning is real and deep.'}
+                </p>
               </div>
             </div>
 
@@ -157,8 +174,14 @@ export default function Home() {
                 <div className="w-16 h-16 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-8 text-purple-400 shadow-[inset_0_0_20px_rgba(168,85,247,0.2)] border border-purple-500/20 group-hover:bg-purple-500 group-hover:text-white transition-colors duration-300">
                   <Telescope className="w-8 h-8"/>
                 </div>
-                <h3 className="card-title text-3xl font-bold text-white mb-4">Tutorías 1 a 1</h3>
-                <p className="text-slate-400 text-lg leading-relaxed">No hemos olvidado el calor humano. La tecnología está guiada por expertos académicos. Si te pierdes en las órbitas altas y necesitas apoyo crítico, puedes agendar videollamadas privadas para solventar tus mayores desafíos de la ESO con empatía real.</p>
+                <h3 className="card-title text-3xl font-bold text-white mb-4">
+                  {language === 'es' ? 'Tutorías 1 a 1' : '1-on-1 Tutoring'}
+                </h3>
+                <p className="text-slate-400 text-lg leading-relaxed">
+                  {language === 'es'
+                    ? 'No hemos olvidado el calor humano. La tecnología está guiada por expertos académicos. Si te pierdes en las órbitas altas y necesitas apoyo crítico, puedes agendar videollamadas privadas para solventar tus mayores desafíos de la ESO con empatía real.'
+                    : 'We haven\'t forgotten human warmth. Technology is guided by academic experts. If you get lost in high orbits and need critical support, you can schedule private video calls to solve your greatest High School challenges with real empathy.'}
+                </p>
               </div>
             </div>
           </div>
@@ -172,18 +195,21 @@ export default function Home() {
             <div className="flex flex-col md:flex-row items-center justify-between gap-10">
                 <div className="max-w-2xl text-left">
                     <span className="text-teal-400 font-bold tracking-widest uppercase mb-3 flex items-center gap-2">
-                        <GraduationCap className="w-5 h-5"/> Experiencia de Vanguardia
+                        <GraduationCap className="w-5 h-5"/> {language === 'es' ? 'Experiencia de Vanguardia' : 'Cutting-Edge Experience'}
                     </span>
                     <h2 className="text-4xl md:text-6xl font-black tracking-tight text-white mb-6">
-                        Nuestra <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500">Facultad Galáctica</span>
+                        {language === 'es' ? 'Nuestra ' : 'Our '}<span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500">{language === 'es' ? 'Facultad Galáctica' : 'Galactic Faculty'}</span>
                     </h2>
                     <p className="text-slate-400 text-xl leading-relaxed mb-6">
-                        La tranquilidad de los padres es nuestra prioridad. En Genio Academy, el talento humano no es un extra, 
-                        es el pilar fundamental que da sentido a nuestra tecnología. 
+                        {language === 'es' 
+                          ? 'La tranquilidad de los padres es nuestra prioridad. En Genio Academy, el talento humano no es un extra, es el pilar fundamental que da sentido a nuestra tecnología.'
+                          : 'Parents\' peace of mind is our priority. At Genio Academy, human talent is not an extra, it is the fundamental pillar that gives meaning to our technology.'}
                     </p>
                     <div className="inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-teal-500/5 border border-teal-500/20 text-teal-400/90 text-sm font-medium italic mb-2 backdrop-blur-sm">
                         <ShieldCheck className="w-5 h-5 shrink-0" />
-                        Todo nuestro profesorado ha sido estudiado de forma exhaustiva para corroborar sus currículums y trayectorias profesionales.
+                        {language === 'es' 
+                          ? 'Todo nuestro profesorado ha sido estudiado de forma exhaustiva para corroborar sus currículums y trayectorias profesionales.'
+                          : 'All our teaching staff has been exhaustively studied to corroborate their resumes and professional trajectories.'}
                     </div>
                     
                     {/* Cuadrícula de compromisos para padres */}
@@ -193,8 +219,8 @@ export default function Home() {
                                 <ShieldCheck className="w-6 h-6 text-teal-400" />
                             </div>
                             <div>
-                                <h4 className="text-white font-bold text-sm uppercase tracking-wide">Perfiles Verificados</h4>
-                                <p className="text-slate-500 text-xs mt-1">Todos nuestros docentes han superado un riguroso proceso de validación académica y pedagógica.</p>
+                                <h4 className="text-white font-bold text-sm uppercase tracking-wide">{language === 'es' ? 'Perfiles Verificados' : 'Verified Profiles'}</h4>
+                                <p className="text-slate-500 text-xs mt-1">{language === 'es' ? 'Todos nuestros docentes han superado un riguroso proceso de validación académica y pedagógica.' : 'All our teachers have passed a rigorous process of academic and pedagogical validation.'}</p>
                             </div>
                         </div>
                         <div className="flex gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
@@ -202,8 +228,8 @@ export default function Home() {
                                 <BrainCircuit className="w-6 h-6 text-blue-400" />
                             </div>
                             <div>
-                                <h4 className="text-white font-bold text-sm uppercase tracking-wide">Apoyo Psicopedagógico</h4>
-                                <p className="text-slate-500 text-xs mt-1">Nuestros tutores están formados para entender y motivar a alumnos de secundaria, no solo para enseñar teoría.</p>
+                                <h4 className="text-white font-bold text-sm uppercase tracking-wide">{language === 'es' ? 'Apoyo Psicopedagógico' : 'Psycho-pedagogical Support'}</h4>
+                                <p className="text-slate-500 text-xs mt-1">{language === 'es' ? 'Nuestros tutores están formados para entender y motivar a alumnos de secundaria, no solo para enseñar teoría.' : 'Our tutors are trained to understand and motivate high school students, not just to teach theory.'}</p>
                             </div>
                         </div>
                         <div className="flex gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
@@ -211,8 +237,8 @@ export default function Home() {
                                 <Compass className="w-6 h-6 text-purple-400" />
                             </div>
                             <div>
-                                <h4 className="text-white font-bold text-sm uppercase tracking-wide">Progreso Gamificado</h4>
-                                <p className="text-slate-500 text-xs mt-1">Fomentamos la autonomía de su hijo. Nuestro sistema de experiencia y niveles le motiva a superarse día a día.</p>
+                                <h4 className="text-white font-bold text-sm uppercase tracking-wide">{language === 'es' ? 'Progreso Gamificado' : 'Gamified Progress'}</h4>
+                                <p className="text-slate-500 text-xs mt-1">{language === 'es' ? 'Fomentamos la autonomía de su hijo. Nuestro sistema de experiencia y niveles le motiva a superarse día a día.' : 'We encourage your child\'s autonomy. Our system of experience and levels motivates them to improve every day.'}</p>
                             </div>
                         </div>
                         <div className="flex gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
@@ -220,8 +246,8 @@ export default function Home() {
                                 <Users className="w-6 h-6 text-amber-400" />
                             </div>
                             <div>
-                                <h4 className="text-white font-bold text-sm uppercase tracking-wide">Cercanía Humana</h4>
-                                <p className="text-slate-500 text-xs mt-1">Garantizamos que detrás de cada pantalla hay un experto real dispuesto a resolver las dudas más complejas.</p>
+                                <h4 className="text-white font-bold text-sm uppercase tracking-wide">{language === 'es' ? 'Cercanía Humana' : 'Human Closeness'}</h4>
+                                <p className="text-slate-500 text-xs mt-1">{language === 'es' ? 'Garantizamos que detrás de cada pantalla hay un experto real dispuesto a resolver las dudas más complejas.' : 'We guarantee that behind every screen there is a real expert ready to solve the most complex doubts.'}</p>
                             </div>
                         </div>
                     </div>
@@ -234,16 +260,16 @@ export default function Home() {
                         
                         <div className="relative btn border-white/10 bg-slate-900 text-white hover:bg-slate-800 rounded-2xl px-10 py-6 h-auto flex flex-col gap-2 transition-all">
                             <span className="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-400 uppercase tracking-tighter">
-                                Ver nuestros Profesores
+                                {language === 'es' ? 'Ver nuestros Profesores' : 'View our Teachers'}
                             </span>
                             <div className="flex items-center gap-2 text-slate-400 group-hover:text-white transition-colors">
-                                <span className="text-xs font-bold uppercase tracking-widest">Listado de Docentes</span>
+                                <span className="text-xs font-bold uppercase tracking-widest">{language === 'es' ? 'Listado de Docentes' : 'Teachers List'}</span>
                                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                             </div>
                         </div>
                     </Link>
                     <p className="text-[10px] text-slate-500 italic max-w-[220px] text-center mt-6 leading-relaxed opacity-60">
-                        Acceda a las trayectorias académicas y pedagógicas de nuestros docentes expertos.
+                        {language === 'es' ? 'Acceda a las trayectorias académicas y pedagógicas de nuestros docentes expertos.' : 'Access the academic and pedagogical trajectories of our expert teachers.'}
                     </p>
                 </div>
             </div>
