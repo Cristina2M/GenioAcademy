@@ -3,7 +3,7 @@ Proyecto: Plataforma de Aprendizaje Incremental Gamificado
 Perfil: Desarrollo de Aplicaciones Web (DAW)
 Fecha: Mayo 2026
 
---- ESTRUCTURA DE LA DEFENSA (40 MINUTOS) ---
+--- ESTRUCTURA DE LA DEFENSA (20 MINUTOS) ---
 
 DIAPOSITIVA 1: PORTADA Y BIENVENIDA
 (Tiempo sugerido: 1 minuto)
@@ -12,13 +12,13 @@ Buenos días a todos los presentes, miembros del tribunal y tutor/a. Mi nombre e
 Este proyecto no es solo una plataforma de gestión de cursos; es un ecosistema diseñado para revolucionar el aprendizaje en la Educación Secundaria Obligatoria a través de la gamificación incremental y la Inteligencia Artificial. Durante esta exposición, desglosaremos no solo el qué hace la aplicación, sino el cómo está construida bajo estándares profesionales de desarrollo web.
 
 DIAPOSITIVA 2: CONTEXTO Y JUSTIFICACIÓN
-(Tiempo sugerido: 2 minutos)
+(Tiempo sugerido: 45 seg - 1 minuto)
 Para entender Genio Academy, primero debemos entender el problema que intenta resolver. En el sistema educativo actual, específicamente en la ESO, nos encontramos con una brecha de motivación alarmante. Los métodos de e-learning tradicionales suelen ser estáticos y poco interactivos, lo que genera una alta tasa de abandono.
 
 Además, el sistema actual impone un ritmo único para todos los alumnos. Genio Academy propone una solución radicalmente distinta: el "Aprendizaje Incremental". Aquí, el contenido no se divide por años académicos, sino por niveles de conocimiento real. El alumno no puede saltar al siguiente nivel sin demostrar que ha dominado el anterior, exactamente igual que en un videojuego de rol o RPG.
 
 DIAPOSITIVA 3: OBJETIVOS DEL PROYECTO
-(Tiempo sugerido: 2 minutos)
+(Tiempo sugerido: 45 seg - 1 minuto)
 Mis objetivos para este proyecto fueron ambiciosos pero claros:
 1. Crear una arquitectura backend/frontend robusta y profesional.
 2. Implementar un motor de gamificación real con consecuencias (el sistema de vidas Roguelike).
@@ -28,26 +28,26 @@ Mis objetivos para este proyecto fueron ambiciosos pero claros:
 Todo esto bajo la premisa de la seguridad, la escalabilidad, el cumplimiento de la rúbrica académica (incluyendo accesibilidad bilingüe) y una experiencia de usuario (UX) inmersiva que hemos denominado "Estética Galáctica".
 
 DIAPOSITIVA 4: ECOSISTEMA TECNOLÓGICO
-(Tiempo sugerido: 2 minutos)
+(Tiempo sugerido: 45 seg - 1 minuto)
 La elección del stack tecnológico ha sido estratégica. 
 En el Backend, he optado por Python y Django REST Framework. Django nos ofrece seguridad por defecto, un ORM muy potente para manejar relaciones complejas y una facilidad de desarrollo (DRF) que permite crear APIs RESTful siguiendo las mejores prácticas.
 
 En el Frontend, la elección fue React 18 con Vite como empaquetador. Necesitaba una SPA (Single Page Application) que fuera extremadamente reactiva para manejar los cambios de XP y niveles en tiempo real. Para los estilos, he utilizado Tailwind CSS v4, lo que me ha permitido crear una interfaz moderna de forma atómica.
 
 DIAPOSITIVA 5: INFRAESTRUCTURA Y PIVOTAJE DE DESPLIEGUE
-(Tiempo sugerido: 2 minutos)
+(Tiempo sugerido: 45 seg - 1 minuto)
 Durante el desarrollo local utilicé Docker para contenerizar y aislar la base de datos PostgreSQL, el backend y el frontend, garantizando la portabilidad del entorno.
 
 Sin embargo, para producción tomé una decisión de arquitectura consciente: pivotar. Originalmente contemplé usar Kubernetes o Docker Swarm en la nube, pero analizando los costes de infraestructura y la complejidad para un MVP, decidí migrar a un modelo PaaS (Platform as a Service). El Frontend reside en Vercel, aprovechando su CDN global, y el Backend en Render. Esto demuestra adaptabilidad técnica para buscar la solución más eficiente al menor coste.
 
 DIAPOSITIVA 6: SEGURIDAD: SSL Y ZERO-CONFIG API
-(Tiempo sugerido: 2 minutos)
+(Tiempo sugerido: 45 seg - 1 minuto)
 Ambos entornos están configurados con certificados SSL de Let's Encrypt para garantizar que todas las comunicaciones entre el alumno y el servidor viajen cifradas bajo HTTPS.
 
 Además, implementé un cliente de Axios "Zero-Config". El código detecta automáticamente el hostname donde se ejecuta. Si detecta el dominio 'cristina2daw.es', apunta a la API de producción. Si detecta 'localhost', apunta al backend local. Esto elimina errores manuales tras cada despliegue y hace que el código sea resiliente al entorno de ejecución.
 
 DIAPOSITIVA 7: MODELADO DE LA BASE DE DATOS (E-R)
-(Tiempo sugerido: 3 minutos)
+(Tiempo sugerido: 45 seg - 1 minuto)
 El diseño de la base de datos es el cerebro de la aplicación. Aquí no solo manejamos usuarios y cursos. Tenemos una jerarquía multidimensional:
 - Las Categorías (como Matemáticas) tienen Niveles de Conocimiento.
 - Estos Niveles tienen un campo 'order' que es el que determina la dificultad RPG.
@@ -56,72 +56,72 @@ El diseño de la base de datos es el cerebro de la aplicación. Aquí no solo ma
 Un punto técnico a destacar es la tabla 'CourseCompletion' con una restricción UNIQUE para (user, course). Esto es vital para la lógica de negocio, ya que impide que un alumno haga 'trampa' y farmee XP completando el mismo curso varias veces.
 
 DIAPOSITIVA 8: SEGURIDAD: DUAL LOGIN
-(Tiempo sugerido: 2 minutos)
+(Tiempo sugerido: 45 seg - 1 minuto)
 He querido mejorar la experiencia de acceso mediante la implementación de un 'Dual Login'. He sobrescrito el backend de autenticación por defecto de Django para crear el 'EmailOrUsernameBackend'.
 Esto permite que el endpoint de token de la API acepte tanto el nombre de usuario como el correo electrónico del alumno. Es un pequeño detalle técnico que demuestra el dominio sobre el framework de autenticación de Django.
 
 DIAPOSITIVA 9: INGENIERÍA DE JWT ENRIQUECIDO
-(Tiempo sugerido: 2 minutos)
+(Tiempo sugerido: 45 seg - 1 minuto)
 Para la sesión, utilizamos SimpleJWT, pero lo hemos personalizado. He extendido el serializador para inyectar datos de gamificación directamente en el payload del token.
 Al decodificar el JWT en el frontend, React ya sabe qué nivel tiene el alumno, cuánta XP tiene y su plan. Esto es fundamental para el rendimiento: nos ahorramos una petición GET /user/profile/ cada vez que el usuario recarga la página. El estado de la UI es consistente desde el primer milisegundo.
 
 DIAPOSITIVA 10: MOTOR RPG Y PROGRESIÓN (BLOQUEOS 403)
-(Tiempo sugerido: 2 minutos)
+(Tiempo sugerido: 45 seg - 1 minuto)
 La lógica de gamificación reside en el backend. Cuando un curso se completa, el sistema calcula la XP ganada. La fórmula es exponencial: nivel actual multiplicado por 500 para el siguiente nivel.
 Pero lo más importante es el control de acceso real. He implementado permisos personalizados en Django que verifican el nivel RPG del usuario antes de devolver los datos del curso. Si un alumno intenta acceder a un curso avanzado sin tener el nivel, el servidor responde con un 403 Forbidden, garantizando que el progreso no sea evadible manipulando el frontend.
 
 DIAPOSITIVA 11: SINCRONIZACIÓN DE VIDAS (SIN CELERY)
-(Tiempo sugerido: 3 minutos)
+(Tiempo sugerido: 45 seg - 1 minuto)
 Este es uno de los puntos técnicos de los que más orgullosa me siento. ¿Cómo regenerar vidas cada 30 minutos sin saturar el servidor con tareas programadas en segundo plano?
 En lugar de usar Celery o Redis, implementé una "Regeneración Pasiva". El servidor guarda el momento en que se perdió la última vida. En cada petición que el usuario hace a la API, el método 'sync_lives' calcula la diferencia de tiempo con el reloj del servidor y añade las vidas correspondientes. Es una solución elegante, ligera y matemáticamente exacta que optimiza los recursos de infraestructura.
 
 DIAPOSITIVA 12: MECÁNICA ROGUELIKE Y PLANETAS
-(Tiempo sugerido: 2 minutos)
+(Tiempo sugerido: 45 seg - 1 minuto)
 Si el alumno agota sus 3 planetas, entra en estado de bloqueo. He desarrollado un componente en React llamado 'LivesPanel' que gestiona esto visualmente.
 Para los alumnos premium (Agujero de Gusano), he implementado un sistema de rescate. He programado 5 minijuegos diferentes en el frontend (parejas, completar, verdadero/falso...). Si el alumno supera el reto, el backend valida la victoria y le devuelve una vida inmediatamente. Es un ejemplo perfecto de interacción fluida entre frontend y backend para la retención del usuario.
 
 DIAPOSITIVA 13: ASTRO Y EL PIVOTAJE DE IA (GROQ CLOUD)
-(Tiempo sugerido: 2 minutos)
+(Tiempo sugerido: 45 seg - 1 minuto)
 Para el tutor IA, experimenté un reto importante. Inicialmente integré Ollama para ejecutar el modelo en local, pero el hardware generaba cuellos de botella y latencias inaceptables. 
 Frente a esto, decidí pivotar hacia Groq Cloud usando LLaMA 3.1 8B. Groq nos proporciona inferencia LPU casi instantánea. Lo implementé usando una arquitectura de "Proxy Seguro": React envía la duda a nuestro backend, y este se comunica con Groq usando una API Key oculta en nuestras variables de entorno, protegiendo así nuestra infraestructura.
 
 DIAPOSITIVA 14: PROMPT ENGINEERING SÓCRÁTICO
-(Tiempo sugerido: 2 minutos)
+(Tiempo sugerido: 45 seg - 1 minuto)
 Para que Astro sea un tutor creíble, trabajé intensamente en el Prompt Engineering. El backend inyecta dinámicamente en el sistema el contexto exacto de la lección que el alumno está viendo y la hora local. 
 Astro tiene terminantemente prohibido dar respuestas directas; su función es lanzar pistas y aplicar el método socrático para activar el pensamiento crítico del alumno, emulando la paciencia de un profesor real.
 
 DIAPOSITIVA 15: SUITE DE TUTORÍAS Y TIEMPO REAL (JITSI)
-(Tiempo sugerido: 2 minutos)
+(Tiempo sugerido: 45 seg - 1 minuto)
 Para los alumnos premium, Genio Academy ofrece conexión humana mediante videollamadas con Jitsi Meet embebidas directamente en la plataforma.
 El flujo técnico es el siguiente: el alumno solicita tutoría, el profesor la aprueba y genera una sala con un UUID. En el frontend, implementé un sistema de polling asíncrono en React. Cuando el profesor inicia la sesión, al alumno le aparece un banner dinámico con un botón para unirse, sin necesidad de abrir enlaces externos o perder el foco.
 
 DIAPOSITIVA 16: FRONTEND: ARQUITECTURA Y ESTADO
-(Tiempo sugerido: 2 minutos)
+(Tiempo sugerido: 45 seg - 1 minuto)
 En el frontend, he utilizado React Context API para crear el 'AuthContext' y el 'LanguageContext'. Estos contextos centralizan la sesión y la configuración del usuario.
 Cualquier componente puede consultar cuánta XP tiene el alumno llamando al hook useAuth. Esto evita el 'prop-drilling' y hace que el código sea altamente mantenible y limpio, siguiendo el principio de responsabilidad única.
 
 DIAPOSITIVA 17: INTERNACIONALIZACIÓN (i18n) Y BRANDING
-(Tiempo sugerido: 2 minutos)
+(Tiempo sugerido: 45 seg - 1 minuto)
 Para cumplir con los criterios de evaluación y aportar un acabado empresarial, implementé un sistema completo de internacionalización (i18n). Las páginas públicas complejas (Inicio, Misión, Claustro) son totalmente bilingües. 
 Desarrollé una lógica condicional en la barra de navegación para que el selector de idioma solo aparezca en las vistas de presentación, ocultándose inteligentemente en el panel interno del alumno. Además, el branding (logotipos, favicon, meta-tags) está pulido al detalle para distanciarnos del diseño genérico por defecto.
 
 DIAPOSITIVA 18: DISEÑO Y UX (DARK GLASSMORPHISM)
-(Tiempo sugerido: 2 minutos)
+(Tiempo sugerido: 45 seg - 1 minuto)
 La interfaz busca ser inmersiva. He utilizado Tailwind CSS v4 para crear una estética propia que denominé 'Dark Glassmorphism', utilizando efectos de desenfoque de fondo y bordes semitransparentes para dar esa sensación espacial.
 Además, he integrado Framer Motion para las animaciones. Cuando un alumno sube de nivel o interactúa con elementos clave, las transiciones suaves refuerzan psicológicamente el sentimiento de calidad y logro.
 
 DIAPOSITIVA 19: RESILIENCIA: GRACEFUL DEGRADATION
-(Tiempo sugerido: 2 minutos)
+(Tiempo sugerido: 45 seg - 1 minuto)
 Un punto de calidad importante es cómo reacciona la app ante fallos. Implementé una técnica de 'Degradación Elegante' en la carga del catálogo.
 La app intenta cargar los cursos con el token del usuario para mostrar su progreso personal. Si el token falla o caduca en ese preciso instante, el código captura el error y lanza automáticamente una segunda petición pública. El resultado: el alumno siempre ve el catálogo, evitando pantallas de error abruptas.
 
 DIAPOSITIVA 20: METODOLOGÍA GIT FLOW Y AGILE
-(Tiempo sugerido: 2 minutos)
+(Tiempo sugerido: 45 seg - 1 minuto)
 El desarrollo se ha gestionado mediante Git Flow de forma estricta, utilizando ramas 'develop' para integración y ramas 'feature' para cada hito (IA, Vidas, Tutorías).
 Además, adopté la filosofía Agile centrada en un Producto Mínimo Viable (MVP). Decidí conscientemente mover funcionalidades como el envío de emails o la generación de PDFs de notas al "Backlog", para concentrar mis horas de desarrollo en perfeccionar el "core" innovador: la IA, el motor RPG y las videollamadas. En el mundo real, priorizar el núcleo del producto sobre los extras es vital.
 
 DIAPOSITIVA 21: RETOS TÉCNICOS SUPERADOS
-(Tiempo sugerido: 2 minutos)
+(Tiempo sugerido: 45 seg - 1 minuto)
 A lo largo del proyecto, superé varios obstáculos críticos:
 1. El despliegue de las bases de datos en local me llevó a programar scripts en Python para poblarlas automáticamente (Seeders) y agilizar mis pruebas.
 2. La limitación de los servidores gratuitos de Render (Sleep Mode) me obligó a optimizar la carga del frontend y gestionar expectativas del usuario con feedback visual.
@@ -136,3 +136,100 @@ DIAPOSITIVA 23: DESPEDIDA Y PREGUNTAS
 (Tiempo sugerido: libre)
 En conclusión, este proyecto condensa todos los conocimientos del ciclo de DAW aplicados a un caso real de principio a fin, asumiendo yo misma los roles de DevOps, Backend, Frontend y Product Manager.
 Muchas gracias por su atención. Quedo a su entera disposición para cualquier pregunta técnica que deseen realizar o para mostrarles una demo en vivo de alguna de las funcionalidades.
+
+
+--- GUÍA VISUAL PARA CANVA ---
+
+A continuación, te indico qué poner visualmente en cada diapositiva para que acompañe perfectamente a tu guion hablado. Mantén el texto al mínimo en las diapositivas; la gente tiene que escucharte a ti, no leer la pantalla.
+
+DIAPOSITIVA 1: PORTADA
+- Texto: Genio Academy - El videojuego de estudiar. Autora: Cristina.
+- Imagen: Logotipo de Genio Academy grande y estética del espacio oscuro.
+
+DIAPOSITIVA 2: CONTEXTO
+- Texto: El problema actual: Desmotivación, E-learning aburrido, Ritmo único. Solución: Aprendizaje Incremental.
+- Imagen: Un gráfico cruzado o iconos tristes vs iconos felices/búho Astro.
+
+DIAPOSITIVA 3: OBJETIVOS
+- Texto: 1. Arquitectura Robusta, 2. Gamificación Real, 3. IA Socrática, 4. Tutorías en Directo.
+- Imagen: Iconos minimalistas para cada punto (ej. Servidor, Mando de juego, Cerebro, Cámara).
+
+DIAPOSITIVA 4: ECOSISTEMA TECNOLÓGICO
+- Texto: Backend: Django REST + Python. Frontend: React + Vite + Tailwind v4. Base de Datos: PostgreSQL.
+- Imagen: Logos oficiales de Django, Python, React, Vite, Tailwind y PostgreSQL.
+
+DIAPOSITIVA 5: INFRAESTRUCTURA Y PIVOTAJE
+- Texto: Desarrollo: Docker. Producción: Vercel (Frontend) + Render (Backend).
+- Imagen: Logo de Docker tachado o con una flecha apuntando hacia los logos de Vercel y Render (simbolizando el pivotaje ágil).
+
+DIAPOSITIVA 6: SEGURIDAD (SSL Y ZERO-CONFIG)
+- Texto: Certificados SSL (HTTPS) + Zero-Config API Client.
+- Imagen: Icono de un candado verde grande y un fragmento pequeño de código difuminado de fondo.
+
+DIAPOSITIVA 7: MODELO DE DATOS
+- Texto: Modelo Jerárquico: Categorías -> Niveles -> Cursos. Restricción UNIQUE.
+- Imagen: Captura de pantalla elegante del diagrama Entidad-Relación (E-R) centrado en CourseCompletion.
+
+DIAPOSITIVA 8: DUAL LOGIN
+- Texto: Autenticación flexible: Email o Username.
+- Imagen: Captura de pantalla de la pantalla de login de tu app.
+
+DIAPOSITIVA 9: JWT ENRIQUECIDO
+- Texto: JSON Web Token con carga útil de gamificación (XP, Nivel, Plan).
+- Imagen: Un gráfico de un "Token" desglosándose en pedazos de datos (XP, Avatar).
+
+DIAPOSITIVA 10: MOTOR RPG (403 FORBIDDEN)
+- Texto: Fórmula Exponencial de XP + Bloqueo seguro en el servidor.
+- Imagen: Pantalla de "Acceso Denegado" o un candado protegiendo un curso.
+
+DIAPOSITIVA 11: SINCRONIZACIÓN DE VIDAS
+- Texto: Regeneración pasiva matemática (Sin Celery/Redis).
+- Imagen: Icono de un reloj matemático o una barra de carga de vida.
+
+DIAPOSITIVA 12: ROGUELIKE Y PLANETAS
+- Texto: 3 Planetas (vidas). Minijuegos de rescate para cuentas premium.
+- Imagen: Captura de pantalla del componente LivesPanel y de uno de los minijuegos.
+
+DIAPOSITIVA 13: ASTRO Y PIVOTAJE IA
+- Texto: Tutor IA. De Ollama local a Groq Cloud (LLaMA 3.1 8B).
+- Imagen: Logo de Groq y LLaMA, junto a la cara de Astro.
+
+DIAPOSITIVA 14: PROMPT ENGINEERING
+- Texto: Contexto inyectado en tiempo real + Método Socrático.
+- Imagen: Una captura del chat de Astro respondiendo una pregunta de forma indirecta.
+
+DIAPOSITIVA 15: SUITE DE TUTORÍAS
+- Texto: Polling asíncrono + Jitsi Meet embebido.
+- Imagen: Captura de pantalla de la videollamada dentro de Genio Academy o el banner de llamada entrante.
+
+DIAPOSITIVA 16: FRONTEND: ESTADO
+- Texto: React Context API (AuthContext, LanguageContext).
+- Imagen: Un diagrama simple de un "Estado global" enviando flechas a varios componentes.
+
+DIAPOSITIVA 17: INTERNACIONALIZACIÓN (i18n)
+- Texto: Plataforma bilingüe (Español/Inglés). Branding personalizado.
+- Imagen: Captura de la Navbar mostrando el selector de idioma (globo).
+
+DIAPOSITIVA 18: DISEÑO (GLASSMORPHISM)
+- Texto: Dark Glassmorphism + Framer Motion.
+- Imagen: Un GIF corto (si Canva lo permite) o captura de una de las animaciones/tarjetas con efecto cristal.
+
+DIAPOSITIVA 19: DEGRADACIÓN ELEGANTE
+- Texto: Resiliencia ante fallos en la carga del catálogo.
+- Imagen: Icono de un escudo o un paraguas protegiendo la app.
+
+DIAPOSITIVA 20: METODOLOGÍA AGILE Y MVP
+- Texto: Metodología Git Flow + Producto Mínimo Viable.
+- Imagen: Árbol de ramas de Git Flow (main, develop, features) y una lista con un check verde en el "Core" y un reloj en el "Backlog".
+
+DIAPOSITIVA 21: RETOS SUPERADOS
+- Texto: 1. Bases de datos locales (Seeders). 2. Modo Sleep de Render. 3. Pivotaje de arquitectura.
+- Imagen: Icono de superación de obstáculos o una montaña.
+
+DIAPOSITIVA 22: ROADMAP
+- Texto: Futuro: App móvil (React Native), modo competitivo B2B.
+- Imagen: Un mockup de móvil con el logo de Genio Academy o un mapa de ruta (Roadmap).
+
+DIAPOSITIVA 23: DESPEDIDA
+- Texto: ¡Gracias por su atención! ¿Preguntas?
+- Imagen: Tu contacto, un código QR a tu GitHub/LinkedIn, y el logotipo final de la academia.
