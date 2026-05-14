@@ -1,4 +1,4 @@
-﻿# 📚 DOCUMENTACIÓN TÉCNICA Y DE USUARIO
+# 📚 DOCUMENTACIÓN TÉCNICA Y DE USUARIO
 ## Genio Academy — Plataforma de Aprendizaje Incremental para la ESO
 
 > **Repositorio GitHub:** https://github.com/Cristina2M/GenioAcademy  
@@ -1277,6 +1277,8 @@ Pensé en tres fases de crecimiento:
 ## 10. Diapositivas para la Exposición (Guión)
 
 Este es el guión que tengo pensado para la presentación del proyecto ante el tribunal. Lo he organizado en diapositivas con el contenido clave de cada una.
+
+> 📺 **Enlace a la presentación (Canva):** [https://canva.link/76zised6tl9vdk2](https://canva.link/76zised6tl9vdk2)
 
 ### Diapositiva 1 — Portada
 
