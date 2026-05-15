@@ -78,3 +78,45 @@ El desarrollo se gestionó usando Git Flow de forma estricta (ramas main, develo
 Además, apliqué la metodología Agile centrada en un "Producto Mínimo Viable". Decidí conscientemente mover funcionalidades como el envío de emails o los PDFs al "Backlog", para concentrar mis horas en asegurar que el "core" innovador (la IA, el motor RPG y las videollamadas) fuera impecable. En el mundo real, priorizar el núcleo del software es vital.
 
 Genio Academy es la prueba de que el software puede ser un motor de cambio real en la motivación de los estudiantes. Muchas gracias por su atención. Quedo a su entera disposición para cualquier pregunta técnica.
+
+--- GUÍA VISUAL PARA CANVA (QUÉ PONER EN PANTALLA) ---
+
+DIAPOSITIVA 1: PORTADA Y BIENVENIDA
+- Visual: Logotipo grande de Genio Academy, estética del espacio oscuro (estilo Dark Glassmorphism).
+- Texto: "Genio Academy - Tu plataforma de aprendizaje incremental para la ESO". "Autora: Cristina Moreno Martínez".
+
+DIAPOSITIVA 2: EL PROBLEMA EDUCATIVO
+- Visual: Iconos o diagrama visual comparando el modelo antiguo (aburrido, un solo ritmo, caras tristes) frente a lo que buscamos.
+- Texto: Muy breve. Puntos clave: Desmotivación, E-learning monótono, Ritmo único en aulas.
+
+DIAPOSITIVA 3: LA SOLUCIÓN (APRENDIZAJE INCREMENTAL)
+- Visual: 4 iconos que representen los pilares (un escudo para seguridad/arquitectura, un mando de consola para gamificación, un cerebro para la IA, y una webcam para tutorías).
+- Texto: "El Aprendizaje Incremental", y una lista de los 4 pilares en 3 palabras cada uno.
+
+DIAPOSITIVA 4: DEMO EN VIVO
+- Visual: Esta es una diapositiva "puente". Una captura de pantalla chula de la plataforma o un gif corto de Astro el búho, con un letrero grande de "DEMOSTRACIÓN EN DIRECTO".
+- Texto: URL del proyecto: cristina2daw.es
+
+DIAPOSITIVA 5: ARQUITECTURA, INFRAESTRUCTURA Y SEGURIDAD
+- Visual: Un diagrama simple de 3 bloques o logos: Vercel (Frontend React), Render (Backend Django), Supabase (Base de datos PostgreSQL).
+- Texto: Destaca "Pivotaje a PaaS" y "Cliente Axios Zero-Config".
+
+DIAPOSITIVA 6: MOTOR RPG Y BASE DE DATOS
+- Visual: Un minidiagrama Entidad-Relación o un candado cerrando un curso, junto al icono de un JWT (Token).
+- Texto: "JWT Enriquecido", "Bloqueos 403 de servidor", "Restricciones UNIQUE".
+
+DIAPOSITIVA 7: SINCRONIZACIÓN DE VIDAS (SIN CELERY)
+- Visual: Una captura del componente 'LivesPanel' (donde salen los 3 planetas) o el diseño de los minijuegos de rescate.
+- Texto: "Algoritmo de regeneración pasiva al vuelo". "Minijuegos de rescate".
+
+DIAPOSITIVA 8: IA SOCRÁTICA Y VIDEOTUTORÍAS
+- Visual: Pantalla dividida: a la izquierda una captura de chat con Astro; a la derecha una captura de la videollamada de Jitsi.
+- Texto: "Proxy Seguro: API Groq Cloud (LLaMA 3.1)". "Videollamadas integradas (Polling asíncrono)".
+
+DIAPOSITIVA 9: PLAN DE NEGOCIO Y VIABILIDAD
+- Visual: Una tabla muy simple con 3 columnas (Plan 1, Plan 2, Plan 3) y sus precios. 
+- Texto: "Costes operativos: ~15-35€/mes". "Break-even: 5 suscriptores". "Escalabilidad B2C a B2B".
+
+DIAPOSITIVA 10: METODOLOGÍA AGILE Y CONCLUSIÓN
+- Visual: Un pequeño esquema de Git Flow (ramas) y un "Checklist" donde el MVP esté marcado en verde y el Backlog con un reloj de arena.
+- Texto: "Metodología Git Flow", "Enfoque en Producto Mínimo Viable (MVP)". "¡Gracias por su atención!"
