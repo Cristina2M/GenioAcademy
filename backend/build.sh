@@ -26,3 +26,6 @@ python populate_one.py
 
 # Expande el contenido de las lecciones existentes (idempotente)
 python expand_lessons.py
+
+# Script temporal para resetear la contraseña del superusuario en producción
+python reset_admin.py
