@@ -1,6 +1,9 @@
 # 📚 DOCUMENTACIÓN TÉCNICA Y DE USUARIO
 ## Genio Academy — Plataforma de Aprendizaje Incremental para la ESO
 
+> **Autora:** Cristina Moreno Martínez
+> **Instituto:** IES Ilíberis
+> **Ciclo:** Desarrollo de Aplicaciones Web (DAW)
 > **Repositorio GitHub:** https://github.com/Cristina2M/GenioAcademy  
 > **Versión del documento:** Hito VII completado + Fase 21 (Despliegue Final) + Expansión de Contenido  
 > **Fecha:** Mayo 2026
