@@ -611,7 +611,7 @@ Docker Compose los conecta en una red interna para que puedan comunicarse entre 
 - Django tiene soporte nativo excelente para PostgreSQL.
 - Soporta el tipo de dato `JSONField` de forma nativa, que uso en los campos `options` de los ejercicios y `cv_json` de los profesores.
 - Es gratuita, de código abierto y muy fiable.
-- Render (el servicio cloud donde está desplegado el backend) ofrece PostgreSQL directamente en su tier gratuito.
+- Supabase es la plataforma donde alojo la base de datos PostgreSQL en producción.
 
 ---
 
@@ -820,7 +820,7 @@ GenioAcademy/
 
 <div style="page-break-after: always;"></div>
 
-**`backend/core/urls.py`** — El enrutador raíz. Conecta los prefijos de URL (`/api/courses/`, `/api/users/`, etc.) con los `urls.py` de cada app. Funciona como un "centralita" que decide a qué app va cada petición.
+**`backend/core/urls.py`** — El enrutador raíz. Conecta los prefijos de URL (`/api/courses/`, `/api/users/`, etc.) con los `urls.py` de cada app. Funciona como una "centralita" que decide a qué app va cada petición.
 
 **`backend/users/serializers.py`** — Aquí está la clase `MyTokenObtainPairSerializer` que personaliza el token JWT para incluir los datos de gamificación del alumno. Cuando Django REST Framework genera un token de login, llama a este serializador, que añade campos extra al payload antes de firmar el token.
 
@@ -856,7 +856,7 @@ La plataforma está disponible en dos formas:
 ### 7.2 Registro de una cuenta nueva
 
 1. Accede a la página principal. Verás la landing page con el diseño espacial de Genio Academy.
-2. Pulsa **"Comenzar Misión"** (en el centro de la pantalla) o **"Registrarse"** (en la barra de navegación superior).
+2. Pulsa **"Nueva Cuenta"** (en la barra de navegación superior).
 3. Llegarás a la página de registro. Primero debes elegir tu **Plan de Suscripción**:
    - **Órbita Base (6,99€/mes):** El plan básico. Incluye acceso a toda la teoría, los quiz interactivos y el sistema de vidas. No incluye el tutor IA.
    - **Velocidad Luz (12,99€/mes):** Todo lo del Plan 1, más el tutor Astro (IA) disponible 24 horas al día los 7 días de la semana.
@@ -867,10 +867,10 @@ La plataforma está disponible en dos formas:
 
 ### 7.3 Inicio de sesión
 
-1. Ve a la página de login (botón "Iniciar Sesión" en la navbar o directamente en `/login`).
+1. Ve a la página de login (botón "Entrar" en la navbar o directamente en `/login`).
 2. Introduce tu **nombre de usuario** o tu **email** (el sistema acepta ambos).
 3. Escribe tu **contraseña**.
-4. Pulsa **"Iniciar Misión"**.
+4. Pulsa **"Desbloquear Terminal"**.
 5. Si las credenciales son correctas, serás redirigido a tu Dashboard personal.
 
 <div style="page-break-after: always;"></div>
@@ -885,7 +885,7 @@ El Dashboard es tu centro de mando personal. Desde aquí puedes ver tu progreso,
 
 - **Tarjeta de perfil (parte superior):** Muestra tu avatar de búho actual, tu nombre de usuario, tu nivel RPG actual y una barra de progreso de XP. La barra indica cuántos puntos te faltan para subir al siguiente nivel.
 
-- **Operación Principal:** Es el curso que la plataforma te sugiere a continuación. Se selecciona automáticamente: el primer curso disponible según tu nivel que aún no hayas completado. Haz clic en él para empezar.
+- **Operación Principal:** Es el lugar donde puedes ver los cursos que tienes iniciados para poder continuar con ellos.
 
 - **Vitrina de Medallas:** Muestra los logros que has conseguido según los cursos que has completado. Cada curso completado suma una medalla a tu colección.
 
@@ -928,7 +928,7 @@ Al hacer clic en un curso disponible entrarás al reproductor. La pantalla se di
 
 - **Ruta de Vuelo:** La lista de lecciones del curso. Haz clic en cualquiera para navegar a ella. Las que ya has completado muestran un ✅ verde.
 - **Botón "Completar Misión":** Aparece activo solo cuando has pasado el simulador de todas las lecciones. Al pulsarlo, recibes los XP del curso (solo la primera vez). Si ya lo habías completado antes, el botón dice "Terminar Entrenamiento" y no da XP adicionales.
-- **Chat de Astro 🦉:** Panel del tutor IA. Solo visible si tienes Plan 2 o Plan 3. (Ver sección 7.7)
+- **Chat de Astro 🦉:** Panel del tutor IA. Solo utilizable si tienes Plan 2 o Plan 3. (Ver sección 7.7)
 - **Panel de Planetas 🪐:** Muestra tus planetas (vidas) actuales y el tiempo restante para recuperar el siguiente. (Ver sección 7.8)
 - **Solicitar Tutoría:** Botón para abrir el modal de solicitud de tutoría. Solo visible con Plan 3. (Ver sección 7.10)
 
@@ -953,7 +953,7 @@ Astro es el asistente de IA de Genio Academy. Está disponible en el sidebar del
 <div style="page-break-after: always;"></div>
 
 **Lo que Astro NO hace:**
-- No te dirá directamente la respuesta de un ejercicio del quiz. Si le preguntas "¿Cuánto es 5 + 7?", te hará preguntas para que lo razonas tú mismo. Esto es el método socrático y es intencional.
+- No te dirá directamente la respuesta de un ejercicio del quiz. Si le preguntas "¿Cuánto es 5 + 7?", te hará preguntas para que lo razones tú mismo. Esto es el método socrático y es intencional.
 
 **Cosas a tener en cuenta:**
 - El historial del chat se mantiene durante la sesión. Si cierras el reproductor y vuelves a entrar, el historial se borra.
@@ -994,7 +994,7 @@ Si tienes el plan "Agujero de Gusano" y has llegado a 0 planetas, puedes recuper
 **Cosas importantes a saber sobre los minijuegos:**
 - Cada minijuego tiene un **período de cooldown**: una vez jugado, no vuelve a estar disponible hasta que pase el tiempo de espera configurado en el servidor.
 - Si superas el minijuego, recuperas **1 planeta inmediatamente**. El reloj de regeneración pasiva no se reinicia.
-- Si no lo superas, no recuperas ningún planeta, pero puedes intentar otro de los 5.
+- Si no lo superas, no recuperas ningún planeta, pero puedes intentar otro minijuego.
 
 ### 7.10 Solicitar una Tutoría en Directo (Solo Plan 3)
 
@@ -1135,11 +1135,11 @@ Para probar la plataforma sin tener que registrarse manualmente, existen estas c
 
 | Tipo de cuenta | Usuario | Contraseña | Qué puede hacer |
 |----------------|---------|------------|-----------------|
-| Alumno Plan 1 | `al1` | `alumno123` | Teoría y quiz básico, sin IA ni minijuegos |
-| Alumno Plan 2 | `al2` | `alumno123` | Lo anterior + tutor Astro IA |
-| Alumno Plan 3 | `al3` | `alumno123` | Todo: minijuegos de rescate y tutorías en vivo |
+| Alumno Plan 1 | `alumno1` | `alumno123` | Teoría y quiz básico, sin IA ni minijuegos |
+| Alumno Plan 2 | `alumno2` | `alumno123` | Lo anterior + tutor Astro IA |
+| Alumno Plan 3 | `alumno3` | `alumno123` | Todo: minijuegos de rescate y tutorías en vivo |
 | Profesor (Matemáticas) | `aris.thorne` | `Genio2026!` | Panel docente, bandeja de consultas |
-| Superusuario | `admin` | (el que pusiste al crear) | Panel de administración completo de Django |
+| Superusuario | `admin` | `admin123` | Panel de administración completo de Django |
 
 ### 8.4 Comandos útiles del día a día
 
@@ -1207,15 +1207,15 @@ Para mantener coherencia en todo el proyecto, seguí estas normas al escribir el
 - **Variables y funciones propias** (lógica de negocio): en **español**. Ejemplos: `leccionActiva`, `pestanaActiva`, `nivelAlumno`, `reclamarRecompensa`, `vidas_count`.
 - **Palabras reservadas del framework/lenguaje**: en **inglés** (no se pueden cambiar). Ejemplos: `useState`, `useEffect`, `className`, `queryset`, `serializer`, `objects.filter()`.
 
-Esta convención la adoptamos para que sea fácil distinguir qué es código del framework y qué es lógica propia del proyecto.
+De esta forma es fácil distinguir qué es código del framework y qué es lógica propia del proyecto.
 
 **Comentarios:**
 - Todos los archivos tienen comentarios en español explicando qué hace cada parte.
 - Los comentarios intentan explicar el **"por qué"** además del **"qué"**. Por ejemplo, no solo "// resta 1 vida" sino "// restamos la vida aquí y no en el frontend para evitar que se manipule desde el navegador".
 
 **Commits:**
-- Sin prefijos de convención (`feat:`, `fix:`, `chore:`). Solo mensajes descriptivos en español.
-- Ejemplos reales: `"Ajustar y documentar CoursePlayer"`, `"Corregir validación de vidas en el backend"`, `"Añadir seed_exercises.py y entorno de produccion del frontend"`.
+- Algunos tienen prefijos de convención (`feat:`, `fix:`, `chore:`...), porque ví que era una norma común en los commits.
+- Ejemplos reales: `"docs: corregir motivacion de python y explicacion de ramas release"`, `"Corregir validación de vidas en el backend"`, `"Añadir seed_exercises.py y entorno de produccion del frontend"`.
 
 <div style="page-break-after: always;"></div>
 
@@ -1257,7 +1257,7 @@ El proyecto está desplegado usando dos servicios en la nube:
 
 **Backend → Render**
 - El backend Django está desplegado en Render como un Web Service.
-- La base de datos PostgreSQL también está en Render.
+- La base de datos PostgreSQL externa está alojada en Supabase.
 - El dominio personalizado `api.cristina2daw.es` está configurado en Render.
 - Las variables de entorno (`SECRET_KEY`, `GROQ_API_KEY`, credenciales de BD) están configuradas directamente en el panel de Render, no en ningún archivo del repositorio.
 
@@ -1320,7 +1320,7 @@ Una de las cosas que más me sorprendió al investigar esto es lo barato que pue
 | Concepto | Coste estimado al mes |
 |----------|-----------------------|
 | Servidor backend (Render — tier de pago básico) | ~7€/mes |
-| Base de datos PostgreSQL (Render) | ~7€/mes |
+| Base de datos PostgreSQL (Supabase) | ~7€/mes |
 | Hosting frontend (Vercel — tier gratuito suficiente) | 0€ |
 | API de Groq Cloud (según volumen de peticiones) | ~0-20€/mes |
 | Dominio y renovación SSL | ~1€/mes |
@@ -1495,7 +1495,7 @@ La idea básica es:
 | `release/hito-3` | Cierre del Hito III: frontend completo conectado al backend |
 | `release/revision2` | Segunda ronda de revisión general del proyecto |
 | `release/correccionesGenerales` | Limpieza de código, españolización de variables y comentarios exhaustivos |
-| `release/contenido` | Expansión del catálogo educativo: seed de ejercicios, mejora de teoría y estabilización final *(rama actual)* |
+| `release/contenido` | Expansión del catálogo educativo: seed de ejercicios, mejora de teoría y estabilización final |
 
 ### Ramas de Feature (orden cronológico de desarrollo)
 
@@ -1552,7 +1552,7 @@ Esto elimina la necesidad de configurar variables de entorno diferentes en Verce
 |----------|-----------|-----|-------|
 | Frontend | Vercel | cristina2daw.es | Despliegue automático desde `main` |
 | Backend | Render | api.cristina2daw.es | Web Service con Python |
-| Base de Datos | Render | (interno) | PostgreSQL gestionada |
+| Base de Datos | Supabase | (externo) | PostgreSQL Serverless |
 
 **Limitación conocida del tier gratuito de Render:** El servidor backend se "suspende" tras 15 minutos de inactividad. La primera petición tras un período de inactividad puede tardar hasta 40 segundos en responder. Esto se ha comunicado en el manual de usuario para gestionar expectativas. En un entorno de producción real se usaría un tier de pago que mantiene el servidor siempre activo.
 
@@ -1571,7 +1571,7 @@ Al principio, mi idea era utilizar **Ollama** para ejecutar un modelo de intelig
 Configurar PostgreSQL dentro de Docker Compose me dio bastantes dolores de cabeza en los primeros hitos. Hubo conflictos con los volúmenes de persistencia de datos (a veces al borrar los contenedores o limpiar cachés perdía toda la información y tenía que volver a registrar usuarios y cargar los cursos a mano). Fue muy frustrante. Por eso acabé invirtiendo tiempo en crear los scripts en Python (`seed_data.py`, `seed_exercises.py`, etc.) para poder poblar la base de datos automáticamente en segundos cada vez que el entorno local se rompía o necesitaba reiniciarlo desde cero.
 
 **3. El despliegue a producción y los recursos gratuitos**
-Pasar del entorno seguro de "localhost" a que la plataforma esté accesible en internet fue probablemente el mayor reto de todos. Como no tenía presupuesto para servidores de pago, tuve que buscar la forma de encajar toda la arquitectura en las capas gratuitas (free tiers) de Vercel (para el frontend) y Render (para el backend y la base de datos). 
+Pasar del entorno seguro de "localhost" a que la plataforma esté accesible en internet fue probablemente el mayor reto de todos. Como no tenía presupuesto para servidores de pago, tuve que buscar la forma de encajar toda la arquitectura en las capas gratuitas (free tiers) de Vercel (para el frontend), Render (para el backend) y Supabase (para la base de datos). 
 
 El principal problema de esto es que los servidores gratuitos de Render se "suspenden" (entran en modo sleep) después de un rato sin tráfico para ahorrar recursos. Esto provocaba que, si alguien entraba a la web después de unas horas de inactividad, el backend tardara muchísimo en arrancar y la página del frontend diera error de "Servidor inaccesible". Para mitigarlo, optimicé todo lo que pude y añadí mensajes en la interfaz para que el usuario sepa que ese retraso inicial es normal. También tuve muchos problemas con la configuración de políticas CORS y variables de entorno para asegurar que el frontend desplegado en Vercel pudiera comunicarse correctamente con la API remota en Render, ya que al principio bloqueaba todas las peticiones.
 

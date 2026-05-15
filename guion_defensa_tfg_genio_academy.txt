@@ -38,7 +38,7 @@ DIAPOSITIVA 5: INFRAESTRUCTURA Y PIVOTAJE DE DESPLIEGUE
 (Tiempo sugerido: 45 seg - 1 minuto)
 Durante el desarrollo local utilicé Docker para contenerizar y aislar la base de datos PostgreSQL, el backend y el frontend, garantizando la portabilidad del entorno.
 
-Sin embargo, para producción tomé una decisión de arquitectura consciente: pivotar. Originalmente contemplé usar Kubernetes o Docker Swarm en la nube, pero analizando los costes de infraestructura y la complejidad para un MVP, decidí migrar a un modelo PaaS (Platform as a Service). El Frontend reside en Vercel, aprovechando su CDN global, y el Backend en Render. Esto demuestra adaptabilidad técnica para buscar la solución más eficiente al menor coste.
+Sin embargo, para producción tomé una decisión de arquitectura consciente: pivotar. Originalmente contemplé usar Kubernetes o Docker Swarm en la nube, pero analizando los costes de infraestructura y la complejidad para un MVP, decidí migrar a un modelo PaaS (Platform as a Service). El Frontend reside en Vercel, aprovechando su CDN global, el Backend en Render, y la Base de Datos en Supabase. Esto demuestra adaptabilidad técnica para buscar la solución más eficiente al menor coste.
 
 DIAPOSITIVA 6: SEGURIDAD: SSL Y ZERO-CONFIG API
 (Tiempo sugerido: 45 seg - 1 minuto)
@@ -159,8 +159,8 @@ DIAPOSITIVA 4: ECOSISTEMA TECNOLÓGICO
 - Imagen: Logos oficiales de Django, Python, React, Vite, Tailwind y PostgreSQL.
 
 DIAPOSITIVA 5: INFRAESTRUCTURA Y PIVOTAJE
-- Texto: Desarrollo: Docker. Producción: Vercel (Frontend) + Render (Backend).
-- Imagen: Logo de Docker tachado o con una flecha apuntando hacia los logos de Vercel y Render (simbolizando el pivotaje ágil).
+- Texto: Desarrollo: Docker. Producción: Vercel + Render + Supabase.
+- Imagen: Logo de Docker tachado o con una flecha apuntando hacia los logos de Vercel, Render y Supabase (simbolizando el pivotaje ágil).
 
 DIAPOSITIVA 6: SEGURIDAD (SSL Y ZERO-CONFIG)
 - Texto: Certificados SSL (HTTPS) + Zero-Config API Client.
