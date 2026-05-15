@@ -25,6 +25,8 @@
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ## 1. Anteproyecto Actualizado
 
 ### Descripción General
@@ -75,8 +77,8 @@ A lo largo del desarrollo del proyecto, la realidad técnica me obligó a tomar 
 
 ---
 
+<div style="page-break-after: always;"></div>
 
----
 
 ## 2. Objetivos y Justificación del Proyecto
 
@@ -120,6 +122,8 @@ Los objetivos concretos que me marqué al inicio del proyecto fueron:
 - Desplegar el proyecto en producción con dominio propio y certificados de seguridad SSL.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## 3. Modelo Entidad-Relación
 
@@ -279,6 +283,8 @@ Estas son las reglas que garantizan que los datos de la base de datos sean siemp
 - Los valores válidos para `status` en `Consultation` son: `'PENDING'`, `'IN_CALL'` y `'ANSWERED'`. Cualquier otro valor sería rechazado por el serializer de Django REST Framework.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## 4. Modelo de Clases y Casos de Uso
 
@@ -514,6 +520,8 @@ Los casos de uso describen cómo interactúan los usuarios con el sistema paso a
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ## 5. Tecnologías Empleadas
 
 En esta sección explico todas las tecnologías que he usado en el proyecto, por qué las elegí y para qué sirven exactamente. Algunas las conocía de clase, otras las tuve que investigar por mi cuenta porque las necesitaba para cosas concretas del proyecto.
@@ -702,6 +710,8 @@ En Genio Academy casi no uso cajas lisas ni sombras planas. Prefiero el efecto "
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ## 6. Estructura de Ficheros del Proyecto
 
 Aquí explico cómo está organizado el código en carpetas. Al principio me costó entender por qué Django organiza el código en "apps" separadas, pero luego tiene bastante sentido: cada app es responsable de una parte concreta del sistema, y así el código no se mezcla todo en el mismo sitio.
@@ -791,6 +801,8 @@ GenioAcademy/
 **`frontend/src/utils/axiosInstance.js`** — La instancia de Axios configurada con interceptores. Hay dos: uno que añade el header `Authorization: Bearer <token>` a cada petición saliente, y otro que detecta errores 401 (token caducado) e intenta renovarlo automáticamente con el refresh token antes de reintentar la petición original.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## 7. Manual de Usuario
 
@@ -990,6 +1002,8 @@ El panel de administración de Django está disponible en `http://localhost:8000
 - **Añadir ejercicios:** El campo `options` debe ser JSON válido en formato lista: `["opción A", "opción B", "opción C"]`. El campo `correct_answer` debe coincidir exactamente con una de las opciones (mismas mayúsculas, mismo texto).
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## 8. Manual del Desarrollador
 
@@ -1196,6 +1210,8 @@ El archivo `src/utils/axiosInstance.js` tiene una lógica de autodetección: si 
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ## 9. Plan de Negocio
 
 Aunque esto es un proyecto académico, quise pensar en serio en si podría tener viabilidad real como producto. Aquí explico el modelo de negocio que tendría si se lanzara al mercado.
@@ -1274,6 +1290,8 @@ Pensé en tres fases de crecimiento:
 - App móvil nativa (React Native + Expo) reutilizando la misma API del backend.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## 10. Diapositivas para la Exposición (Guión)
 
@@ -1374,6 +1392,8 @@ Decisiones de diseño clave: JWT enriquecido con datos RPG, regeneración de vid
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ## 11. Enlace al Código en GitHub y Estrategia de Ramas
 
 El código completo del proyecto está disponible públicamente en:
@@ -1436,6 +1456,8 @@ La idea básica es:
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ## 12. Entornos de Ejecución y Producción
 
 ### Dominios Oficiales en Producción
@@ -1468,8 +1490,7 @@ Esto elimina la necesidad de configurar variables de entorno diferentes en Verce
 
 ---
 
-
----
+<div style="page-break-after: always;"></div>
 
 ## 13. Dificultades Encontradas
 
