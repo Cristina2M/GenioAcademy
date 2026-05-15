@@ -25,6 +25,8 @@
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ## 1. Anteproyecto Actualizado
 
 ### Descripción General
@@ -46,6 +48,8 @@ La plataforma se apoya en **cuatro pilares** principales:
 - **Claustro Interactivo:** Es el catálogo de profesores especializados. Los usuarios del plan premium pueden solicitar tutorías directas y conectarse mediante videollamada integrada (sin salir de la plataforma).
 
 Técnicamente, el proyecto está estructurado como una arquitectura de **microservicios** usando Docker: el frontend es una SPA en React + Vite, el backend es una API REST en Django, y la base de datos es PostgreSQL. Actualmente está desplegado en producción utilizando servicios en la nube como Vercel y Render.
+
+<div style="page-break-after: always;"></div>
 
 ### Estado de desarrollo por Hitos
 
@@ -71,13 +75,16 @@ A lo largo del desarrollo del proyecto, la realidad técnica me obligó a tomar 
 2. **De Ollama Local a Groq Cloud (Tutor IA):** Inicialmente iba a usar la API de Ollama para correr el modelo localmente. En la práctica, el hardware necesario para correr un modelo en local (even uno pequeño) provocaba latencias inaceptables en las respuestas del tutor Astro. Para solucionarlo, migré la integración hacia **Groq**, un proveedor en la nube que ofrece inferencia ultrarrápida (LPU).
 3. **Descarte de LDAP y S3 Buckets:** Se valoró LDAP para la gestión de usuarios, pero para el alcance de Genio Academy (enfocado a usuarios finales y no a redes corporativas internas), el sistema de JWT enriquecido resultó mucho más seguro, rápido y estándar. Respecto a S3 para multimedia, actualmente los recursos (como los avatares) se cargan desde el propio bundle de React o bases de datos ligeras para mantener los costes a cero, aunque la base de código está preparada para integrarlo si el proyecto escala.
 4. **Sistema de Vidas y RPG más profundo:** En el diseño inicial solo se mencionaba una "API externa de avatares". Decidí ir un paso más allá en la gamificación y desarrollé todo un motor propio de subida de experiencia, niveles (Bloqueos 403 reales en servidor) y el sistema *Roguelike* de regeneración de vidas por tiempo, lo que aporta muchísimo más valor diferencial que solo usar avatares de DiceBear.
+
+<div style="page-break-after: always;"></div>
+
 5. **Funciones pospuestas al Backlog (PDFs, Email y n8n):** Ciertas funcionalidades clásicas como la generación de diplomas en PDF, la validación de cuentas por correo electrónico o las integraciones externas de automatización (ej. n8n), estaban inicialmente contempladas. Sin embargo, aplicando principios ágiles (Agile), decidí desplazarlas a la versión 2.0. El motivo es que preferí invertir el presupuesto de horas de desarrollo en asegurar que el *core* innovador de la app (el motor adaptativo, la IA en tiempo real y las videollamadas) fuera robusto y libre de fallos para este Producto Mínimo Viable (MVP).
 6. **Internacionalización (i18n) y Branding:** Para cumplir con los criterios de evaluación y mejorar la profesionalidad del producto, se ha implementado un sistema completo de internacionalización bilingüe (Español/Inglés) con un *LanguageContext*. Este sistema traduce dinámicamente las páginas públicas más complejas (Inicio, Misión, Claustro) y muestra el selector de idioma de forma condicional solo en estas vistas. Además, se ha pulido el branding final en producción, reemplazando los meta-tags genéricos de Vite por el logotipo oficial y título de Genio Academy en la pestaña del navegador.
 
 ---
 
+<div style="page-break-after: always;"></div>
 
----
 
 ## 2. Objetivos y Justificación del Proyecto
 
@@ -107,6 +114,8 @@ Genio Academy pretende dar respuesta a estas carencias mediante:
 
 **Conectividad con profesores reales:** Para el apoyo que la IA no puede cubrir, el sistema incluye la opción de contactar con especialistas para tutorías por videollamada en vivo.
 
+<div style="page-break-after: always;"></div>
+
 ### Objetivos Específicos
 
 Los objetivos concretos que me marqué al inicio del proyecto fueron:
@@ -121,6 +130,8 @@ Los objetivos concretos que me marqué al inicio del proyecto fueron:
 - Desplegar el proyecto en producción con dominio propio y certificados de seguridad SSL.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## 3. Modelo Entidad-Relación
 
@@ -138,6 +149,8 @@ Antes de ver el diagrama, una aclaración rápida para quien no esté familiariz
 - **PK (Primary Key):** Es el identificador único de cada fila de una tabla. No pueden repetirse dos registros con el mismo PK. En Django, si no especificas uno, se crea automáticamente un campo `id` autoincremental.
 - **FK (Foreign Key):** Es una referencia al PK de otra tabla. Por ejemplo, si una `Lesson` tiene un campo `course (FK)`, significa que esa lección pertenece al curso cuyo `id` coincide con ese valor. Es la forma de "conectar" tablas entre sí.
 - **M2M (Many to Many):** Relación de muchos a muchos. Por ejemplo, un profesor puede impartir varias materias, y una materia puede tener varios profesores. Django gestiona esto con una tabla intermedia automática.
+
+<div style="page-break-after: always;"></div>
 
 ### Entidades Principales
 
@@ -281,11 +294,13 @@ Estas son las reglas que garantizan que los datos de la base de datos sean siemp
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ## 4. Modelo de Clases y Casos de Uso
 
 ### Arquitectura de Capas (Backend)
 
-El backend sigue una arquitectura de tres capas bastante típica en aplicaciones web. Lo estudié en clase y luego intenté aplicarlo de la forma más limpia posible:
+El backend sigue una arquitectura de tres capas bastante típica en aplicaciones web. Lo aprendí en las prácticas de la empresa y quise intentar aplicarlo de la forma más limpia posible:
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
@@ -326,6 +341,7 @@ El backend sigue una arquitectura de tres capas bastante típica en aplicaciones
 │  MinigameLog   Professor       Consultation                  │
 └──────────────────────────────────────────────────────────────┘
 ```
+<div style="page-break-after: always;"></div>
 
 **¿Qué hace cada capa?**
 
@@ -387,6 +403,8 @@ src/
 
 - **`PrivateRoute.jsx`:** Un componente que envuelve las rutas privadas. Si el usuario no está autenticado, le redirige al login. Si sí lo está, deja pasar al componente de la ruta.
 
+<div style="page-break-after: always;"></div>
+
 ### Rutas de la Aplicación (App.jsx)
 
 | URL | Componente | Tipo de acceso |
@@ -422,6 +440,8 @@ Los casos de uso describen cómo interactúan los usuarios con el sistema paso a
 - **Resultado:** Alumno registrado. El frontend redirige al login.
 - **Posibles errores:** Username o email ya en uso (400), contraseña demasiado corta (400).
 
+<div style="page-break-after: always;"></div>
+
 #### CU-02: Login y obtención de sesión JWT
 
 - **Actor:** Alumno registrado
@@ -445,6 +465,8 @@ Los casos de uso describen cómo interactúan los usuarios con el sistema paso a
 - **Endpoint:** `GET /api/courses/categories/`
 - **Resultado:** El alumno ve el catálogo con los cursos disponibles y bloqueados claramente diferenciados.
 - **Nota:** Si el alumno intenta acceder directamente a un curso bloqueado via URL (ej: `/player/5`), el backend devolverá `403 Forbidden` al intentar cargar los datos del curso.
+
+<div style="page-break-after: always;"></div>
 
 #### CU-04: Completar un curso y ganar XP
 
@@ -470,6 +492,8 @@ Los casos de uso describen cómo interactúan los usuarios con el sistema paso a
 - **Resultado:** Respuesta de Astro que guía sin revelar la solución directa.
 - **Restricción:** Si el alumno tiene Plan 1, el backend devuelve `403 Forbidden`. El frontend muestra un aviso para actualizar el plan.
 
+<div style="page-break-after: always;"></div>
+
 #### CU-06: Fallar una evaluación y perder un planeta
 
 - **Actor:** Alumno conectado (cualquier plan)
@@ -493,6 +517,8 @@ Los casos de uso describen cómo interactúan los usuarios con el sistema paso a
 - **Endpoint:** `POST /api/users/management/{id}/update_avatar/` con `{ "selected_avatar": "buho3" }`
 - **Resultado:** El avatar nuevo aparece en la navbar al instante sin necesidad de volver a hacer login.
 
+<div style="page-break-after: always;"></div>
+
 #### CU-09: Solicitar una tutoría personalizada
 
 - **Actor:** Alumno con Plan 3
@@ -515,6 +541,8 @@ Los casos de uso describen cómo interactúan los usuarios con el sistema paso a
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ## 5. Tecnologías Empleadas
 
 En esta sección explico todas las tecnologías que he usado en el proyecto, por qué las elegí y para qué sirven exactamente. Algunas las conocía de clase, otras las tuve que investigar por mi cuenta porque las necesitaba para cosas concretas del proyecto.
@@ -528,7 +556,7 @@ En esta sección explico todas las tecnologías que he usado en el proyecto, por
 | **Git** | Latest | Control de versiones con estrategia Git Flow |
 | **GitHub** | — | Repositorio remoto y backup |
 
-**Docker** es una herramienta que permite empaquetar una aplicación con todo lo que necesita para funcionar (código, dependencias, configuración) dentro de un "contenedor". La ventaja es que ese contenedor funciona igual en cualquier máquina, da igual si es Windows, Linux o Mac. Esto me lo explicaron en clase como "it works on my machine" pero con Docker funciona en todas partes.
+**Docker** es una herramienta que permite empaquetar una aplicación con todo lo que necesita para funcionar (código, dependencias, configuración) dentro de un "contenedor". La ventaja es que ese contenedor funciona igual en cualquier máquina, da igual si es Windows, Linux o Mac.
 
 En este proyecto tengo 3 contenedores gestionados por Docker Compose:
 1. **frontend** — Node.js con React y Vite.
@@ -537,9 +565,10 @@ En este proyecto tengo 3 contenedores gestionados por Docker Compose:
 
 Docker Compose los conecta en una red interna para que puedan comunicarse entre sí (el backend habla con la base de datos, por ejemplo) y expone los puertos necesarios al exterior (5173 para el frontend, 8000 para el backend).
 
-**Git** lo uso con una estrategia parecida a Git Flow: hay una rama `main` estable, una rama `develop` de integración, y ramas `feature/` para desarrollar cada funcionalidad por separado. Cuando termino una feature la fusiono en `develop` y cuando todo está estable lo llevo a `main`.
+**Git** lo uso con una estrategia parecida a Git Flow: hay una rama `main` estable, una rama `develop` de integración, ramas `feature/` para desarrollar cada funcionalidad por separado, y ramas `release/` para preparar las entregas y pulir detalles de cada hito importante. Cuando termino una feature la fusiono en `develop`, de ahí se estabiliza en `release/`, y finalmente lo llevo a `main` cuando está listo para producción.
 
 ---
+<div style="page-break-after: always;"></div>
 
 ### Backend
 
@@ -554,7 +583,7 @@ Docker Compose los conecta en una red interna para que puedan comunicarse entre 
 | **Groq SDK** | Latest | Cliente oficial de la API de IA de Groq Cloud |
 | **python-dotenv** | Latest | Carga de variables de entorno desde `.env` |
 
-**Python 3.11** lo elegí porque es el lenguaje que más domino del backend después de haberlo estudiado en clase, y porque Django (el framework que iba a usar) es Python. La versión 3.11 en concreto porque es la que tiene soporte a largo plazo y es la que estaba disponible en la imagen de Docker oficial.
+**Python 3.11** lo elegí, a pesar de no haberlo dado en clase durante el ciclo, porque es el lenguaje que utiliza Django. Mi decisión de usar Django viene motivada por la experiencia previa que adquirí utilizándolo en la empresa durante mis prácticas. Me pareció la oportunidad perfecta para aplicar en mi proyecto lo que aprendí en un entorno laboral real. La versión 3.11 en concreto la elegí porque tiene soporte a largo plazo y es la que estaba disponible en la imagen de Docker oficial.
 
 **Django** es un framework web de Python que sigue el patrón MVT (Model-View-Template), aunque en este proyecto no uso las templates de Django porque el frontend lo lleva React. Lo que sí uso es el ORM (para gestionar la base de datos), el panel de administración (para gestionar el contenido), y el sistema de apps para organizar el código.
 
@@ -605,6 +634,8 @@ Docker Compose los conecta en una red interna para que puedan comunicarse entre 
 
 **React Router DOM v6** gestiona la navegación dentro de la SPA. Define qué componente se renderiza para cada URL, y lo hace sin recargar la página. También proporciona el hook `useNavigate` para redirigir programáticamente y `useParams` para leer parámetros de la URL (como el `courseId` en `/player/:courseId`).
 
+<div style="page-break-after: always;"></div>
+
 **Axios** es un cliente HTTP basado en promesas. Lo uso en lugar del `fetch` nativo del navegador porque permite configurar interceptores fácilmente. Mi instancia de Axios en `axiosInstance.js` tiene un interceptor que añade automáticamente el token JWT a todas las peticiones y otro que maneja el refresco del token cuando caduca.
 
 **Tailwind CSS v4** es un framework de CSS basado en utilidades. En lugar de escribir clases CSS tradicionales, aplicas clases predefinidas directamente en el HTML/JSX. Por ejemplo, `className="flex items-center gap-4 p-6 rounded-xl bg-white"`. Al principio me costó acostumbrarme pero luego es muy rápido de usar. La v4 tiene una sintaxis nueva respecto a v3, con configuración dentro del CSS en lugar de un archivo `tailwind.config.js`.
@@ -635,6 +666,8 @@ Así la clave de API nunca llega al navegador del usuario.
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ### Decisiones Técnicas Importantes
 
 Aquí explico algunas decisiones de diseño que tomé y por qué, porque creo que son cosas que no son obvias si no se explican:
@@ -660,6 +693,8 @@ La solución que usé es polling: el componente `ActiveCallBanner.jsx` hace una 
 **4. Proxy de IA en el backend**
 
 Como ya mencioné antes, el backend actúa de intermediario entre el frontend y Groq. Esto no es solo por seguridad (proteger la API key), sino también porque me permite añadir el `SYSTEM_PROMPT` de Astro en el servidor, donde el alumno no puede verlo ni modificarlo. Si lo pusiera en el frontend, cualquiera podría inspeccionar el código y ver las instrucciones de comportamiento de Astro.
+
+<div style="page-break-after: always;"></div>
 
 **5. Catálogo siempre disponible sin error**
 
@@ -692,6 +727,8 @@ Toda la plataforma funciona en un tema oscuro (*dark mode*).
   - `fuchsia-500` (#d946ef): Usado para botones de riesgo, vidas perdidas, o simplemente para dar contraste llamativo en gradientes.
 - **Textos:** Blanco puro (#ffffff) o gris claro (`slate-300` / #cbd5e1) para facilitar la lectura prolongada sin fatiga visual.
 
+<div style="page-break-after: always;"></div>
+
 **3. Efectos y Componentes (Glassmorphism)**
 En Genio Academy casi no uso cajas lisas ni sombras planas. Prefiero el efecto "Cristal":
 - **Paneles y Tarjetas:** Tienen fondos semi-transparentes (`bg-black/30` o `bg-white/5`), acompañados de un filtro de desenfoque (`backdrop-blur-md`).
@@ -702,6 +739,8 @@ En Genio Academy casi no uso cajas lisas ni sombras planas. Prefiero el efecto "
 - **Iconos:** Uso la librería estandarizada **Lucide React**. Se caracteriza por iconos minimalistas de trazo fino que no sobrecargan la interfaz espacial.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## 6. Estructura de Ficheros del Proyecto
 
@@ -779,6 +818,8 @@ GenioAcademy/
 
 **`backend/core/settings.py`** — El archivo de configuración central de Django. Aquí se configuran cosas como la base de datos, las apps instaladas, los ajustes de JWT (tiempo de expiración de tokens), la política CORS (qué orígenes puede llamar a la API), la zona horaria, etc. Es el archivo que más hay que revisar cuando algo de configuración no funciona.
 
+<div style="page-break-after: always;"></div>
+
 **`backend/core/urls.py`** — El enrutador raíz. Conecta los prefijos de URL (`/api/courses/`, `/api/users/`, etc.) con los `urls.py` de cada app. Funciona como un "centralita" que decide a qué app va cada petición.
 
 **`backend/users/serializers.py`** — Aquí está la clase `MyTokenObtainPairSerializer` que personaliza el token JWT para incluir los datos de gamificación del alumno. Cuando Django REST Framework genera un token de login, llama a este serializador, que añade campos extra al payload antes de firmar el token.
@@ -792,6 +833,8 @@ GenioAcademy/
 **`frontend/src/utils/axiosInstance.js`** — La instancia de Axios configurada con interceptores. Hay dos: uno que añade el header `Authorization: Bearer <token>` a cada petición saliente, y otro que detecta errores 401 (token caducado) e intenta renovarlo automáticamente con el refresh token antes de reintentar la petición original.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## 7. Manual de Usuario
 
@@ -807,6 +850,8 @@ La plataforma está disponible en dos formas:
 > **Nota importante sobre el tiempo de carga inicial:** Si accedes por primera vez o llevas un rato sin entrar, el backend puede tardar hasta 40 segundos en responder la primera petición. Esto es normal y se debe a que el servidor gratuito de Render se "duerme" cuando no hay actividad. Después de esa primera carga, todo funciona con normalidad.
 
 ![Página Principal](capturas_doc/paginaPrincipal.png)
+
+<div style="page-break-after: always;"></div>
 
 ### 7.2 Registro de una cuenta nueva
 
@@ -828,6 +873,8 @@ La plataforma está disponible en dos formas:
 4. Pulsa **"Iniciar Misión"**.
 5. Si las credenciales son correctas, serás redirigido a tu Dashboard personal.
 
+<div style="page-break-after: always;"></div>
+
 ### 7.4 El Dashboard (Panel de Control del Alumno)
 
 El Dashboard es tu centro de mando personal. Desde aquí puedes ver tu progreso, elegir tu próxima misión y personalizar tu perfil.
@@ -848,6 +895,8 @@ El Dashboard es tu centro de mando personal. Desde aquí puedes ver tu progreso,
 
 - **Mi Trayectoria:** Acceso a tu historial de cursos, tanto los que tienes en progreso como los que ya has completado. Puedes filtrar por estado y ver cuándo los completaste.
 
+<div style="page-break-after: always;"></div>
+
 ### 7.5 El Catálogo Estelar (Cursos disponibles)
 
 En la sección "Catálogo Estelar" (`/courses`) verás todas las asignaturas disponibles. Cada asignatura tiene varios niveles de conocimiento, y cada nivel tiene varios cursos.
@@ -860,6 +909,8 @@ En la sección "Catálogo Estelar" (`/courses`) verás todas las asignaturas dis
 **¿Qué asignaturas hay?** Actualmente el catálogo incluye Matemáticas, Física, Ciencias Naturales, Historia y Lengua, organizadas en niveles de conocimiento progresivos.
 
 **Un detalle importante:** Aunque en el frontend veas el candado, si alguien intentara acceder directamente a la URL de un curso bloqueado, el backend devolverá un error `403 Forbidden` y el frontend mostrará un mensaje de acceso denegado. La restricción está en el servidor, no solo en la interfaz.
+
+<div style="page-break-after: always;"></div>
 
 ### 7.6 El Reproductor de Curso (CoursePlayer)
 
@@ -881,6 +932,8 @@ Al hacer clic en un curso disponible entrarás al reproductor. La pantalla se di
 - **Panel de Planetas 🪐:** Muestra tus planetas (vidas) actuales y el tiempo restante para recuperar el siguiente. (Ver sección 7.8)
 - **Solicitar Tutoría:** Botón para abrir el modal de solicitud de tutoría. Solo visible con Plan 3. (Ver sección 7.10)
 
+<div style="page-break-after: always;"></div>
+
 ### 7.7 El Tutor Astro (Inteligencia Artificial)
 
 Astro es el asistente de IA de Genio Academy. Está disponible en el sidebar del reproductor de cursos para alumnos con Plan 2 o superior.
@@ -897,6 +950,8 @@ Astro es el asistente de IA de Genio Academy. Está disponible en el sidebar del
 - Ayuda para entender un ejercicio: "No entiendo el enunciado de esta pregunta".
 - Aclaraciones sobre el temario de la lección activa.
 
+<div style="page-break-after: always;"></div>
+
 **Lo que Astro NO hace:**
 - No te dirá directamente la respuesta de un ejercicio del quiz. Si le preguntas "¿Cuánto es 5 + 7?", te hará preguntas para que lo razonas tú mismo. Esto es el método socrático y es intencional.
 
@@ -904,6 +959,8 @@ Astro es el asistente de IA de Genio Academy. Está disponible en el sidebar del
 - El historial del chat se mantiene durante la sesión. Si cierras el reproductor y vuelves a entrar, el historial se borra.
 - Astro conoce el contexto del curso y la lección en la que estás, así que sus respuestas son específicas para lo que estás estudiando.
 - Si tienes Plan 1, verás un aviso de que esta función requiere Plan 2 o superior.
+
+<div style="page-break-after: always;"></div>
 
 ### 7.8 El Sistema de Planetas (Vidas)
 
@@ -966,6 +1023,8 @@ Los avatares son los búhos que representan tu perfil en la plataforma. Hay vari
 3. Los que puedes usar aparecen activos. Los que requieren más nivel aparecen con un candado y el nivel necesario.
 4. Haz clic en uno activo para seleccionarlo. El cambio es inmediato: verás tu nuevo búho en la navbar al instante.
 
+<div style="page-break-after: always;"></div>
+
 ### 7.12 El Panel de Profesores (Solo para docentes)
 
 Si tu cuenta es de profesor (`is_teacher = True`), tienes acceso a un panel especial en `/teacher-dashboard`. Este panel no es accesible para alumnos normales.
@@ -991,6 +1050,8 @@ El panel de administración de Django está disponible en `http://localhost:8000
 - **Añadir ejercicios:** El campo `options` debe ser JSON válido en formato lista: `["opción A", "opción B", "opción C"]`. El campo `correct_answer` debe coincidir exactamente con una de las opciones (mismas mayúsculas, mismo texto).
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## 8. Manual del Desarrollador
 
@@ -1030,6 +1091,8 @@ GROQ_API_KEY=tu_clave_de_groq_aqui
 
 > **¿Qué es la SECRET_KEY?** Es la clave criptográfica que Django usa para firmar los tokens JWT y otras funciones de seguridad. Debe ser larga y aleatoria. Nunca debe subirse al repositorio. Puedes generar una con Python: `python -c "import secrets; print(secrets.token_hex(50))"`.
 
+<div style="page-break-after: always;"></div>
+
 ```bash
 # 3. Levantar todos los servicios (la primera vez tarda unos minutos)
 docker-compose up --build
@@ -1063,6 +1126,8 @@ docker exec genioacademy-backend-1 python manage.py shell < seed_teacher_users.p
 - Panel de Administración Django: http://localhost:8000/admin/
 
 > **Nota sobre el nombre del contenedor:** El nombre `genioacademy-backend-1` lo genera Docker Compose automáticamente a partir del nombre de la carpeta y del servicio. Si la carpeta del proyecto tiene otro nombre, el contenedor se llamará diferente. Para ver el nombre exacto usa `docker ps` mientras los contenedores están corriendo.
+
+<div style="page-break-after: always;"></div>
 
 ### 8.3 Cuentas de prueba
 
@@ -1152,6 +1217,8 @@ Esta convención la adoptamos para que sea fácil distinguir qué es código del
 - Sin prefijos de convención (`feat:`, `fix:`, `chore:`). Solo mensajes descriptivos en español.
 - Ejemplos reales: `"Ajustar y documentar CoursePlayer"`, `"Corregir validación de vidas en el backend"`, `"Añadir seed_exercises.py y entorno de produccion del frontend"`.
 
+<div style="page-break-after: always;"></div>
+
 **Estructura de componentes React:**
 - Un componente por archivo.
 - Los componentes de página van en `/pages/`, los reutilizables en `/components/`.
@@ -1177,6 +1244,8 @@ Para añadir cursos, lecciones y ejercicios nuevos no hace falta ser programador
 
 > **Consejo:** Si vas a añadir muchas lecciones de una vez, es más eficiente hacerlo mediante un script Python como `seed_exercises.py` y ejecutarlo con `python manage.py seed_exercises`. Pero para una o dos lecciones, el panel de admin es más rápido.
 
+<div style="page-break-after: always;"></div>
+
 ### 8.7 Cómo funciona el despliegue en producción
 
 El proyecto está desplegado usando dos servicios en la nube:
@@ -1196,6 +1265,8 @@ El proyecto está desplegado usando dos servicios en la nube:
 El archivo `src/utils/axiosInstance.js` tiene una lógica de autodetección: si el hostname del navegador es `localhost`, apunta al backend local en `http://localhost:8000`. Si el hostname es `cristina2daw.es`, apunta automáticamente a `https://api.cristina2daw.es`. Esto elimina la necesidad de cambiar variables de configuración manualmente al desplegar.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## 9. Plan de Negocio
 
@@ -1222,6 +1293,8 @@ La idea es que el Plan 1 sea accesible para cualquier familia, el Plan 2 añada 
 **Público objetivo secundario:** Padres de alumnos de la ESO que buscan una herramienta de apoyo académico digital para sus hijos. En muchos casos son ellos quienes pagan la suscripción, así que el producto también tiene que convencerles a ellos.
 
 **Público objetivo terciario:** Centros educativos que podrían adoptar Genio Academy como herramienta complementaria para sus alumnos. Este sería un modelo B2B (Business to Business) en lugar del B2C (Business to Consumer) actual.
+
+<div style="page-break-after: always;"></div>
 
 ### 9.3 ¿Por qué elegiría alguien Genio Academy en lugar de la competencia?
 
@@ -1255,6 +1328,8 @@ Una de las cosas que más me sorprendió al investigar esto es lo barato que pue
 
 Con solo **5 suscriptores del Plan 1** (5 × 6,99€ = 34,95€) se cubren los costes operativos. A partir de ahí, todo es margen. Esto lo hace un modelo especialmente viable para empezar.
 
+<div style="page-break-after: always;"></div>
+
 ### 9.5 Estrategia de crecimiento
 
 Pensé en tres fases de crecimiento:
@@ -1275,6 +1350,8 @@ Pensé en tres fases de crecimiento:
 - App móvil nativa (React Native + Expo) reutilizando la misma API del backend.
 
 ---
+
+<div style="page-break-after: always;"></div>
 
 ## 10. Diapositivas para la Exposición (Guión)
 
@@ -1314,6 +1391,8 @@ Este es el guión que tengo pensado para la presentación del proyecto ante el t
 
 Recorrido de demo: Registro → Dashboard → Catálogo Estelar → CoursePlayer (teoría + quiz) → Chat con Astro → Panel de Planetas → Solicitar Tutoría → ActiveCallBanner → Videollamada Jitsi
 
+<div style="page-break-after: always;"></div>
+
 ### Diapositiva 5 — Arquitectura y Decisiones Técnicas
 
 ¿Cómo está construido por dentro y por qué?
@@ -1351,6 +1430,8 @@ Decisiones de diseño clave: JWT enriquecido con datos RPG, regeneración de vid
 - **Plan 3:** solicitud de tutoría → filtrado automático por materia → asignación al especialista.
 - Videollamada Jitsi embebida dentro de la plataforma. El alumno recibe notificación mediante polling cada 30 segundos. Sin abrir pestañas externas.
 
+<div style="page-break-after: always;"></div>
+
 ### Diapositiva 9 — Plan de Negocio
 
 *(Mostrar tabla de planes)*
@@ -1377,6 +1458,8 @@ Decisiones de diseño clave: JWT enriquecido con datos RPG, regeneración de vid
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ## 11. Enlace al Código en GitHub y Estrategia de Ramas
 
 El código completo del proyecto está disponible públicamente en:
@@ -1394,6 +1477,8 @@ La idea básica es:
 - Cuando se acerca una entrega importante, se crea una rama `release/` para hacer los últimos ajustes.
 
 ![Árbol de Commits y Ramas de Git](capturas_doc/arbolGit.png)
+
+<div style="page-break-after: always;"></div>
 
 ### Ramas principales
 
@@ -1439,6 +1524,8 @@ La idea básica es:
 
 ---
 
+<div style="page-break-after: always;"></div>
+
 ## 12. Entornos de Ejecución y Producción
 
 ### Dominios Oficiales en Producción
@@ -1471,8 +1558,7 @@ Esto elimina la necesidad de configurar variables de entorno diferentes en Verce
 
 ---
 
-
----
+<div style="page-break-after: always;"></div>
 
 ## 13. Dificultades Encontradas
 
