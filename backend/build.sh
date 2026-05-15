@@ -29,3 +29,6 @@ python expand_lessons.py
 
 # Script temporal para resetear la contraseña del superusuario en producción
 python reset_admin.py
+
+# Puebla el currículum (cv_json) de todos los profesores si está vacío
+python seed_professor_cvs.py
