@@ -598,6 +598,8 @@ Docker Compose los conecta en una red interna para que puedan comunicarse entre 
 
 **psycopg2-binary** es el adaptador que permite a Python conectarse con PostgreSQL. Es la versión `binary` porque incluye las librerías de PostgreSQL compiladas dentro del paquete, así no hace falta instalarlas por separado en el sistema.
 
+<div style="page-break-after: always;"></div>
+
 **Groq SDK** es el cliente oficial en Python para la API de Groq Cloud. Lo uso en `ai/views.py` para enviar el mensaje del alumno junto con el prompt de sistema de Astro y recibir la respuesta del modelo de lenguaje.
 
 **python-dotenv** carga las variables del archivo `.env` (que no está en el repositorio por seguridad) en las variables de entorno del proceso. Así el código puede acceder a la `SECRET_KEY` de Django, las credenciales de PostgreSQL y la `GROQ_API_KEY` sin que estén escritas directamente en el código fuente.
@@ -637,8 +639,6 @@ Docker Compose los conecta en una red interna para que puedan comunicarse entre 
 
 **React Router DOM v6** gestiona la navegación dentro de la SPA. Define qué componente se renderiza para cada URL, y lo hace sin recargar la página. También proporciona el hook `useNavigate` para redirigir programáticamente y `useParams` para leer parámetros de la URL (como el `courseId` en `/player/:courseId`).
 
-<div style="page-break-after: always;"></div>
-
 **Axios** es un cliente HTTP basado en promesas. Lo uso en lugar del `fetch` nativo del navegador porque permite configurar interceptores fácilmente. Mi instancia de Axios en `axiosInstance.js` tiene un interceptor que añade automáticamente el token JWT a todas las peticiones y otro que maneja el refresco del token cuando caduca.
 
 **Tailwind CSS v4** es un framework de CSS basado en utilidades. En lugar de escribir clases CSS tradicionales, aplicas clases predefinidas directamente en el HTML/JSX. Por ejemplo, `className="flex items-center gap-4 p-6 rounded-xl bg-white"`. Al principio me costó acostumbrarme pero luego es muy rápido de usar. La v4 tiene una sintaxis nueva respecto a v3, con configuración dentro del CSS en lugar de un archivo `tailwind.config.js`.
@@ -668,8 +668,6 @@ Para usarlo de forma segura, el frontend nunca llama directamente a Groq. El flu
 Así la clave de API nunca llega al navegador del usuario.
 
 ---
-
-<div style="page-break-after: always;"></div>
 
 ### Decisiones Técnicas Importantes
 
