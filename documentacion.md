@@ -611,7 +611,7 @@ Docker Compose los conecta en una red interna para que puedan comunicarse entre 
 - Django tiene soporte nativo excelente para PostgreSQL.
 - Soporta el tipo de dato `JSONField` de forma nativa, que uso en los campos `options` de los ejercicios y `cv_json` de los profesores.
 - Es gratuita, de código abierto y muy fiable.
-- Supabase es la plataforma donde alojo la base de datos PostgreSQL en producción.
+- Supabase (el servicio cloud de base de datos) ofrece PostgreSQL como servicio gestionado con un tier gratuito muy generoso, lo que desacopla la base de datos del servidor de aplicaciones.
 
 ---
 
@@ -1257,7 +1257,7 @@ El proyecto está desplegado usando dos servicios en la nube:
 
 **Backend → Render**
 - El backend Django está desplegado en Render como un Web Service.
-- La base de datos PostgreSQL externa está alojada en Supabase.
+- La base de datos PostgreSQL está alojada externamente en Supabase.
 - El dominio personalizado `api.cristina2daw.es` está configurado en Render.
 - Las variables de entorno (`SECRET_KEY`, `GROQ_API_KEY`, credenciales de BD) están configuradas directamente en el panel de Render, no en ningún archivo del repositorio.
 
@@ -1320,7 +1320,7 @@ Una de las cosas que más me sorprendió al investigar esto es lo barato que pue
 | Concepto | Coste estimado al mes |
 |----------|-----------------------|
 | Servidor backend (Render — tier de pago básico) | ~7€/mes |
-| Base de datos PostgreSQL (Supabase) | ~7€/mes |
+| Base de datos PostgreSQL (Supabase) | ~0€ (Tier gratuito) |
 | Hosting frontend (Vercel — tier gratuito suficiente) | 0€ |
 | API de Groq Cloud (según volumen de peticiones) | ~0-20€/mes |
 | Dominio y renovación SSL | ~1€/mes |
@@ -1552,7 +1552,7 @@ Esto elimina la necesidad de configurar variables de entorno diferentes en Verce
 |----------|-----------|-----|-------|
 | Frontend | Vercel | cristina2daw.es | Despliegue automático desde `main` |
 | Backend | Render | api.cristina2daw.es | Web Service con Python |
-| Base de Datos | Supabase | (externo) | PostgreSQL Serverless |
+| Base de Datos | Supabase | Supabase URL | PostgreSQL gestionada |
 
 **Limitación conocida del tier gratuito de Render:** El servidor backend se "suspende" tras 15 minutos de inactividad. La primera petición tras un período de inactividad puede tardar hasta 40 segundos en responder. Esto se ha comunicado en el manual de usuario para gestionar expectativas. En un entorno de producción real se usaría un tier de pago que mantiene el servidor siempre activo.
 
@@ -1565,7 +1565,7 @@ Esto elimina la necesidad de configurar variables de entorno diferentes en Verce
 A lo largo del desarrollo de este proyecto me he encontrado bastantes obstáculos que me han obligado a investigar y replantear algunas soluciones técnicas. Estas son las dificultades más destacadas que superé:
 
 **1. La integración de la Inteligencia Artificial (Astro)**
-Al principio, mi idea era utilizar **Ollama** para ejecutar un modelo de inteligencia artificial de forma local dentro de un contenedor Docker en mi ordenador. Quería que el proyecto fuera 100% independiente. Sin embargo, mi equipo no tenía la capacidad de procesamiento ni la memoria RAM necesarias. Tras configurar todo el entorno y lograr que funcionara, la latencia era inaceptable: a veces tenía que esperar hasta 20 minutos para que la IA respondiera a un simple "Hola". Fue una experiencia exasperante. La solución fue pivotar hacia un servicio en la nube que fuera extremadamente rápido, y por eso acabé utilizando la API de **Groq**. Es increíblemente veloz y me permitió lograr esa sensación de chat socrático en tiempo real sin quemar el ordenador.
+Al principio, mi idea era utilizar **Ollama** para ejecutar un modelo de inteligencia artificial de forma local dentro de un contenedor Docker en mi ordenador. Quería que el proyecto fuera 100% independiente. Sin embargo, mi equipo no tenía la capacidad de procesamiento ni la memoria RAM necesarias. Tras configurar todo el entorno y lograr que funcionara, la latencia era inaceptable: a veces tenía que esperar hasta 20 minutos para que la IA respondiera a un simple "Hola". Fue una experiencia exasperante. La solución fue pivotar hacia un servicio en la nube que fuera extremadamente rápido, y por eso acabé utilizando la API de **Groq**. Es increíblemente veloz en comparación y me permitió lograr esa sensación de chat socrático en tiempo real sin quemar el ordenador.
 
 **2. Problemas con la base de datos en local**
 Configurar PostgreSQL dentro de Docker Compose me dio bastantes dolores de cabeza en los primeros hitos. Hubo conflictos con los volúmenes de persistencia de datos (a veces al borrar los contenedores o limpiar cachés perdía toda la información y tenía que volver a registrar usuarios y cargar los cursos a mano). Fue muy frustrante. Por eso acabé invirtiendo tiempo en crear los scripts en Python (`seed_data.py`, `seed_exercises.py`, etc.) para poder poblar la base de datos automáticamente en segundos cada vez que el entorno local se rompía o necesitaba reiniciarlo desde cero.
