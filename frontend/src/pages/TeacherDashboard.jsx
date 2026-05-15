@@ -25,7 +25,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import StudentCardModal from '../components/StudentCardModal';
 import JitsiMeetWrapper from '../components/JitsiMeetWrapper';
 import CourseEditorTab from '../components/CourseEditorTab';
-
+import { getStudentAvatar } from '../utils/avatarUtils';
 // ─── COMPONENTE PRINCIPAL: Panel del Profesor ───────────────────────────────
 const TeacherDashboard = () => {
     // Obtenemos los datos del usuario logueado desde el contexto global
@@ -362,7 +362,7 @@ const StudentsTab = ({ alumnos, onSeleccionarAlumno }) => {
                             {/* Avatar + Nombre del alumno */}
                             <td className="py-6 px-8 flex items-center gap-4">
                                 <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-indigo-500/30">
-                                    <img src={`/assets/buho/${alumno.avatar}.png`} alt="Avatar del alumno" className="w-full h-full object-cover" />
+                                    <img src={getStudentAvatar(alumno.avatar)} alt="Avatar del alumno" className="w-full h-full object-cover" />
                                 </div>
                                 <span className="font-bold text-white">{alumno.username}</span>
                             </td>

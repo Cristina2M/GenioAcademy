@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axiosInstance from '../api/axios';
+import { getStudentAvatar } from '../utils/avatarUtils';
 
 const StudentCardModal = ({ student, onClose, onIniciarLlamada }) => {
     const [nombreLlamada, setNombreLlamada] = useState('');
@@ -82,7 +83,7 @@ const StudentCardModal = ({ student, onClose, onIniciarLlamada }) => {
                     <div className="px-8 pb-8 flex flex-col items-center">
                         {/* Avatar */}
                         <div className="relative -mt-16 w-32 h-32 rounded-full border-4 border-[#0a0a14] bg-indigo-900 overflow-hidden mb-4 shadow-[0_0_20px_rgba(99,102,241,0.4)]">
-                            <img src={`/assets/buho/${student.avatar}.png`} alt={student.username} className="w-full h-full object-cover" />
+                            <img src={getStudentAvatar(student.avatar)} alt={student.username} className="w-full h-full object-cover" />
                         </div>
 
                         {/* Nombre y nivel */}
