@@ -73,6 +73,11 @@ class CourseSerializer(serializers.ModelSerializer):
         """
         Comprueba si existe un registro de completitud para este alumno + este curso.
         """
+        # Primero miramos si el contexto tiene los IDs precargados (Optimización N+1)
+        completed_ids = self.context.get('completed_course_ids')
+        if completed_ids is not None:
+            return obj.id in completed_ids
+
         request = self.context.get('request')
         if not request or not getattr(request, 'user', None) or not request.user.is_authenticated:
             return False
@@ -84,6 +89,11 @@ class CourseSerializer(serializers.ModelSerializer):
         """
         Comprueba si el alumno ha iniciado el curso (existe en UserCourseProgress).
         """
+        # Primero miramos si el contexto tiene los IDs precargados (Optimización N+1)
+        started_ids = self.context.get('started_course_ids')
+        if started_ids is not None:
+            return obj.id in started_ids
+
         request = self.context.get('request')
         if not request or not getattr(request, 'user', None) or not request.user.is_authenticated:
             return False

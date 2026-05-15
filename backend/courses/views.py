@@ -69,8 +69,16 @@ class CategoryViewSet(viewsets.ModelViewSet):
             jwt_auth = JWTAuthentication()
             user_auth_tuple = jwt_auth.authenticate(self.request)
             if user_auth_tuple:
-                self.request.user = user_auth_tuple[0]
-        except Exception:
+                user = user_auth_tuple[0]
+                self.request.user = user
+                
+                # PRECARGA PARA EVITAR N+1 Y ERRORES DE TIMEOUT EN PRODUCCIÓN
+                from .models import CourseCompletion, UserCourseProgress
+                context['completed_course_ids'] = set(CourseCompletion.objects.filter(user=user).values_list('course_id', flat=True))
+                context['started_course_ids'] = set(UserCourseProgress.objects.filter(user=user).values_list('course_id', flat=True))
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
             pass  # Si el token es inválido o ha caducado, ignoramos y dejamos anónimo
         return context
 
