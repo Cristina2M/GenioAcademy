@@ -221,14 +221,53 @@ La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina 
 | `guionExpo` | Guion de la defensa oral del TFG y guía visual para Canva |
 
 ### Ramas de Feature (desarrollo de funcionalidades)
+
+#### 🔧 Backend y Base de Datos
 | Rama | Funcionalidad desarrollada |
 |---|---|
+| `feature/bd` | Modelado inicial de la base de datos: `CustomUser`, `Category`, `KnowledgeLevel`, `Course` |
+| `feature/backendV1` | Primera versión funcional del backend: Django + DRF + endpoints REST básicos |
 | `feature/motorLogica` | Motor de lógica incremental: progresión de XP, subida de nivel y bloqueo 403 |
-| `feature/autenticacionFrontend` | Sistema de login/registro en React conectado al JWT del backend |
-| `feature/IA` | Integración de Astro: tutor socrático con Groq + LLaMA + `AIChatPanel.jsx` |
 | `feature/vidas` | Sistema Roguelike: 3 planetas, regeneración pasiva y 5 minijuegos de recuperación |
+| `feature/recupContrasena` | Sistema de recuperación de contraseña por email con tokens seguros de Django |
+| `feature/notificaciones` | Sistema de notificaciones de tutoría en tiempo real (polling asíncrono) |
+
+#### 💻 Frontend y UI
+| Rama | Funcionalidad desarrollada |
+|---|---|
+| `feature/frontendV1` | Estructura inicial del frontend: React + Vite + Tailwind + enrutamiento base |
+| `feature/frontend` | Desarrollo de la interfaz principal: Navbar, Home, Login, Register y estilos globales |
+| `feature/autenticacionFrontend` | Sistema de login/registro en React conectado al JWT del backend |
+| `feature/panelEstudiante` | Panel de control del alumno (Dashboard): XP, nivel, avatar y misión sugerida |
+| `feature/reproductorCursos` | Reproductor de cursos `CoursePlayer.jsx` con teoría, quiz y sidebar de lecciones |
+| `feature/home-v2` | Rediseño premium de la página de inicio con animaciones y sección de planes |
+| `feature/mision` | Página "La Misión": presentación del proyecto educativo y sus objetivos |
+| `feature/paginacion` | Carrusel de cursos con paginación por niveles en el catálogo |
+| `feature/Catalogo` | Catálogo público de cursos (`Courses.jsx`) con estructura de categorías y niveles |
+
+#### 🤖 Inteligencia Artificial y Contenido
+| Rama | Funcionalidad desarrollada |
+|---|---|
+| `feature/IA` | Integración de Astro: tutor socrático con Groq + LLaMA + `AIChatPanel.jsx` |
+| `feature/microcursos` | Seed masivo de lecciones y ejercicios cortos para todos los cursos |
+| `feature/contenido-formateado` | Expansión y formateo HTML del contenido educativo de las lecciones |
+
+#### 🎓 Claustro de Profesores y Panel Docente
+| Rama | Funcionalidad desarrollada |
+|---|---|
+| `feature/claustro` | Página pública del claustro de profesores con cards animadas y filtro por materia |
+| `feature/interfaz-profesor` | Panel docente del profesor: gestión de consultas y videollamadas (`TeacherDashboard.jsx`) |
+| `feature/ficha-alumno` | Ficha de alumno para el profesor con estadísticas RPG (`StudentCardModal.jsx`) |
 | `feature/tutorias` | Sistema de tutorías: modal de solicitud, videollamadas Jitsi y notificaciones en tiempo real |
+| `feature/creacionCursosProf` | Editor de cursos para el profesor: CRUD de lecciones y ejercicios (`CourseEditorTab.jsx`) |
+
+#### 🚀 Despliegue y Documentación
+| Rama | Funcionalidad desarrollada |
+|---|---|
+| `feature/despliegue` | Configuración del despliegue en Vercel (frontend) y Render (backend) |
+| `feature/docs` | Primera versión de la documentación técnica del proyecto |
 | `feature/docs2` | Actualización de documentación de producción y estabilización final |
+| `feature/correccionDetalles` | Correcciones de detalle: UX, mensajes de error y ajustes visuales finales |
 
 ---
 
