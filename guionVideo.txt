@@ -1,0 +1,136 @@
+GUION DETALLADO PARA EL VÍDEO DEMOSTRATIVO DE GENIO ACADEMY
+Duración estimada: 10 - 15 minutos.
+Estructura: Acción visual (lo que haces) + Discurso (lo que dices).
+
+=======================================================
+INTRODUCCIÓN Y ARQUITECTURA
+=======================================================
+
+[ACCIÓN EN PANTALLA]
+Abre el navegador en la página principal (cristina2daw.es). Quédate en la cabecera mostrando el diseño espacial sin hacer scroll todavía.
+
+[LO QUE DEBES DECIR]
+"Hola, mi nombre es Cristina Moreno Martínez y este es el vídeo demostrativo de mi Trabajo de Fin de Ciclo: Genio Academy. Esta plataforma es un entorno de aprendizaje gamificado para la ESO basado en una progresión incremental tipo RPG.
+
+A nivel técnico, la aplicación está dividida en tres microservicios en la nube:
+1. El Frontend está desarrollado con React 18, Vite y Tailwind CSS v4, desplegado en la red global de Vercel.
+2. El Backend es una API RESTful desarrollada en Python con Django REST Framework, alojada en Render.
+3. La Base de Datos es PostgreSQL, alojada de forma independiente en Supabase.
+Todo el ecosistema se comunica de forma segura mediante HTTPS y un sistema de JSON Web Tokens (JWT) enriquecidos."
+
+=======================================================
+REGISTRO Y DUAL LOGIN
+=======================================================
+
+[ACCIÓN EN PANTALLA]
+Haz clic en "Comenzar Misión" o "Registrarse". Muestra la pantalla de selección de planes de suscripción. Luego ve a la pantalla de Inicio de Sesión.
+
+[LO QUE DEBES DECIR]
+"El sistema monetario simulado se basa en tres planes de suscripción que desbloquean diferentes capacidades, como la IA o las tutorías en vivo. 
+Para el acceso, he implementado un sistema de 'Dual Login' sobrescribiendo el backend de autenticación de Django. Esto permite al usuario iniciar sesión tanto con su correo electrónico como con su nombre de usuario de forma transparente. Voy a iniciar sesión con una cuenta de nivel máximo para mostrar toda la funcionalidad."
+
+[ACCIÓN EN PANTALLA]
+Inicia sesión con un alumno que tenga el Plan 3 (Agujero de Gusano).
+
+=======================================================
+EL DASHBOARD Y LA GAMIFICACIÓN
+=======================================================
+
+[ACCIÓN EN PANTALLA]
+Muestra el Dashboard. Mueve el ratón señalando el avatar, el nivel, la barra de XP y las vidas (planetas) en la parte izquierda de la pantalla.
+
+[LO QUE DEBES DECIR]
+"Al decodificar el JWT en el Frontend, React carga instantáneamente el estado global mediante la Context API. Aquí vemos el panel central del alumno. 
+El progreso no se mide por cursos escolares, sino por Nivel de Conocimiento (Lvl). La experiencia (XP) acumulada se rige por una fórmula matemática exponencial alojada en el servidor. A la izquierda podemos ver nuestro Avatar actual, la racha de días consecutivos estudiando y nuestras Vidas, que aquí llamamos Planetas."
+
+=======================================================
+CATÁLOGO Y BLOQUEO RPG (403)
+=======================================================
+
+[ACCIÓN EN PANTALLA]
+Navega a "Rutas Espaciales" (Catálogo). Haz scroll para mostrar niveles abiertos y niveles bloqueados con el candado. Intenta hacer clic en un curso bloqueado.
+
+[LO QUE DEBES DECIR]
+"El catálogo de cursos está jerarquizado. Como este es un sistema de aprendizaje incremental estricto, el alumno no puede acceder a material avanzado si no tiene el nivel RPG requerido. 
+Esta seguridad no es solo visual en el Frontend. He desarrollado permisos personalizados en Django que verifican el nivel de la base de datos en cada petición. Si se intenta forzar el acceso a un nivel bloqueado manipulando React, el servidor devolverá un error 403 Forbidden, impidiendo hacer trampas."
+
+=======================================================
+SIMULADOR Y QUIZ
+=======================================================
+
+[ACCIÓN EN PANTALLA]
+Entra a un curso que tengas disponible. Ve a una lección. Muestra el contenido teórico (HTML renderizado) y luego baja hasta el Quiz. Contesta bien una pregunta y dale a Completar Misión.
+
+[LO QUE DEBES DECIR]
+"El reproductor de cursos está diseñado como una Single Page Application fluida. Aquí el backend me sirve contenido HTML enriquecido para la teoría.
+Al final de la lección encontramos la evaluación. Si superamos el reto, el servidor actualiza nuestra base de datos, recalculando al vuelo si hemos superado el umbral para subir de nivel. Al completar todo el curso, recibimos la XP y una nueva medalla."
+
+=======================================================
+SISTEMA ROGUELIKE Y REGENERACIÓN DE VIDAS
+=======================================================
+
+[ACCIÓN EN PANTALLA]
+Ve a otra lección y falla a propósito el quiz. Haz clic en el panel de Vidas (icono de los planetas en el menú superior derecho) para mostrar que has perdido un planeta y que hay una cuenta atrás.
+
+[LO QUE DEBES DECIR]
+"Una mecánica fundamental es el castigo por fallar, diseñado para evitar el aprendizaje por 'fuerza bruta'. Si fallamos, perdemos una vida.
+¿Cómo se regeneran estas vidas? En lugar de usar herramientas pesadas como Celery o Redis en el backend, desarrollé un algoritmo de 'Regeneración Pasiva al Vuelo'. Django guarda la marca de tiempo de la última vida perdida. En cualquier petición posterior que haga el usuario a la API, el servidor calcula la diferencia de tiempo matemáticamente y devuelve las vidas correspondientes sin consumir memoria extra en segundo plano."
+
+=======================================================
+ASTRO: INTELIGENCIA ARTIFICIAL SOCRÁTICA
+=======================================================
+
+[ACCIÓN EN PANTALLA]
+Abre el panel del Chat de Astro (Tutor IA). Escribe algo como: "Astro, no sé resolver la ecuación del ejercicio". Muestra cómo te responde.
+
+[LO QUE DEBES DECIR]
+"Si el alumno se queda atascado, puede invocar a Astro. Inicialmente desplegué este servicio con Ollama en local, pero pivoté a la nube de Groq Cloud integrando el modelo LLaMA 3.1 para lograr una inferencia casi instantánea.
+El flujo de seguridad es vital: React nunca toca la clave de la IA. El frontend hace una petición a Django, y es mi backend quien se comunica con Groq como un 'Proxy Seguro'. Mediante Prompt Engineering, Django inyecta silenciosamente el contexto de la lección que el alumno está viendo y restringe a Astro para que use el método socrático: no puede dar la respuesta directa, debe hacer preguntas para guiar al alumno."
+
+=======================================================
+MINIJUEGOS DE RESCATE (REPETICIÓN ESPACIADA)
+=======================================================
+
+[ACCIÓN EN PANTALLA]
+Ve a tu perfil o usa un enlace a un minijuego (ej. juego de parejas o memory). Juega un poco para mostrar que es interactivo.
+
+[LO QUE DEBES DECIR]
+"Para los alumnos sin vidas que tengan un plan premium, he implementado minijuegos desarrollados puramente con React y Tailwind. Si el alumno supera estos retos mentales, el servidor valida la victoria y le devuelve una vida instantáneamente, fomentando la retención del usuario en la plataforma."
+
+=======================================================
+VIDEOTUTORÍAS: POLLING Y JITSI (FRONTEND)
+=======================================================
+
+[ACCIÓN EN PANTALLA]
+Dale al botón de "Solicitar Tutoría" en el reproductor de un curso. Escribe un mensaje breve solicitando ayuda.
+
+[LO QUE DEBES DECIR]
+"Finalmente, la conexión humana. Un alumno puede solicitar una tutoría en vivo. Esta petición se guarda en PostgreSQL. Para saber cuándo el profesor contesta, he evitado usar WebSockets por su complejidad de despliegue en capas gratuitas. En su lugar, programé un Polling asíncrono en React: el navegador pregunta a la API cada cierto tiempo si hay novedades."
+
+=======================================================
+PANEL DEL PROFESOR (BACKEND)
+=======================================================
+
+[ACCIÓN EN PANTALLA]
+En otra pestaña (o abriendo modo incógnito), inicia sesión con el usuario profesor (`aris.thorne` o el que tengas configurado). Ve al Panel Docente.
+
+[LO QUE DEBES DECIR]
+"Si cambiamos a la vista del profesor, el ruteo de React detecta el rol en el JWT y nos redirige a un panel exclusivo. Aquí el profesor tiene un CRUD completo para gestionar sus cursos y alumnos.
+En la pestaña de consultas, vemos la petición que acabo de mandar. El profesor puede responder por texto, lo cual marcará el ticket como resuelto."
+
+[ACCIÓN EN PANTALLA]
+En el panel de consultas del profesor, dale a "Iniciar Videollamada". Se abrirá el modal o marco de Jitsi en pantalla.
+Rápidamente vuelve a la ventana del Alumno y muestra cómo le aparece el Banner de "Llamada Entrante" y dale a unirse.
+
+[LO QUE DEBES DECIR]
+"O bien, el profesor puede iniciar una Transmisión en Vivo. Al hacerlo, el backend genera dinámicamente un UUID seguro y crea una sala de Jitsi Meet que se embebe directamente en nuestra plataforma. 
+Gracias al Polling que mencioné antes, el alumno recibe un aviso dinámico en su pantalla en tiempo real sin tener que recargar la página ni usar enlaces externos de Zoom o Meet.
+
+Con esto, Genio Academy cubre el ciclo completo: retención mediante UI reactiva, progresión estricta RPG, asistencia IA de ultra baja latencia y conexión de microservicios en la nube. 
+Muchas gracias."
+
+=======================================================
+CONSEJOS PARA LA GRABACIÓN:
+1. Usa OBS Studio u otro grabador de pantalla. Graba toda tu pantalla completa.
+2. Ten abiertas de antemano dos pestañas: una para el alumno y otra para el profesor, así no pierdes tiempo escribiendo contraseñas a mitad del vídeo.
+3. Habla con calma, seguridad y tono profesional, no pasa nada si dura 8, 10 o 15 minutos, lo importante es que el profesor vea tu dominio del proyecto.
