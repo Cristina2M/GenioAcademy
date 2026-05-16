@@ -79,6 +79,12 @@ Además, apliqué la metodología Agile centrada en un "Producto Mínimo Viable"
 
 Genio Academy es la prueba de que el software puede ser un motor de cambio real en la motivación de los estudiantes. Muchas gracias por su atención. Quedo a su entera disposición para cualquier pregunta técnica.
 
+
+
+
+
+
+
 --- GUÍA VISUAL PARA CANVA (QUÉ PONER EN PANTALLA) ---
 
 DIAPOSITIVA 1: PORTADA Y BIENVENIDA
