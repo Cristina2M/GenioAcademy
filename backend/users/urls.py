@@ -1,3 +1,17 @@
+# ============================================================
+# ARCHIVO: users/urls.py
+# FUNCIÓN: Define las rutas de la API para los Alumnos/Usuarios.
+#
+# Endpoints disponibles bajo /api/users/:
+#   /register/            → Crear nueva cuenta de alumno
+#   /lives/               → Consultar estado de planetas (vidas)
+#   /lives/decrease/      → Restar 1 planeta al fallar una evaluación
+#   /minigames/play/      → Validar la victoria en un minijuego de rescate
+#   /forgot-password/     → Solicitar email de recuperación de contraseña
+#   /reset-password/      → Confirmar nueva contraseña con token seguro
+#   /management/          → CRUD completo de usuarios (gestión interna)
+# ============================================================
+
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (

@@ -1,3 +1,13 @@
+// ============================================================
+// ARCHIVO: LanguageContext.jsx
+// FUNCIÓN: Contexto global de idioma (Español / Inglés).
+//
+// Permite que cualquier página o componente sepa en qué idioma
+// debe mostrar sus textos y cambie entre ES <-> EN con un clic.
+// Solo se usa en las páginas públicas (Home, Claustro, Misión)
+// ya que la app para alumnos está completamente en español.
+// ============================================================
+
 import React, { createContext, useState } from 'react';
 
 const LanguageContext = createContext();
