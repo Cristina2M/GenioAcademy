@@ -287,7 +287,15 @@ La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina 
 *   **Ejecutar Migraciones:** `docker exec genioacademy-backend-1 python manage.py migrate`
 *   **Poblar BD (Local):** `docker exec genioacademy-backend-1 python manage.py shell < seed_data.py`
 *   **Poblar BD (Producción):** `docker exec genioacademy-backend-1 python manage.py seed_production`
+*   **Rellenar CVs de Profesores:** `docker exec genioacademy-backend-1 python seed_professor_cvs.py`
 *   **Crear Superusuario:** `docker exec genioacademy-backend-1 python manage.py createsuperuser`
+
+### 🔹 Comandos de Git (Flujo Habitual)
+
+*   **Ver estado de cambios:** `git status`
+*   **Hacer commit:** `git add -A && git commit -m "descripción del cambio"`
+*   **Subir a origen:** `git push origin <nombre-de-la-rama>`
+*   **Merge a main:** `git checkout main && git merge <rama> --no-ff -m "Merge <rama>: descripción"`
 
 ---
 
@@ -297,41 +305,70 @@ La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina 
 | Método | Endpoint | Descripción |
 |---|---|---|
 | `POST` | `/api/token/` | Login Dual (Email/User): devuelve tokens JWT |
+| `POST` | `/api/token/refresh/` | Renovación silenciosa del token de acceso |
 | `POST` | `/api/users/register/` | Registro de nuevo alumno |
+| `POST` | `/api/users/forgot-password/` | Solicitar email de recuperación de contraseña |
+| `POST` | `/api/users/reset-password/` | Confirmar nueva contraseña con token seguro |
+
+### Sistema de Gamificación (Vidas y Minijuegos)
+| Método | Endpoint | Acceso | Descripción |
+|---|---|---|---|
+| `GET` | `/api/users/lives/` | 🔒 Autenticado | Estado de planetas, cooldowns y acceso a minijuegos |
+| `POST` | `/api/users/lives/decrease/` | 🔒 Autenticado | Restar 1 planeta al fallar una evaluación |
+| `POST` | `/api/users/minigames/play/` | 🔒 Plan 3 | Validar victoria en minijuego y recuperar 1 planeta |
 
 ### Catálogo Educativo
 | Método | Endpoint | Acceso | Descripción |
 |---|---|---|---|
-| `GET` | `/api/courses/categories/` | 🌐 Público | Árbol completo de asignaturas y niveles |
-| `GET` | `/api/courses/courses/{id}/` | 🔒 Autenticado | Detalle de curso con lecciones y ejercicios |
+| `GET` | `/api/courses/categories/` | 🌐 Público | Árbol completo de asignaturas, niveles y cursos |
+| `GET` | `/api/courses/courses/{id}/` | 🔒 Autenticado | Detalle de un curso con sus lecciones y ejercicios |
+| `POST` | `/api/courses/courses/{id}/complete/` | 🔒 Autenticado | Marcar un curso como completado y recibir XP |
+
+### Inteligencia Artificial (Astro)
+| Método | Endpoint | Acceso | Descripción |
+|---|---|---|---|
+| `POST` | `/api/ai/chat/` | 🔒 Plan 2+ | Enviar mensaje a Astro y recibir respuesta socrática |
 
 ### Sistema de Tutorías y Profesores
-| Método | Endpoint | Descripción |
-|---|---|---|
-| `GET` | `/api/teachers/professors/` | Lista de profesores (filtro por materia) |
-| `POST` | `/api/teachers/consultations/` | Crear consulta de tutoría |
-| `POST` | `/api/teachers/consultations/{id}/start_call/` | Iniciar videollamada Jitsi (solo docentes) |
+| Método | Endpoint | Acceso | Descripción |
+|---|---|---|---|
+| `GET` | `/api/teachers/professors/` | 🌐 Público | Lista de profesores activos (filtro por ?course_id) |
+| `POST` | `/api/teachers/consultations/` | 🔒 Plan 3 | Crear consulta de tutoría con un profesor |
+| `GET` | `/api/teachers/consultations/` | 🔒 Autenticado | Listar tutorías propias (alumno) o recibidas (profe) |
+| `POST` | `/api/teachers/consultations/{id}/start_call/` | 🔒 Profesor | Iniciar videollamada Jitsi y notificar al alumno |
+| `GET` | `/api/teachers/consultations/active_calls/` | 🔒 Alumno | Comprobar si hay una videollamada activa para él |
+| `GET` | `/api/teachers/consultations/unread_count/` | 🔒 Alumno | Número de respuestas sin leer (badge del Navbar) |
 
 ---
 
 ## 🏛️ Detalles Técnicos
 
 ### Arquitectura del Frontend
-1. **Zero-Config API**: El archivo `src/api/axios.js` detecta automáticamente el hostname para apuntar a `localhost` o a `api.cristina2daw.es`.
-2. **Tailwind v4**: Estilos centralizados en `src/index.css` con variables modernas.
-3. **Estado Global**: `AuthContext.jsx` gestiona la sesión mediante persistencia de JWT en `localStorage`.
+1. **Zero-Config API**: El archivo `src/api/axios.js` detecta automáticamente el hostname para apuntar a `localhost` o a `api.cristina2daw.es` sin necesidad de configurar variables de entorno en Vercel.
+2. **Tailwind v4 + DaisyUI**: Estilos centralizados en `src/index.css`. DaisyUI aporta componentes base (modal, dropdown, badge) que se combinan con clases de Tailwind personalizadas.
+3. **Estado Global**: `AuthContext.jsx` gestiona la sesión completa mediante JWT en `localStorage`. El token incluye datos de gamificación (XP, nivel, avatar) para evitar peticiones extra.
+4. **Contexto de Idioma**: `LanguageContext.jsx` gestiona el cambio ES/EN en las páginas públicas (Home, Claustro, Misión).
 
 ### Autenticación JWT
 * El payload incluye campos personalizados como `subscription_level` y `is_teacher` para el renderizado condicional de la UI.
 * **SafeTokenRefreshView**: Evita errores 500 durante la renovación de tokens en usuarios inexistentes.
-* **Sistema de Login Dual**: El backend implementa un `EmailOrUsernameBackend` que permite a los usuarios autenticarse indistintamente con su `username` o su `email`, mejorando la accesibilidad y la experiencia de usuario.
+* **Sistema de Login Dual**: El backend implementa un `EmailOrUsernameBackend` que permite a los usuarios autenticarse indistintamente con su `username` o su `email`.
+* **Renovación Silenciosa**: El interceptor de Axios renueva el `access token` automáticamente usando el `refresh token` cuando recibe un 401, sin interrumpir al usuario.
+
+### Gamificación RPG
+* **XP y Niveles**: Cada curso completado otorga XP. Al alcanzar `nivel_actual × 500` XP, el alumno sube de nivel automáticamente.
+* **Planetas (Vidas Roguelike)**: Máximo 3 planetas. Se pierde 1 al fallar una evaluación. Se regenera 1 automáticamente cada 10 minutos (sin tareas en segundo plano: se calcula la diferencia de tiempo al vuelo).
+* **Rachas (Streaks)**: Se incrementa 1 por cada día consecutivo que el alumno inicie sesión. Se reinicia a 1 si se rompe la racha.
+* **Minijuegos de Rescate**: Exclusivos de Plan 3. Con 0 planetas, el alumno puede jugar uno de 5 minijuegos para recuperar 1 planeta. Cada minijuego tiene un cooldown individual.
 
 ### Seguridad del Contenido HTML
 * En `CoursePlayer.jsx` se usa `dangerouslySetInnerHTML`. Este enfoque es seguro ya que el contenido es inyectado exclusivamente por los administradores del sistema via scripts de confianza.
 
 ### Inteligencia Artificial (Astro)
-* **Sincronización Horaria**: El backend inyecta dinámicamente la hora local del alumno (ajustada a CEST/CET) en el prompt del sistema. Esto permite que Astro adapte sus saludos y comentarios según sea mañana, tarde o noche, eliminando inconsistencias temporales.
+* **Sincronización Horaria**: El backend inyecta dinámicamente la hora local del alumno (ajustada a CEST/CET) en el prompt del sistema. Esto permite que Astro adapte sus saludos según sea mañana, tarde o noche.
+* **Método Socrático**: Astro nunca da la respuesta directa; guía al alumno con preguntas para que la descubra por sí mismo.
 * **Modelo**: Se utiliza `llama-3.1-8b-instant` vía Groq para obtener respuestas con latencia inferior a 1 segundo.
+* **Seguridad**: La clave de la API de Groq nunca se expone al frontend. Todas las peticiones pasan por el backend de Django como intermediario.
 
 ---
 
@@ -339,3 +376,4 @@ La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina 
 
 * **Hot Reload**: Los cambios en CSS y JSX se reflejan al instante gracias a Vite.
 * **Españolización del Código**: Se mantiene una estricta coherencia en el lenguaje de las variables de negocio (español) y las palabras reservadas del framework (inglés).
+* **Diseño Idempotente de los Seeds**: Todos los scripts de siembra de datos (`seed_production`, `seed_professor_cvs.py`) comprueban antes de insertar para no duplicar registros aunque se ejecuten varias veces.

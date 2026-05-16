@@ -30,8 +30,9 @@ ALLOWED_HOSTS = [
 ]
 
 
-# Application definition
-
+# ── APLICACIONES REGISTRADAS ──
+# Django solo reconoce las apps que estén listadas aquí.
+# Añadimos nuestras apps propias junto a las de Django y los paquetes de terceros.
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
