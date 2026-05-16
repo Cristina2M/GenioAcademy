@@ -16,11 +16,12 @@ Se ha implementado una arquitectura de **microservicios dockerizados** para gara
 
 ### 🏗️ Arquitectura del Sistema
 
-El sistema se compone de tres contenedores principales:
+El sistema se compone de cuatro capas principales:
 
-1. **Frontend**: React + Vite (SPA). *Puerto: `5173` (localhost:5173)*
-2. **Backend**: Django + Django REST Framework. *Puerto: `8000` (localhost:8000)*
-3. **Database**: PostgreSQL. *Puerto interno: `5432`*
+1. **Frontend (Vercel)**: React + Vite (SPA). *Dominio: `cristina2daw.es`*
+2. **Backend (Render)**: Django + Django REST Framework. *Dominio: `api.cristina2daw.es`*
+3. **Base de Datos (Supabase)**: PostgreSQL en la nube. *Conexión vía DATABASE_URL.*
+4. **DNS y Dominio (IONOS)**: Gestión del dominio personalizado y redirección de subdominios.
 
 ---
 
@@ -36,10 +37,11 @@ El frontend implementa una lógica de auto-detección de entorno. No es necesari
 
 ### 🔐 Gestión de Credenciales y Entorno (.env)
 
-Por normativas de seguridad, los secretos del marco de trabajo no se vuelcan al repositorio público.
+Por normativas de seguridad, los secretos del proyecto no se vuelcan al repositorio público.
 Debe preexistir o ser inyectado por Docker un contexto de variables (`.env` o compose environment) que defina:
 * La firma secreta criptográfica de Django (`SECRET_KEY`).
-* Las credenciales de levantamiento y conexión inter-contenedor de PostgreSQL (`POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`).
+* Las credenciales de conexión a PostgreSQL local (`POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`).
+* La URL de conexión a la base de datos en producción (`DATABASE_URL`) — en producción apunta a Supabase.
 * La clave de API de Groq para el asistente Astro (`GROQ_API_KEY`).
 
 ### 🧪 Cuentas de Prueba
@@ -48,11 +50,11 @@ Para poder probar la plataforma sin registrarse, existen las siguientes cuentas 
 
 | Tipo | Usuario | Contraseña | Acceso |
 |---|---|---|---|
-| Alumno (Plan 1) | `al1` | `alumno123` | Catálogo básico |
-| Alumno (Plan 2) | `al2` | `alumno123` | Catálogo + Astro IA |
-| Alumno (Plan 3) | `al3` | `alumno123` | Todo + Tutorías |
+| Alumno (Plan 1) | `alumno1` | `alumno123` | Catálogo básico |
+| Alumno (Plan 2) | `alumno2` | `alumno123` | Catálogo + Astro IA |
+| Alumno (Plan 3) | `alumno3` | `alumno123` | Todo + Tutorías |
 | Profesor (Matemáticas) | `aris.thorne` | `Genio2026!` | Panel docente |
-| Superusuario | `admin` | (ver `.env`) | Admin de Django |
+| Superusuario | `admin` | `admin123` | Admin de Django |
 
 ---
 
@@ -182,10 +184,11 @@ Afinación del proyecto para su entrega, exposición y uso real.
   * **Bug crítico resuelto:** Migración courses.0004_usercourseprogress estaba pendiente en PostgreSQL Docker.
 
 * **Fase 21: Despliegue Final y Auditoría de Contenidos** ✅
-  * Configuración de dominios personalizados con SSL en Vercel y Render.
+  * Configuración de dominios personalizados con SSL en Vercel y Render (IONOS como DNS).
   * Implementación de **Zero-Config API** en el frontend para resiliencia entre entornos.
-  * Siembra masiva de profesores y especialidades en producción (`seed_production`).
+  * Siembra masiva de profesores, especialidades y CV en producción (`seed_production`, `seed_professor_cvs.py`).
   * Optimización de Astro IA: sincronización horaria y personalidad socrática mejorada.
+  * Corrección crítica del problema **N+1 queries** en el catálogo de cursos: se precalculan los IDs de cursos completados/iniciados en el contexto del serializador para usuarios autenticados, eliminando el error 500 en producción.
 
 ---
 
@@ -215,6 +218,7 @@ La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina 
 | `release/revision2` | Segunda ronda de revisión general antes de los hitos de gamificación |
 | `release/correccionesGenerales` | Limpieza de código, españolización de variables y comentarios exhaustivos |
 | `release/contenido` | Expansión de contenido educativo, seed de ejercicios y estabilización final (rama actual) |
+| `guionExpo` | Guion de la defensa oral del TFG y guía visual para Canva |
 
 ### Ramas de Feature (desarrollo de funcionalidades)
 | Rama | Funcionalidad desarrollada |
