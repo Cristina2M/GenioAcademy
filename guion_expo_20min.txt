@@ -1,0 +1,128 @@
+GUION DE DEFENSA - TFG: GENIO ACADEMY
+Autora: Cristina Moreno Martínez
+Ciclo: Desarrollo de Aplicaciones Web (DAW)
+Duración Objetivo: 20 Minutos
+
+--- ESTRUCTURA DE 10 DIAPOSITIVAS ---
+
+DIAPOSITIVA 1: PORTADA Y BIENVENIDA
+(Tiempo sugerido: 1 minuto)
+Buenos días a todos los presentes, miembros del tribunal y tutor. Mi nombre es Cristina y hoy tengo el placer de presentarles la defensa técnica de mi Trabajo de Fin de Ciclo titulado: Genio Academy. 
+
+Este proyecto no es solo una plataforma de gestión de cursos; es un ecosistema diseñado para revolucionar el aprendizaje en la Educación Secundaria Obligatoria a través de la gamificación incremental y la Inteligencia Artificial. Durante esta exposición, desglosaremos no solo el qué hace la aplicación, sino el cómo está construida bajo estándares profesionales de desarrollo web.
+
+DIAPOSITIVA 2: EL PROBLEMA EDUCATIVO
+(Tiempo sugerido: 1.5 minutos)
+Para entender Genio Academy, primero debemos entender el problema que intenta resolver. En el sistema educativo actual, específicamente en la ESO, nos encontramos con una brecha de motivación alarmante. Los métodos de e-learning tradicionales suelen ser estáticos, poco interactivos y aburridos.
+
+Además, el sistema impone un ritmo único para todos los alumnos. ¿Qué pasa si un alumno va muy avanzado en matemáticas pero necesita más tiempo en historia? Genio Academy propone una solución radicalmente distinta para romper este modelo rígido.
+
+DIAPOSITIVA 3: LA SOLUCIÓN (APRENDIZAJE INCREMENTAL)
+(Tiempo sugerido: 1.5 minutos)
+Mi solución se basa en el "Aprendizaje Incremental". Aquí, el contenido no se divide por cursos académicos, sino por niveles de conocimiento real. El alumno no puede saltar al siguiente nivel sin demostrar que ha dominado el anterior, exactamente igual que en un videojuego de rol.
+
+Para lograr esto, me fijé 4 pilares técnicos:
+1. Una arquitectura robusta y escalable.
+2. Un motor de gamificación real con consecuencias (el sistema de vidas Roguelike).
+3. Un tutor inteligente socrático que no dé respuestas, sino que guíe.
+4. Conexión humana mediante tutorías en tiempo real.
+
+Y todo bajo una interfaz bilingüe e inmersiva que he denominado "Dark Glassmorphism".
+
+DIAPOSITIVA 4: DEMO EN VIVO
+(Tiempo sugerido: 5-7 minutos)
+*(En esta diapositiva, sales de la presentación y muestras la web real)*
+- Muestra el registro (Dual Login).
+- Muestra el Dashboard y la interfaz bilingüe.
+- Entra a un curso y completa un quiz (gana XP).
+- Falla una pregunta a propósito para perder una vida (Planeta).
+- Muestra el chat con Astro.
+- Muestra la petición de Tutoría y el panel del profesor.
+- (Al terminar, vuelves a la presentación).
+
+DIAPOSITIVA 5: ARQUITECTURA, INFRAESTRUCTURA Y SEGURIDAD
+(Tiempo sugerido: 2 minutos)
+¿Cómo está construido todo esto por debajo? La elección del stack fue estratégica.
+En el Backend opté por Python y Django REST Framework por su ORM potente y su seguridad. Para el Frontend elegí React 18 con Vite por su extrema reactividad.
+
+Para producción, decidí aplicar un "Pivotaje de Despliegue". En lugar de complicarme con Kubernetes, migré a un modelo PaaS distribuido para optimizar costes: El frontend reside en Vercel, el backend en Render, y la base de datos PostgreSQL en Supabase. Todo cifrado por HTTPS.
+Además, implementé un cliente Axios "Zero-Config" que detecta automáticamente si estoy en localhost o en el dominio oficial para redirigir las peticiones, lo que evita que la app se rompa tras un despliegue.
+
+DIAPOSITIVA 6: MOTOR RPG Y BASE DE DATOS
+(Tiempo sugerido: 2 minutos)
+La lógica de gamificación reside íntegramente en el backend para evitar trampas.
+La base de datos tiene una restricción UNIQUE para evitar que los alumnos "farmeen" experiencia repitiendo un curso. Cuando ganan XP, el nivel se calcula con una fórmula exponencial matemática.
+
+Para que el frontend sea rápido, he diseñado un "JWT Enriquecido". He extendido el serializador de Django para inyectar la experiencia, el nivel y el plan del alumno dentro del token de sesión. Así, el estado en React es consistente desde el primer milisegundo sin tener que hacer peticiones extra. Además, si un alumno intenta acceder a un nivel bloqueado manipulando el frontend, Django le devolverá un error 403 Forbidden.
+
+DIAPOSITIVA 7: SINCRONIZACIÓN DE VIDAS (SIN CELERY)
+(Tiempo sugerido: 2 minutos)
+Este es uno de los puntos técnicos de los que más orgullosa me siento. ¿Cómo regenerar las vidas perdidas cada 30 minutos sin saturar el servidor con tareas pesadas en segundo plano?
+En lugar de usar Celery o Redis, implementé un algoritmo de "Regeneración Pasiva". El servidor solo guarda la fecha en la que se perdió la última vida. En cada petición que el usuario hace a la API, el código calcula al vuelo la diferencia de tiempo y devuelve las vidas correspondientes. Es elegante, no consume RAM extra y es matemáticamente exacto.
+
+DIAPOSITIVA 8: IA SOCRÁTICA Y VIDEOTUTORÍAS
+(Tiempo sugerido: 2 minutos)
+Para el tutor Astro, experimenté mi segundo gran reto: la latencia. Inicialmente probé Ollama en local, pero era muy lento. Pivoté hacia la API de Groq Cloud usando LLaMA 3.1 8B. Lo implementé bajo una arquitectura de "Proxy Seguro": React habla con Django, y Django habla con Groq usando claves ocultas. Mediante Prompt Engineering, le inyecto a la IA el contexto exacto de lo que está estudiando el alumno y le prohíbo dar respuestas directas.
+
+Para las tutorías, he integrado Jitsi Meet embebido. Para que el alumno sepa cuándo el profesor ha entrado a la sala, implementé un sistema de "Polling" asíncrono en React que comprueba el estado cada 30 segundos y lanza un banner dinámico sin usar costosos WebSockets.
+
+DIAPOSITIVA 9: PLAN DE NEGOCIO Y VIABILIDAD
+(Tiempo sugerido: 1 minuto)
+A nivel de negocio, este es un proyecto altamente viable.
+Los costes operativos en la nube oscilan entre los 15 y 35 euros mensuales (Render, dominios, etc.).
+El Break-Even se alcanza con apenas 5 suscriptores del Plan Básico o 2 del Plan Avanzado. Es un modelo perfectamente escalable, diseñado para empezar como B2C (familias) y expandirse a B2B (licencias para colegios).
+
+DIAPOSITIVA 10: METODOLOGÍA AGILE Y CONCLUSIÓN
+(Tiempo sugerido: 1.5 minutos)
+El desarrollo se gestionó usando Git Flow de forma estricta (ramas main, develop y features). 
+Además, apliqué la metodología Agile centrada en un "Producto Mínimo Viable". Decidí conscientemente mover funcionalidades como el envío de emails o los PDFs al "Backlog", para concentrar mis horas en asegurar que el "core" innovador (la IA, el motor RPG y las videollamadas) fuera impecable. En el mundo real, priorizar el núcleo del software es vital.
+
+Genio Academy es la prueba de que el software puede ser un motor de cambio real en la motivación de los estudiantes. Muchas gracias por su atención. Quedo a su entera disposición para cualquier pregunta técnica.
+
+
+
+
+
+
+
+--- GUÍA VISUAL PARA CANVA (QUÉ PONER EN PANTALLA) ---
+
+DIAPOSITIVA 1: PORTADA Y BIENVENIDA
+- Visual: Logotipo grande de Genio Academy, estética del espacio oscuro (estilo Dark Glassmorphism).
+- Texto: "Genio Academy - Tu plataforma de aprendizaje incremental para la ESO". "Autora: Cristina Moreno Martínez".
+
+DIAPOSITIVA 2: EL PROBLEMA EDUCATIVO
+- Visual: Iconos o diagrama visual comparando el modelo antiguo (aburrido, un solo ritmo, caras tristes) frente a lo que buscamos.
+- Texto: Muy breve. Puntos clave: Desmotivación, E-learning monótono, Ritmo único en aulas.
+
+DIAPOSITIVA 3: LA SOLUCIÓN (APRENDIZAJE INCREMENTAL)
+- Visual: 4 iconos que representen los pilares (un escudo para seguridad/arquitectura, un mando de consola para gamificación, un cerebro para la IA, y una webcam para tutorías).
+- Texto: "El Aprendizaje Incremental", y una lista de los 4 pilares en 3 palabras cada uno.
+
+DIAPOSITIVA 4: DEMO EN VIVO
+- Visual: Esta es una diapositiva "puente". Una captura de pantalla chula de la plataforma o un gif corto de Astro el búho, con un letrero grande de "DEMOSTRACIÓN EN DIRECTO".
+- Texto: URL del proyecto: cristina2daw.es
+
+DIAPOSITIVA 5: ARQUITECTURA, INFRAESTRUCTURA Y SEGURIDAD
+- Visual: Un diagrama simple de 3 bloques o logos: Vercel (Frontend React), Render (Backend Django), Supabase (Base de datos PostgreSQL).
+- Texto: Destaca "Pivotaje a PaaS" y "Cliente Axios Zero-Config".
+
+DIAPOSITIVA 6: MOTOR RPG Y BASE DE DATOS
+- Visual: Un minidiagrama Entidad-Relación o un candado cerrando un curso, junto al icono de un JWT (Token).
+- Texto: "JWT Enriquecido", "Bloqueos 403 de servidor", "Restricciones UNIQUE".
+
+DIAPOSITIVA 7: SINCRONIZACIÓN DE VIDAS (SIN CELERY)
+- Visual: Una captura del componente 'LivesPanel' (donde salen los 3 planetas) o el diseño de los minijuegos de rescate.
+- Texto: "Algoritmo de regeneración pasiva al vuelo". "Minijuegos de rescate".
+
+DIAPOSITIVA 8: IA SOCRÁTICA Y VIDEOTUTORÍAS
+- Visual: Pantalla dividida: a la izquierda una captura de chat con Astro; a la derecha una captura de la videollamada de Jitsi.
+- Texto: "Proxy Seguro: API Groq Cloud (LLaMA 3.1)". "Videollamadas integradas (Polling asíncrono)".
+
+DIAPOSITIVA 9: PLAN DE NEGOCIO Y VIABILIDAD
+- Visual: Una tabla muy simple con 3 columnas (Plan 1, Plan 2, Plan 3) y sus precios. 
+- Texto: "Costes operativos: ~15-35€/mes". "Break-even: 5 suscriptores". "Escalabilidad B2C a B2B".
+
+DIAPOSITIVA 10: METODOLOGÍA AGILE Y CONCLUSIÓN
+- Visual: Un pequeño esquema de Git Flow (ramas) y un "Checklist" donde el MVP esté marcado en verde y el Backlog con un reloj de arena.
+- Texto: "Metodología Git Flow", "Enfoque en Producto Mínimo Viable (MVP)". "¡Gracias por su atención!"
