@@ -3,11 +3,17 @@ kind: Ingress
 metadata:
   name: genioacademy-ingress
   annotations:
-    # K3s usa Traefik como ingress controller por defecto, no nginx
-    # Usamos ingressClassName en spec en vez de la anotación deprecada
+    # cert-manager solicitará y renovará el certificado SSL de Let's Encrypt automáticamente
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   # Traefik es el ingress controller que viene incluido en K3s
   ingressClassName: traefik
+  tls:
+    - hosts:
+        - cristina2daw.es
+        - www.cristina2daw.es
+        - api.cristina2daw.es
+      secretName: genioacademy-tls
   rules:
     # ── DOMINIO PRINCIPAL (FRONTEND) ──
     - host: cristina2daw.es
