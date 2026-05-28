@@ -49,6 +49,16 @@ jobs:
         run: |
           python backend/manage.py test backend/
 
+      - name: Generar Documentación Automática (pdoc)
+        run: |
+          pdoc ./backend/core ./backend/users ./backend/courses ./backend/ai -o docs/
+
+      - name: Guardar Documentación como Artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-docs
+          path: docs/
+
       # --- FRONTEND BUILD CHECK ---
       - name: Configurar Entorno Node.js
         uses: actions/setup-node@v4
@@ -104,3 +114,25 @@ jobs:
           file: ./frontend/Dockerfile.prod
           push: true # Subir imagen al registro de Docker Hub
           tags: cristina2m/genio-frontend:latest
+
+  # ── DESPLIEGUE AUTOMÁTICO EN KUBERNETES ──
+  deploy-to-kubernetes:
+    needs: build-and-push-images
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/release/contenido')
+    
+    steps:
+      - name: Desplegar en K8s via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ec2-user/GenioAcademy
+            git pull origin main
+            sudo kubectl apply -f kubernetes/
+            sudo kubectl rollout restart deployment/backend-deployment
+            sudo kubectl rollout restart deployment/frontend-deployment
+            sudo kubectl rollout status deployment/backend-deployment
+            sudo kubectl rollout status deployment/frontend-deployment

@@ -50,7 +50,7 @@ La plataforma se apoya en **cuatro pilares** principales:
 
 - **Claustro Interactivo:** Es el catálogo de profesores especializados. Los usuarios del plan premium pueden solicitar tutorías directas y conectarse mediante videollamada integrada (sin salir de la plataforma).
 
-Técnicamente, el proyecto está estructurado como una arquitectura de **microservicios** usando Docker: el frontend es una SPA en React + Vite, el backend es una API REST en Django, y la base de datos es PostgreSQL. Actualmente está desplegado en producción utilizando servicios en la nube como Vercel y Render.
+Técnicamente, el proyecto está estructurado como una arquitectura de **microservicios** usando Docker: el frontend es una SPA en React + Vite, el backend es una API REST en Django, y la base de datos es PostgreSQL. Actualmente está desplegado en producción utilizando un **clúster Kubernetes (K3s)** alojado en una instancia **EC2 de Amazon Web Services (AWS)**, empleando Traefik como Ingress Controller y certificados SSL automatizados con cert-manager.
 
 <div style="page-break-after: always;"></div>
 
@@ -74,7 +74,7 @@ El proyecto se planificó en distintas etapas o hitos. Aquí un resumen del esta
 
 A lo largo del desarrollo del proyecto, la realidad técnica me obligó a tomar decisiones y pivotar respecto a la idea original del anteproyecto. Estos cambios no son errores de planificación, sino decisiones de arquitectura justificadas:
 
-1. **De Kubernetes/Docker Swarm a PaaS (Vercel y Render):** En el anteproyecto contemplé usar Kubernetes para orquestar contenedores en la nube. Sin embargo, al llegar a la fase de despliegue, evalué los costes (mantener un clúster de K8s 24/7 es muy caro para un proyecto de estudiante) y la complejidad innecesaria para el tráfico esperado inicial. Decidí pivotar hacia un despliegue **PaaS (Platform as a Service)** utilizando Vercel para el Frontend y Render para el Backend. Sigo usando Docker en local para garantizar la portabilidad, pero el despliegue es mucho más ágil y gratuito.
+1. **Evolución del Despliegue hacia AWS y Kubernetes:** En el anteproyecto inicial se barajaban opciones más sencillas, pero finalmente se optó por cumplir con los estándares de la industria desplegando la aplicación en **Amazon Web Services (AWS)**. Se configuró una instancia EC2 en la que se instaló **K3s** (una distribución ligera de Kubernetes). Ambos servicios (frontend y backend) se empaquetan en contenedores Docker y se orquestan en el clúster, lo que garantiza alta disponibilidad, paridad exacta con el entorno de desarrollo y un despliegue profesional.
 2. **De Ollama Local a Groq Cloud (Tutor IA):** Inicialmente iba a usar la API de Ollama para correr el modelo localmente. En la práctica, el hardware necesario para correr un modelo en local (even uno pequeño) provocaba latencias inaceptables en las respuestas del tutor Astro. Para solucionarlo, migré la integración hacia **Groq**, un proveedor en la nube que ofrece inferencia ultrarrápida (LPU).
 3. **Descarte de LDAP y S3 Buckets:** Se valoró LDAP para la gestión de usuarios, pero para el alcance de Genio Academy (enfocado a usuarios finales y no a redes corporativas internas), el sistema de JWT enriquecido resultó mucho más seguro, rápido y estándar. Respecto a S3 para multimedia, actualmente los recursos (como los avatares) se cargan desde el propio bundle de React o bases de datos ligeras para mantener los costes a cero, aunque la base de código está preparada para integrarlo si el proyecto escala.
 4. **Sistema de Vidas y RPG más profundo:** En el diseño inicial solo se mencionaba una "API externa de avatares". Decidí ir un paso más allá en la gamificación y desarrollé todo un motor propio de subida de experiencia, niveles (Bloqueos 403 reales en servidor) y el sistema *Roguelike* de regeneración de vidas por tiempo, lo que aporta muchísimo más valor diferencial que solo usar avatares de DiceBear.
@@ -848,7 +848,7 @@ La plataforma está disponible en dos formas:
 - **En producción (internet):** https://cristina2daw.es — accesible desde cualquier navegador sin instalar nada.
 - **En local (para desarrollo):** http://localhost:5173 — solo si tienes el proyecto corriendo en tu ordenador con Docker.
 
-> **Nota importante sobre el tiempo de carga inicial:** Si accedes por primera vez o llevas un rato sin entrar, el backend puede tardar hasta 40 segundos en responder la primera petición. Esto es normal y se debe a que el servidor gratuito de Render se "duerme" cuando no hay actividad. Después de esa primera carga, todo funciona con normalidad.
+> **Nota de rendimiento:** Gracias a la infraestructura desplegada en AWS con Kubernetes, la aplicación se mantiene siempre activa y responde con latencias mínimas, garantizando una excelente experiencia de usuario sin los tiempos de "frío" típicos de los servidores gratuitos.
 
 ![Página Principal](capturas_doc/paginaPrincipal.png)
 
@@ -1249,18 +1249,15 @@ Para añadir cursos, lecciones y ejercicios nuevos no hace falta ser programador
 
 ### 8.7 Cómo funciona el despliegue en producción
 
-El proyecto está desplegado usando dos servicios en la nube:
+El proyecto está desplegado utilizando una arquitectura Cloud Native:
 
-**Frontend → Vercel**
-- Cada vez que se hace push a la rama `main` del repositorio, Vercel detecta el cambio automáticamente y despliega la nueva versión.
-- El dominio personalizado `cristina2daw.es` está configurado en Vercel.
-- El archivo `.env.production` del frontend contiene la URL de la API de producción.
+**Frontend → Kubernetes Pod (AWS)**
+- Cada vez que se hace push a la rama `main`, GitHub Actions construye una imagen Docker y la despliega automáticamente en el clúster.
+- El dominio personalizado `cristina2daw.es` está enrutado mediante Traefik Ingress.
 
-**Backend → Render**
-- El backend Django está desplegado en Render como un Web Service.
-- La base de datos PostgreSQL está alojada externamente en Supabase.
-- El dominio personalizado `api.cristina2daw.es` está configurado en Render.
-- Las variables de entorno (`SECRET_KEY`, `GROQ_API_KEY`, credenciales de BD) están configuradas directamente en el panel de Render, no en ningún archivo del repositorio.
+**Backend → Kubernetes Pod (AWS)**
+- El backend Django está desplegado en el mismo clúster K3s.
+- Las variables de entorno (Secretos) se gestionan de forma segura nativamente en Kubernetes mediante `Secret` resources.
 
 **Zero-Config API en el frontend:**
 El archivo `src/utils/axiosInstance.js` tiene una lógica de autodetección: si el hostname del navegador es `localhost`, apunta al backend local en `http://localhost:8000`. Si el hostname es `cristina2daw.es`, apunta automáticamente a `https://api.cristina2daw.es`. Esto elimina la necesidad de cambiar variables de configuración manualmente al desplegar.
@@ -1400,7 +1397,7 @@ Recorrido de demo: Registro → Dashboard → Catálogo Estelar → CoursePlayer
 
 - **3 microservicios en Docker:** Frontend (React + Vite), Backend (Django + DRF), Base de Datos (PostgreSQL).
 - **API REST** con autenticación JWT enriquecida con datos de gamificación.
-- **Pivotaje de Despliegue:** De la idea inicial de usar Kubernetes, se pasó a un modelo **PaaS (Vercel y Render)** para optimizar costes y complejidad en esta fase de MVP.
+- **Despliegue Cloud Native:** Se implementó una arquitectura basada en contenedores Docker orquestados con Kubernetes (K3s) sobre instancias EC2 de AWS.
 - **Pivotaje de IA:** De Ollama local a **Groq Cloud (LLaMA 3.1 8B)**. El hardware local generaba cuellos de botella; Groq nos permite una inferencia LPU casi instantánea. El backend actúa como proxy seguro ocultando la API Key.
 - **UI/UX e Internacionalización:** Diseño *Glassmorphism* moderno, con un sistema de traducción condicional (i18n) para hacer la plataforma accesible de forma profesional bilingüe.
 
@@ -1572,9 +1569,9 @@ Al principio, mi idea era utilizar **Ollama** para ejecutar un modelo de intelig
 Configurar PostgreSQL dentro de Docker Compose me dio bastantes dolores de cabeza en los primeros hitos. Hubo conflictos con los volúmenes de persistencia de datos (a veces al borrar los contenedores o limpiar cachés perdía toda la información y tenía que volver a registrar usuarios y cargar los cursos a mano). Fue muy frustrante. Por eso acabé invirtiendo tiempo en crear los scripts en Python (`seed_data.py`, `seed_exercises.py`, etc.) para poder poblar la base de datos automáticamente en segundos cada vez que el entorno local se rompía o necesitaba reiniciarlo desde cero.
 
 **3. El despliegue a producción y los recursos gratuitos**
-Pasar del entorno seguro de "localhost" a que la plataforma esté accesible en internet fue probablemente el mayor reto de todos. Como no tenía presupuesto para servidores de pago, tuve que buscar la forma de encajar toda la arquitectura en las capas gratuitas (free tiers) de Vercel (para el frontend), Render (para el backend) y Supabase (para la base de datos). 
+Pasar del entorno seguro de "localhost" a la nube fue el mayor reto. Se implementó un entorno Cloud completo en **Amazon Web Services (AWS)** utilizando una instancia **EC2**. Sobre esta, se configuró un clúster de **Kubernetes (K3s)** para orquestar los contenedores. 
 
-El principal problema de esto es que los servidores gratuitos de Render se "suspenden" (entran en modo sleep) después de un rato sin tráfico para ahorrar recursos. Esto provocaba que, si alguien entraba a la web después de unas horas de inactividad, el backend tardara muchísimo en arrancar y la página del frontend diera error de "Servidor inaccesible". Para mitigarlo, optimicé todo lo que pude y añadí mensajes en la interfaz para que el usuario sepa que ese retraso inicial es normal. También tuve muchos problemas con la configuración de políticas CORS y variables de entorno para asegurar que el frontend desplegado en Vercel pudiera comunicarse correctamente con la API remota en Render, ya que al principio bloqueaba todas las peticiones.
+Configurar el Ingress Controller (Traefik) junto con `cert-manager` para la emisión automática de certificados HTTPS de Let's Encrypt fue complejo, pero garantizó comunicaciones totalmente seguras. Además, la implementación del pipeline de **CI/CD con GitHub Actions** automatizó completamente la actualización de la plataforma, conectándose por SSH al servidor y reiniciando los pods sin interrupción del servicio (zero-downtime).
 
 A pesar de la frustración que generaron estos bloqueos en su momento, pelearme con el despliegue es probablemente la parte del proyecto en la que más he aprendido sobre cómo se operan las aplicaciones reales en el mundo laboral.
 

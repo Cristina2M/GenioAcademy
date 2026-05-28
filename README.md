@@ -1,5 +1,6 @@
 # 🚀 Genio Academy — Plataforma de Aprendizaje Incremental
 
+[![CI/CD Pipeline](https://github.com/Cristina2M/GenioAcademy/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Cristina2M/GenioAcademy/actions/workflows/ci-cd.yml)
 Genio Academy es una plataforma de academia online diseñada específicamente para estudiantes de la ESO. A diferencia de las plataformas tradicionales, organiza el contenido por **niveles de conocimiento específicos** y no por cursos académicos, lo que permite un aprendizaje personalizado y progresivo.
 
 La plataforma incluye un sistema de **gamificación RPG** (XP, niveles, vidas Roguelike), **minijuegos educativos** de recuperación, un **tutor virtual socrático con IA** (Groq / LLaMA), un **claustro interactivo** de profesores y **videollamadas de tutoría en directo** via Jitsi Meet.
@@ -14,23 +15,31 @@ La plataforma incluye un sistema de **gamificación RPG** (XP, niveles, vidas Ro
 
 Se ha implementado una arquitectura de **microservicios dockerizados** para garantizar que el entorno de desarrollo sea idéntico al de producción.
 
-### 🏗️ Arquitectura del Sistema
+### 🏗️ Arquitectura del Sistema (Cloud Native)
 
-El sistema se compone de cuatro capas principales:
+El sistema utiliza una arquitectura de **microservicios dockerizados** orquestados con **Kubernetes**, asegurando escalabilidad y paridad total entre desarrollo y producción:
 
-1. **Frontend (Vercel)**: React + Vite (SPA). *Dominio: `cristina2daw.es`*
-2. **Backend (Render)**: Django + Django REST Framework. *Dominio: `api.cristina2daw.es`*
-3. **Base de Datos (Supabase)**: PostgreSQL en la nube. *Conexión vía DATABASE_URL.*
-4. **DNS y Dominio (IONOS)**: Gestión del dominio personalizado y redirección de subdominios.
+1. **Infraestructura Cloud (AWS)**: Servidor EC2 ejecutando **K3s** (distribución ligera y certificada de Kubernetes).
+2. **Frontend (Contenedor)**: NGINX sirviendo la SPA construida con React + Vite. *Dominio: `cristina2daw.es`*
+3. **Backend (Contenedor)**: Gunicorn ejecutando Django + Django REST Framework. *Dominio: `api.cristina2daw.es`*
+4. **Base de Datos**: PostgreSQL para la persistencia transaccional y relacional.
+5. **Enrutamiento y Seguridad**: Traefik (Ingress Controller) junto con `cert-manager` para la emisión y renovación automática de certificados SSL/TLS gratuitos vía Let's Encrypt.
+6. **DNS y Dominio (IONOS)**: Gestión de DNS apuntando a la IP elástica de AWS.
 
 ---
 
-## 🌍 Producción y Despliegue
+## 🌍 Producción, CI/CD y Despliegue Automático
 
-La plataforma se encuentra desplegada y operativa en los siguientes dominios oficiales:
+El código fuente cuenta con una canalización completa de Integración y Despliegue Continuo (CI/CD) usando **GitHub Actions**.
 
-*   **Frontend (Vercel):** [https://cristina2daw.es](https://cristina2daw.es)
-*   **Backend (Render):** [https://api.cristina2daw.es](https://api.cristina2daw.es)
+*   **Frontend (AWS K8s):** [https://cristina2daw.es](https://cristina2daw.es)
+*   **Backend API (AWS K8s):** [https://api.cristina2daw.es](https://api.cristina2daw.es)
+
+### 🔄 Flujo CI/CD Implementado:
+1. **Testing**: Al hacer push, se levanta una BD temporal y se ejecutan las pruebas unitarias automáticas de Django.
+2. **Build & Push**: Si las pruebas pasan, se construyen las imágenes Docker multiplataforma y se suben a Docker Hub (`cristina2m/genio-backend` y `cristina2m/genio-frontend`).
+3. **Deploy to K8s**: El pipeline se conecta vía SSH seguro a la instancia EC2 de AWS, descarga los nuevos manifiestos y ejecuta un `rollout restart` en Kubernetes para actualizar los pods sin tiempo de inactividad (Zero Downtime Deployment).
+4. **Docs**: Se genera la documentación del código Python vía `pdoc` y se guarda como artefacto descargable.
 
 ### ⚙️ Configuración Zero-Config de API
 El frontend implementa una lógica de auto-detección de entorno. No es necesario configurar variables `VITE_API_URL` manualmente para producción; la aplicación detecta si está en el dominio oficial y apunta automáticamente al backend de Render.
