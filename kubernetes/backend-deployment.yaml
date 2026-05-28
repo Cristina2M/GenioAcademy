@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-secrets
+type: Opaque
+stringData:
+  # Las contraseñas y claves se almacenan de forma segura en un secret
+  SECRET_KEY: "django-insecure-prod-key-for-kubernetes-deployment-genio-academy"
+  GROQ_API_KEY: "gsk_yV8x6543210placeholderapiplaceholder"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: backend
+spec:
+  replicas: 2 # Alta disponibilidad: levantamos 2 pods
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: cristina2m/genio-backend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          env:
+            - name: PRODUCTION
+              value: "True"
+            - name: DATABASE_URL
+              value: "postgres://genio_user:genio_password@db-service:5432/genio_db"
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: SECRET_KEY
+            - name: GROQ_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: GROQ_API_KEY
+          # Comprobación de salud (Liveness y Readiness Probes) para asegurar resiliencia en K8s
+          livenessProbe:
+            httpGet:
+              path: /api/courses/categories/
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /api/courses/categories/
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  ports:
+    - port: 8000
+      targetPort: 8000
+  selector:
+    app: backend

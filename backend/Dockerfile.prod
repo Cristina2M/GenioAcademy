@@ -1,0 +1,29 @@
+# Usamos una imagen de Python oficial de producción ligera
+FROM python:3.11-slim
+
+# Evita que Python genere archivos .pyc y permite ver logs en tiempo real
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Directorio de trabajo en el contenedor
+WORKDIR /app
+
+# Instalamos dependencias del sistema necesarias para PostgreSQL y compilación
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    gcc \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Instalamos las dependencias de Python
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiamos el resto del código del backend
+COPY . /app/
+
+# Exponemos el puerto de Gunicorn (servidor de aplicaciones WSGI de producción)
+EXPOSE 8000
+
+# Comando para arrancar el servidor de producción con Gunicorn
+CMD ["gunicorn", "core.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3", "--timeout", "120"]
