@@ -3,18 +3,11 @@ kind: Ingress
 metadata:
   name: genioacademy-ingress
   annotations:
-    kubernetes.io/ingress.class: "nginx"
-    # Autocertificación automática con Let's Encrypt / Cert-Manager si está habilitado
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true" # Fuerza redirección HTTPS
-    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    # K3s usa Traefik como ingress controller por defecto, no nginx
+    # Usamos ingressClassName en spec en vez de la anotación deprecada
 spec:
-  tls:
-    - hosts:
-        - cristina2daw.es
-        - www.cristina2daw.es
-        - api.cristina2daw.es
-      secretName: genioacademy-tls # Secret conteniendo el certificado SSL/TLS de producción
+  # Traefik es el ingress controller que viene incluido en K3s
+  ingressClassName: traefik
   rules:
     # ── DOMINIO PRINCIPAL (FRONTEND) ──
     - host: cristina2daw.es
