@@ -27,7 +27,8 @@ class UsersAPITest(TestCase):
     # Prueba para asegurarnos de que el endpoint de lista de usuarios funciona correctamente.
     def test_get_users(self):
         # Ejecutamos una petición GET a nuestra URL (la API REST generada por el router)
-        response = self.client.get('/api/users/users/')
+        # El router registra el ViewSet bajo 'management', no 'users'
+        response = self.client.get('/api/users/management/')
         
         # Aseguramos que la respuesta del servidor es correcta (HTTP 200 OK)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -54,7 +55,8 @@ class UsersAPITest(TestCase):
 
     # Prueba para validar que un usuario nuevo puede registrarse desde la API de forma anónima
     def test_user_registration(self):
-        response = self.client.post('/api/users/users/', {
+        # El endpoint de registro es /register/, no el ViewSet de management
+        response = self.client.post('/api/users/register/', {
             'username': 'nuevo_estudiante',
             'email': 'nuevo@genio.com',
             'password': 'password_segura',
