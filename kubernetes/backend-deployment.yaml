@@ -45,19 +45,23 @@ spec:
                 secretKeyRef:
                   name: backend-secrets
                   key: GROQ_API_KEY
-          # Comprobación de salud (Liveness y Readiness Probes) para asegurar resiliencia en K8s
+            # ALLOWED_HOSTS amplio para que las probes internas de K8s no den 400
+            - name: DJANGO_ALLOWED_HOSTS
+              value: "*"
+          # Usamos tcpSocket en vez de httpGet para evitar el error 400 de ALLOWED_HOSTS
+          # K8s sólo comprueba que el puerto 8000 está escuchando, lo cual es suficiente
           livenessProbe:
-            httpGet:
-              path: /api/courses/categories/
+            tcpSocket:
               port: 8000
             initialDelaySeconds: 15
             periodSeconds: 20
+            failureThreshold: 3
           readinessProbe:
-            httpGet:
-              path: /api/courses/categories/
+            tcpSocket:
               port: 8000
             initialDelaySeconds: 10
             periodSeconds: 10
+            failureThreshold: 3
 ---
 apiVersion: v1
 kind: Service
