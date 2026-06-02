@@ -128,11 +128,16 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
+          envs: GROQ_API_KEY
           script: |
             cd /home/ec2-user/GenioAcademy
             git pull origin main
             sudo kubectl apply -f kubernetes/
+            # Actualizar la API key real (sobreescribe el placeholder del YAML)
+            sudo kubectl patch secret backend-secrets -p "{\"stringData\":{\"GROQ_API_KEY\":\"$GROQ_API_KEY\"}}"
             sudo kubectl rollout restart deployment/backend-deployment
             sudo kubectl rollout restart deployment/frontend-deployment
             sudo kubectl rollout status deployment/backend-deployment
             sudo kubectl rollout status deployment/frontend-deployment
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
