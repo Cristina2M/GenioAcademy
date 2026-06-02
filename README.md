@@ -386,3 +386,6 @@ La plataforma utiliza una estética **Dark Glassmorphism** que evoca una cabina 
 * **Hot Reload**: Los cambios en CSS y JSX se reflejan al instante gracias a Vite.
 * **Españolización del Código**: Se mantiene una estricta coherencia en el lenguaje de las variables de negocio (español) y las palabras reservadas del framework (inglés).
 * **Diseño Idempotente de los Seeds**: Todos los scripts de siembra de datos (`seed_production`, `seed_professor_cvs.py`) comprueban antes de insertar para no duplicar registros aunque se ejecuten varias veces.
+
+
+demo despligue en vivo
