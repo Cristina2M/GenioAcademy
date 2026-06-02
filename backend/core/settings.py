@@ -29,6 +29,13 @@ ALLOWED_HOSTS = [
     'api.cristina2daw.es',    # Subdominio personalizado del backend
 ]
 
+# Orígenes de confianza para CSRF (necesario para el admin bajo HTTPS)
+CSRF_TRUSTED_ORIGINS = [
+    'https://api.cristina2daw.es',
+    'https://cristina2daw.es',
+    'https://www.cristina2daw.es',
+]
+
 
 # ── APLICACIONES REGISTRADAS ──
 # Django solo reconoce las apps que estén listadas aquí.
