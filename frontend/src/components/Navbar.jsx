@@ -21,6 +21,15 @@ export default function Navbar() {
   // Número de respuestas del profesor que el alumno aún no ha leído
   const [unreadCount, setUnreadCount] = useState(0);
 
+  // Marca todas las notificaciones como leídas y resetea el contador visualmente
+  const marcarLeido = async () => {
+    if (unreadCount === 0) return;
+    setUnreadCount(0); // Reset inmediato en la UI
+    try {
+      await axiosInstance.post('teachers/consultations/mark_as_read/');
+    } catch { /* silencioso */ }
+  };
+
   // Consultamos el conteo de notificaciones sin leer al montar el componente.
   // Solo para alumnos con Plan 3 (los únicos que pueden tener tutorías).
   useEffect(() => {
@@ -109,9 +118,10 @@ export default function Navbar() {
             {/* Badge de notificaciones — solo para alumnos Plan 3 con respuestas sin leer */}
             {!user.is_teacher && user.subscription_level >= 3 && unreadCount > 0 && (
               <Link
-                to="/dashboard"
+                to="/dashboard#mis-transmisiones"
+                onClick={marcarLeido}
                 className="relative hidden sm:flex items-center justify-center w-10 h-10 rounded-full bg-pink-500/10 border border-pink-500/30 hover:bg-pink-500/20 transition-all group"
-                title={`${unreadCount} respuesta${unreadCount > 1 ? 's' : ''} sin leer — ver en Mi Panel`}
+                title={`${unreadCount} respuesta${unreadCount > 1 ? 's' : ''} sin leer — ver Mis Transmisiones`}
               >
                 <Bell className="w-5 h-5 text-pink-400 group-hover:scale-110 transition-transform" />
                 <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-lg shadow-pink-500/50 animate-bounce">
@@ -202,7 +212,7 @@ export default function Navbar() {
                 {/* Badge móvil de notificaciones */}
                 {!user.is_teacher && user.subscription_level >= 3 && unreadCount > 0 && (
                   <li>
-                    <Link to="/dashboard" className="text-pink-400 font-bold border border-pink-500/30 rounded-lg my-1 flex items-center gap-2">
+                    <Link to="/dashboard#mis-transmisiones" onClick={marcarLeido} className="text-pink-400 font-bold border border-pink-500/30 rounded-lg my-1 flex items-center gap-2">
                       <Bell className="w-4 h-4" />
                       {unreadCount} respuesta{unreadCount > 1 ? 's' : ''} nueva{unreadCount > 1 ? 's' : ''}
                     </Link>

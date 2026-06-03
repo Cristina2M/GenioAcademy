@@ -167,6 +167,16 @@ export default function Dashboard() {
     },
   ];
 
+  // Scroll automático al anchor #mis-transmisiones si viene de la campanita
+  useEffect(() => {
+    if (window.location.hash === '#mis-transmisiones') {
+      setTimeout(() => {
+        const el = document.getElementById('mis-transmisiones');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 400); // Pequeño delay para que el DOM esté listo
+    }
+  }, []);
+
   // Función que se ejecuta cuando el alumno hace clic en un avatar de la galería
   const seleccionarAvatar = async (idAvatar) => {
     setActualizandoAvatar(true);
@@ -375,7 +385,7 @@ export default function Dashboard() {
             {/* ── MIS TRANSMISIONES (CONSULTAS A PROFESORES) ── */}
             {nivelSuscripcion >= 3 && (
               <>
-                <h2 className="text-2xl font-black text-white px-2 flex items-center gap-2 mt-10">
+                <h2 id="mis-transmisiones" className="text-2xl font-black text-white px-2 flex items-center gap-2 mt-10 scroll-mt-28">
                   <MessageSquare className="w-6 h-6 text-teal-400" /> Mis Transmisiones
                   <span className="text-xs font-normal text-slate-500 normal-case tracking-normal">(consultas a profesores)</span>
                 </h2>
