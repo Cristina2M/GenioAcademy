@@ -14,7 +14,7 @@
 // ============================================================
 
 import { useContext, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Target, Trophy, Flame, Compass, Play, BookOpen, Star, Lock, X, Rocket, GraduationCap, ChevronRight, ShieldCheck, MessageSquare, CheckCircle, Clock, Video } from 'lucide-react';
 import AuthContext from '../context/AuthContext';
 import axiosInstance from '../api/axios';
@@ -23,6 +23,7 @@ import { getStudentAvatar, avatarDatabase } from '../utils/avatarUtils';
 export default function Dashboard() {
   // Sacamos del contexto global los datos del alumno conectado y la función para cambiar avatar
   const { user, updateAvatar } = useContext(AuthContext);
+  const location = useLocation();
   const [actualizandoAvatar, setActualizandoAvatar] = useState(false);
 
   // Cursos que el alumno tiene en progreso (obtenidos del backend)
@@ -167,15 +168,15 @@ export default function Dashboard() {
     },
   ];
 
-  // Scroll automático al anchor #mis-transmisiones si viene de la campanita
+  // Scroll automático al anchor #mis-transmisiones (funciona aunque ya estés en el Dashboard)
   useEffect(() => {
-    if (window.location.hash === '#mis-transmisiones') {
+    if (location.hash === '#mis-transmisiones') {
       setTimeout(() => {
         const el = document.getElementById('mis-transmisiones');
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 400); // Pequeño delay para que el DOM esté listo
+      }, 400);
     }
-  }, []);
+  }, [location.hash]);
 
   // Función que se ejecuta cuando el alumno hace clic en un avatar de la galería
   const seleccionarAvatar = async (idAvatar) => {
