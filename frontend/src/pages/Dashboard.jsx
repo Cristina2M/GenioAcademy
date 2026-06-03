@@ -68,6 +68,8 @@ export default function Dashboard() {
   // Consultas enviadas por el alumno a profesores
   const [consultas, setConsultas] = useState([]);
   const [cargandoConsultas, setCargandoConsultas] = useState(true);
+  const [paginaConsultas, setPaginaConsultas] = useState(1);
+  const CONSULTAS_POR_PAGINA = 3;
 
   // ─────────────────────────────────────────────
   // OBTENER EL PROGRESO AL ARRANCAR
@@ -404,50 +406,76 @@ export default function Dashboard() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {consultas.map((c) => {
-                      const est = estadoConsulta(c.status);
-                      return (
-                        <div key={c.id} className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-6 space-y-4 hover:border-teal-500/30 transition-all">
-                          {/* Cabecera: profesor + estado + fecha */}
-                          <div className="flex items-start justify-between gap-4 flex-wrap">
-                            <div>
-                              <p className="text-xs text-slate-500 uppercase tracking-widest mb-1">Consulta a</p>
-                              <p className="text-white font-bold text-lg">{c.professor_name}</p>
-                              {c.course_title && <p className="text-teal-400 text-xs mt-0.5">📚 {c.course_title}</p>}
+                    {/* Paginación: solo mostramos las consultas de la página actual */}
+                    {consultas
+                      .slice((paginaConsultas - 1) * CONSULTAS_POR_PAGINA, paginaConsultas * CONSULTAS_POR_PAGINA)
+                      .map((c) => {
+                        const est = estadoConsulta(c.status);
+                        return (
+                          <div key={c.id} className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-6 space-y-4 hover:border-teal-500/30 transition-all">
+                            {/* Cabecera: profesor + estado + fecha */}
+                            <div className="flex items-start justify-between gap-4 flex-wrap">
+                              <div>
+                                <p className="text-xs text-slate-500 uppercase tracking-widest mb-1">Consulta a</p>
+                                <p className="text-white font-bold text-lg">{c.professor_name}</p>
+                                {c.course_title && <p className="text-teal-400 text-xs mt-0.5">📚 {c.course_title}</p>}
+                              </div>
+                              <div className="flex flex-col items-end gap-2">
+                                <span className={`flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 rounded-full border ${est.color}`}>
+                                  {est.icon} {est.label}
+                                </span>
+                                <span className="text-[10px] text-slate-600">
+                                  {new Date(c.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                </span>
+                              </div>
                             </div>
-                            <div className="flex flex-col items-end gap-2">
-                              <span className={`flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 rounded-full border ${est.color}`}>
-                                {est.icon} {est.label}
-                              </span>
-                              <span className="text-[10px] text-slate-600">
-                                {new Date(c.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
-                              </span>
-                            </div>
-                          </div>
 
-                          {/* Mensaje del alumno */}
-                          <div className="bg-black/30 border border-white/5 rounded-xl p-4">
-                            <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-2 font-bold">Tu pregunta</p>
-                            <p className="text-slate-300 text-sm leading-relaxed">{c.message}</p>
-                          </div>
+                            {/* Mensaje del alumno */}
+                            <div className="bg-black/30 border border-white/5 rounded-xl p-4">
+                              <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-2 font-bold">Tu pregunta</p>
+                              <p className="text-slate-300 text-sm leading-relaxed">{c.message}</p>
+                            </div>
 
-                          {/* Respuesta del profesor (solo si existe) */}
-                          {c.response ? (
-                            <div className="bg-teal-500/5 border border-teal-500/20 rounded-xl p-4">
-                              <p className="text-[10px] text-teal-400 uppercase tracking-widest mb-2 font-bold flex items-center gap-1">
-                                <CheckCircle className="w-3 h-3" /> Respuesta del Maestro
-                              </p>
-                              <p className="text-slate-200 text-sm leading-relaxed">{c.response}</p>
-                            </div>
-                          ) : (
-                            <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-4 flex items-center gap-3">
-                              <Clock className="w-4 h-4 text-amber-400 shrink-0" />
-                              <p className="text-amber-300/70 text-sm italic">El maestro aún no ha respondido. Te notificaremos cuando lo haga.</p>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
+                            {/* Respuesta del profesor (solo si existe) */}
+                            {c.response ? (
+                              <div className="bg-teal-500/5 border border-teal-500/20 rounded-xl p-4">
+                                <p className="text-[10px] text-teal-400 uppercase tracking-widest mb-2 font-bold flex items-center gap-1">
+                                  <CheckCircle className="w-3 h-3" /> Respuesta del Maestro
+                                </p>
+                                <p className="text-slate-200 text-sm leading-relaxed">{c.response}</p>
+                              </div>
+                            ) : (
+                              <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-4 flex items-center gap-3">
+                                <Clock className="w-4 h-4 text-amber-400 shrink-0" />
+                                <p className="text-amber-300/70 text-sm italic">El maestro aún no ha respondido. Te notificaremos cuando lo haga.</p>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+
+                    {/* Controles de paginación */}
+                    {consultas.length > CONSULTAS_POR_PAGINA && (
+                      <div className="flex items-center justify-between pt-2">
+                        <button
+                          onClick={() => setPaginaConsultas(p => Math.max(1, p - 1))}
+                          disabled={paginaConsultas === 1}
+                          className="btn btn-sm bg-slate-800 hover:bg-slate-700 border border-white/10 text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed rounded-xl px-4"
+                        >
+                          ← Anterior
+                        </button>
+                        <span className="text-xs text-slate-500 font-semibold">
+                          Página {paginaConsultas} de {Math.ceil(consultas.length / CONSULTAS_POR_PAGINA)}
+                        </span>
+                        <button
+                          onClick={() => setPaginaConsultas(p => Math.min(Math.ceil(consultas.length / CONSULTAS_POR_PAGINA), p + 1))}
+                          disabled={paginaConsultas === Math.ceil(consultas.length / CONSULTAS_POR_PAGINA)}
+                          className="btn btn-sm bg-slate-800 hover:bg-slate-700 border border-white/10 text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed rounded-xl px-4"
+                        >
+                          Siguiente →
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
               </>
