@@ -15,7 +15,7 @@
 
 import { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Target, Trophy, Flame, Compass, Play, BookOpen, Star, Lock, X, Rocket, GraduationCap, ChevronRight, ShieldCheck } from 'lucide-react';
+import { Target, Trophy, Flame, Compass, Play, BookOpen, Star, Lock, X, Rocket, GraduationCap, ChevronRight, ShieldCheck, MessageSquare, CheckCircle, Clock, Video } from 'lucide-react';
 import AuthContext from '../context/AuthContext';
 import axiosInstance from '../api/axios';
 import { getStudentAvatar, avatarDatabase } from '../utils/avatarUtils';
@@ -64,6 +64,10 @@ export default function Dashboard() {
   const [journeyCourses, setJourneyCourses] = useState([]);
   const [cargandoCursos, setCargandoCursos] = useState(true);
 
+  // Consultas enviadas por el alumno a profesores
+  const [consultas, setConsultas] = useState([]);
+  const [cargandoConsultas, setCargandoConsultas] = useState(true);
+
   // ─────────────────────────────────────────────
   // OBTENER EL PROGRESO AL ARRANCAR
   // ─────────────────────────────────────────────
@@ -86,6 +90,34 @@ export default function Dashboard() {
 
     cargarDatos();
   }, []);
+
+  // Carga las consultas del alumno y marca las notificaciones como leídas
+  useEffect(() => {
+    if (!user || user.is_teacher || (user.subscription_level || 1) < 3) {
+      setCargandoConsultas(false);
+      return;
+    }
+    const cargarConsultas = async () => {
+      try {
+        const res = await axiosInstance.get('teachers/consultations/');
+        setConsultas(res.data);
+        // Marcamos todas como leídas al entrar al dashboard
+        await axiosInstance.post('teachers/consultations/mark_as_read/');
+      } catch (error) {
+        console.error('Error al cargar consultas', error);
+      } finally {
+        setCargandoConsultas(false);
+      }
+    };
+    cargarConsultas();
+  }, [user]);
+
+  // Mapa de estado de consulta → etiqueta y color visual
+  const estadoConsulta = (status) => {
+    if (status === 'ANSWERED') return { label: 'Resuelta', color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30', icon: <CheckCircle className="w-3 h-3" /> };
+    if (status === 'IN_CALL')  return { label: 'En Videollamada', color: 'text-blue-400 bg-blue-500/10 border-blue-500/30', icon: <Video className="w-3 h-3" /> };
+    return { label: 'Pendiente', color: 'text-amber-400 bg-amber-500/10 border-amber-500/30', icon: <Clock className="w-3 h-3" /> };
+  };
 
   // ─────────────────────────────────────────────
   // LÓGICA DE LOGROS DINÁMICOS
@@ -339,6 +371,76 @@ export default function Dashboard() {
                 </div>
               ))}
             </div>
+
+            {/* ── MIS TRANSMISIONES (CONSULTAS A PROFESORES) ── */}
+            {nivelSuscripcion >= 3 && (
+              <>
+                <h2 className="text-2xl font-black text-white px-2 flex items-center gap-2 mt-10">
+                  <MessageSquare className="w-6 h-6 text-teal-400" /> Mis Transmisiones
+                  <span className="text-xs font-normal text-slate-500 normal-case tracking-normal">(consultas a profesores)</span>
+                </h2>
+
+                {cargandoConsultas ? (
+                  <div className="flex justify-center p-8 bg-slate-900/40 rounded-2xl border border-white/5">
+                    <span className="loading loading-spinner text-teal-400"></span>
+                  </div>
+                ) : consultas.length === 0 ? (
+                  <div className="bg-slate-900/40 backdrop-blur-md border border-dashed border-white/10 rounded-2xl p-10 text-center">
+                    <MessageSquare className="w-12 h-12 text-slate-700 mx-auto mb-4" />
+                    <h3 className="text-xl font-bold text-slate-500">Sin transmisiones</h3>
+                    <p className="text-slate-600 text-sm mt-2">Todavía no has enviado ninguna consulta a un profesor.</p>
+                    <Link to="/dashboard/claustro" className="btn btn-outline border-teal-500 text-teal-400 hover:bg-teal-500 hover:text-slate-950 mt-6 rounded-xl">Ir al Claustro</Link>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {consultas.map((c) => {
+                      const est = estadoConsulta(c.status);
+                      return (
+                        <div key={c.id} className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-6 space-y-4 hover:border-teal-500/30 transition-all">
+                          {/* Cabecera: profesor + estado + fecha */}
+                          <div className="flex items-start justify-between gap-4 flex-wrap">
+                            <div>
+                              <p className="text-xs text-slate-500 uppercase tracking-widest mb-1">Consulta a</p>
+                              <p className="text-white font-bold text-lg">{c.professor_name}</p>
+                              {c.course_title && <p className="text-teal-400 text-xs mt-0.5">📚 {c.course_title}</p>}
+                            </div>
+                            <div className="flex flex-col items-end gap-2">
+                              <span className={`flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 rounded-full border ${est.color}`}>
+                                {est.icon} {est.label}
+                              </span>
+                              <span className="text-[10px] text-slate-600">
+                                {new Date(c.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Mensaje del alumno */}
+                          <div className="bg-black/30 border border-white/5 rounded-xl p-4">
+                            <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-2 font-bold">Tu pregunta</p>
+                            <p className="text-slate-300 text-sm leading-relaxed">{c.message}</p>
+                          </div>
+
+                          {/* Respuesta del profesor (solo si existe) */}
+                          {c.response ? (
+                            <div className="bg-teal-500/5 border border-teal-500/20 rounded-xl p-4">
+                              <p className="text-[10px] text-teal-400 uppercase tracking-widest mb-2 font-bold flex items-center gap-1">
+                                <CheckCircle className="w-3 h-3" /> Respuesta del Maestro
+                              </p>
+                              <p className="text-slate-200 text-sm leading-relaxed">{c.response}</p>
+                            </div>
+                          ) : (
+                            <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-4 flex items-center gap-3">
+                              <Clock className="w-4 h-4 text-amber-400 shrink-0" />
+                              <p className="text-amber-300/70 text-sm italic">El maestro aún no ha respondido. Te notificaremos cuando lo haga.</p>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </>
+            )}
           </div>
 
           {/* ── COLUMNA LATERAL DERECHA (sidebar) ── */}
