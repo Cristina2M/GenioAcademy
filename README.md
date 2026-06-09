@@ -190,7 +190,7 @@ git checkout main && git merge <rama> --no-ff -m "Merge <rama>: descripción"
 |---|---|
 | `feature/bd` | Modelado inicial de la base de datos |
 | `feature/backendV1` | Primera versión del backend: API REST y serializadores |
-| `feature/motorLogica` | Motor de XP, subida de nivel y bloqueo 403 |
+| `feature/motorLogica` | Motor de XP y subida de nivel automática |
 | `feature/autenticacionFrontend` | Login/registro en React conectado al JWT del backend |
 | `feature/frontend` | Estructura de páginas y enrutamiento SPA |
 | `feature/frontendV1` | Primera versión estable del cliente React |
@@ -274,7 +274,6 @@ La interfaz sigue una estética **Dark Glassmorphism** que llamo "Estética Gal�
 
 **Autenticación dual:** El backend tiene un `EmailOrUsernameBackend` personalizado que acepta tanto el username como el email para iniciar sesión.
 
-**Bloqueo 403 en servidor:** El acceso a cursos de nivel superior no es solo visual. Si alguien intenta acceder directamente a la URL de un curso bloqueado, el backend devuelve `403 Forbidden`.
 
 ---
 

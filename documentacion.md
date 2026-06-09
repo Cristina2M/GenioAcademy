@@ -40,7 +40,7 @@ Para que la plataforma resultara más atractiva y los alumnos quisieran usarla d
 
 La plataforma se apoya en **cuatro pilares** principales:
 
-- **Gamificación tipo RPG:** Los alumnos acumulan puntos de experiencia (XP) completando cursos. Cuando reúnen suficiente XP suben de nivel, y cada nuevo nivel desbloquea más contenido y nuevos avatares de búho para personalizar su perfil.
+- **Gamificación tipo RPG:** Los alumnos acumulan puntos de experiencia (XP) completando cursos. Cuando reúnen suficiente XP suben de nivel, y cada nuevo nivel desbloquea nuevos avatares de búho para personalizar su perfil y hace visible el progreso acumulado.
 
 - **Tutor IA (Astro):** Hay un asistente de inteligencia artificial integrado en el reproductor de cursos llamado Astro. Lo interesante es que no da las respuestas directamente, sino que utiliza el **método socrático**: hace preguntas para que el propio alumno llegue a la solución. Lo he implementado conectando el backend con la API de Groq y el modelo `llama-3.1-8b-instant`. Astro además sabe en qué lección estás en cada momento, por lo que sus respuestas siempre tienen contexto.
 
@@ -72,10 +72,10 @@ A lo largo del desarrollo del proyecto, la realidad técnica me obligó a tomar 
 
 1. **Evolución del Despliegue hacia AWS y Kubernetes:** En el anteproyecto inicial se barajaban opciones más sencillas, pero al final decidí apostar por algo más cercano a lo que se usa en el mundo real y desplegar la aplicación en **Amazon Web Services (AWS)**. Configuré una instancia EC2 e instalé **K3s** (una distribución ligera de Kubernetes). Empaqueto ambos servicios (frontend y backend) en contenedores Docker y los orquesto en el clúster, lo que me da alta disponibilidad, paridad exacta con el entorno de desarrollo y un despliegue más cercano a lo profesional.
 2. **De Ollama Local a Groq Cloud (Tutor IA):** Inicialmente iba a usar la API de Ollama para correr el modelo localmente. En la práctica, el hardware necesario para correr un modelo en local (incluso uno pequeño) provocaba latencias inaceptables en las respuestas del tutor Astro. Para solucionarlo, migré la integración hacia **Groq**, un proveedor en la nube que ofrece inferencia ultrarrápida (LPU).
-3. **Descarte de LDAP y S3 Buckets:** Valoré LDAP para la gestión de usuarios, pero para el alcance de Genio Academy (enfocado a usuarios finales y no a redes corporativas internas), el sistema de JWT enriquecido resultó mucho más seguro, rápido y estándar. Respecto a S3 para multimedia, actualmente los recursos (como los avatares) se cargan desde el propio bundle de React o bases de datos ligeras para mantener los costes a cero, aunque la base de código está preparada para integrarlo si el proyecto escala.
-4. **Sistema de Vidas y RPG más profundo:** En el diseño inicial solo se mencionaba una "API externa de avatares". Decidí ir un paso más allá en la gamificación y desarrollé todo un motor propio de subida de experiencia, niveles (Bloqueos 403 reales en servidor) y el sistema *Roguelike* de regeneración de vidas por tiempo, lo que aporta muchísimo más valor diferencial que solo usar avatares de DiceBear.
+3. **Descarte de LDAP y S3 Buckets:** Valoré LDAP para la gestión de usuarios, pero para el alcance de Genio Academy (enfocado a usuarios finales y no a redes corporativas internas), el sistema de JWT enriquecido resultó mucho más seguro, rápido y estándar. Respecto a S3 para multimedia, actualmente los recursos (como los avatares) se cargan desde el propio paquete compilado de React o bases de datos ligeras para mantener los costes a cero, aunque la base de código está preparada para integrarlo si el proyecto escala.
+4. **Sistema de Vidas y RPG más profundo:** En el diseño inicial solo se mencionaba una "API externa de avatares". Decidí ir un paso más allá en la gamificación y desarrollé todo un motor propio de subida de experiencia y niveles, y el sistema *Roguelike* de regeneración de vidas por tiempo, lo que aporta muchísimo más valor diferencial que solo usar avatares de DiceBear.
 
-5. **Funciones pospuestas al Backlog (PDFs, Email y n8n):** Ciertas funcionalidades clásicas como la generación de diplomas en PDF, la validación de cuentas por correo electrónico o las integraciones externas de automatización (ej. n8n), estaban inicialmente contempladas. Sin embargo, aplicando principios ágiles (Agile), decidí desplazarlas a la versión 2.0. El motivo es que preferí invertir el presupuesto de horas de desarrollo en asegurar que el *core* innovador de la app (el motor adaptativo, la IA en tiempo real y las videollamadas) fuera robusto y libre de fallos para este Producto Mínimo Viable (MVP).
+5. **Funciones pospuestas al Backlog (PDFs, Email y n8n):** Ciertas funcionalidades clásicas como la generación de diplomas en PDF, la validación de cuentas por correo electrónico o las integraciones externas de automatización (ej. n8n), estaban inicialmente contempladas. Sin embargo, aplicando principios ágiles (Agile), decidí desplazarlas a la versión 2.0. El motivo es que preferí invertir el presupuesto de horas de desarrollo en asegurar que el núcleo innovador de la app (el motor adaptativo, la IA en tiempo real y las videollamadas) fuera robusto y libre de fallos para este Producto Mínimo Viable (MVP).
 6. **Internacionalización (i18n) y Branding:** Para cumplir con los criterios de evaluación y mejorar la profesionalidad del producto, añadí un sistema de internacionalización bilingüe (Español/Inglés) con un *LanguageContext* que traduce dinámicamente las páginas públicas más elaboradas (Inicio, Misión, Claustro). El selector de idioma solo aparece en esas vistas para no añadir ruido en el resto de la app. También aproveché para pulir el branding final en producción: cambié los meta-tags genéricos de Vite por el logo y el título real de Genio Academy en la pestaña del navegador.
 
 ---
@@ -98,7 +98,7 @@ El problema principal que observé es que **los alumnos de la ESO carecen de una
 
 Genio Academy pretende dar respuesta a estas carencias mediante:
 
-**Aprendizaje incremental personalizado:** El contenido se organiza por niveles de dificultad en cada materia. No puedes acceder al siguiente nivel hasta que demuestres que dominas el actual. Esto no es solo una restricción visual: lo gestiona el backend mediante comprobaciones, de forma que intentar acceder a un curso superior al nivel RPG actual devuelve un error `403 Forbidden`.
+**Aprendizaje incremental personalizado:** El contenido se organiza por niveles de dificultad en cada materia. El sistema de niveles RPG motiva el progreso: al completar cursos acumulas XP y subes de nivel, lo que desbloquea avatares de búho más elaborados en tu perfil y hace visible tu avance. Los avatares superiores tienen validación real en el servidor, así que no se pueden usar antes de alcanzar el nivel requerido.
 
 **Gamificación con consecuencias reales:** He procurado que los elementos de juego no sean solo adornos cosméticos. Todo tiene una función:
 - Los **puntos de experiencia (XP)** acumulados te permiten subir de nivel. La fórmula que utilizo es: `XP necesarios = nivel_actual × 500`. Así, los primeros niveles son rápidos de superar para "enganchar" al estudiante, y luego el reto va creciendo.
@@ -115,7 +115,7 @@ Los objetivos concretos que me marqué al inicio del proyecto fueron:
 
 - Desarrollar una plataforma web funcional y responsiva utilizando tecnologías modernas (React, Django, PostgreSQL, Docker).
 - Implementar un sistema de autenticación seguro con tokens JWT, que a la vez integren la información de gamificación del alumno para evitar consultas innecesarias a la base de datos.
-- Crear una lógica educativa robusta que controle el acceso al contenido según el nivel, con validación tanto en cliente como en servidor.
+- Crear una lógica educativa que motive el progreso mediante XP y niveles RPG, con validación en servidor para el desbloqueo de recompensas (avatares) al alcanzar el nivel requerido, y con bloqueo real de funcionalidades premium (IA, minijuegos, tutorías) según el plan de suscripción.
 - Integrar un asistente de inteligencia artificial de forma segura, canalizando todas las peticiones a través del backend para no exponer la clave de la API.
 - Diseñar un sistema de vidas (planetas) con penalizaciones y regeneración pasiva y activa (minijuegos).
 - Diferenciar funcionalidades mediante tres planes de suscripción gestionados desde el servidor.
@@ -235,7 +235,7 @@ Antes de ver el diagrama, una aclaración rápida para quien no esté familiariz
 
 **Category** — representa una asignatura (Matemáticas, Historia, Física...). Es la raíz del árbol de contenido.
 
-**KnowledgeLevel** — cada asignatura tiene varios niveles de dificultad. El campo `order` indica qué nivel RPG mínimo necesita el alumno para acceder a los cursos de este nivel. Por ejemplo, `order=2` significa que necesitas nivel RPG 2 o superior.
+**KnowledgeLevel** — cada asignatura tiene varios niveles de dificultad. El campo `order` indica el orden de presentación de ese bloque dentro de la asignatura (1 = introductorio, 2 = intermedio, etc.). Todos los cursos del catálogo son accesibles independientemente del nivel RPG del alumno; el sistema de niveles funciona como motivación de progreso, no como restricción de acceso.
 
 **Course** — un curso concreto dentro de un nivel de conocimiento. Tiene un campo `xp_reward` que indica cuántos XP gana el alumno al completarlo.
 
@@ -313,7 +313,7 @@ El backend sigue una arquitectura de tres capas bastante típica en aplicaciones
 │                                                               │
 │  sync_lives(user)        → Motor de regeneración pasiva      │
 │  get_lives_data(user)    → Helper: estado completo de vidas  │
-│  check_unlocked(user, n) → Bloqueo 403 por nivel RPG         │
+│  check_unlocked(user, n) → Placeholder sin implementar (contiene solo pass)  │
 │  MyTokenObtainPairSerializer → JWT enriquecido con RPG data  │
 │  UserSerializer          → Transforma User ↔ JSON            │
 │  SYSTEM_PROMPT           → Instrucciones de Astro (IA)       │
@@ -438,15 +438,14 @@ Los casos de uso describen cómo interactúan los usuarios con el sistema paso a
 - **Endpoint:** `POST /api/token/`
 - **Resultado:** Alumno conectado, redirigido al Dashboard.
 
-**¿Qué es un JWT?** JWT son las siglas de JSON Web Token. Es un estándar para transmitir información de forma segura entre dos partes (en este caso, el frontend y el backend) usando una firma digital. El token tiene tres partes separadas por puntos: header (tipo de algoritmo), payload (los datos) y signature (la firma que garantiza que no ha sido manipulado). El backend firma el token con una clave secreta (`SECRET_KEY`) que solo él conoce, así que si alguien intenta falsificar un token, la firma no coincidirá y el servidor lo rechazará.
+**¿Qué es un JWT?** JWT son las siglas de JSON Web Token. Es un estándar para transmitir información de forma segura entre dos partes (en este caso, el frontend y el backend) usando una firma digital. El token tiene tres partes separadas por puntos: header (tipo de algoritmo), payload (los datos) y signature (la firma que verifica que no ha sido manipulado). El backend firma el token con una clave secreta (`SECRET_KEY`) que solo él conoce, así que si alguien intenta falsificar un token, la firma no coincidirá y el servidor lo rechazará.
 
 #### CU-03: Explorar el catálogo de cursos
 
 - **Actor:** Alumno conectado (cualquier plan)
-- **Descripción:** El alumno navega a `/courses`. El frontend hace `GET /api/courses/categories/` con su token JWT. El backend devuelve el árbol completo de asignaturas → niveles → cursos. Para cada curso, incluye si el alumno lo ha iniciado (`is_started`) o completado (`is_completed`). Los niveles cuyo campo `order` supera el `current_student_level` del alumno aparecen con candado en el frontend.
+- **Descripción:** El alumno navega a `/courses`. El frontend hace `GET /api/courses/categories/` con su token JWT. El backend devuelve el árbol completo de asignaturas → niveles → cursos. Para cada curso, incluye si el alumno lo ha iniciado (`is_started`) o completado (`is_completed`).
 - **Endpoint:** `GET /api/courses/categories/`
-- **Resultado:** El alumno ve el catálogo con los cursos disponibles y bloqueados claramente diferenciados.
-- **Nota:** Si el alumno intenta acceder directamente a un curso bloqueado via URL (ej: `/player/5`), el backend devolverá `403 Forbidden` al intentar cargar los datos del curso.
+- **Resultado:** El alumno ve el catálogo completo con el estado de progreso de cada curso (iniciado, completado o sin empezar).
 
 #### CU-04: Completar un curso y ganar XP
 
@@ -593,7 +592,7 @@ Docker Compose los conecta en una red interna para que puedan comunicarse entre 
 | Tecnología | Versión | Para qué la uso |
 |-----------|---------|-----------------|
 | **React** | 18.x | Framework de interfaz de usuario (SPA) |
-| **Vite** | Latest | Bundler ultrarrápido con Hot Reload |
+| **Vite** | Latest | Empaquetador ultrarrápido con recarga en caliente (*Hot Reload*) |
 | **React Router DOM** | v6 | Enrutamiento SPA sin recargar la página |
 | **Axios** | Latest | Cliente HTTP con interceptores automáticos de JWT |
 | **Tailwind CSS** | v4 | Motor de estilos basado en utilidades |
@@ -603,7 +602,7 @@ Docker Compose los conecta en una red interna para que puedan comunicarse entre 
 
 **React 18** es el framework que uso para construir la interfaz. La idea de React es que divides la interfaz en componentes reutilizables. Cada componente tiene su propio estado y se re-renderiza automáticamente cuando ese estado cambia. Con React 18 puedo usar hooks modernos como `useState`, `useEffect`, `useContext`, `useRef`, etc.
 
-**Vite** es el bundler (empaquetador) del proyecto. Antes la opción más común era Webpack (con Create React App), pero Vite es mucho más rápido tanto para arrancar el servidor de desarrollo como para hacer el build de producción. El Hot Reload de Vite es prácticamente instantáneo.
+**Vite** es el empaquetador (*bundler*) del proyecto. Antes la opción más común era Webpack (con Create React App), pero Vite es mucho más rápido tanto para arrancar el servidor de desarrollo como para hacer el build de producción. La recarga en caliente (*Hot Reload*) de Vite es prácticamente instantánea.
 
 **React Router DOM v6** gestiona la navegación dentro de la SPA. Define qué componente se renderiza para cada URL, y lo hace sin recargar la página. También proporciona el hook `useNavigate` para redirigir programáticamente y `useParams` para leer parámetros de la URL (como el `courseId` en `/player/:courseId`).
 
@@ -688,7 +687,7 @@ He implementado un backend de autenticación personalizado (`EmailOrUsernameBack
 
 ---
 
-### 5.3 Guía de Estilo y Diseño (UI/UX)
+### Guía de Estilo y Diseño (UI/UX)
 
 He seguido una línea de diseño muy clara que llamo **Estética Galáctica (Dark Glassmorphism)**. La idea era que el alumno no se sintiera en un aula virtual típica, sino a los mandos de una nave espacial donde estudiar es el combustible para su viaje interestelar. Con esa premisa conceptual, las decisiones visuales siguientes tienen mucho más sentido.
 
@@ -773,7 +772,7 @@ GenioAcademy/
 │   │   ├── models.py            → Category, KnowledgeLevel, Course, Lesson, Exercise,
 │   │   │                          CourseCompletion, UserCourseProgress
 │   │   ├── serializers.py       → Serialización del árbol de contenido
-│   │   ├── views.py             → API de cursos con bloqueo por nivel RPG
+│   │   ├── views.py             → API de cursos: catálogo, detalle, completar curso y motor de XP
 │   │   ├── urls.py              → Rutas: /categories/, /courses/{id}/, /complete/...
 │   │   └── management/commands/
 │   │       └── seed_exercises.py → Comando Django: puebla lecciones y ejercicios en cursos existentes
@@ -820,7 +819,7 @@ GenioAcademy/
 
 **`backend/users/serializers.py`** — Aquí está la clase `MyTokenObtainPairSerializer` que personaliza el token JWT para incluir los datos de gamificación del alumno. Cuando Django REST Framework genera un token de login, llama a este serializador, que añade campos extra al payload antes de firmar el token.
 
-**`backend/courses/views.py`** — Contiene la lógica de bloqueo por nivel RPG. Antes de devolver los datos de un curso, comprueba si el nivel del alumno (extraído del token) es suficiente para acceder. Si no lo es, lanza `HTTP 403 Forbidden`.
+**`backend/courses/views.py`** — Contiene los controladores de la API de cursos: catálogo, detalle de curso, completar curso (con motor RPG de XP y subida de nivel) y seguimiento de progreso del alumno.
 
 **`backend/ai/views.py`** — El proxy de IA. Recibe el mensaje del alumno, construye el `SYSTEM_PROMPT` con las instrucciones de Astro y el contexto de la lección, llama a la API de Groq con el SDK de Python y devuelve la respuesta al frontend. La `GROQ_API_KEY` se lee de las variables de entorno, nunca del código.
 
@@ -891,12 +890,9 @@ En la sección "Catálogo Estelar" (`/courses`) verás todas las asignaturas dis
 
 **¿Cómo funciona el acceso?**
 
-- **Disponible (sin candado):** Tu nivel RPG actual es igual o superior al nivel mínimo requerido. Puedes entrar al curso haciendo clic en él.
-- **Bloqueado (con candado 🔒):** Tu nivel RPG actual es insuficiente. Sigue completando cursos de tu nivel actual para acumular XP y subir de nivel.
+Todos los cursos del catálogo son accesibles. El sistema de niveles RPG no bloquea el acceso a los cursos: su función es motivar el progreso, ya que al completar cursos acumulas XP y subes de nivel, lo que desbloquea avatares de búho más avanzados en tu perfil.
 
 **¿Qué asignaturas hay?** Actualmente el catálogo incluye Matemáticas, Física, Ciencias Naturales, Historia y Lengua, organizadas en niveles de conocimiento progresivos.
-
-**Un detalle importante:** Aunque en el frontend veas el candado, si alguien intentara acceder directamente a la URL de un curso bloqueado, el backend devolverá un error `403 Forbidden` y el frontend mostrará un mensaje de acceso denegado. La restricción está en el servidor, no solo en la interfaz.
 
 ### 7.6 El Reproductor de Curso (CoursePlayer)
 
@@ -1186,7 +1182,7 @@ De esta forma es fácil distinguir qué es código del framework y qué es lógi
 - Los comentarios intentan explicar el **"por qué"** además del **"qué"**. Por ejemplo, no solo "// resta 1 vida" sino "// resto la vida aquí y no en el frontend para evitar que se manipule desde el navegador".
 
 **Commits:**
-- Algunos tienen prefijos de convención (`feat:`, `fix:`, `chore:`...), porque ví que era una norma común en los commits.
+- Algunos tienen prefijos de convención (`feat:`, `fix:`, `chore:`...), porque vi que era una norma común en los commits.
 - Ejemplos reales: `"docs: corregir motivacion de python y explicacion de ramas release"`, `"Corregir validación de vidas en el backend"`, `"Añadir seed_exercises.py y entorno de produccion del frontend"`.
 
 **Estructura de componentes React:**
@@ -1202,7 +1198,7 @@ Para añadir cursos, lecciones y ejercicios nuevos no hace falta ser programador
 
 2. **Crear una asignatura nueva:** Ve a `Courses > Categorías` y pulsa "Añadir". Solo necesitas un nombre y una descripción.
 
-3. **Crear un nivel de conocimiento:** Ve a `Courses > Knowledge levels` y pulsa "Añadir". Elige la categoría (asignatura) y el `order` (número de nivel RPG mínimo requerido para acceder).
+3. **Crear un nivel de conocimiento:** Ve a `Courses > Knowledge levels` y pulsa "Añadir". Elige la categoría (asignatura) y el `order` (número que indica el orden de dificultad de este bloque dentro de la asignatura; solo afecta al orden de visualización en el catálogo).
 
 4. **Crear un curso:** Ve a `Courses > Cursos` y pulsa "Añadir". Elige el nivel de conocimiento, pon un título y descripción. El campo `xp_reward` (por defecto 300) define cuántos XP da al completarlo.
 
@@ -1287,7 +1283,7 @@ Esta tabla compara Genio Academy con las plataformas más conocidas:
 | Contenido adaptado al currículo de la ESO española | ✅ Sí | ❌ No | ❌ No |
 | Tutor IA socrático con contexto de la lección | ✅ Sí | ❌ No | ✅ Parcial |
 | Gamificación con consecuencias reales (vidas) | ✅ Sí | ❌ No | ✅ Sí |
-| Bloqueo de contenido por nivel real del alumno | ✅ Sí | ❌ No | ✅ Parcial |
+| Sistema de niveles RPG con XP y desbloqueo de avatares | ✅ Sí | ❌ No | ✅ Parcial |
 | Minijuegos educativos de rescate | ✅ Sí | ❌ No | ❌ No |
 | Tutorías con profesor humano real en vivo | ✅ Sí | ❌ No | ❌ No |
 | Planes de pago escalonados | ✅ Sí | ❌ Gratis/donación | ✅ Sí |
@@ -1306,7 +1302,7 @@ Una de las cosas que más me sorprendió al investigar esto es que, incluso con 
 | Dominio y renovación SSL (Let's Encrypt gratuito) | ~1€/mes |
 | **Total operativo estimado** | **~31-61€/mes** |
 
-Con solo **9 suscriptores del Plan 1** (9 × 6,99€ = 62,91€) se cubren los costes operativos en el peor escenario. Si en una primera fase de validación se optara por una arquitectura más sencilla (por ejemplo, Render + Supabase en sus tiers gratuitos), el coste bajaría a menos de 5€/mes y el break-even sería de tan solo 1 suscriptor. Esto lo hace un modelo especialmente viable para arrancar.
+Con solo **9 suscriptores del Plan 1** (9 × 6,99€ = 62,91€) se cubren los costes operativos en el peor escenario. Si en una primera fase de validación se optara por una arquitectura más sencilla (por ejemplo, Render + Supabase en sus tiers gratuitos), el coste bajaría a menos de 5€/mes y el punto de equilibrio sería de tan solo 1 suscriptor. Esto lo hace un modelo especialmente viable para arrancar.
 
 ### 9.5 Estrategia de crecimiento
 
@@ -1314,7 +1310,7 @@ Pensé en tres fases de crecimiento:
 
 **Fase 1 — Lanzamiento y validación (meses 1-6):**
 - Ofrecer un precio de "fundador" reducido para los primeros 100 alumnos.
-- Recoger feedback real de uso para priorizar mejoras.
+- Recoger retroalimentación real de uso para priorizar mejoras.
 - Ampliar el catálogo de contenido educativo en todas las asignaturas.
 
 **Fase 2 — Escala (meses 6-18):**
@@ -1356,8 +1352,8 @@ Este es el guión que tengo pensado para la presentación del proyecto ante el t
 
 ¿Cómo lo resuelve Genio Academy?
 
-- **Aprendizaje incremental:** el contenido está bloqueado hasta que el alumno demuestra que está preparado (nivel RPG como gatekeeper, validado en el servidor).
-- **Gamificación real:** XP, niveles y planetas (vidas) no son decoración. Afectan el acceso y obligan a reflexionar sobre los errores.
+- **Aprendizaje incremental:** el sistema de niveles RPG marca el progreso del alumno. Cuantos más cursos completa, más XP acumula y más sube de nivel, desbloqueando nuevos avatares y recompensas validadas en el servidor.
+- **Gamificación real:** XP, niveles y planetas (vidas) no son decoración. Los planetas condicionan el uso del simulador y obligan a reflexionar sobre los errores; los niveles desbloquean avatares exclusivos.
 - **Tutor Astro:** IA socrática disponible 24/7. Enseña a pensar, no da las respuestas. Conoce el contexto de la lección activa.
 - **Conexión humana:** Tutorías con profesores reales en vivo vía videollamada integrada, para los alumnos que más lo necesitan.
 
@@ -1386,7 +1382,7 @@ Entidades principales del sistema:
 `Professor` → `Consultation` ← `CustomUser`
 `MinigameLog` ← `CustomUser`
 
-Decisiones de diseño clave: JWT enriquecido con datos RPG, regeneración de vidas sin Celery (cálculo al vuelo), bloqueo 403 en el servidor.
+Decisiones de diseño clave: JWT enriquecido con datos RPG, regeneración de vidas sin Celery (cálculo al vuelo).
 
 ### Diapositiva 7 — El Sistema Roguelike de Vidas
 
@@ -1409,7 +1405,7 @@ Decisiones de diseño clave: JWT enriquecido con datos RPG, regeneración de vid
 *(Mostrar tabla de planes)*
 
 - **Costes operativos:** ~31-61€/mes con la infraestructura AWS/Kubernetes actual.
-- **Break-even:** 9 suscriptores del Plan 1 cubren los costes en el peor escenario.
+- **Punto de equilibrio:** 9 suscriptores del Plan 1 cubren los costes en el peor escenario.
 - **Modelo escalable:** de B2C (familias individuales) a B2B (licencias para centros educativos).
 
 ### Diapositiva 10 — Conclusión, Metodología y Hoja de Ruta
@@ -1421,7 +1417,7 @@ Decisiones de diseño clave: JWT enriquecido con datos RPG, regeneración de vid
 - Despliegue en producción real: https://cristina2daw.es
 
 **Decisiones de Metodología (Agile):**
-- He aplicado el concepto de **Producto Mínimo Viable (MVP)**. Funcionalidades como validación por email, generación de PDFs o integración con n8n se movieron al backlog conscientemente. El objetivo era asegurar que el "core" innovador (IA en tiempo real, videollamadas y gamificación) fuera impecable.
+- He aplicado el concepto de **Producto Mínimo Viable (MVP)**. Funcionalidades como validación por email, generación de PDFs o integración con n8n se movieron al backlog conscientemente. El objetivo era asegurar que el núcleo innovador (IA en tiempo real, videollamadas y gamificación) fuera impecable.
 
 **Lo que vendría después (si siguiera desarrollándolo):**
 - Desarrollo de las funciones del backlog (PDFs de notas, email).
@@ -1471,7 +1467,7 @@ La idea básica es:
 |------|----------------|
 | `feature/bd` | Modelado inicial de la base de datos (CustomUser, Cursos, Niveles) |
 | `feature/backendV1` | Primera versión del backend: API REST, serializadores y migraciones |
-| `feature/motorLogica` | Motor de gamificación: XP, subida de nivel y bloqueo 403 |
+| `feature/motorLogica` | Motor de gamificación: XP, subida de nivel automática |
 | `feature/autenticacionFrontend` | Sistema de login/registro en React conectado al JWT del backend |
 | `feature/frontend` | Base del frontend: estructura de páginas y enrutamiento SPA |
 | `feature/frontendV1` | Primera versión estable del cliente React |
