@@ -5,8 +5,8 @@
 > **Instituto:** IES Ilíberis
 > **Ciclo:** Desarrollo de Aplicaciones Web (DAW)
 > **Repositorio GitHub:** https://github.com/Cristina2M/GenioAcademy  
-> **Versión del documento:** Hito VII completado + Fase 21 (Despliegue Final) + Expansión de Contenido  
-> **Fecha:** Mayo 2026
+> **Versión del documento:** Hito VII completado + Despliegue Final en AWS/Kubernetes
+> **Fecha:** Junio 2026
 
 ---
 
@@ -28,8 +28,6 @@
 
 ---
 
-<div style="page-break-after: always;"></div>
-
 ## 1. Anteproyecto Actualizado
 
 ### Descripción General
@@ -50,9 +48,7 @@ La plataforma se apoya en **cuatro pilares** principales:
 
 - **Claustro Interactivo:** Es el catálogo de profesores especializados. Los usuarios del plan premium pueden solicitar tutorías directas y conectarse mediante videollamada integrada (sin salir de la plataforma).
 
-Técnicamente, el proyecto está estructurado como una arquitectura de **microservicios** usando Docker: el frontend es una SPA en React + Vite, el backend es una API REST en Django, y la base de datos es PostgreSQL. Actualmente está desplegado en producción utilizando un **clúster Kubernetes (K3s)** alojado en una instancia **EC2 de Amazon Web Services (AWS)**, empleando Traefik como Ingress Controller y certificados SSL automatizados con cert-manager.
-
-<div style="page-break-after: always;"></div>
+Técnicamente, el proyecto está estructurado como una arquitectura de **microservicios** usando Docker: el frontend es una SPA en React + Vite, el backend es una API REST en Django, y la base de datos es PostgreSQL. Actualmente está desplegado en producción utilizando un **clúster Kubernetes (K3s)** alojado en una instancia **EC2 de Amazon Web Services (AWS)**, empleando **Traefik** como Ingress Controller (viene incluido por defecto en K3s) y certificados SSL automatizados con cert-manager.
 
 ### Estado de desarrollo por Hitos
 
@@ -74,19 +70,15 @@ El proyecto se planificó en distintas etapas o hitos. Aquí un resumen del esta
 
 A lo largo del desarrollo del proyecto, la realidad técnica me obligó a tomar decisiones y pivotar respecto a la idea original del anteproyecto. Estos cambios no son errores de planificación, sino decisiones de arquitectura justificadas:
 
-1. **Evolución del Despliegue hacia AWS y Kubernetes:** En el anteproyecto inicial se barajaban opciones más sencillas, pero finalmente se optó por cumplir con los estándares de la industria desplegando la aplicación en **Amazon Web Services (AWS)**. Se configuró una instancia EC2 en la que se instaló **K3s** (una distribución ligera de Kubernetes). Ambos servicios (frontend y backend) se empaquetan en contenedores Docker y se orquestan en el clúster, lo que garantiza alta disponibilidad, paridad exacta con el entorno de desarrollo y un despliegue profesional.
-2. **De Ollama Local a Groq Cloud (Tutor IA):** Inicialmente iba a usar la API de Ollama para correr el modelo localmente. En la práctica, el hardware necesario para correr un modelo en local (even uno pequeño) provocaba latencias inaceptables en las respuestas del tutor Astro. Para solucionarlo, migré la integración hacia **Groq**, un proveedor en la nube que ofrece inferencia ultrarrápida (LPU).
-3. **Descarte de LDAP y S3 Buckets:** Se valoró LDAP para la gestión de usuarios, pero para el alcance de Genio Academy (enfocado a usuarios finales y no a redes corporativas internas), el sistema de JWT enriquecido resultó mucho más seguro, rápido y estándar. Respecto a S3 para multimedia, actualmente los recursos (como los avatares) se cargan desde el propio bundle de React o bases de datos ligeras para mantener los costes a cero, aunque la base de código está preparada para integrarlo si el proyecto escala.
+1. **Evolución del Despliegue hacia AWS y Kubernetes:** En el anteproyecto inicial se barajaban opciones más sencillas, pero al final decidí apostar por algo más cercano a lo que se usa en el mundo real y desplegar la aplicación en **Amazon Web Services (AWS)**. Configuré una instancia EC2 e instalé **K3s** (una distribución ligera de Kubernetes). Empaqueto ambos servicios (frontend y backend) en contenedores Docker y los orquesto en el clúster, lo que me da alta disponibilidad, paridad exacta con el entorno de desarrollo y un despliegue más cercano a lo profesional.
+2. **De Ollama Local a Groq Cloud (Tutor IA):** Inicialmente iba a usar la API de Ollama para correr el modelo localmente. En la práctica, el hardware necesario para correr un modelo en local (incluso uno pequeño) provocaba latencias inaceptables en las respuestas del tutor Astro. Para solucionarlo, migré la integración hacia **Groq**, un proveedor en la nube que ofrece inferencia ultrarrápida (LPU).
+3. **Descarte de LDAP y S3 Buckets:** Valoré LDAP para la gestión de usuarios, pero para el alcance de Genio Academy (enfocado a usuarios finales y no a redes corporativas internas), el sistema de JWT enriquecido resultó mucho más seguro, rápido y estándar. Respecto a S3 para multimedia, actualmente los recursos (como los avatares) se cargan desde el propio bundle de React o bases de datos ligeras para mantener los costes a cero, aunque la base de código está preparada para integrarlo si el proyecto escala.
 4. **Sistema de Vidas y RPG más profundo:** En el diseño inicial solo se mencionaba una "API externa de avatares". Decidí ir un paso más allá en la gamificación y desarrollé todo un motor propio de subida de experiencia, niveles (Bloqueos 403 reales en servidor) y el sistema *Roguelike* de regeneración de vidas por tiempo, lo que aporta muchísimo más valor diferencial que solo usar avatares de DiceBear.
 
-<div style="page-break-after: always;"></div>
-
 5. **Funciones pospuestas al Backlog (PDFs, Email y n8n):** Ciertas funcionalidades clásicas como la generación de diplomas en PDF, la validación de cuentas por correo electrónico o las integraciones externas de automatización (ej. n8n), estaban inicialmente contempladas. Sin embargo, aplicando principios ágiles (Agile), decidí desplazarlas a la versión 2.0. El motivo es que preferí invertir el presupuesto de horas de desarrollo en asegurar que el *core* innovador de la app (el motor adaptativo, la IA en tiempo real y las videollamadas) fuera robusto y libre de fallos para este Producto Mínimo Viable (MVP).
-6. **Internacionalización (i18n) y Branding:** Para cumplir con los criterios de evaluación y mejorar la profesionalidad del producto, se ha implementado un sistema completo de internacionalización bilingüe (Español/Inglés) con un *LanguageContext*. Este sistema traduce dinámicamente las páginas públicas más complejas (Inicio, Misión, Claustro) y muestra el selector de idioma de forma condicional solo en estas vistas. Además, se ha pulido el branding final en producción, reemplazando los meta-tags genéricos de Vite por el logotipo oficial y título de Genio Academy en la pestaña del navegador.
+6. **Internacionalización (i18n) y Branding:** Para cumplir con los criterios de evaluación y mejorar la profesionalidad del producto, añadí un sistema de internacionalización bilingüe (Español/Inglés) con un *LanguageContext* que traduce dinámicamente las páginas públicas más elaboradas (Inicio, Misión, Claustro). El selector de idioma solo aparece en esas vistas para no añadir ruido en el resto de la app. También aproveché para pulir el branding final en producción: cambié los meta-tags genéricos de Vite por el logo y el título real de Genio Academy en la pestaña del navegador.
 
 ---
-
-<div style="page-break-after: always;"></div>
 
 
 ## 2. Objetivos y Justificación del Proyecto
@@ -117,8 +109,6 @@ Genio Academy pretende dar respuesta a estas carencias mediante:
 
 **Conectividad con profesores reales:** Para el apoyo que la IA no puede cubrir, el sistema incluye la opción de contactar con especialistas para tutorías por videollamada en vivo.
 
-<div style="page-break-after: always;"></div>
-
 ### Objetivos Específicos
 
 Los objetivos concretos que me marqué al inicio del proyecto fueron:
@@ -133,8 +123,6 @@ Los objetivos concretos que me marqué al inicio del proyecto fueron:
 - Desplegar el proyecto en producción con dominio propio y certificados de seguridad SSL.
 
 ---
-
-<div style="page-break-after: always;"></div>
 
 ## 3. Modelo Entidad-Relación
 
@@ -152,8 +140,6 @@ Antes de ver el diagrama, una aclaración rápida para quien no esté familiariz
 - **PK (Primary Key):** Es el identificador único de cada fila de una tabla. No pueden repetirse dos registros con el mismo PK. En Django, si no especificas uno, se crea automáticamente un campo `id` autoincremental.
 - **FK (Foreign Key):** Es una referencia al PK de otra tabla. Por ejemplo, si una `Lesson` tiene un campo `course (FK)`, significa que esa lección pertenece al curso cuyo `id` coincide con ese valor. Es la forma de "conectar" tablas entre sí.
 - **M2M (Many to Many):** Relación de muchos a muchos. Por ejemplo, un profesor puede impartir varias materias, y una materia puede tener varios profesores. Django gestiona esto con una tabla intermedia automática.
-
-<div style="page-break-after: always;"></div>
 
 ### Entidades Principales
 
@@ -234,7 +220,7 @@ Antes de ver el diagrama, una aclaración rápida para quien no esté familiariz
 
   * is_teacher NO es un campo de base de datos sino un campo calculado:
     devuelve True si el usuario tiene un professor_profile asociado
-    (relación OneToOne con Professor). Así no duplicamos información.
+    (relación OneToOne con Professor). Así no duplico información.
 ```
 
 ### Descripción de cada entidad
@@ -286,7 +272,7 @@ Antes de ver el diagrama, una aclaración rápida para quien no esté familiariz
 
 ### Restricciones de Integridad
 
-Estas son las reglas que garantizan que los datos de la base de datos sean siempre consistentes:
+Estas son las reglas que aseguran que los datos de la base de datos sean siempre consistentes:
 
 - La combinación `(user, course)` en `CourseCompletion` es **UNIQUE** — impide el farmeo de XP completando el mismo curso varias veces.
 - `lives_count` nunca puede superar `MAX_LIVES = 3`. Esto no está forzado a nivel de base de datos (con un constraint SQL), sino en la lógica Python del backend. Cuando se intenta sumar una vida, se comprueba primero que `lives_count < 3`.
@@ -296,8 +282,6 @@ Estas son las reglas que garantizan que los datos de la base de datos sean siemp
 - Los valores válidos para `status` en `Consultation` son: `'PENDING'`, `'IN_CALL'` y `'ANSWERED'`. Cualquier otro valor sería rechazado por el serializer de Django REST Framework.
 
 ---
-
-<div style="page-break-after: always;"></div>
 
 ## 4. Modelo de Clases y Casos de Uso
 
@@ -344,7 +328,6 @@ El backend sigue una arquitectura de tres capas bastante típica en aplicaciones
 │  MinigameLog   Professor       Consultation                  │
 └──────────────────────────────────────────────────────────────┘
 ```
-<div style="page-break-after: always;"></div>
 
 **¿Qué hace cada capa?**
 
@@ -400,13 +383,11 @@ src/
 
 **Piezas clave del frontend que merece la pena explicar:**
 
-- **`AuthContext.jsx`:** Es el "cerebro" de la sesión en el cliente. Usa la Context API de React para que cualquier componente de la app pueda saber si hay un usuario conectado, quién es, su nivel, sus XP, etc. sin tener que pasarlo por props de componente en componente. Cuando el alumno hace login, el token JWT se guarda en `localStorage` y se decodifica para extraer los datos del payload (nivel, XP, avatar, plan...).
+- **`AuthContext.jsx`:** El proveedor global de sesión. Cualquier componente puede saber si hay un usuario conectado y acceder a sus datos sin pasar props manualmente. (Explicación detallada en la sección 5, junto con las tecnologías del frontend.)
 
-- **`axiosInstance.js`:** Es un cliente HTTP configurado con un interceptor. Lo que hace el interceptor es añadir automáticamente el header `Authorization: Bearer <token>` a todas las peticiones que se hacen al backend. Así no tengo que acordarme de incluirlo manualmente en cada llamada. También tiene lógica de refresco: si el token de acceso ha caducado, intenta renovarlo con el token de refresco antes de devolver un error.
+- **`axiosInstance.js`:** Cliente HTTP con interceptores de JWT automáticos: añade el token en cada petición y lo renueva si caduca. (Explicación detallada en la sección 5.)
 
 - **`PrivateRoute.jsx`:** Un componente que envuelve las rutas privadas. Si el usuario no está autenticado, le redirige al login. Si sí lo está, deja pasar al componente de la ruta.
-
-<div style="page-break-after: always;"></div>
 
 ### Rutas de la Aplicación (App.jsx)
 
@@ -443,8 +424,6 @@ Los casos de uso describen cómo interactúan los usuarios con el sistema paso a
 - **Resultado:** Alumno registrado. El frontend redirige al login.
 - **Posibles errores:** Username o email ya en uso (400), contraseña demasiado corta (400).
 
-<div style="page-break-after: always;"></div>
-
 #### CU-02: Login y obtención de sesión JWT
 
 - **Actor:** Alumno registrado
@@ -468,8 +447,6 @@ Los casos de uso describen cómo interactúan los usuarios con el sistema paso a
 - **Endpoint:** `GET /api/courses/categories/`
 - **Resultado:** El alumno ve el catálogo con los cursos disponibles y bloqueados claramente diferenciados.
 - **Nota:** Si el alumno intenta acceder directamente a un curso bloqueado via URL (ej: `/player/5`), el backend devolverá `403 Forbidden` al intentar cargar los datos del curso.
-
-<div style="page-break-after: always;"></div>
 
 #### CU-04: Completar un curso y ganar XP
 
@@ -495,8 +472,6 @@ Los casos de uso describen cómo interactúan los usuarios con el sistema paso a
 - **Resultado:** Respuesta de Astro que guía sin revelar la solución directa.
 - **Restricción:** Si el alumno tiene Plan 1, el backend devuelve `403 Forbidden`. El frontend muestra un aviso para actualizar el plan.
 
-<div style="page-break-after: always;"></div>
-
 #### CU-06: Fallar una evaluación y perder un planeta
 
 - **Actor:** Alumno conectado (cualquier plan)
@@ -520,8 +495,6 @@ Los casos de uso describen cómo interactúan los usuarios con el sistema paso a
 - **Endpoint:** `POST /api/users/management/{id}/update_avatar/` con `{ "selected_avatar": "buho3" }`
 - **Resultado:** El avatar nuevo aparece en la navbar al instante sin necesidad de volver a hacer login.
 
-<div style="page-break-after: always;"></div>
-
 #### CU-09: Solicitar una tutoría personalizada
 
 - **Actor:** Alumno con Plan 3
@@ -544,8 +517,6 @@ Los casos de uso describen cómo interactúan los usuarios con el sistema paso a
 
 ---
 
-<div style="page-break-after: always;"></div>
-
 ## 5. Tecnologías Empleadas
 
 En esta sección explico todas las tecnologías que he usado en el proyecto, por qué las elegí y para qué sirven exactamente. Algunas las conocía de clase, otras las tuve que investigar por mi cuenta porque las necesitaba para cosas concretas del proyecto.
@@ -562,8 +533,8 @@ En esta sección explico todas las tecnologías que he usado en el proyecto, por
 **Docker** es una herramienta que permite empaquetar una aplicación con todo lo que necesita para funcionar (código, dependencias, configuración) dentro de un "contenedor". La ventaja es que ese contenedor funciona igual en cualquier máquina, da igual si es Windows, Linux o Mac.
 
 En este proyecto tengo 3 contenedores gestionados por Docker Compose:
-1. **frontend** — Node.js con React y Vite.
-2. **backend** — Python con Django.
+1. **frontend** — Node.js con React y Vite. En desarrollo usa el servidor de Vite; en producción la imagen compila la SPA y la sirve con **Nginx**, que es mucho más eficiente que tener Node corriendo. Nginx requiere la regla `try_files $uri $uri/ /index.html` en su configuración: sin ella, al refrescar una URL interna como `/dashboard` el servidor buscaría esa carpeta físicamente en disco y devolvería un 404 en lugar de dejar que React Router maneje la ruta.
+2. **backend** — Python con Django. En producción no se usa el servidor de desarrollo `runserver` de Django (que no está preparado para múltiples usuarios simultáneos), sino **Gunicorn** con 3 workers en paralelo. El timeout está configurado en 120 segundos para que si la API de Groq tarda en responder, la conexión no se corte antes de que llegue la respuesta del tutor.
 3. **db** — PostgreSQL.
 
 Docker Compose los conecta en una red interna para que puedan comunicarse entre sí (el backend habla con la base de datos, por ejemplo) y expone los puertos necesarios al exterior (5173 para el frontend, 8000 para el backend).
@@ -571,7 +542,6 @@ Docker Compose los conecta en una red interna para que puedan comunicarse entre 
 **Git** lo uso con una estrategia parecida a Git Flow: hay una rama `main` estable, una rama `develop` de integración, ramas `feature/` para desarrollar cada funcionalidad por separado, y ramas `release/` para preparar las entregas y pulir detalles de cada hito importante. Cuando termino una feature la fusiono en `develop`, de ahí se estabiliza en `release/`, y finalmente lo llevo a `main` cuando está listo para producción.
 
 ---
-<div style="page-break-after: always;"></div>
 
 ### Backend
 
@@ -598,8 +568,6 @@ Docker Compose los conecta en una red interna para que puedan comunicarse entre 
 
 **psycopg2-binary** es el adaptador que permite a Python conectarse con PostgreSQL. Es la versión `binary` porque incluye las librerías de PostgreSQL compiladas dentro del paquete, así no hace falta instalarlas por separado en el sistema.
 
-<div style="page-break-after: always;"></div>
-
 **Groq SDK** es el cliente oficial en Python para la API de Groq Cloud. Lo uso en `ai/views.py` para enviar el mensaje del alumno junto con el prompt de sistema de Astro y recibir la respuesta del modelo de lenguaje.
 
 **python-dotenv** carga las variables del archivo `.env` (que no está en el repositorio por seguridad) en las variables de entorno del proceso. Así el código puede acceder a la `SECRET_KEY` de Django, las credenciales de PostgreSQL y la `GROQ_API_KEY` sin que estén escritas directamente en el código fuente.
@@ -616,7 +584,7 @@ Docker Compose los conecta en una red interna para que puedan comunicarse entre 
 - Django tiene soporte nativo excelente para PostgreSQL.
 - Soporta el tipo de dato `JSONField` de forma nativa, que uso en los campos `options` de los ejercicios y `cv_json` de los profesores.
 - Es gratuita, de código abierto y muy fiable.
-- Supabase (el servicio cloud de base de datos) ofrece PostgreSQL como servicio gestionado con un tier gratuito muy generoso, lo que desacopla la base de datos del servidor de aplicaciones.
+- En producción corre dentro del clúster Kubernetes en el mismo EC2, con un PersistentVolume de 5 GB para que los datos no se pierdan al reiniciar el pod.
 
 ---
 
@@ -667,6 +635,13 @@ Para usarlo de forma segura, el frontend nunca llama directamente a Groq. El flu
 
 Así la clave de API nunca llega al navegador del usuario.
 
+Una cosa que me importaba mucho es que Astro no fuera solo un chat de texto plano, sino un agente real con capacidad de consultar datos del sistema. Para eso implementé **Groq Tool Calling**: en lugar de limitarse a responder preguntas con texto, Astro tiene dos herramientas definidas que puede invocar de forma autónoma cuando lo considera necesario:
+
+- **`consultar_estadisticas_alumno`:** permite a Astro pedirle al backend los niveles, XP y vidas actuales del alumno autenticado. Así puede adaptar su respuesta a la situación real del alumno: si le quedan pocas vidas, puede recordárselo; si acaba de subir de nivel, puede felicitarle.
+- **`recomendar_ejercicio_refuerzo`:** permite a Astro sugerir ejercicios específicos según el área de conocimiento en la que el alumno está fallando más.
+
+El flujo de Tool Calling es el siguiente: el backend recibe la respuesta de Groq, detecta si el modelo ha decidido usar una herramienta, ejecuta la consulta correspondiente en PostgreSQL, y devuelve el resultado a Groq para que complete su respuesta con información real. Todo esto ocurre en el mismo ciclo de petición, de forma transparente para el alumno.
+
 ---
 
 ### Decisiones Técnicas Importantes
@@ -687,23 +662,27 @@ En su lugar, opté por calcularlo "al vuelo": cuando el alumno consulta sus vida
 
 **3. Polling para las videollamadas en lugar de WebSockets**
 
-Para notificar al alumno de que el profesor ha iniciado la videollamada, la opción más "moderna" sería usar WebSockets (una conexión permanente bidireccional). Pero los WebSockets son más complejos de implementar y de desplegar, especialmente en el tier gratuito de Render.
+Para notificar al alumno de que el profesor ha iniciado la videollamada, la opción más "moderna" sería usar WebSockets (una conexión permanente bidireccional). Pero los WebSockets requieren más infraestructura y complejidad de despliegue que no se justifican para un proyecto de esta escala.
 
-La solución que usé es polling: el componente `ActiveCallBanner.jsx` hace una petición `GET /api/teachers/consultations/active_calls/` cada 30 segundos para ver si hay alguna llamada activa. No es perfecta (puede haber hasta 30 segundos de retraso), pero funciona bien para un proyecto de esta escala y es mucho más sencilla de implementar.
+La solución que usé es polling: el componente `ActiveCallBanner.jsx` hace una petición `GET /api/teachers/consultations/active_calls/` cada 30 segundos para ver si hay alguna llamada activa. No es perfecta (puede haber hasta 30 segundos de retraso), pero funciona bien para un proyecto de esta escala y es mucho más sencilla de implementar. Este mismo patrón se usa también en la campanita de notificaciones del Navbar, que hace polling cada 60 segundos para comprobar si el profesor ha respondido una consulta del alumno.
 
 **4. Proxy de IA en el backend**
 
 Como ya mencioné antes, el backend actúa de intermediario entre el frontend y Groq. Esto no es solo por seguridad (proteger la API key), sino también porque me permite añadir el `SYSTEM_PROMPT` de Astro en el servidor, donde el alumno no puede verlo ni modificarlo. Si lo pusiera en el frontend, cualquiera podría inspeccionar el código y ver las instrucciones de comportamiento de Astro.
 
-<div style="page-break-after: always;"></div>
+**5. LanguageContext: internacionalización condicional**
 
-**5. Catálogo siempre disponible sin error**
+He implementado un contexto de idioma (`LanguageContext.jsx`) separado de `AuthContext`. Gestiona el cambio Español/Inglés y se aplica de forma condicional solo en las páginas públicas más elaboradas: la landing page (`Home`), el Claustro público y la página de Misión. En el resto de la aplicación (el panel del alumno, el reproductor de cursos, etc.) todo está en español, ya que es el idioma del currículo educativo.
+
+El selector de idioma solo aparece en esas páginas públicas, para no añadir ruido visual en las zonas funcionales de la plataforma.
+
+**6. Catálogo siempre disponible sin error**
 
 `CategoryViewSet` tiene permiso `AllowAny`, es decir, no requiere autenticación. Pero si hay un token válido presente, lo usa para enriquecer la respuesta con datos de progreso del alumno (`is_started`, `is_completed`). Si el token es inválido o no existe, devuelve los datos sin esa información extra.
 
 Además, en el frontend (`Courses.jsx`), si la primera petición (con token) falla, hay un fallback que hace una segunda petición sin token. Así el catálogo siempre se muestra aunque haya algún problema con la sesión del alumno.
 
-**6. Autenticación Dual (email o username)**
+**7. Autenticación Dual (email o username)**
 
 He implementado un backend de autenticación personalizado (`EmailOrUsernameBackend`) que sobreescribe el comportamiento predeterminado de Django. El método `authenticate()` personalizado acepta tanto el `username` como el `email` como identificador de login. Esto evita que los alumnos tengan que recordar si se registraron con su nombre de usuario o con su email.
 
@@ -711,37 +690,55 @@ He implementado un backend de autenticación personalizado (`EmailOrUsernameBack
 
 ### 5.3 Guía de Estilo y Diseño (UI/UX)
 
-No creé un documento separado para la guía de estilo porque en un proyecto moderno todo esto se define directamente en la configuración de Tailwind CSS (o a través de variables CSS como usa la versión v4). Sin embargo, he seguido una línea de diseño muy clara que llamo **Estética Galáctica (Dark Glassmorphism)**. 
+He seguido una línea de diseño muy clara que llamo **Estética Galáctica (Dark Glassmorphism)**. La idea era que el alumno no se sintiera en un aula virtual típica, sino a los mandos de una nave espacial donde estudiar es el combustible para su viaje interestelar. Con esa premisa conceptual, las decisiones visuales siguientes tienen mucho más sentido.
 
-Si tuviera que extraer esa configuración visual a una guía de estilo clásica, sería exactamente esta:
+**1. Tipografía**
 
-**1. Tipografía (Typography)**
-Como uso Tailwind v4 por defecto, la tipografía se apoya en las fuentes de sistema predeterminadas (System Sans-Serif), lo que garantiza que cargue rapidísimo y se vea bien en Windows, Mac o Android sin descargar fuentes externas.
-- **Títulos (H1 / H2):** System Sans, Bold (700). Suelo aplicarles degradados dinámicos con `bg-clip-text`.
-- **Cuerpo (Párrafos):** System Sans, Regular (400), tamaño base 16px.
+En lugar de usar las fuentes de sistema genéricas del navegador, importo dos tipografías de Google Fonts que encajan con la personalidad del proyecto:
+- **Outfit** (títulos, rótulos y etiquetas): tipografía geométrica de corte limpio e inspirada en interfaces de cabinas futuristas. Aporta el tono premium y tecnológico que buscaba. Se usa en `h1`, `h2` y en todos los textos que necesitan presencia visual.
+- **Inter** (textos de lectura y teoría de los cursos): diseñada específicamente para interfaces digitales. Ofrece una legibilidad perfecta en textos largos bajo cualquier resolución de pantalla.
 
-**2. Paleta de Colores (Colors)**
-Toda la plataforma funciona en un tema oscuro (*dark mode*).
-- **Fondos (Backgrounds):** `slate-900` (#0f172a) para simular el espacio profundo, y variaciones de `indigo-950` (#1e1b4b) para zonas de contraste.
-- **Acentos Neón (Accents):** 
-  - `cyan-400` (#22d3ee): Usado para botones principales y para destacar elementos interactivos positivos.
-  - `fuchsia-500` (#d946ef): Usado para botones de riesgo, vidas perdidas, o simplemente para dar contraste llamativo en gradientes.
-- **Textos:** Blanco puro (#ffffff) o gris claro (`slate-300` / #cbd5e1) para facilitar la lectura prolongada sin fatiga visual.
+Jerarquía estándar aplicada:
+- `h1` Títulos de sección: `2.25rem (36px)` | Bold | tracking ancho
+- `h2` Títulos de tarjeta: `1.5rem (24px)` | SemiBold
+- Cuerpo de texto: `1rem (16px)` | Regular | altura de línea `1.625` (la óptima para lectura continua)
 
-<div style="page-break-after: always;"></div>
+**2. Paleta de Colores**
+
+Toda la plataforma funciona en tema oscuro. Los valores de color están definidos en variables CSS centralizadas usando el modelo de color **HSL**, lo que facilita mucho ajustar luminosidad o saturación de toda la paleta tocando un solo número:
+
+- **Fondo del Espacio (Space Black):** de `hsl(240, 25%, 3%)` a `hsl(240, 30%, 7%)`. Aporta profundidad visual y elimina la fatiga que producen los fondos blancos en sesiones largas de estudio.
+- **Contraste / Cristal:** `rgba(255, 255, 255, 0.03)` con bordes `rgba(255, 255, 255, 0.08)`. Son los paneles Glassmorphism.
+- **Neón Índigo (principal):** `hsl(239, 84%, 67%)`. Para botones, llamadas a la acción y elementos activos.
+- **Neón Violeta (secundario):** `hsl(271, 91%, 65%)`. Para barras de XP, subidas de nivel y efectos mágicos.
+- **Verde Esmeralda (vidas / éxito):** `hsl(150, 84%, 55%)`. Planetas llenos y respuestas correctas.
+- **Rojo Alerta (pérdida / error):** `hsl(0, 84%, 60%)`. Vidas perdidas, fallos de evaluación e indicador "En Vivo" de videollamada.
+- **Ámbar (pendiente / aviso):** para estados de espera, como consultas sin responder o notificaciones.
+
+Esta paleta cumple los estándares de contraste **WCAG AA**, lo que hace el texto legible incluso para personas con dificultades de visión.
 
 **3. Efectos y Componentes (Glassmorphism)**
-En Genio Academy casi no uso cajas lisas ni sombras planas. Prefiero el efecto "Cristal":
-- **Paneles y Tarjetas:** Tienen fondos semi-transparentes (`bg-black/30` o `bg-white/5`), acompañados de un filtro de desenfoque (`backdrop-blur-md`).
-- **Bordes:** Todos los componentes amigables usan bordes fuertemente redondeados (`rounded-xl`, `rounded-2xl` o `rounded-full`) para dar una sensación lúdica y menos corporativa.
 
-**4. Iconografía y Mascotas**
-- **Astro el Búho:** Es la mascota principal y el núcleo de la gamificación. Tiene variaciones (con cascos, con birrete, durmiendo) para acompañar los diferentes estados emocionales del alumno en la plataforma.
-- **Iconos:** Uso la librería estandarizada **Lucide React**. Se caracteriza por iconos minimalistas de trazo fino que no sobrecargan la interfaz espacial.
+En Genio Academy casi no hay cajas lisas ni sombras planas. Todo el sistema de tarjetas usa el efecto "Cristal":
+- **Paneles y Tarjetas:** fondos semi-transparentes (`bg-black/30` o `bg-white/5`), con filtro de desenfoque de fondo (`backdrop-filter: blur(12px)`) y bordes sutiles semi-transparentes.
+- **Resplandores de Neón:** sombras proyectadas con colores vibrantes (`box-shadow: 0 0 15px rgba(indigo, 0.3)`) para simular luces de pantalla holográfica.
+- **Bordes:** siempre redondeados (`rounded-xl`, `rounded-2xl` o `rounded-full`). Da una sensación más lúdica y menos corporativa.
+- **Micro-animaciones:** todos los botones e interacciones tienen transiciones de suavizado (`transition: all 0.3s ease`) y efectos hover con resplandores, para que la interfaz se sienta "viva".
+
+**4. Diseño Responsivo (Mobile-First)**
+
+La plataforma está diseñada con la premisa **Mobile-First**: primero se diseña para pantallas pequeñas y luego se expande para escritorio mediante breakpoints de Tailwind.
+
+- **Navbar adaptativa:** en ordenadores se despliega en horizontal con badges translúcidos. En móviles, se contrae a un menú hamburguesa que libera toda la pantalla para el contenido.
+- **Reproductor de Cursos:** en ordenadores el sidebar de lecciones y el contenido principal van en columnas paralelas. En móviles, el sidebar se oculta bajo un botón flotante desplegable para dar el 100% del ancho a la lección.
+- **Dashboard:** la disposición en grid de dos columnas (contenido + sidebar) colapsa a una columna en pantallas pequeñas.
+
+**5. Iconografía y Mascotas**
+- **Astro el Búho:** es la mascota principal y el eje de la gamificación. Tiene varias variantes (con casco espacial, con birrete, dormido...) para acompañar los diferentes estados emocionales del alumno: cuando estudia, cuando falla, cuando sube de nivel.
+- **Avatares de búho:** la galería de búhos del perfil sigue una progresión visual de niveles. El búho inicial es básico; los más avanzados tienen apariencia más tecnológica y elaborada, incentivando el esfuerzo a través del premio visual.
+- **Iconos:** uso la librería **Lucide React**, con iconos minimalistas de trazo fino que no saturan una interfaz ya muy rica visualmente.
 
 ---
-
-<div style="page-break-after: always;"></div>
 
 ## 6. Estructura de Ficheros del Proyecto
 
@@ -819,8 +816,6 @@ GenioAcademy/
 
 **`backend/core/settings.py`** — El archivo de configuración central de Django. Aquí se configuran cosas como la base de datos, las apps instaladas, los ajustes de JWT (tiempo de expiración de tokens), la política CORS (qué orígenes puede llamar a la API), la zona horaria, etc. Es el archivo que más hay que revisar cuando algo de configuración no funciona.
 
-<div style="page-break-after: always;"></div>
-
 **`backend/core/urls.py`** — El enrutador raíz. Conecta los prefijos de URL (`/api/courses/`, `/api/users/`, etc.) con los `urls.py` de cada app. Funciona como una "centralita" que decide a qué app va cada petición.
 
 **`backend/users/serializers.py`** — Aquí está la clase `MyTokenObtainPairSerializer` que personaliza el token JWT para incluir los datos de gamificación del alumno. Cuando Django REST Framework genera un token de login, llama a este serializador, que añade campos extra al payload antes de firmar el token.
@@ -829,13 +824,9 @@ GenioAcademy/
 
 **`backend/ai/views.py`** — El proxy de IA. Recibe el mensaje del alumno, construye el `SYSTEM_PROMPT` con las instrucciones de Astro y el contexto de la lección, llama a la API de Groq con el SDK de Python y devuelve la respuesta al frontend. La `GROQ_API_KEY` se lee de las variables de entorno, nunca del código.
 
-**`frontend/src/context/AuthContext.jsx`** — Probablemente el archivo más importante del frontend. Proporciona a toda la app el estado de la sesión: si hay usuario conectado, quién es, sus datos de gamificación, y las funciones `login()` y `logout()`. Cualquier componente puede acceder a esto con `useContext(AuthContext)`.
-
-**`frontend/src/utils/axiosInstance.js`** — La instancia de Axios configurada con interceptores. Hay dos: uno que añade el header `Authorization: Bearer <token>` a cada petición saliente, y otro que detecta errores 401 (token caducado) e intenta renovarlo automáticamente con el refresh token antes de reintentar la petición original.
+**`frontend/src/context/AuthContext.jsx`** y **`frontend/src/utils/axiosInstance.js`** — Los dos archivos más importantes del frontend. Su funcionamiento está explicado en detalle en la sección 5 (Tecnologías Empleadas).
 
 ---
-
-<div style="page-break-after: always;"></div>
 
 ## 7. Manual de Usuario
 
@@ -848,11 +839,9 @@ La plataforma está disponible en dos formas:
 - **En producción (internet):** https://cristina2daw.es — accesible desde cualquier navegador sin instalar nada.
 - **En local (para desarrollo):** http://localhost:5173 — solo si tienes el proyecto corriendo en tu ordenador con Docker.
 
-> **Nota de rendimiento:** Gracias a la infraestructura desplegada en AWS con Kubernetes, la aplicación se mantiene siempre activa y responde con latencias mínimas, garantizando una excelente experiencia de usuario sin los tiempos de "frío" típicos de los servidores gratuitos.
+> **Nota:** A diferencia de los servicios gratuitos que "se duermen" si no los usa nadie, la app corre en AWS con Kubernetes, así que está siempre activa y responde rápido desde el primer momento.
 
 ![Página Principal](capturas_doc/paginaPrincipal.png)
-
-<div style="page-break-after: always;"></div>
 
 ### 7.2 Registro de una cuenta nueva
 
@@ -874,8 +863,6 @@ La plataforma está disponible en dos formas:
 4. Pulsa **"Desbloquear Terminal"**.
 5. Si las credenciales son correctas, serás redirigido a tu Dashboard personal.
 
-<div style="page-break-after: always;"></div>
-
 ### 7.4 El Dashboard (Panel de Control del Alumno)
 
 El Dashboard es tu centro de mando personal. Desde aquí puedes ver tu progreso, elegir tu próxima misión y personalizar tu perfil.
@@ -894,9 +881,9 @@ El Dashboard es tu centro de mando personal. Desde aquí puedes ver tu progreso,
 
 - **Botón al Claustro:** Acceso directo al catálogo de profesores. Solo disponible para alumnos con Plan 3 ("Agujero de Gusano").
 
-- **Mi Trayectoria:** Acceso a tu historial de cursos, tanto los que tienes en progreso como los que ya has completado. Puedes filtrar por estado y ver cuándo los completaste.
+- **Mis Transmisiones:** Si tienes Plan 3, en la parte inferior del Dashboard encontrarás el historial de todas las consultas que has enviado a profesores, con el texto de tu pregunta, la respuesta del profesor (si ya ha contestado) y el estado de la consulta (pendiente, en videollamada o resuelta). Las consultas están paginadas de tres en tres para que no sea una lista interminable. Cuando el profesor responde, aparece una campanita 🔔 en la barra de navegación; al hacer clic en ella, la campanita desaparece y la página hace scroll automático hasta esta sección.
 
-<div style="page-break-after: always;"></div>
+- **Mi Trayectoria:** Acceso a tu historial de cursos, tanto los que tienes en progreso como los que ya has completado. Puedes filtrar por estado y ver cuándo los completaste.
 
 ### 7.5 El Catálogo Estelar (Cursos disponibles)
 
@@ -910,8 +897,6 @@ En la sección "Catálogo Estelar" (`/courses`) verás todas las asignaturas dis
 **¿Qué asignaturas hay?** Actualmente el catálogo incluye Matemáticas, Física, Ciencias Naturales, Historia y Lengua, organizadas en niveles de conocimiento progresivos.
 
 **Un detalle importante:** Aunque en el frontend veas el candado, si alguien intentara acceder directamente a la URL de un curso bloqueado, el backend devolverá un error `403 Forbidden` y el frontend mostrará un mensaje de acceso denegado. La restricción está en el servidor, no solo en la interfaz.
-
-<div style="page-break-after: always;"></div>
 
 ### 7.6 El Reproductor de Curso (CoursePlayer)
 
@@ -933,8 +918,6 @@ Al hacer clic en un curso disponible entrarás al reproductor. La pantalla se di
 - **Panel de Planetas 🪐:** Muestra tus planetas (vidas) actuales y el tiempo restante para recuperar el siguiente. (Ver sección 7.8)
 - **Solicitar Tutoría:** Botón para abrir el modal de solicitud de tutoría. Solo visible con Plan 3. (Ver sección 7.10)
 
-<div style="page-break-after: always;"></div>
-
 ### 7.7 El Tutor Astro (Inteligencia Artificial)
 
 Astro es el asistente de IA de Genio Academy. Está disponible en el sidebar del reproductor de cursos para alumnos con Plan 2 o superior.
@@ -951,8 +934,6 @@ Astro es el asistente de IA de Genio Academy. Está disponible en el sidebar del
 - Ayuda para entender un ejercicio: "No entiendo el enunciado de esta pregunta".
 - Aclaraciones sobre el temario de la lección activa.
 
-<div style="page-break-after: always;"></div>
-
 **Lo que Astro NO hace:**
 - No te dirá directamente la respuesta de un ejercicio del quiz. Si le preguntas "¿Cuánto es 5 + 7?", te hará preguntas para que lo razones tú mismo. Esto es el método socrático y es intencional.
 
@@ -960,8 +941,6 @@ Astro es el asistente de IA de Genio Academy. Está disponible en el sidebar del
 - El historial del chat se mantiene durante la sesión. Si cierras el reproductor y vuelves a entrar, el historial se borra.
 - Astro conoce el contexto del curso y la lección en la que estás, así que sus respuestas son específicas para lo que estás estudiando.
 - Si tienes Plan 1, verás un aviso de que esta función requiere Plan 2 o superior.
-
-<div style="page-break-after: always;"></div>
 
 ### 7.8 El Sistema de Planetas (Vidas)
 
@@ -1024,8 +1003,6 @@ Los avatares son los búhos que representan tu perfil en la plataforma. Hay vari
 3. Los que puedes usar aparecen activos. Los que requieren más nivel aparecen con un candado y el nivel necesario.
 4. Haz clic en uno activo para seleccionarlo. El cambio es inmediato: verás tu nuevo búho en la navbar al instante.
 
-<div style="page-break-after: always;"></div>
-
 ### 7.12 El Panel de Profesores (Solo para docentes)
 
 Si tu cuenta es de profesor (`is_teacher = True`), tienes acceso a un panel especial en `/teacher-dashboard`. Este panel no es accesible para alumnos normales.
@@ -1042,7 +1019,7 @@ Si tu cuenta es de profesor (`is_teacher = True`), tienes acceso a un panel espe
 
 El panel de administración de Django está disponible en `http://localhost:8000/admin/` (local) o `https://api.cristina2daw.es/admin/` (producción). Solo el superusuario tiene acceso.
 
-**Desde el panel de administración se puede:**
+**Desde el panel de administración puedes:**
 
 - **Gestionar el catálogo educativo:** Crear, editar y eliminar Categorías (asignaturas), Niveles de Conocimiento, Cursos, Lecciones y Ejercicios. El campo "Contenido" de las lecciones acepta HTML enriquecido directamente.
 - **Gestionar alumnos:** Ver la lista de usuarios registrados, su plan de suscripción, XP, nivel y vidas. Se puede editar cualquier campo manualmente.
@@ -1051,8 +1028,6 @@ El panel de administración de Django está disponible en `http://localhost:8000
 - **Añadir ejercicios:** El campo `options` debe ser JSON válido en formato lista: `["opción A", "opción B", "opción C"]`. El campo `correct_answer` debe coincidir exactamente con una de las opciones (mismas mayúsculas, mismo texto).
 
 ---
-
-<div style="page-break-after: always;"></div>
 
 ## 8. Manual del Desarrollador
 
@@ -1092,8 +1067,6 @@ GROQ_API_KEY=tu_clave_de_groq_aqui
 
 > **¿Qué es la SECRET_KEY?** Es la clave criptográfica que Django usa para firmar los tokens JWT y otras funciones de seguridad. Debe ser larga y aleatoria. Nunca debe subirse al repositorio. Puedes generar una con Python: `python -c "import secrets; print(secrets.token_hex(50))"`.
 
-<div style="page-break-after: always;"></div>
-
 ```bash
 # 3. Levantar todos los servicios (la primera vez tarda unos minutos)
 docker-compose up --build
@@ -1128,18 +1101,16 @@ docker exec genioacademy-backend-1 python manage.py shell < seed_teacher_users.p
 
 > **Nota sobre el nombre del contenedor:** El nombre `genioacademy-backend-1` lo genera Docker Compose automáticamente a partir del nombre de la carpeta y del servicio. Si la carpeta del proyecto tiene otro nombre, el contenedor se llamará diferente. Para ver el nombre exacto usa `docker ps` mientras los contenedores están corriendo.
 
-<div style="page-break-after: always;"></div>
-
 ### 8.3 Cuentas de prueba
 
-Para probar la plataforma sin tener que registrarse manualmente, existen estas cuentas predefinidas (se crean con los scripts de siembra):
+Para probar la plataforma sin tener que registrarse manualmente, existen estas cuentas predefinidas (se crean con los scripts de siembra). El sistema acepta tanto el nombre de usuario como el email asociado para iniciar sesión (login dual):
 
 | Tipo de cuenta | Usuario | Contraseña | Qué puede hacer |
 |----------------|---------|------------|-----------------|
 | Alumno Plan 1 | `alumno1` | `alumno123` | Teoría y quiz básico, sin IA ni minijuegos |
 | Alumno Plan 2 | `alumno2` | `alumno123` | Lo anterior + tutor Astro IA |
-| Alumno Plan 3 | `alumno3` | `alumno123` | Todo: minijuegos de rescate y tutorías en vivo |
-| Profesor (Matemáticas) | `aris.thorne` | `Genio2026!` | Panel docente, bandeja de consultas |
+| Alumno Plan 3 | `alumno3` | `alumno123` | Todo: minijuegos de rescate, tutorías en vivo y Mis Transmisiones |
+| Profesor (Matemáticas) | `aris.thorne` | `Genio2026!` | Panel docente, bandeja de consultas y editor de cursos |
 | Superusuario | `admin` | `admin123` | Panel de administración completo de Django |
 
 ### 8.4 Comandos útiles del día a día
@@ -1212,13 +1183,11 @@ De esta forma es fácil distinguir qué es código del framework y qué es lógi
 
 **Comentarios:**
 - Todos los archivos tienen comentarios en español explicando qué hace cada parte.
-- Los comentarios intentan explicar el **"por qué"** además del **"qué"**. Por ejemplo, no solo "// resta 1 vida" sino "// restamos la vida aquí y no en el frontend para evitar que se manipule desde el navegador".
+- Los comentarios intentan explicar el **"por qué"** además del **"qué"**. Por ejemplo, no solo "// resta 1 vida" sino "// resto la vida aquí y no en el frontend para evitar que se manipule desde el navegador".
 
 **Commits:**
 - Algunos tienen prefijos de convención (`feat:`, `fix:`, `chore:`...), porque ví que era una norma común en los commits.
 - Ejemplos reales: `"docs: corregir motivacion de python y explicacion de ramas release"`, `"Corregir validación de vidas en el backend"`, `"Añadir seed_exercises.py y entorno de produccion del frontend"`.
-
-<div style="page-break-after: always;"></div>
 
 **Estructura de componentes React:**
 - Un componente por archivo.
@@ -1245,26 +1214,43 @@ Para añadir cursos, lecciones y ejercicios nuevos no hace falta ser programador
 
 > **Consejo:** Si vas a añadir muchas lecciones de una vez, es más eficiente hacerlo mediante un script Python como `seed_exercises.py` y ejecutarlo con `python manage.py seed_exercises`. Pero para una o dos lecciones, el panel de admin es más rápido.
 
-<div style="page-break-after: always;"></div>
-
 ### 8.7 Cómo funciona el despliegue en producción
 
-El proyecto está desplegado utilizando una arquitectura Cloud Native:
+El proyecto está desplegado en **AWS** usando **Kubernetes (K3s)** sobre una instancia EC2.
 
-**Frontend → Kubernetes Pod (AWS)**
-- Cada vez que se hace push a la rama `main`, GitHub Actions construye una imagen Docker y la despliega automáticamente en el clúster.
-- El dominio personalizado `cristina2daw.es` está enrutado mediante Traefik Ingress.
+**Infraestructura base:**
+- Instancia EC2 tipo `t3.medium` en AWS (el mínimo recomendado para soportar K3s con varias réplicas sin quedarse sin RAM). Se le asigna una **IP Elástica** para que la IP pública nunca cambie al reiniciar el servidor.
+- El Security Group de la instancia permite tráfico en los puertos 22 (SSH solo desde mi IP), 80 (HTTP) y 443 (HTTPS).
+- Los registros DNS del dominio `cristina2daw.es` en IONOS apuntan a esa IP Elástica: hay tres registros A para `cristina2daw.es`, `www.cristina2daw.es` y `api.cristina2daw.es`.
 
-**Backend → Kubernetes Pod (AWS)**
-- El backend Django está desplegado en el mismo clúster K3s.
-- Las variables de entorno (Secretos) se gestionan de forma segura nativamente en Kubernetes mediante `Secret` resources.
+**Persistencia de datos en Kubernetes:**
+Los pods de Kubernetes son volátiles por diseño: si se reinician pierden todo su almacenamiento. Para evitar que los datos de los alumnos (niveles RPG, XP, vidas) desaparezcan en cada reinicio del contenedor de PostgreSQL, configuré un **PersistentVolume (PV)** y un **PersistentVolumeClaim (PVC)** de 5 GB. Estos recursos almacenan los datos directamente en el disco físico de la máquina EC2, independientemente del ciclo de vida de los pods.
+
+**Réplicas y vigilancia de salud:**
+Tanto el frontend como el backend están configurados con **2 réplicas**. Esto significa que hay dos instancias corriendo en paralelo: si una falla, Kubernetes redirige el tráfico a la otra mientras levanta una nueva. Para saber si un pod está sano, configuré **Liveness y Readiness Probes**: son peticiones que Kubernetes hace periódicamente al pod; si Django o Nginx dejan de responder, el pod se marca como no saludable, se termina y se crea uno nuevo limpio.
+
+**Frontend → Kubernetes Pod**
+- Cada push a la rama `main` dispara GitHub Actions, que construye la imagen Docker y ejecuta un `rollout restart` en el clúster vía SSH, actualizando los pods sin tiempo de inactividad (Zero Downtime Deployment).
+- El dominio `cristina2daw.es` está enrutado mediante el Ingress Controller **Traefik**, que viene incluido por defecto en K3s.
+
+**Backend → Kubernetes Pod**
+- El backend Django corre con Gunicorn (3 workers). Las variables de entorno secretas (`SECRET_KEY`, `GROQ_API_KEY`, credenciales de BD) se inyectan mediante `Secret` resources de Kubernetes, que las montan como variables de entorno en el contenedor sin necesidad de tener el archivo `.env` en el repositorio.
+
+**Certificados SSL con Cert-Manager:**
+Para el HTTPS se usa **Cert-Manager**, un gestor de certificados que se instala en el clúster. Una vez configurado con un `ClusterIssuer` de Let's Encrypt, solicita y renueva automáticamente los certificados SSL de forma gratuita. Sin esto, el navegador bloquearía las llamadas entre el frontend y la API por política de seguridad de contenido mixto (HTTPS vs HTTP).
+
+**Pipeline CI/CD (GitHub Actions):**
+El workflow `.github/workflows/ci-cd.yml` tiene tres etapas:
+1. **Testing:** levanta un servicio PostgreSQL temporal en los servidores de GitHub con variables de entorno de prueba (`DATABASE_URL`, `SECRET_KEY`, `PRODUCTION=False`) y ejecuta el `pytest` de Django. Si algún test falla, el pipeline se detiene y no despliega nada.
+2. **Build & Push:** si los tests pasan, construye las imágenes Docker multiplataforma y las sube a Docker Hub (`cristina2m/genio-backend` y `cristina2m/genio-frontend`).
+3. **Deploy:** se conecta vía SSH a la instancia EC2 y ejecuta el `rollout restart` de Kubernetes.
+
+Como paso adicional, el pipeline genera la documentación técnica del código Python mediante **pdoc** y la guarda como artefacto descargable de la ejecución.
 
 **Zero-Config API en el frontend:**
 El archivo `src/utils/axiosInstance.js` tiene una lógica de autodetección: si el hostname del navegador es `localhost`, apunta al backend local en `http://localhost:8000`. Si el hostname es `cristina2daw.es`, apunta automáticamente a `https://api.cristina2daw.es`. Esto elimina la necesidad de cambiar variables de configuración manualmente al desplegar.
 
 ---
-
-<div style="page-break-after: always;"></div>
 
 ## 9. Plan de Negocio
 
@@ -1292,8 +1278,6 @@ La idea es que el Plan 1 sea accesible para cualquier familia, el Plan 2 añada 
 
 **Público objetivo terciario:** Centros educativos que podrían adoptar Genio Academy como herramienta complementaria para sus alumnos. Este sería un modelo B2B (Business to Business) en lugar del B2C (Business to Consumer) actual.
 
-<div style="page-break-after: always;"></div>
-
 ### 9.3 ¿Por qué elegiría alguien Genio Academy en lugar de la competencia?
 
 Esta tabla compara Genio Academy con las plataformas más conocidas:
@@ -1313,20 +1297,16 @@ La principal ventaja competitiva es la combinación de tres cosas que ninguna pl
 
 ### 9.4 Costes operativos estimados
 
-Una de las cosas que más me sorprendió al investigar esto es lo barato que puede ser operar una plataforma así con los servicios en la nube actuales:
+Una de las cosas que más me sorprendió al investigar esto es que, incluso con una infraestructura profesional en la nube, los costes operativos siguen siendo muy bajos comparados con el precio de cualquier suscripción:
 
 | Concepto | Coste estimado al mes |
 |----------|-----------------------|
-| Servidor backend (Render — tier de pago básico) | ~7€/mes |
-| Base de datos PostgreSQL (Supabase) | ~0€ (Tier gratuito) |
-| Hosting frontend (Vercel — tier gratuito suficiente) | 0€ |
+| Instancia EC2 t3.medium en AWS (backend + frontend + BD en K3s) | ~30-40€/mes |
 | API de Groq Cloud (según volumen de peticiones) | ~0-20€/mes |
-| Dominio y renovación SSL | ~1€/mes |
-| **Total operativo estimado** | **~15-35€/mes** |
+| Dominio y renovación SSL (Let's Encrypt gratuito) | ~1€/mes |
+| **Total operativo estimado** | **~31-61€/mes** |
 
-Con solo **5 suscriptores del Plan 1** (5 × 6,99€ = 34,95€) se cubren los costes operativos. A partir de ahí, todo es margen. Esto lo hace un modelo especialmente viable para empezar.
-
-<div style="page-break-after: always;"></div>
+Con solo **9 suscriptores del Plan 1** (9 × 6,99€ = 62,91€) se cubren los costes operativos en el peor escenario. Si en una primera fase de validación se optara por una arquitectura más sencilla (por ejemplo, Render + Supabase en sus tiers gratuitos), el coste bajaría a menos de 5€/mes y el break-even sería de tan solo 1 suscriptor. Esto lo hace un modelo especialmente viable para arrancar.
 
 ### 9.5 Estrategia de crecimiento
 
@@ -1348,8 +1328,6 @@ Pensé en tres fases de crecimiento:
 - App móvil nativa (React Native + Expo) reutilizando la misma API del backend.
 
 ---
-
-<div style="page-break-after: always;"></div>
 
 ## 10. Diapositivas para la Exposición (Guión)
 
@@ -1389,16 +1367,14 @@ Este es el guión que tengo pensado para la presentación del proyecto ante el t
 
 Recorrido de demo: Registro → Dashboard → Catálogo Estelar → CoursePlayer (teoría + quiz) → Chat con Astro → Panel de Planetas → Solicitar Tutoría → ActiveCallBanner → Videollamada Jitsi
 
-<div style="page-break-after: always;"></div>
-
 ### Diapositiva 5 — Arquitectura y Decisiones Técnicas
 
 ¿Cómo está construido por dentro y por qué?
 
 - **3 microservicios en Docker:** Frontend (React + Vite), Backend (Django + DRF), Base de Datos (PostgreSQL).
 - **API REST** con autenticación JWT enriquecida con datos de gamificación.
-- **Despliegue Cloud Native:** Se implementó una arquitectura basada en contenedores Docker orquestados con Kubernetes (K3s) sobre instancias EC2 de AWS.
-- **Pivotaje de IA:** De Ollama local a **Groq Cloud (LLaMA 3.1 8B)**. El hardware local generaba cuellos de botella; Groq nos permite una inferencia LPU casi instantánea. El backend actúa como proxy seguro ocultando la API Key.
+- **Despliegue en la nube:** Desplegué la app en AWS usando Kubernetes (K3s) sobre una instancia EC2, con los tres servicios orquestados en contenedores Docker.
+- **Pivotaje de IA:** De Ollama local a **Groq Cloud (LLaMA 3.1 8B)**. El hardware local generaba cuellos de botella; Groq me permite una inferencia LPU casi instantánea. El backend actúa como proxy seguro ocultando la API Key.
 - **UI/UX e Internacionalización:** Diseño *Glassmorphism* moderno, con un sistema de traducción condicional (i18n) para hacer la plataforma accesible de forma profesional bilingüe.
 
 ### Diapositiva 6 — Modelo de Datos
@@ -1428,14 +1404,12 @@ Decisiones de diseño clave: JWT enriquecido con datos RPG, regeneración de vid
 - **Plan 3:** solicitud de tutoría → filtrado automático por materia → asignación al especialista.
 - Videollamada Jitsi embebida dentro de la plataforma. El alumno recibe notificación mediante polling cada 30 segundos. Sin abrir pestañas externas.
 
-<div style="page-break-after: always;"></div>
-
 ### Diapositiva 9 — Plan de Negocio
 
 *(Mostrar tabla de planes)*
 
-- **Costes operativos:** ~15-35€/mes con los servicios en la nube actuales.
-- **Break-even:** Solo 5 suscriptores del Plan 1 cubren los costes operativos.
+- **Costes operativos:** ~31-61€/mes con la infraestructura AWS/Kubernetes actual.
+- **Break-even:** 9 suscriptores del Plan 1 cubren los costes en el peor escenario.
 - **Modelo escalable:** de B2C (familias individuales) a B2B (licencias para centros educativos).
 
 ### Diapositiva 10 — Conclusión, Metodología y Hoja de Ruta
@@ -1456,8 +1430,6 @@ Decisiones de diseño clave: JWT enriquecido con datos RPG, regeneración de vid
 
 ---
 
-<div style="page-break-after: always;"></div>
-
 ## 11. Enlace al Código en GitHub y Estrategia de Ramas
 
 El código completo del proyecto está disponible públicamente en:
@@ -1475,8 +1447,6 @@ La idea básica es:
 - Cuando se acerca una entrega importante, se crea una rama `release/` para hacer los últimos ajustes.
 
 ![Árbol de Commits y Ramas de Git](capturas_doc/arbolGit.png)
-
-<div style="page-break-after: always;"></div>
 
 ### Ramas principales
 
@@ -1522,8 +1492,6 @@ La idea básica es:
 
 ---
 
-<div style="page-break-after: always;"></div>
-
 ## 12. Entornos de Ejecución y Producción
 
 ### Dominios Oficiales en Producción
@@ -1533,30 +1501,25 @@ La plataforma está desplegada y accesible en:
 - **Plataforma para alumnos (Frontend):** https://cristina2daw.es
 - **API Central (Backend):** https://api.cristina2daw.es
 
-Ambos dominios tienen certificado SSL activo (el candado verde en el navegador), lo que garantiza que las comunicaciones van cifradas.
+Ambos dominios tienen certificado SSL activo (el candado verde en el navegador), lo que significa que toda la comunicación entre el alumno y la plataforma viaja cifrada.
 
 ### Lógica Zero-Config del Frontend
 
-Para facilitar el despliegue, el frontend implementa un detector de entorno automático en `src/utils/axiosInstance.js`. Funciona así:
-
-1. Si el hostname es `localhost` (entorno de desarrollo), apunta al backend en `http://localhost:8000`.
-2. Si el hostname es `cristina2daw.es` (entorno de producción), apunta automáticamente a `https://api.cristina2daw.es`.
-
-Esto elimina la necesidad de configurar variables de entorno diferentes en Vercel cada vez que se despliega.
+El frontend detecta automáticamente el entorno (local vs. producción) a partir del hostname del navegador y apunta a la URL de API correspondiente, sin necesidad de archivos `.env` distintos. El mecanismo completo está explicado en la sección 8.7.
 
 ### Detalles del Despliegue
 
 | Servicio | Proveedor | URL | Notas |
 |----------|-----------|-----|-------|
-| Frontend | Vercel | cristina2daw.es | Despliegue automático desde `main` |
-| Backend | Render | api.cristina2daw.es | Web Service con Python |
-| Base de Datos | Supabase | Supabase URL | PostgreSQL gestionada |
+| Frontend | AWS EC2 (K3s) | cristina2daw.es | Pod con NGINX sirviendo la SPA compilada |
+| Backend | AWS EC2 (K3s) | api.cristina2daw.es | Pod con Gunicorn + Django |
+| Base de Datos | AWS EC2 (K3s) | Acceso interno al clúster | PostgreSQL con PersistentVolume de 5 GB |
+| Enrutamiento | Traefik (Ingress Controller de K3s) | — | Gestiona los subdominios y el SSL |
+| Certificados SSL | cert-manager + Let's Encrypt | — | Renovación automática y gratuita |
 
-**Limitación conocida del tier gratuito de Render:** El servidor backend se "suspende" tras 15 minutos de inactividad. La primera petición tras un período de inactividad puede tardar hasta 40 segundos en responder. Esto se ha comunicado en el manual de usuario para gestionar expectativas. En un entorno de producción real se usaría un tier de pago que mantiene el servidor siempre activo.
+Todo corre en la misma instancia EC2 (`t3.medium`) con una IP Elástica para que la dirección pública no cambie entre reinicios.
 
 ---
-
-<div style="page-break-after: always;"></div>
 
 ## 13. Dificultades Encontradas
 
@@ -1568,12 +1531,12 @@ Al principio, mi idea era utilizar **Ollama** para ejecutar un modelo de intelig
 **2. Problemas con la base de datos en local**
 Configurar PostgreSQL dentro de Docker Compose me dio bastantes dolores de cabeza en los primeros hitos. Hubo conflictos con los volúmenes de persistencia de datos (a veces al borrar los contenedores o limpiar cachés perdía toda la información y tenía que volver a registrar usuarios y cargar los cursos a mano). Fue muy frustrante. Por eso acabé invirtiendo tiempo en crear los scripts en Python (`seed_data.py`, `seed_exercises.py`, etc.) para poder poblar la base de datos automáticamente en segundos cada vez que el entorno local se rompía o necesitaba reiniciarlo desde cero.
 
-**3. El despliegue a producción y los recursos gratuitos**
-Pasar del entorno seguro de "localhost" a la nube fue el mayor reto. Se implementó un entorno Cloud completo en **Amazon Web Services (AWS)** utilizando una instancia **EC2**. Sobre esta, se configuró un clúster de **Kubernetes (K3s)** para orquestar los contenedores. 
+**3. El despliegue a producción**
+Pasar del entorno seguro de "localhost" a la nube fue el mayor reto. Monté un entorno Cloud completo en **Amazon Web Services (AWS)** con una instancia **EC2 (t3.medium)** y sobre ella configuré un clúster de **Kubernetes (K3s)** para orquestar los contenedores.
 
-Configurar el Ingress Controller (Traefik) junto con `cert-manager` para la emisión automática de certificados HTTPS de Let's Encrypt fue complejo, pero garantizó comunicaciones totalmente seguras. Además, la implementación del pipeline de **CI/CD con GitHub Actions** automatizó completamente la actualización de la plataforma, conectándose por SSH al servidor y reiniciando los pods sin interrupción del servicio (zero-downtime).
+Configurar **Traefik** como Ingress Controller junto con `cert-manager` fue complejo, pero valió la pena: con eso conseguí que todas las comunicaciones vayan cifradas por HTTPS. También tuve que configurar el **PersistentVolume** para que la base de datos PostgreSQL no perdiese los datos al reiniciar el pod, algo que no es obvio hasta que te pasa. Además, la implementación del pipeline de **CI/CD con GitHub Actions** automatizó completamente la actualización de la plataforma, conectándose por SSH al servidor y reiniciando los pods sin interrupción del servicio (zero-downtime).
 
 A pesar de la frustración que generaron estos bloqueos en su momento, pelearme con el despliegue es probablemente la parte del proyecto en la que más he aprendido sobre cómo se operan las aplicaciones reales en el mundo laboral.
 
 *Documentación técnica y de usuario del Proyecto de Fin de Ciclo — Grado Superior en Desarrollo de Aplicaciones Web.*
-*Última actualización: Mayo 2026.*
+*Última actualización: Junio 2026.*
