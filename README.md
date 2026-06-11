@@ -283,3 +283,6 @@ La interfaz sigue una estética **Dark Glassmorphism** que llamo "Estética Gal�
 - **Españolización del código:** Las variables y funciones propias están en español; las palabras reservadas del framework, en inglés. Así es fácil distinguir qué es lógica propia y qué es del framework.
 - **Comentarios en el código:** Todos los archivos tienen comentarios que explican el "por qué" además del "qué". Ejemplo: `// resto la vida aquí y no en el frontend para evitar que se manipule desde el navegador`.
 - **Seeds idempotentes:** Los scripts de siembra comprueban antes de insertar para no duplicar registros aunque se ejecuten varias veces.
+
+
+action.
